@@ -150,8 +150,8 @@ footer p{max-width:70ch}
 .modal-x{position:absolute;right:12px;top:10px;z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:24px;line-height:1;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .modal-x:focus-visible{outline:2px solid var(--ai)}
 .modal-ph{background:var(--paper2);display:flex}
-.modal-ph img{display:block;width:100%;max-height:62vh;object-fit:cover}
-.modal-ph.two img{width:50%;aspect-ratio:1/1;max-height:50vh}
+.modal-ph img{display:block;width:100%;aspect-ratio:16/9;max-height:46vh;object-fit:cover}
+.modal-ph.two img{width:50%;aspect-ratio:4/3;max-height:40vh}
 .modal-ph.two img+img{border-left:2px solid #fff}
 .modal-ph .fb{width:100%;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:56px;color:rgba(38,41,46,.25);background:repeating-linear-gradient(135deg,var(--paper2) 0 10px,#e6dfd0 10px 20px)}
 .modal-bd{padding:20px 24px 26px}
@@ -162,11 +162,12 @@ footer p{max-width:70ch}
 .modal-bd .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .modal-bd .chips span{font-size:12.5px;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:2px 9px;color:var(--ink2)}
 @media (max-width:640px){.modal{padding:0;align-items:flex-end}.modal-box{border-radius:14px 14px 0 0;max-height:94vh}.modal-ph.two{flex-direction:column}.modal-ph.two img{width:100%;aspect-ratio:16/10;max-height:none}.modal-ph.two img+img{border-left:0;border-top:2px solid #fff}}
-@media (max-width:640px){.modal-video{padding:14px 24px 0}
+.modal-video:not(:empty){padding:18px 24px 24px;border-top:1px solid var(--rule)}
+.modal-video .vt{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink2);margin-bottom:10px}
 .modal-video .yt{position:relative;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden}
 .modal-video .yt+.yt{margin-top:12px}
 .modal-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-@media (max-width:640px){.modal-video{padding:12px 12px 0}}
+@media (max-width:640px){.modal-video:not(:empty){padding:14px 12px 18px}}
 </style>
 </head>
 <body>
@@ -280,7 +281,7 @@ footer p{max-width:70ch}
   </div>
 </section>
 
-<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-video" id="mVideo"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div></div></div></div>
+<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div></div><div class="modal-video" id="mVideo"></div></div></div>
 <footer><div class="wrap">
   <p>行程依「熱海伊豆行.xlsx」晴天版整理；巴士與步行時間為估算，祭典日期以 2027 年官方公告為準。景點照片透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土數値情報（dataofjapan/land）。</p>
 </div></footer>
@@ -688,7 +689,7 @@ function openCard(id){
   document.getElementById('mText').textContent=c.text;
   document.getElementById('mChips').innerHTML=(c.chips||[]).map(x=>`<span>${x}</span>`).join('');
   const vids=[].concat(c.video||[]).map(ytId).filter(Boolean);
-  document.getElementById('mVideo').innerHTML=vids.map(v=>`<div class="yt"><iframe src="https://www.youtube.com/embed/${v}?rel=0" title="${c.name} 介紹影片" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`).join('');
+  document.getElementById('mVideo').innerHTML=(vids.length?'<div class="vt">介紹影片</div>':'')+vids.map(v=>`<div class="yt"><iframe src="https://www.youtube.com/embed/${v}?rel=0" title="${c.name} 介紹影片" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`).join('');
   modal.hidden=false;document.body.style.overflow='hidden';
   modal.querySelector('.modal-x').focus();
   modal.dataset.from=id;
