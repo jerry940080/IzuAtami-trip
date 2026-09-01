@@ -147,12 +147,12 @@ footer p{max-width:70ch}
 .modal[hidden]{display:none}
 .modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-bg{position:absolute;inset:0;background:rgba(38,41,46,.55);backdrop-filter:blur(3px)}
-.modal-box{position:relative;background:#fff;border-radius:14px;max-width:min(820px,calc(62vh * 16 / 9));width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-box{position:relative;background:#fff;border-radius:14px;max-width:820px;width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal-x{position:absolute;right:12px;top:10px;z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:24px;line-height:1;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .modal-x:focus-visible{outline:2px solid var(--ai)}
-.modal-ph{position:relative;background:#e4ded0;overflow:hidden;aspect-ratio:16/9}
+.modal-ph{position:relative;background:var(--paper2);overflow:hidden;aspect-ratio:16/9;max-height:50vh}
 .modal-ph .track{display:flex;height:100%;transition:transform .35s ease}
-.modal-ph .track img{flex:none;width:100%;height:100%;object-fit:contain;display:block}
+.modal-ph .track img{flex:none;width:100%;height:100%;object-fit:cover;display:block}
 .modal-ph .nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:var(--ink);font-size:26px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;padding-bottom:3px}
 .modal-ph .nav:hover{background:#fff}
 .modal-ph .nav:focus-visible{outline:2px solid var(--ai)}
@@ -177,18 +177,6 @@ footer p{max-width:70ch}
 .modal-video .vl{font-size:13px;color:var(--ink2);margin-bottom:6px}
 .modal-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (max-width:640px){.modal-video:not(:empty){padding:14px 12px 18px}}
-.day-body{transition:grid-template-columns .4s ease}
-@media (min-width:861px) and (hover:hover){
-  .day-body:has(.mapcard:hover){grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
-  .mapcard{cursor:zoom-in}
-}
-@media (hover:none){.mapcard{cursor:pointer}.mapcard::after{content:'點一下放大';position:absolute;right:10px;top:10px;font-size:11px;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.9);color:var(--ink2);pointer-events:none}}
-.mapcard{position:sticky;top:64px}
-.mapcard.big-src{position:relative}
-.map-modal .modal-box{max-width:min(1100px,calc(88vh * 600 / 440));background:#fff}
-.map-modal svg{display:block;width:100%;height:auto}
-.map-modal .mapfoot button{display:none}
-@media (prefers-reduced-motion:reduce){.day-body{transition:none}}
 </style>
 </head>
 <body>
@@ -303,7 +291,6 @@ footer p{max-width:70ch}
 </section>
 
 <div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div></div><div class="modal-video" id="mVideo"></div></div></div>
-<div class="modal map-modal" id="mapModal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-label="放大地圖"><button type="button" class="modal-x" aria-label="關閉">×</button><div id="mapModalBody"></div></div></div>
 <footer><div class="wrap">
   <p>行程依「熱海伊豆行.xlsx」晴天版整理；巴士與步行時間為估算，祭典日期以 2027 年官方公告為準。景點照片透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土數値情報（dataofjapan/land）。</p>
 </div></footer>
@@ -740,21 +727,7 @@ function slide(d){
   ph.querySelector('.track').style.transform=`translateX(-${i*100}%)`;
   ph.querySelectorAll('.dots i').forEach((el,k)=>el.classList.toggle('on',k===i));
 }
-const mapModal=document.getElementById('mapModal');
-function openMap(mc){
-  const body=document.getElementById('mapModalBody');
-  body.innerHTML='';
-  body.appendChild(mc.querySelector('svg').cloneNode(true));
-  body.appendChild(mc.querySelector('.mapfoot').cloneNode(true));
-  const svg=body.querySelector('svg');
-  svg.querySelectorAll('.leg,.mk').forEach(el=>{el.style.opacity=1;el.style.strokeDashoffset=0;el.style.transition='none';});
-  mapModal.hidden=false;document.body.style.overflow='hidden';mapModal.querySelector('.modal-x').focus();
-}
-function closeMap(){mapModal.hidden=true;document.body.style.overflow='';}
 document.addEventListener('click',e=>{
-  if(e.target.closest('#mapModal .modal-x')||(e.target.classList.contains('modal-bg')&&e.target.closest('#mapModal'))){closeMap();return;}
-  const mc=e.target.closest('.mapcard');
-  if(mc&&!e.target.closest('.replay')&&!e.target.closest('#mapModal')){if(matchMedia('(hover:none)').matches||e.detail===2){openMap(mc);}return;}
   if(e.target.closest('.modal .nav')){slide(e.target.closest('.nav').classList.contains('next')?1:-1);return;}
   const card=e.target.closest('.card[data-card]');if(card){openCard(card.dataset.card);return;}
   if(e.target.closest('.modal-x')||e.target.classList.contains('modal-bg'))closeModal();
@@ -763,7 +736,6 @@ let tx=null;
 document.addEventListener('touchstart',e=>{if(e.target.closest('#mPh'))tx=e.touches[0].clientX;},{passive:true});
 document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>40)slide(dx<0?1:-1);},{passive:true});
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&!mapModal.hidden){closeMap();return;}
   if(e.key==='Escape'&&!modal.hidden)closeModal();
   if(!modal.hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))slide(e.key==='ArrowRight'?1:-1);
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.card[data-card]')){e.preventDefault();openCard(e.target.dataset.card);}
