@@ -231,7 +231,7 @@ footer p{max-width:70ch}
           <tr><th>區間</th><th>車種</th><th>時間</th><th>車資</th><th>訂票</th></tr>
           <tr><td>成田 T2 → 品川</td><td>JR 成田特快</td><td>19:53–21:00</td><td>¥3,330</td><td class="mute">えきねっと</td></tr>
           <tr><td>品川 → 靜岡</td><td>東海道新幹線 ひかり</td><td>約 1 小時</td><td>¥6,470</td><td class="mute">smart-EX，選可放行李箱座位</td></tr>
-          <tr><td>靜岡市區・清水一日</td><td>租車（tabirai）</td><td>2/12 全天</td><td class="mute">概算 ¥6,000</td><td class="mute">tabirai 靜岡站前</td></tr>
+          <tr><td>靜岡・久能・清水一日</td><td>租車（tabirai）</td><td>2/12 全天</td><td class="mute">概算 ¥6,000</td><td class="mute">tabirai 靜岡站前</td></tr>
           <tr><td>靜岡 → 沼津</td><td>JR 東海道本線</td><td>約 1 小時</td><td>¥990</td><td class="mute">當日購票</td></tr>
           <tr><td>沼津 → 熱海</td><td>JR 東海道本線</td><td>約 25 分</td><td>¥420</td><td class="mute">當日購票</td></tr>
           <tr><td>熱海 → 河津</td><td>JR 踊子</td><td>約 1 小時 10 分</td><td>¥3,490</td><td class="mute">えきねっと・1／9 號車廂・A 席</td></tr>
@@ -381,12 +381,12 @@ const CARDS={
  miho:{name:'三保松原',jp:'三保の松原',kind:'景點',short:'羽衣傳說的松林海岸，世界遺產',wiki:['三保の松原'],
   text:'約 3 萬棵黑松沿著 7 公里的海岸線排開，隔著駿河灣正對富士山，是浮世繪與和歌裡畫過無數次的日本三大松原之一，2013 年以「富士山—信仰的對象與藝術的泉源」的一部分列入世界文化遺產。海邊有能劇《羽衣》傳說中的「羽衣の松」，入口的「みほしるべ」是免費的展示館。冬天早上到中午之間富士山最清楚。',
   chips:['24 小時','免費','石垣草莓開車約 30 分','世界文化遺產']},
- shimizu:{name:'清水 河岸の市',jp:'清水魚市場 河岸の市',kind:'午餐',short:'鮪魚之港的海鮮丼，選項小丸子樂園',wiki:['清水港'],
-  text:'清水港是日本冷凍鮪魚卸貨量第一的港口，「河岸の市」是漁協直營的市場，いちば館賣魚貨與干物，まぐろ館裡二十幾家食堂比鄰，鮪魚丼、生櫻花蝦（2 月是冷凍的）、靜岡黑輪都吃得到，價格比觀光區實在。吃完可以走去隔壁的<b>エスパルスドリームプラザ</b>，裡面有「ちびまる子ちゃんランド」（櫻桃小丸子的故鄉就是清水）與摩天輪，下雨天的室內備案。',
-  chips:['まぐろ館 11:00–15:00','週三多休市','三保松原開車約 15 分','選項：小丸子樂園']},
- satta:{name:'薩埵峠',jp:'薩埵峠',kind:'景點',short:'廣重畫過的富士山經典構圖',wiki:['薩埵峠'],
-  text:'東海道舊道最險的一段，歌川廣重《東海道五十三次》「由井」畫的就是這裡。展望台一次收進富士山、駿河灣、東名高速與東海道本線，是靜岡最經典的一張明信片。停車場只有十幾個位子，從停車場走到展望台約 10 分鐘的產業道路。<b>下午順光、但冬天日落約 17:20</b>，抓 15:00–16:30 之間最好。',
-  chips:['24 小時','免費','停車位少','清水開車約 25 分']},
+ shimizu:{name:'清水 河岸の市',jp:'清水魚市場 河岸の市',kind:'午餐',short:'鮪魚之港的海鮮丼，下一站小丸子樂園',wiki:['清水港'],
+  text:'清水港是日本冷凍鮪魚卸貨量第一的港口，「河岸の市」是漁協直營的市場，いちば館賣魚貨與干物，まぐろ館裡二十幾家食堂比鄰，鮪魚丼、生櫻花蝦（2 月是冷凍的）、靜岡黑輪都吃得到，價格比觀光區實在。吃完開車 5 分鐘就到隔壁的<b>エスパルスドリームプラザ</b>，下午的小丸子樂園與摩天輪都在那裡。',
+  chips:['まぐろ館 11:00–15:00','週三多休市','三保松原開車約 15 分','下一站：小丸子樂園']},
+ maruko:{name:'小丸子樂園',jp:'ちびまる子ちゃんランド',kind:'景點',short:'清水就是小丸子的故鄉',wiki:['ちびまる子ちゃん','エスパルスドリームプラザ'],
+  text:'作者櫻桃子出身清水，《櫻桃小丸子》整部作品的舞台就是這一帶。1999 年開幕的小丸子樂園在<b>エスパルスドリームプラザ 3 樓</b>，把漫畫場景等比例做出來：小丸子的家、三年四班的教室、公園與商店街都能走進去拍照，還有限定周邊與扭蛋。逛完到同棟的清水すし横丁吃壽司、搭海邊的大摩天輪「ドリームスカイ」，天氣好的話從海側平台能看到富士山。整棟都是室內，下雨天也不怕。',
+  chips:['10:00–20:00（以官網為準）','約 ¥1,000','エスパルスドリームプラザ 3F','清水 河岸の市開車 5 分']},
  numazuport:{name:'沼津港 港口美食',jp:'沼津港・沼津みなと新鮮館',kind:'午餐',short:'丸天かき揚げ丼、深海魚料理、干物伴手禮',wiki:['沼津港'],
   text:'深海水族館旁邊就是沼津港的餐飲區，走路 3 分鐘內都吃得到。必吃清單：魚河岸「丸天」的巨無霸かき揚げ丼（高達 15 公分的酥炸海鮮塔，兩人分一份剛好）；「港八十三番地」的深海魚料理與深海魚漢堡；「双葉寿司」「千本一」的海鮮丼與金目鯛煮付け；「みなと新鮮館」市場買竹筴魚干物、櫻花蝦、蜜柑當伴手禮，可真空包裝帶回台灣。注意 2 月駿河灣禁捕しらす，生しらす丼吃不到，桜えび也是冷凍的，這兩樣別特地點。逛完可以上「びゅうお」大型水門展望台看富士山與港口全景。',
   chips:['沼津站巴士約 10 分','丸天 かき揚げ丼','深海魚漢堡','干物・櫻花蝦伴手禮','2 月無生しらす']},
@@ -483,20 +483,20 @@ const DAYS=[
    {t:'19:00',i:'🍢',h:'青葉橫丁　靜岡おでん'}
   ],cards:['shinkansen','shizuhotel','zoo','yume','toshogu','aoba'],
   rain:'<b>雨備</b>　富士山看不到就跳過夢テラス：動物園室內館（猛獸館 299、夜行性動物館）＋久能山東照宮博物館，回靜岡逛靜岡市美術館或登呂遺跡博物館，晚上照樣去青葉橫丁。'},
- {n:3,date:'2/12',wd:'五',title:'租車一日：久能・清水・薩埵峠',sub:'石垣草莓、三保松原、鮪魚丼，最後上薩埵峠看富士山',stay:'靜岡站前飯店（續住）',
-  map:{pts:['shizuoka','ichigo','miho','shimizu','satta'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'satta',mode:'car'},{a:'satta',b:'shizuoka',mode:'car',curve:.22}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',satta:'r'},minSpan:.17},
+ {n:3,date:'2/12',wd:'五',title:'租車一日：久能・三保・清水',sub:'石垣草莓、三保松原、鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
+  map:{pts:['shizuoka','ichigo','miho','shimizu','maruko'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r'},minSpan:.1},
   tl:[
    {t:'08:30',i:'🍳',h:'飯店早餐'},
    {t:'09:30',i:'🚗',h:'靜岡站前取車（tabirai 事先預約）',move:1},
    {t:'10:00',i:'🍓',h:'石垣草莓 久能海岸　開車約 30 分・上午場需預約',move:1},
    {t:'11:30',i:'🌊',h:'三保松原　開車約 30 分・羽衣の松與富士山',move:1},
    {t:'12:40',i:'🍽',h:'清水 河岸の市　開車約 15 分・鮪魚丼',move:1},
-   {t:'選項',i:'🎪',h:'小丸子樂園（エスパルスドリームプラザ）　步行約 10 分'},
-   {t:'15:00',i:'🗻',h:'薩埵峠　開車約 25 分・富士山＋駿河灣經典構圖',move:1},
-   {t:'16:40',i:'🚗',h:'開車約 40 分回靜岡站還車',move:1},
+   {t:'14:00',i:'🎪',h:'小丸子樂園（エスパルスドリームプラザ 3F）　開車約 5 分',move:1},
+   {t:'16:00',i:'🎡',h:'ドリームプラザ　摩天輪、海側平台看富士山、買周邊'},
+   {t:'17:00',i:'🚗',h:'開車約 30 分回靜岡站還車',move:1},
    {t:'18:30',i:'🍽',h:'靜岡市區晚餐'}
-  ],cards:['ichigo','miho','shimizu','satta'],
-  rain:'<b>雨備</b>　不租車：JR 到清水，河岸の市午餐＋エスパルスドリームプラザ（小丸子樂園、室內商場）；草莓園本來就是溫室，下雨照採；薩埵峠看不到富士山就直接跳過。'},
+  ],cards:['ichigo','miho','shimizu','maruko'],
+  rain:'<b>雨備</b>　這天本來就有一半在室內。不租車的話：JR 到清水站，巴士接河岸の市午餐，再走ドリームプラザ 逛小丸子樂園與商場；草莓園是溫室，下雨照採；三保松原看不到富士山就縮短或跳過。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'移動日順路吃沼津港，傍晚進熱海泡溫泉',stay:'LiVEMAX Resort 熱海 Ocean',
   map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus'},{a:'aquarium',b:'numazuStn',mode:'bus',curve:.35},{a:'numazuStn',b:'atami',mode:'rail',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
   tl:[
@@ -686,7 +686,7 @@ function animateMap(svg){
 // hero overview
 (function(){
   const cfg={pts:['nrt','prince','shizuoka','aquarium','atami','kawazu','shimoda','minami'],
-    legs:[{a:'nrt',b:'shinagawa',mode:'rail',via:['chiba','funabashi','kinshicho','tokyo']},{a:'shinagawa',b:'shizuoka',mode:'shinkansen',via:['shinyoko','odawara','atami','mishima','numazuStn','satta','shimizu']},{a:'shizuoka',b:'satta',mode:'car',via:['ichigo','miho','shimizu']},{a:'atami',b:'kawazu',mode:'rail',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'shimoda',mode:'izukyu'},{a:'shimoda',b:'minami',mode:'bus'}],
+    legs:[{a:'nrt',b:'shinagawa',mode:'rail',via:['chiba','funabashi','kinshicho','tokyo']},{a:'shinagawa',b:'shizuoka',mode:'shinkansen',via:['shinyoko','odawara','atami','mishima','numazuStn','satta','shimizu']},{a:'shizuoka',b:'maruko',mode:'car',via:['ichigo','miho','shimizu']},{a:'atami',b:'kawazu',mode:'rail',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'shimoda',mode:'izukyu'},{a:'shimoda',b:'minami',mode:'bus'}],
     labels:{nrt:'r',prince:'r',shizuoka:'l',aquarium:'b',atami:'r',kawazu:'r',shimoda:'b',minami:'l'},
     bbox:{la0:34.45,la1:35.95,lo0:138.00,lo1:140.80}};
   const el=document.getElementById('heroMap');
