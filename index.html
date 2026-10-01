@@ -91,6 +91,9 @@ td b{font-weight:500}
 .mapcard svg{display:block;width:100%;height:auto}
 .mapfoot{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2);align-items:center}
 .mapfoot .lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.areamap{max-width:780px;margin:20px auto 0;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.areamap svg{display:block;width:100%;height:auto}
+.areanote{margin-top:18px;padding:12px 16px;border-left:3px solid var(--sakura);background:var(--paper2);border-radius:0 8px 8px 0;font-size:14px}
 .mapbg{display:flex;flex-wrap:wrap;gap:4px 12px;padding:7px 14px 9px;border-top:1px dashed var(--rule);font-size:11px;color:var(--ink3);align-items:center}
 .mapbg b{font-weight:500}
 .mapbg .lg{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
@@ -240,7 +243,7 @@ footer p{max-width:70ch}
           <tr><th>區間</th><th>車種</th><th>時間</th><th>車資</th><th>訂票</th></tr>
           <tr><td>成田 T2 → 品川</td><td>JR 成田特快</td><td>19:53–21:00</td><td>¥3,330</td><td class="mute">えきねっと</td></tr>
           <tr><td>品川 → 靜岡</td><td>東海道新幹線 ひかり</td><td>約 1 小時</td><td>¥6,470</td><td class="mute">smart-EX，選可放行李箱座位</td></tr>
-          <tr><td>靜岡・久能・清水一日</td><td>租車（tabirai）</td><td>2/12 全天</td><td class="mute">概算 ¥6,000</td><td class="mute">tabirai 靜岡站前</td></tr>
+          <tr><td>靜岡自駕（日本平・久能・清水）</td><td>租車（tabirai）</td><td>2/11 中午–2/12 傍晚</td><td class="mute">概算 ¥12,000<br>＋停車約 ¥3,500</td><td class="mute">tabirai 靜岡站前</td></tr>
           <tr><td>靜岡 → 沼津</td><td>JR 東海道本線</td><td>約 1 小時</td><td>¥990</td><td class="mute">當日購票</td></tr>
           <tr><td>沼津 → 熱海</td><td>JR 東海道本線</td><td>約 25 分</td><td>¥420</td><td class="mute">當日購票</td></tr>
           <tr><td>熱海 → 河津</td><td>JR 踊子</td><td>約 1 小時 10 分</td><td>¥3,490</td><td class="mute">えきねっと・1／9 號車廂・A 席</td></tr>
@@ -258,7 +261,7 @@ footer p{max-width:70ch}
         <h3>訂票時程</h3>
         <ul class="todo">
           <li><span class="d">越早越好</span><span>訂靜岡站前飯店 2/11–12 兩晚</span></li>
-          <li><span class="d">隨時</span><span>tabirai 預約 2/12 靜岡站前租車</span></li>
+          <li><span class="d">隨時</span><span>tabirai 預約靜岡站前租車　<b>2/11 中午 – 2/12 傍晚（兩天）</b></span></li>
           <li><span class="d">隨時</span><span>預約 2/12 上午場石垣草莓採果</span></li>
           <li><span class="d">1/11 前後</span><span>smart-EX 訂兩段新幹線指定席：2/11 品川→靜岡、2/15 熱海→品川</span></li>
           <li><span class="d">1/14 09:00</span><span>えきねっと開賣 2/14 踊子（熱海→河津）A 席・1／9 號車廂</span></li>
@@ -347,7 +350,7 @@ const MODE={
 const KIND={hotel:{c:'#c8452e',r:6,t:'🛏'},spot:{c:'#e28aa5',r:5.5},station:{c:'#fff',r:4,s:'#2b4c7e'},air:{c:'#26292e',r:5.5,sq:true}};
 const NAMES={
  nrt:['成田機場 T2','air'], shinagawa:['品川站','station'], prince:['品川王子大飯店','hotel'], tokyo:['東京站','station'],
- shizuoka:['靜岡站','station'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ume:['日本平梅園','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷 溫泉','spot'],
+ shizuoka:['靜岡站','station'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ume:['日本平梅園','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷','spot'],
  ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], shimizu:['清水 河岸の市','spot'], maruko:['小丸子樂園','spot'], satta:['薩埵峠','spot'],
  mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], byuo:['びゅうお 展望水門','spot'], senbon:['千本松原','spot'], lalaport:['ららぽーと沼津','spot'],
  atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], beach:['熱海陽光海灘','spot'],
@@ -481,31 +484,33 @@ const DAYS=[
    {t:'19:53–21:00',i:'🚆',h:'成田 T2 → 品川　JR 成田特快・¥3,330',move:1},
    {t:'21:00',i:'🛏',h:'品川王子大飯店 北塔 check-in，站內覓食'}
   ],cards:['nex','prince']},
- {n:2,date:'2/11',wd:'四',title:'品川 → 靜岡',sub:'建國紀念日，新幹線一小時到靜岡：小熊貓、富士山展望、東照宮、黑輪',stay:'靜岡站前飯店（待訂）',
-  map:{pts:['shizuoka','zoo','yume','ume','toshogu','aoba'],legs:[{a:'shizuoka',b:'zoo',mode:'bus',line:'静鉄ジャストライン 日本平線'},{a:'zoo',b:'yume',mode:'bus',line:'静鉄ジャストライン 日本平線'},{a:'yume',b:'ume',mode:'walk'},{a:'ume',b:'yume',mode:'walk',curve:.35},{a:'yume',b:'toshogu',mode:'ropeway',line:'日本平ロープウェイ'},{a:'toshogu',b:'yume',mode:'ropeway',line:'日本平ロープウェイ',curve:.3},{a:'yume',b:'shizuoka',mode:'bus',line:'静鉄ジャストライン 日本平線',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',ume:'t',toshogu:'b',aoba:'t'},minSpan:.055,lines:[{mode:'shinkansen',line:'東海道新幹線 ひかり（品川→靜岡・圖幅外）'}]},
+ {n:2,date:'2/11',wd:'四',title:'品川 → 靜岡',sub:'建國紀念日，新幹線一小時到靜岡，站前取車自駕上日本平',stay:'靜岡站前飯店（待訂）',
+  map:{pts:['shizuoka','zoo','yume','ume','toshogu','aoba'],legs:[{a:'shizuoka',b:'yume',mode:'car',line:'租車（日本平パークウェイ・免費）'},{a:'yume',b:'toshogu',mode:'ropeway',line:'日本平ロープウェイ'},{a:'toshogu',b:'yume',mode:'ropeway',line:'日本平ロープウェイ',curve:.3},{a:'yume',b:'ume',mode:'walk'},{a:'ume',b:'yume',mode:'walk',curve:.35},{a:'yume',b:'zoo',mode:'car',line:'租車（日本平パークウェイ・免費）'},{a:'zoo',b:'shizuoka',mode:'car',line:'租車（日本平パークウェイ・免費）',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',ume:'t',toshogu:'b',aoba:'t'},minSpan:.055,lines:[{mode:'shinkansen',line:'東海道新幹線 ひかり（品川→靜岡・圖幅外）'}]},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out'},
    {t:'10:00',i:'🚄',h:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470',move:1},
-   {t:'11:20',i:'🧳',h:'靜岡站寄放行李'},
+   {t:'11:20',i:'🚗',h:'靜岡站前取車（tabirai 預約），行李直接放後車廂',move:1},
    {t:'11:40',i:'🍽',h:'靜岡站周邊午餐'},
-   {t:'12:20',i:'🚌',h:'靜岡站 → 日本平動物園　静鉄 日本平線・約 25 分',move:1},
-   {t:'13:00',i:'🐼',h:'日本平動物園　小熊貓、猛獸館 299'},
-   {t:'14:15',i:'🚌',h:'動物園 → 日本平　日本平線 42 系統・約 21 分',move:1},
-   {t:'14:40',i:'🗻',h:'日本平夢テラス　富士山與駿河灣展望迴廊'},
-   {t:'15:10',i:'🌼',h:'日本平梅園　夢テラス 步行即到・約 350 棵梅・免費',move:1},
-   {t:'15:30',i:'🚡',h:'日本平纜車 → 久能山東照宮　約 5 分',move:1},
-   {t:'注意',i:'⚠',h:'東照宮冬季 16:00 截止拜觀、纜車末班約 16:15；動物園待太久就改成先搭纜車、回程再逛夢テラス'},
-   {t:'16:30',i:'🚌',h:'日本平 → 靜岡站　日本平線・約 45 分',move:1},
-   {t:'17:30',i:'🛏',h:'靜岡站前飯店 check-in（房間待訂）'},
-   {t:'19:00',i:'🍢',h:'青葉橫丁　靜岡おでん'}
+   {t:'12:30',i:'🚗',h:'開車 → 日本平山頂　約 20 分・パークウェイ免費・山頂免費停車',move:1},
+   {t:'12:55',i:'🚡',h:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400',move:1},
+   {t:'13:05',i:'⛩',h:'久能山東照宮　國寶社殿與博物館（冬季 16:00 截止拜觀）'},
+   {t:'14:20',i:'🚡',h:'纜車回日本平',move:1},
+   {t:'14:30',i:'🗻',h:'日本平夢テラス　富士山與駿河灣展望迴廊'},
+   {t:'15:00',i:'🌼',h:'日本平梅園　步行即到・約 350 棵梅・免費'},
+   {t:'15:20',i:'🚗',h:'開車 → 日本平動物園　約 10 分・停車 ¥620',move:1},
+   {t:'15:35',i:'🐼',h:'日本平動物園　小熊貓（最後入園 16:00、16:30 閉園）'},
+   {t:'16:35',i:'🚗',h:'開車回靜岡站・飯店　約 20 分',move:1},
+   {t:'17:00',i:'🛏',h:'停好車 check-in（房間待訂）'},
+   {t:'注意',i:'⚠',h:'晚上要喝酒，車停好就別再動 —— 日本酒駕零容忍，同車的人也會被追究'},
+   {t:'19:00',i:'🍢',h:'走路去青葉橫丁　約 10 分・靜岡おでん'}
   ],cards:['shinkansen','shizuhotel','zoo','yume','ume','toshogu','aoba'],
-  rain:'<b>雨備</b>　富士山看不到就跳過夢テラス與梅園（都在戶外）：改走動物園室內館（猛獸館 299、夜行性動物館）＋久能山東照宮博物館，回靜岡後直接去青葉橫丁。'},
+  rain:'<b>雨備</b>　富士山看不到就跳過夢テラス與梅園（都在戶外）：改走久能山東照宮博物館＋動物園室內館（猛獸館 299、夜行性動物館），有車時間很鬆，回靜岡後直接去青葉橫丁。'},
  {n:3,date:'2/12',wd:'五',title:'租車一日：久能・三保・清水',sub:'石垣草莓、三保松原、鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
   map:{pts:['shizuoka','ichigo','miho','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail',line:'JR 東海道本線'}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
   tl:[
    {t:'08:30',i:'🍳',h:'飯店早餐'},
-   {t:'09:30',i:'🚗',h:'靜岡站前取車（tabirai 事先預約）',move:1},
+   {t:'09:30',i:'🚗',h:'開車出發（2/11 起續租中）',move:1},
    {t:'10:00',i:'🍓',h:'石垣草莓 久能海岸　開車約 30 分・上午場需預約',move:1},
    {t:'11:30',i:'🌊',h:'三保松原　開車約 30 分・羽衣の松與富士山',move:1},
    {t:'12:40',i:'🍽',h:'清水 河岸の市　開車約 15 分・鮪魚丼',move:1},
@@ -735,7 +740,7 @@ function animateMap(svg){
 
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML='<a href="#pre">行前</a>'+DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`).join('')+'<a href="#tickets">車票・訂票</a><a href="#food">美食・行李</a>';
+strip.innerHTML='<a href="#pre">行前</a>'+DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">車票・訂票</a><a href="#food">美食・行李</a>';
 
 // days
 function imgsHTML(c,id){
@@ -751,12 +756,28 @@ function cardHTML(id){
     <div class="bd"><h4>${c.name}<span>${c.jp||''}</span></h4><p>${c.short||''}</p></div>
   </article>`;
 }
+function areaHTML(){
+  const cfg={pts:['shizuoka','aoba','yunoki','zoo','yume','toshogu','ichigo','miho','shimizu','maruko'],legs:[],
+    labels:{shizuoka:'l',aoba:'t',yunoki:'t',zoo:'b',yume:'r',toshogu:'r',ichigo:'b',miho:'r',shimizu:'l',maruko:'r'},minSpan:.115};
+  const mp=buildMap(cfg,{aria:'靜岡・清水 景點位置圖'});
+  const cards=['zoo','yume','ume','toshogu','ichigo','miho','shimizu','maruko','aoba','yunoki','shizuhotel'];
+  return `<section class="block" id="shizuoka">
+  <div class="wrap">
+    <h2>靜岡・清水 有什麼</h2>
+    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；日本平梅園就在夢テラス 旁邊幾步路，圖上併成同一點。</p>
+    <div class="areamap">${mp}${bgRow(bgLines)}</div>
+    <div class="cards">${cards.map(cardHTML).join('')}</div>
+    <p class="mute" style="margin-top:14px">刻意沒排進去的：駿府城公園、靜岡浅間神社、登呂遺跡（都要有歷史背景才有感）；丸子宿 丁子屋（方向相反，來回多 40 分鐘）；薩埵峠（已換成小丸子樂園）。</p>
+    <div class="areanote">↓ 以下 <b>2/11（四）、2/12（五）</b> 兩天，是從上面這些點挑出來、排得進時間的<b>推薦路線</b>。不是全部都去。</div>
+  </div>
+</section>`;
+}
 function bgRow(ls){
   if(!ls.length) return '';
   return '<div class="mapbg"><b>圖中鐵道</b>'+ls.map(L=>'<span class="lg"><i style="border-color:'+L.c+'"></i>'+L.n+'</span>').join('')+'</div>';
 }
 const daysEl=document.getElementById('days');
-daysEl.innerHTML=DAYS.map(d=>{
+const dayBlocks=DAYS.map(d=>{
   const seen=new Set(), rows=[];
   (d.map.lines||[]).concat(d.map.legs).forEach(l=>{
     const label=l.line||MODE[l.mode].label, k=l.mode+'|'+label;
@@ -780,7 +801,8 @@ daysEl.innerHTML=DAYS.map(d=>{
     <div class="cards">${d.cards.map(cardHTML).join('')}</div>
   </div>
 </section>`;
-}).join('');
+});
+daysEl.innerHTML=dayBlocks[0]+areaHTML()+dayBlocks.slice(1).join('');
 
 // animate day maps on scroll + replay
 document.querySelectorAll('.mapcard').forEach(mc=>{
