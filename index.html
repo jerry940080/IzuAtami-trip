@@ -112,6 +112,7 @@ td b{font-weight:500}
 .mact a{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 15px;border:1px solid var(--rule);border-radius:999px;background:var(--paper);color:var(--ai);text-decoration:none;transition:border-color .18s,background .18s}
 .mact a:hover{background:#fff;border-color:var(--ai)}
 .mact a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.mapcap{padding:9px 14px;border-bottom:1px solid var(--rule);font-size:12px;color:var(--ink2);background:var(--paper)}
 .areamap{max-width:780px;margin:20px auto 0;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
 .areamap svg{display:block;width:100%;height:auto}
 .areanote{margin-top:18px;padding:12px 16px;border-left:3px solid var(--sakura);background:var(--paper2);border-radius:0 8px 8px 0;font-size:14px}
@@ -350,7 +351,7 @@ const LINES=[{"n":"JR 伊東線","c":"#3E9A55","s":[[[139.0778,35.1036],[139.073
 const P={ // [lat,lng]
  nrt:[35.7726,140.3878], chiba:[35.6130,140.1130], tokyo:[35.6812,139.7671], shinagawa:[35.6285,139.7387], prince:[35.6305,139.7345],
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
- shizuoka:[34.9718,138.3886], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ume:[34.9714,138.4624], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], yunoki:[34.9780,138.4110],
+ shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ume:[34.9714,138.4624], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], yunoki:[34.9780,138.4110],
  ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], shimizu:[35.0158,138.4900], maruko:[35.0206,138.5081], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], byuo:[35.0873,138.8548], senbon:[35.0920,138.8452], lalaport:[35.0940,138.8860],
  atami:[35.1036,139.0780], livemax:[35.0954,139.0777], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0975,139.0800],
@@ -371,7 +372,7 @@ const MODE={
 const KIND={hotel:{c:'#c8452e',r:6,t:'🛏'},spot:{c:'#e28aa5',r:5.5},station:{c:'#fff',r:4,s:'#2b4c7e'},air:{c:'#26292e',r:5.5,sq:true}};
 const NAMES={
  nrt:['成田機場 T2','air'], shinagawa:['品川站','station'], prince:['品川王子大飯店','hotel'], tokyo:['東京站','station'],
- shizuoka:['靜岡站','station'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ume:['日本平梅園','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷','spot'],
+ shizuoka:['靜岡站','station'], shizuhotel:['靜岡站前飯店（待訂）','hotel'], hobby:['Hobby Square','spot'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ume:['日本平梅園','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷','spot'],
  ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], shimizu:['清水 河岸の市','spot'], maruko:['小丸子樂園','spot'], satta:['薩埵峠','spot'],
  mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], byuo:['びゅうお 展望水門','spot'], senbon:['千本松原','spot'], lalaport:['ららぽーと沼津','spot'],
  atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], beach:['熱海陽光海灘','spot'],
@@ -716,9 +717,10 @@ function marker(key,pr,side,big){
   let dot;
   if(K.sq) dot=`<rect x="${-r}" y="${-r}" width="${2*r}" height="${2*r}" transform="rotate(45)" fill="${K.c}" stroke="#fff" stroke-width="2"/>`;
   else dot=`<circle r="${r}" fill="${K.c}" stroke="${K.s||'#fff'}" stroke-width="${K.s?2.2:2}"/>`;
-  const dx=side==='l'?-r-6:side==='r'?r+6:0, dy=side==='t'?-r-7:side==='b'?r+14:4.5;
-  const anchor=side==='l'?'end':side==='r'?'start':'middle';
-  const lbl=side?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
+  const sm=/^([tblr])(\d)?$/.exec(side||''), sd=sm?sm[1]:'', ex=sm&&sm[2]?(sm[2]-1)*17:0;
+  const dx=sd==='l'?-(r+6+ex):sd==='r'?(r+6+ex):0, dy=sd==='t'?-(r+7+ex):sd==='b'?(r+14+ex):4.5;
+  const anchor=sd==='l'?'end':sd==='r'?'start':'middle';
+  const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
   const g=`<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
   const u=gUrl(key);
   return u?`<a class="mk-a" data-k="${key}" href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${name}，在 Google 地圖開啟">${g}</a>`:g;
@@ -813,15 +815,20 @@ function cardHTML(id){
   </article>`;
 }
 function areaHTML(){
-  const cfg={pts:['shizuoka','sengen','aoba','yunoki','zoo','yume','toshogu','ichigo','miho','shimizu','maruko','satta'],legs:[],
-    labels:{shizuoka:'b',sengen:'t',aoba:'l',yunoki:'t',zoo:'b',yume:'r',toshogu:'r',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',satta:'l'},minSpan:.115};
+  const cfg={pts:['shizuoka','sengen','aoba','yunoki','zoo','ume','yume','toshogu','ichigo','miho','shimizu','maruko','satta'],legs:[],
+    labels:{shizuoka:'b',sengen:'t',aoba:'l',yunoki:'t',zoo:'b',ume:'t2',yume:'r',toshogu:'r',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',satta:'l'},minSpan:.115};
   const mp=buildMap(cfg,{aria:'靜岡・清水 景點位置圖',W:760,H:560});
+  const bg1=bgRow(bgLines);
+  const cfg2={pts:['shizuoka','shizuhotel','hobby','aoba','sengen','yunoki'],legs:[],
+    labels:{shizuoka:'r',shizuhotel:'l',hobby:'b',aoba:'t',sengen:'t',yunoki:'t'},minSpan:.016};
+  const mp2=buildMap(cfg2,{aria:'靜岡站周邊放大圖',W:760,H:420});
   const cards=['zoo','yume','ume','toshogu','ichigo','miho','shimizu','maruko','aoba','hobby','sengen','satta','yunoki','shizuhotel'];
   return `<section class="block" id="shizuoka">
   <div class="wrap">
     <h2>靜岡・清水 有什麼</h2>
-    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；日本平梅園就在夢テラス 旁邊幾步路、Hobby Square 就在靜岡站南口 1 分，這兩個圖上併入鄰近的點，卡片仍分開。點地圖上任何一個標記，都會另開 Google 地圖。</p>
-    <div class="areamap">${mp}${bgRow(bgLines)}</div>
+    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把 14 個候選點全部標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</b></p>
+    <div class="areamap">${mp}${bg1}</div>
+    <div class="areamap"><div class="mapcap">靜岡站周邊放大（上圖左下角那一帶）</div>${mp2}${bgRow(bgLines)}</div>
     <div class="cards">${cards.map(cardHTML).join('')}</div>
     <p class="mute" style="margin-top:14px">以上 14 個是候選清單，<b>不是全都要去</b>。其中薩埵峠（在由比，清水再往東北 25 分）、靜岡淺間神社、Hobby Square 沒有排進下面的推薦路線，想去的話得拿掉別的。另外還有駿府城公園、登呂遺跡、丸子宿 丁子屋（方向相反，來回多 40 分鐘）也沒收進來。</p>
     <div class="areanote">↓ 以下 <b>2/11（四）、2/12（五）</b> 兩天，是從上面這些點挑出來、排得進時間的<b>推薦路線</b>。不是全部都去。</div>
