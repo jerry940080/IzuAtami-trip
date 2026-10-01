@@ -320,7 +320,7 @@ const LAND=[[[138.2186,35.6445],[138.2283,35.646],[138.2318,35.639],[138.2288,35
 const P={ // [lat,lng]
  nrt:[35.7726,140.3878], chiba:[35.6130,140.1130], tokyo:[35.6812,139.7671], shinagawa:[35.6285,139.7387], prince:[35.6305,139.7345],
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
- shizuoka:[34.9718,138.3886], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818],
+ shizuoka:[34.9718,138.3886], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ume:[34.9714,138.4624], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], yunoki:[34.9780,138.4110],
  ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], shimizu:[35.0158,138.4900], maruko:[35.0206,138.5081], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], byuo:[35.0873,138.8548], senbon:[35.0920,138.8452], lalaport:[35.0940,138.8860],
  atami:[35.1036,139.0780], livemax:[35.0954,139.0777], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0975,139.0800],
@@ -347,7 +347,7 @@ const MODE={
 const KIND={hotel:{c:'#c8452e',r:6,t:'🛏'},spot:{c:'#e28aa5',r:5.5},station:{c:'#fff',r:4,s:'#2b4c7e'},air:{c:'#26292e',r:5.5,sq:true}};
 const NAMES={
  nrt:['成田機場 T2','air'], shinagawa:['品川站','station'], prince:['品川王子大飯店','hotel'], tokyo:['東京站','station'],
- shizuoka:['靜岡站','station'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'],
+ shizuoka:['靜岡站','station'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ume:['日本平梅園','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷 溫泉','spot'],
  ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], shimizu:['清水 河岸の市','spot'], maruko:['小丸子樂園','spot'], satta:['薩埵峠','spot'],
  mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], byuo:['びゅうお 展望水門','spot'], senbon:['千本松原','spot'], lalaport:['ららぽーと沼津','spot'],
  atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], beach:['熱海陽光海灘','spot'],
@@ -374,6 +374,9 @@ const CARDS={
  yume:{url:'https://nihondaira-yume-terrace.jp/',name:'日本平夢テラス',jp:'日本平夢テラス',kind:'景點',short:'木造展望迴廊，富士山與駿河灣',wiki:['日本平'],
   text:'2018 年開幕的展望設施，隈研吾設計，用靜岡產檜木以法隆寺夢殿為意象組成八角形建築，外圈是 200 公尺長的展望迴廊。晴天可以一次看到富士山、駿河灣、清水港與伊豆半島，冬天空氣最清澈，是這趟最有機會拍到富士山全景的地方。館內有展示室與咖啡座，出發前先看官網即時影像確認富士山露不露臉。',
   chips:['9:00–17:00（六至 21:00）','免費','第二個週二休','動物園巴士約 15 分']},
+ ume:{url:'https://www.visit-shizuoka.com/spot/detail_292.html',name:'日本平梅園',jp:'日本平梅園',kind:'景點',short:'山頂 350 棵梅，配富士山與駿河灣',
+  text:'日本平山頂一帶的梅園，約 350 棵——白梅「南高」、紅梅「錦光」，還有蠟梅。花期從 1 月下旬延續到 2 月下旬，<b>我們去的 2/11 正在花期內</b>。一邊聞梅香散步、一邊望富士山與駿河灣，而且<b>入園免費</b>。就在夢テラス 旁邊走幾分鐘，加 20 分鐘就逛得完。每年 2 月中旬辦「日本平梅まつり」，2026 年是 2/14–15 — 我們早幾天到，花開著但沒有攤位。',
+  chips:['免費','1 月下旬–2 月下旬開花','約 350 棵','夢テラス 步行即到']},
  toshogu:{url:'https://www.toshogu.or.jp/',name:'久能山東照宮',jp:'久能山東照宮',kind:'景點',short:'德川家康長眠地，纜車 5 分直達',wiki:['久能山東照宮'],
   text:'德川家康過世後最初的埋葬地，1617 年建成的社殿是靜岡唯一的國寶建築，權現造的漆金彩繪與極彩色雕刻保存得很完整。從日本平搭空中纜車約 5 分鐘就到（走石階要 1,159 階，別想不開）。境內博物館收藏家康的洋時鐘與甲冑。<b>冬季纜車末班約 16:00、拜觀也是 16:00 截止</b>，行程要抓早。',
   chips:['9:00–16:00（冬季）','拜觀 ¥800','纜車來回 ¥1,400','末班 16:00 要確認']},
@@ -392,6 +395,9 @@ const CARDS={
  maruko:{url:'https://www.chibimarukochan-land.com/',name:'小丸子樂園',jp:'ちびまる子ちゃんランド',kind:'景點',short:'清水就是小丸子的故鄉',wiki:['ちびまる子ちゃん','エスパルスドリームプラザ'],
   text:'作者櫻桃子出身清水，《櫻桃小丸子》整部作品的舞台就是這一帶。1999 年開幕的小丸子樂園在<b>エスパルスドリームプラザ 3 樓</b>，把漫畫場景等比例做出來：小丸子的家、三年四班的教室、公園與商店街都能走進去拍照，還有限定周邊與扭蛋。逛完到同棟的清水すし横丁吃壽司、搭海邊的大摩天輪「ドリームスカイ」，天氣好的話從海側平台能看到富士山。整棟都是室內，下雨天也不怕。',
   chips:['10:00–20:00（最終入館 19:30）','大人 ¥1,200・小孩 ¥700','エスパルスドリームプラザ 3F','清水 河岸の市開車 5 分']},
+ yunoki:{url:'https://www.yunokinosato.com/',name:'柚木の郷 天然溫泉',jp:'東静岡 天然温泉 柚木の郷',kind:'溫泉',short:'東靜岡站步行 1 分，岩風呂與兩種三溫暖',
+  text:'東靜岡站走路 1 分鐘就到的天然溫泉，規模比想像中大：岩風呂、源泉立湯、高濃度碳酸泉、寢湯、水風呂，另有兩種三溫暖——熱風蒸屋（ロウリュウ）與美潤蒸屋（奈米霧），岩盤浴另計。館內有「ほんまもん食堂」與「囲炉裏茶房」兩處食事處（11:00–22:00，最後點餐 21:30），<b>泡完直接吃晚餐不用再移動</b>。從靜岡站搭 JR 一站 3 分鐘，是還車後最順的收尾，也補上從靜岡到熱海之間唯一的泡湯機會。',
+  chips:['平日 ¥1,200・假日 ¥1,430','10:00–24:00（最後入場 23:30）','東靜岡站步行 1 分','年中無休','館內有食事處']},
  numazuport:{url:'https://numazukanko.jp/',name:'沼津港 港口美食',jp:'沼津港・沼津みなと新鮮館',kind:'午餐',short:'丸天かき揚げ丼、深海魚料理、干物伴手禮',wiki:['沼津港'],
   text:'深海水族館旁邊就是沼津港的餐飲區，走路 3 分鐘內都吃得到。必吃清單：魚河岸「丸天」的巨無霸かき揚げ丼（高達 15 公分的酥炸海鮮塔，兩人分一份剛好）；「港八十三番地」的深海魚料理與深海魚漢堡；「双葉寿司」「千本一」的海鮮丼與金目鯛煮付け；「みなと新鮮館」市場買竹筴魚干物、櫻花蝦、蜜柑當伴手禮，可真空包裝帶回台灣。注意 2 月駿河灣禁捕しらす，生しらす丼吃不到，桜えび也是冷凍的，這兩樣別特地點。',
   chips:['沼津站巴士約 10 分','丸天 かき揚げ丼','深海魚漢堡','干物・櫻花蝦伴手禮','2 月無生しらす']},
@@ -476,7 +482,7 @@ const DAYS=[
    {t:'21:00',i:'🛏',h:'品川王子大飯店 北塔 check-in，站內覓食'}
   ],cards:['nex','prince']},
  {n:2,date:'2/11',wd:'四',title:'品川 → 靜岡',sub:'建國紀念日，新幹線一小時到靜岡：小熊貓、富士山展望、東照宮、黑輪',stay:'靜岡站前飯店（待訂）',
-  map:{pts:['shizuoka','zoo','yume','toshogu','aoba'],legs:[{a:'shizuoka',b:'zoo',mode:'bus'},{a:'zoo',b:'yume',mode:'bus'},{a:'yume',b:'toshogu',mode:'ropeway'},{a:'toshogu',b:'yume',mode:'ropeway',curve:.3},{a:'yume',b:'shizuoka',mode:'bus',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',toshogu:'b',aoba:'t'},minSpan:.055},
+  map:{pts:['shizuoka','zoo','yume','ume','toshogu','aoba'],legs:[{a:'shizuoka',b:'zoo',mode:'bus'},{a:'zoo',b:'yume',mode:'bus'},{a:'yume',b:'ume',mode:'walk'},{a:'ume',b:'yume',mode:'walk',curve:.35},{a:'yume',b:'toshogu',mode:'ropeway'},{a:'toshogu',b:'yume',mode:'ropeway',curve:.3},{a:'yume',b:'shizuoka',mode:'bus',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',ume:'t',toshogu:'b',aoba:'t'},minSpan:.055},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out'},
@@ -485,17 +491,18 @@ const DAYS=[
    {t:'11:40',i:'🍽',h:'靜岡站周邊午餐'},
    {t:'12:20',i:'🚌',h:'靜岡站 → 日本平動物園　巴士約 35 分',move:1},
    {t:'13:00',i:'🐼',h:'日本平動物園　小熊貓、猛獸館 299'},
-   {t:'14:30',i:'🚌',h:'動物園 → 日本平夢テラス　約 15 分',move:1},
-   {t:'14:50',i:'🗻',h:'日本平夢テラス　富士山與駿河灣展望迴廊'},
+   {t:'14:20',i:'🚌',h:'動物園 → 日本平夢テラス　約 15 分',move:1},
+   {t:'14:40',i:'🗻',h:'日本平夢テラス　富士山與駿河灣展望迴廊'},
+   {t:'15:10',i:'🌼',h:'日本平梅園　夢テラス 步行即到・約 350 棵梅・免費',move:1},
    {t:'15:30',i:'🚡',h:'日本平纜車 → 久能山東照宮　約 5 分',move:1},
    {t:'注意',i:'⚠',h:'東照宮冬季 16:00 截止拜觀、纜車末班約 16:15；動物園待太久就改成先搭纜車、回程再逛夢テラス'},
    {t:'16:30',i:'🚌',h:'日本平 → 靜岡站　約 45 分',move:1},
    {t:'17:30',i:'🛏',h:'靜岡站前飯店 check-in（房間待訂）'},
    {t:'19:00',i:'🍢',h:'青葉橫丁　靜岡おでん'}
-  ],cards:['shinkansen','shizuhotel','zoo','yume','toshogu','aoba'],
-  rain:'<b>雨備</b>　富士山看不到就跳過夢テラス：動物園室內館（猛獸館 299、夜行性動物館）＋久能山東照宮博物館，回靜岡逛靜岡市美術館或登呂遺跡博物館，晚上照樣去青葉橫丁。'},
+  ],cards:['shinkansen','shizuhotel','zoo','yume','ume','toshogu','aoba'],
+  rain:'<b>雨備</b>　富士山看不到就跳過夢テラス與梅園（都在戶外）：改走動物園室內館（猛獸館 299、夜行性動物館）＋久能山東照宮博物館，回靜岡後直接去青葉橫丁。'},
  {n:3,date:'2/12',wd:'五',title:'租車一日：久能・三保・清水',sub:'石垣草莓、三保松原、鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
-  map:{pts:['shizuoka','ichigo','miho','shimizu','maruko'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r'},minSpan:.1},
+  map:{pts:['shizuoka','ichigo','miho','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail'}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
   tl:[
    {t:'08:30',i:'🍳',h:'飯店早餐'},
    {t:'09:30',i:'🚗',h:'靜岡站前取車（tabirai 事先預約）',move:1},
@@ -505,9 +512,11 @@ const DAYS=[
    {t:'14:00',i:'🎪',h:'小丸子樂園（エスパルスドリームプラザ 3F）　開車約 5 分',move:1},
    {t:'16:00',i:'🎡',h:'ドリームプラザ　摩天輪、海側平台看富士山、買周邊'},
    {t:'17:00',i:'🚗',h:'開車約 30 分回靜岡站還車',move:1},
-   {t:'18:30',i:'🍽',h:'靜岡市區晚餐'}
-  ],cards:['ichigo','miho','shimizu','maruko'],
-  rain:'<b>雨備</b>　這天本來就有一半在室內。不租車的話：JR 到清水站，巴士接河岸の市午餐，再走ドリームプラザ 逛小丸子樂園與商場；草莓園是溫室，下雨照採；三保松原看不到富士山就縮短或跳過。'},
+   {t:'17:40',i:'🚆',h:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190',move:1},
+   {t:'18:00',i:'♨',h:'柚木の郷　天然溫泉＋三溫暖，館內食事處吃晚餐'},
+   {t:'21:00',i:'🚆',h:'東靜岡 → 靜岡　回飯店',move:1}
+  ],cards:['ichigo','miho','shimizu','maruko','yunoki'],
+  rain:'<b>雨備</b>　這天本來就有一半在室內。不租車的話：JR 到清水站，巴士接河岸の市午餐，再走ドリームプラザ 逛小丸子樂園與商場；草莓園是溫室，下雨照採；三保松原看不到富士山就縮短或跳過；晚上的柚木の郷 全在室內，照去。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'移動日順路吃沼津港，傍晚進熱海泡溫泉',stay:'LiVEMAX Resort 熱海 Ocean',
   map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus'},{a:'aquarium',b:'byuo',mode:'walk'},{a:'byuo',b:'senbon',mode:'walk'},{a:'senbon',b:'numazuStn',mode:'bus',curve:.3},{a:'numazuStn',b:'atami',mode:'rail',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
   tl:[
