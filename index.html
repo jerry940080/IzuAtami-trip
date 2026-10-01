@@ -90,7 +90,7 @@ td b{font-weight:500}
 @media (max-width:860px){.mapcard{position:static}}
 .mapcard svg{display:block;width:100%;height:auto}
 .mapfoot{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2);align-items:center}
-.mapfoot .lg{display:inline-flex;align-items:center;gap:6px}
+.mapfoot .lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .mapfoot .lg i{display:inline-block;width:22px;height:0;border-top:3px solid}
 .mapfoot button{margin-left:auto;border:1px solid var(--rule);background:var(--paper);border-radius:999px;padding:3px 11px;font:inherit;font-size:12px;color:var(--ink2);cursor:pointer}
 .mapfoot button:hover{background:#fff;color:var(--ink)}
@@ -474,7 +474,7 @@ const IMG={prince:['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEB
 
 const DAYS=[
  {n:1,date:'2/10',wd:'三',title:'桃園 → 成田 → 品川',sub:'下午飛，晚上住進東京',stay:'品川王子大飯店 北塔',
-  map:{pts:['nrt','shinagawa','prince'],legs:[{a:'nrt',b:'shinagawa',mode:'rail',via:['chiba','funabashi','kinshicho','tokyo']},{a:'shinagawa',b:'prince',mode:'walk'}],labels:{nrt:'r',prince:'l'},minSpan:.3},
+  map:{pts:['nrt','shinagawa','prince'],legs:[{a:'nrt',b:'shinagawa',mode:'rail',line:"JR 成田特快 N'EX",via:['chiba','funabashi','kinshicho','tokyo']},{a:'shinagawa',b:'prince',mode:'walk'}],labels:{nrt:'r',prince:'l'},minSpan:.3},
   tl:[
    {t:'13:30–17:30',i:'✈',h:'桃園 T1 → 成田 T2　虎航 IT202'},
    {t:'18:00',i:'🧳',h:'領行李、入境（Visit Japan Web 先填好）'},
@@ -482,7 +482,7 @@ const DAYS=[
    {t:'21:00',i:'🛏',h:'品川王子大飯店 北塔 check-in，站內覓食'}
   ],cards:['nex','prince']},
  {n:2,date:'2/11',wd:'四',title:'品川 → 靜岡',sub:'建國紀念日，新幹線一小時到靜岡：小熊貓、富士山展望、東照宮、黑輪',stay:'靜岡站前飯店（待訂）',
-  map:{pts:['shizuoka','zoo','yume','ume','toshogu','aoba'],legs:[{a:'shizuoka',b:'zoo',mode:'bus'},{a:'zoo',b:'yume',mode:'bus'},{a:'yume',b:'ume',mode:'walk'},{a:'ume',b:'yume',mode:'walk',curve:.35},{a:'yume',b:'toshogu',mode:'ropeway'},{a:'toshogu',b:'yume',mode:'ropeway',curve:.3},{a:'yume',b:'shizuoka',mode:'bus',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',ume:'t',toshogu:'b',aoba:'t'},minSpan:.055},
+  map:{pts:['shizuoka','zoo','yume','ume','toshogu','aoba'],legs:[{a:'shizuoka',b:'zoo',mode:'bus',line:'静鉄ジャストライン 日本平線'},{a:'zoo',b:'yume',mode:'bus',line:'静鉄ジャストライン 日本平線'},{a:'yume',b:'ume',mode:'walk'},{a:'ume',b:'yume',mode:'walk',curve:.35},{a:'yume',b:'toshogu',mode:'ropeway',line:'日本平ロープウェイ'},{a:'toshogu',b:'yume',mode:'ropeway',line:'日本平ロープウェイ',curve:.3},{a:'yume',b:'shizuoka',mode:'bus',line:'静鉄ジャストライン 日本平線',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',ume:'t',toshogu:'b',aoba:'t'},minSpan:.055,lines:[{mode:'shinkansen',line:'東海道新幹線 ひかり（品川→靜岡・圖幅外）'}]},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out'},
@@ -502,7 +502,7 @@ const DAYS=[
   ],cards:['shinkansen','shizuhotel','zoo','yume','ume','toshogu','aoba'],
   rain:'<b>雨備</b>　富士山看不到就跳過夢テラス與梅園（都在戶外）：改走動物園室內館（猛獸館 299、夜行性動物館）＋久能山東照宮博物館，回靜岡後直接去青葉橫丁。'},
  {n:3,date:'2/12',wd:'五',title:'租車一日：久能・三保・清水',sub:'石垣草莓、三保松原、鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
-  map:{pts:['shizuoka','ichigo','miho','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail'}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
+  map:{pts:['shizuoka','ichigo','miho','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail',line:'JR 東海道本線'}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
   tl:[
    {t:'08:30',i:'🍳',h:'飯店早餐'},
    {t:'09:30',i:'🚗',h:'靜岡站前取車（tabirai 事先預約）',move:1},
@@ -518,7 +518,7 @@ const DAYS=[
   ],cards:['ichigo','miho','shimizu','maruko','yunoki'],
   rain:'<b>雨備</b>　這天本來就有一半在室內。不租車的話：JR 到清水站，巴士接河岸の市午餐，再走ドリームプラザ 逛小丸子樂園與商場；草莓園是溫室，下雨照採；三保松原看不到富士山就縮短或跳過；晚上的柚木の郷 全在室內，照去。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'移動日順路吃沼津港，傍晚進熱海泡溫泉',stay:'LiVEMAX Resort 熱海 Ocean',
-  map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus'},{a:'aquarium',b:'byuo',mode:'walk'},{a:'byuo',b:'senbon',mode:'walk'},{a:'senbon',b:'numazuStn',mode:'bus',curve:.3},{a:'numazuStn',b:'atami',mode:'rail',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
+  map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',line:'JR 東海道本線',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45'},{a:'aquarium',b:'byuo',mode:'walk'},{a:'byuo',b:'senbon',mode:'walk'},{a:'senbon',b:'numazuStn',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45',curve:.3},{a:'numazuStn',b:'atami',mode:'rail',line:'JR 東海道本線',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out'},
@@ -536,7 +536,7 @@ const DAYS=[
   ],cards:['numazuport','aquarium','byuo','senbon','livemax'],
   rain:'<b>雨備</b>　整天都在室內：水族館逛久一點，びゅうお 展望台與千本松原改天再說，午餐後直接去 ららぽーと沼津（沼津站巴士約 20 分）避雨，再搭 JR 進熱海。'},
  {n:5,date:'2/14',wd:'日',title:'河津一日遊',sub:'踊子號靠海側南下賞櫻，看完夜櫻搭普通車回熱海',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
-  map:{pts:['livemax','atami','teddy','banana','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu'},{a:'shimoda',b:'shirahama',mode:'bus'},{a:'shimoda',b:'minami',mode:'bus'},{a:'kawazu',b:'atami',mode:'izukyu',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',banana:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
+  map:{pts:['livemax','atami','teddy','banana','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',banana:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🚕',h:'飯店 → 熱海站　計程車約 5 分',move:1},
@@ -552,7 +552,7 @@ const DAYS=[
   ],cards:['odoriko','sakura','minami','shimoda','shirahama','teddy','banana','inatori'],
   rain:'<b>雨備</b>　伊豆稻取「雛のつるし飾り」展館全在室內，加上下田培里小路與了仙寺；河津只在傍晚點燈時段撐傘走一段，其餘時間縮短。'},
  {n:6,date:'2/15',wd:'一',title:'熱海 → 品川',sub:'上午梅園正見頃、來宮大楠，下午新幹線回東京吃烤肉',stay:'品川王子大飯店 北塔',
-  map:{pts:['livemax','baien','kinomiya','itogawa','atami','shinagawa','prince','roppongi','shimokita'],legs:[{a:'livemax',b:'baien',mode:'taxi'},{a:'baien',b:'kinomiya',mode:'walk'},{a:'kinomiya',b:'itogawa',mode:'walk'},{a:'itogawa',b:'atami',mode:'walk'},{a:'atami',b:'shinagawa',mode:'shinkansen',via:['odawara','shinyoko']},{a:'shinagawa',b:'prince',mode:'walk'},{a:'prince',b:'roppongi',mode:'subway'}],labels:{atami:'b',shinagawa:'r',prince:'r',roppongi:'t',shimokita:'l'},minSpan:.3},
+  map:{pts:['livemax','baien','kinomiya','itogawa','atami','shinagawa','prince','roppongi','shimokita'],legs:[{a:'livemax',b:'baien',mode:'taxi'},{a:'baien',b:'kinomiya',mode:'walk'},{a:'kinomiya',b:'itogawa',mode:'walk'},{a:'itogawa',b:'atami',mode:'walk'},{a:'atami',b:'shinagawa',mode:'shinkansen',line:'東海道新幹線 こだま',via:['odawara','shinyoko']},{a:'shinagawa',b:'prince',mode:'walk'},{a:'prince',b:'roppongi',mode:'subway',line:'都營淺草線→都營大江戶線'}],labels:{atami:'b',shinagawa:'r',prince:'r',roppongi:'t',shimokita:'l'},minSpan:.3},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out，行李寄櫃台'},
@@ -569,7 +569,7 @@ const DAYS=[
    {t:'選項',i:'🎸',h:'或去下北澤：古著、小酒館、live house'}
   ],cards:['baien','kinomiya','itogawa','yakiniku','roppongi','shimokita']},
  {n:7,date:'2/16',wd:'二',title:'東京自由日',sub:'神保町沾麵、秋葉原，晚上找一條橫丁喝一杯',stay:'品川王子大飯店 北塔（續住）',
-  map:{pts:['prince','jimbocho','akiba','yokocho'],legs:[{a:'prince',b:'jimbocho',mode:'subway'},{a:'jimbocho',b:'akiba',mode:'walk'},{a:'akiba',b:'yokocho',mode:'subway'},{a:'yokocho',b:'prince',mode:'subway',curve:.2}],labels:{prince:'l',jimbocho:'l',akiba:'r',yokocho:'r'},minSpan:.1},
+  map:{pts:['prince','jimbocho','akiba','yokocho'],legs:[{a:'prince',b:'jimbocho',mode:'subway',line:'都營淺草線→都營三田線'},{a:'jimbocho',b:'akiba',mode:'walk'},{a:'akiba',b:'yokocho',mode:'subway',line:'地鐵（視橫丁地點而定）'},{a:'yokocho',b:'prince',mode:'subway',line:'地鐵（視橫丁地點而定）',curve:.2}],labels:{prince:'l',jimbocho:'l',akiba:'r',yokocho:'r'},minSpan:.1},
   tl:[
    {t:'09:00',i:'☕',h:'自由時間　睡到自然醒，或去品川水族館'},
    {t:'12:00',i:'🚇',h:'品川 → 神保町　都營淺草線→三田線約 20 分',move:1},
@@ -580,7 +580,7 @@ const DAYS=[
    {t:'19:00',i:'🍶',h:'自由行程：居酒屋橫丁　地點待定'}
   ],cards:['katsumoto','akiba','yokocho']},
  {n:8,date:'2/17',wd:'三',title:'品川 → 成田 → 桃園',sub:'一早搭成田特快，機場慢慢買伴手禮',stay:'回家',
-  map:{pts:['prince','shinagawa','nrt'],legs:[{a:'prince',b:'shinagawa',mode:'walk'},{a:'shinagawa',b:'nrt',mode:'rail',via:['tokyo','kinshicho','funabashi','chiba']}],labels:{nrt:'r',prince:'l'},minSpan:.3},
+  map:{pts:['prince','shinagawa','nrt'],legs:[{a:'prince',b:'shinagawa',mode:'walk'},{a:'shinagawa',b:'nrt',mode:'rail',line:"JR 成田特快 N'EX",via:['tokyo','kinshicho','funabashi','chiba']}],labels:{nrt:'r',prince:'l'},minSpan:.3},
   tl:[
    {t:'07:00',i:'🍳',h:'早餐'},
    {t:'08:00',i:'🧳',h:'Check-out'},
@@ -738,8 +738,12 @@ function cardHTML(id){
 }
 const daysEl=document.getElementById('days');
 daysEl.innerHTML=DAYS.map(d=>{
-  const modes=[...new Set(d.map.legs.map(l=>l.mode))];
-  const legend=modes.map(m=>`<span class="lg"><i style="border-color:${MODE[m].c};${MODE[m].d?'border-top-style:dashed':''}"></i>${MODE[m].label}</span>`).join('');
+  const seen=new Set(), rows=[];
+  (d.map.lines||[]).concat(d.map.legs).forEach(l=>{
+    const label=l.line||MODE[l.mode].label, k=l.mode+'|'+label;
+    if(seen.has(k))return; seen.add(k); rows.push({m:l.mode,label});
+  });
+  const legend=rows.map(x=>`<span class="lg"><i style="border-color:${MODE[x.m].c};${MODE[x.m].d?'border-top-style:dashed':''}"></i>${x.label}</span>`).join('');
   return `<section class="day" id="day${d.n}">
   <div class="wrap">
     <div class="day-head">
