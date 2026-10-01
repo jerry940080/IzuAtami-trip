@@ -91,6 +91,13 @@ td b{font-weight:500}
 .mapcard svg{display:block;width:100%;height:auto}
 .mapfoot{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2);align-items:center}
 .mapfoot .lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.mk-a{cursor:pointer}
+.mk-a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.mk-a:hover .mk circle,.mk-a:hover .mk rect{stroke:var(--ai);stroke-width:3}
+.mact{margin-top:16px}
+.mact a{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 15px;border:1px solid var(--rule);border-radius:999px;background:var(--paper);color:var(--ai);text-decoration:none;transition:border-color .18s,background .18s}
+.mact a:hover{background:#fff;border-color:var(--ai)}
+.mact a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
 .areamap{max-width:780px;margin:20px auto 0;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
 .areamap svg{display:block;width:100%;height:auto}
 .areanote{margin-top:18px;padding:12px 16px;border-left:3px solid var(--sakura);background:var(--paper2);border-radius:0 8px 8px 0;font-size:14px}
@@ -315,7 +322,7 @@ footer p{max-width:70ch}
   </div>
 </section>
 
-<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div></div><div class="modal-video" id="mVideo"></div></div></div>
+<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
 <footer><div class="wrap">
   <p>行程為 2026-09-01 定案的 v3 版（原始資料「熱海伊豆行.xlsx」的品川→熱海→河津住兩晚版本已過時，僅供參考）；巴士、步行與開車時間為估算，班次時刻與祭典日期以 2027 年官方公告為準。景點照片部分為現場照，其餘透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土数値情報（dataofjapan/land）；鐵道線形為「国土数値情報（鉄道データ）」（国土交通省）加工製作，CC BY 4.0。</p>
 </div></footer>
@@ -357,6 +364,30 @@ const NAMES={
  ito:['伊東','station'], izukogen:['伊豆高原','station'], teddy:['泰迪熊博物館（選項）','spot'], banana:['熱川香蕉鱷魚園（選項）','spot'], atagawa:['伊豆熱川','station'], inatori:['伊豆稻取','station'], kawazu:['河津站','station'], sakura:['河津櫻並木','spot'], shimoda:['伊豆急下田','station'], shirahama:['白濱神社','spot'], minami:['南伊豆 櫻花・油菜花祭','spot'],
  jimbocho:['神保町・神田勝本','spot'], shimokita:['下北澤（選項）','spot'], akiba:['秋葉原','spot'], roppongi:['六本木','spot'], yokocho:['居酒屋橫丁（待定）','spot'], odawara:['小田原','station']
 };
+
+/* Google 地圖查詢字串：有名稱的用日文正式名（會帶出該地點的資訊卡），
+   沒列的自動退回用經緯度落針 */
+const GQ={
+ nrt:'成田空港第2ターミナル', shinagawa:'品川駅', prince:'品川プリンスホテル', tokyo:'東京駅', odawara:'小田原駅',
+ shizuoka:'静岡駅', shizuhotel:'静岡駅', zoo:'静岡市立日本平動物園', yume:'日本平夢テラス', ume:'日本平梅園',
+ toshogu:'久能山東照宮', aoba:'青葉横丁 静岡市', ichigo:'久能 石垣いちご', miho:'三保の松原',
+ shimizu:'清水魚市場 河岸の市', maruko:'ちびまる子ちゃんランド', yunoki:'東静岡天然温泉 柚木の郷',
+ mishima:'三島駅', numazuStn:'沼津駅', numazuport:'沼津港', aquarium:'沼津港深海水族館',
+ byuo:'沼津港大型展望水門 びゅうお', senbon:'千本浜公園', lalaport:'ららぽーと沼津',
+ atami:'熱海駅', livemax:'リブマックスリゾート熱海Ocean', baien:'熱海梅園', kinomiya:'来宮神社 熱海',
+ itogawa:'糸川遊歩道 熱海', beach:'熱海サンビーチ',
+ ito:'伊東駅', izukogen:'伊豆高原駅', teddy:'伊豆テディベア・ミュージアム', banana:'熱川バナナワニ園',
+ atagawa:'伊豆熱川駅', inatori:'伊豆稲取駅', kawazu:'河津駅', sakura:'河津桜並木',
+ shimoda:'ペリーロード 下田', shirahama:'白濱神社 下田', minami:'下賀茂 みなみの桜と菜の花まつり',
+ jimbocho:'つけそば 神田勝本', katsumoto:'つけそば 神田勝本', akiba:'秋葉原電気街',
+ roppongi:'六本木ヒルズ', shimokita:'下北沢駅', souvenir:'成田空港第2ターミナル'
+};
+function gUrl(k){
+  const base='https://www.google.com/maps/search/?api=1&query=';
+  if(GQ[k]) return base+encodeURIComponent(GQ[k]);
+  if(P[k])  return base+P[k][0]+','+P[k][1];
+  return '';
+}
 
 const CARDS={
  nex:{url:'https://www.jreast.co.jp/multi/nex/',name:"成田特快 N'EX",jp:'成田エクスプレス',kind:'交通',short:'成田 T2 直達品川約 1 小時',wiki:['成田エクスプレス'],
@@ -665,7 +696,10 @@ function marker(key,pr,side,big){
   const dx=side==='l'?-r-6:side==='r'?r+6:0, dy=side==='t'?-r-7:side==='b'?r+14:4.5;
   const anchor=side==='l'?'end':side==='r'?'start':'middle';
   const lbl=side?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
-  return `<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
+  const c=CARDS[key], tip=name+(c&&c.short?'　'+c.short:'')+'　｜點擊在 Google 地圖開啟';
+  const g=`<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><title>${tip}</title>${dot}${lbl}</g>`;
+  const u=gUrl(key);
+  return u?`<a class="mk-a" href="${u}" target="_blank" rel="noopener noreferrer">${g}</a>`:g;
 }
 let bgLines=[];
 function railBg(pr,bbox){
@@ -833,6 +867,10 @@ function openCard(id){
   document.getElementById('mJp').textContent=c.jp||'';
   document.getElementById('mText').innerHTML=c.text;
   document.getElementById('mChips').innerHTML=(c.chips||[]).map(x=>`<span>${x}</span>`).join('');
+  const act=document.getElementById('mAct');act.textContent='';
+  const gu=gUrl(id);
+  if(gu){const ga=document.createElement('a');ga.href=gu;ga.target='_blank';ga.rel='noopener noreferrer';
+    ga.textContent='在 Google 地圖開啟 ↗';ga.title='另開分頁，可看即時評分、營業時間與路線';act.appendChild(ga);}
   const vids=[].concat(c.video||[]).map(v=>{const u=typeof v==='string'?v:v.u;return {id:ytId(u),st:ytStart(u),l:v.l};}).filter(v=>v.id);
   document.getElementById('mVideo').innerHTML=(vids.length?'<div class="vt">介紹影片</div>':'')+vids.map(v=>`${v.l?`<div class="vl">${v.l}</div>`:''}<div class="yt"><iframe src="https://www.youtube.com/embed/${v.id}?rel=0${v.st?'&start='+v.st:''}" title="${c.name} ${v.l||'介紹影片'}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`).join('');
   modal.hidden=false;document.body.style.overflow='hidden';
