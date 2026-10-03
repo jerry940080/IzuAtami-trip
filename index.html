@@ -290,6 +290,31 @@ footer p{max-width:70ch}
 @media (max-width:640px){
   .hero svg{height:220px}
   section.block{padding:34px 0 12px}
+  /* 時間軸（停留點＋移動藥丸） */
+  .tlx{list-style:none;margin:4px 0 0;padding:0}
+  .tlx li{display:grid;grid-template-columns:48px 22px minmax(0,1fr);column-gap:8px}
+  .tlx li.st{padding:0;border-radius:14px;cursor:pointer}
+  .tlx li.st:active{background:#fff}
+  .tlx .tt{padding:11px 0 0;text-align:right;line-height:1.2}
+  .tlx .tt b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .tlx .tt span{display:block;font-size:10.5px;color:var(--ink3);margin-top:3px}
+  .tlx .ax{position:relative}
+  .tlx .ax::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--rule)}
+  .tlx .ax.first::before{top:20px}
+  .tlx .ax.last::before{bottom:calc(100% - 20px)}
+  .tlx .ax i{position:absolute;top:13px;left:3px;width:16px;height:16px;border-radius:50%;border:3px solid var(--paper)}
+  .tlx .ax.dash::before{background:none;border-left:2px dashed var(--coast)}
+  .tlx .bd{padding:9px 0 11px;min-width:0}
+  .tlx .n{font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
+  .tlx .m{display:flex;align-items:center;gap:6px;margin-top:4px;min-width:0}
+  .tlx .k{flex:none;font-size:10.5px;padding:1px 7px;border-radius:999px;color:#fff;font-weight:600}
+  .tlx .d{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tlx li.open .m{flex-wrap:wrap}
+  .tlx li.open .d{white-space:normal;overflow:visible}
+  .tlx li.go{height:38px}
+  .tlx li.go:last-child .ax::before{bottom:50%}
+  .tlx li.go>div:last-child{display:flex;align-items:center}
+  .tlx .pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;background:var(--paper2);color:var(--ink2);font-size:12px;font-weight:600}
   section.block>.wrap>h2{font-size:24px;margin-bottom:12px}
   .lead{font-size:14.5px;margin-bottom:16px}
   .areanote{font-size:13.5px;padding:10px 13px}
@@ -761,6 +786,18 @@ const DAYS=[
    {t:'18:45',i:'🚆',h:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190',move:1},
    {t:'19:05',i:'♨',h:'柚木の郷　天然溫泉＋三溫暖，館內食事處吃晚餐（食事處 LO 21:30）'},
    {t:'22:00',i:'🚆',h:'東靜岡 → 靜岡　回飯店',move:1}
+  ],
+  stops:[
+   {t:'08:30',i:'🍳',n:'飯店早餐',k:'美食',go:{i:'🚗',t:'30 分'}},
+   {t:'10:00',i:'🍓',n:'石垣草莓 久能海岸',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',go:{i:'🚗',t:'25 分'}},
+   {t:'11:05',i:'🦐',n:'清水 河岸の市',k:'景點',d:'先逛いちば館買干物與櫻花蝦',card:'shimizu'},
+   {t:'12:00',i:'🍽',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',go:{i:'🚗',t:'5 分'}},
+   {t:'13:20',i:'🎪',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko'},
+   {t:'14:30',i:'🎡',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',go:{i:'🚗',t:'20 分'}},
+   {t:'15:50',i:'🌲',n:'三保松原・御穗神社・神の道',k:'景點',d:'500 公尺松林參道散步',card:'miho'},
+   {t:'16:50',i:'🌅',n:'羽衣の松海岸 等夕陽',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',go:{i:'🚗',t:'40 分'}},
+   {t:'18:30',i:'🔑',n:'還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',go:{i:'🚆',t:'JR 3 分・¥190'}},
+   {t:'19:05',i:'♨',n:'柚木の郷',k:'溫泉',d:'天然溫泉＋三溫暖，館內食事處吃晚餐（LO 21:30）',card:'yunoki',go:{i:'🚆',t:'22:00 回飯店'}}
   ],cards:['ichigo','shimizu','maruko','miho','mihoshrine','yunoki'],
   rain:'<b>雨備</b>　上午到下午幾乎都在室內，照跑：草莓園是溫室、河岸の市 與ドリームプラザ 都有屋頂。會泡湯的只有傍晚的三保夕陽 —— 看不到就跳過，提早還車去柚木の郷 多泡一小時。不租車的話：JR 到清水站，走路 5 分到河岸の市，再搭東口的免費接駁巴士去ドリームプラザ（約 10 分）。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'上午搭車去日本平動物園看小熊貓，中午移動，順路吃沼津港',stay:'LiVEMAX Resort 熱海 Ocean',
@@ -1085,6 +1122,23 @@ function bgRow(ls){
   return '<div class="mapbg"><b>圖中鐵道</b>'+ls.map(L=>'<span class="lg"><i style="border-color:'+L.c+'"></i>'+L.n+'</span>').join('')+'</div>';
 }
 const daysEl=document.getElementById('days');
+const KCOL={'美食':'var(--shu)','景點':'var(--sakura)','體驗':'var(--sakura)','住宿':'var(--ai)','交通':'var(--ink3)','溫泉':'var(--murasaki)','提醒':'var(--nanohana)','選項':'var(--wakatake)'};
+function mins(t){const m=/^(\d{1,2}):(\d{2})$/.exec(t);return m?(+m[1])*60+(+m[2]):null;}
+function fmtDur(m){if(m<=0)return'';if(m<60)return m+' 分';const h=Math.floor(m/60),r=m%60;return h+' 小時'+(r?' '+r+' 分':'');}
+function stopsHTML(d){
+  const S=d.stops;
+  return `<ol class="tlx">${S.map((s,i)=>{
+    const nx=S[i+1];let dur='';
+    if(nx){const a=mins(s.t),b=mins(nx.t);if(a!=null&&b!=null){let leg=0;const gm=s.go&&/(\d+)\s*分/.exec(s.go.t);if(gm&&!/\d{2}:\d{2}/.test(s.go.t))leg=+gm[1];dur=fmtDur(b-a-leg);}}
+    const col=KCOL[s.k]||'var(--sakura)';
+    const row=`<li class="st${s.card?' has':''}"${s.card?` data-card="${s.card}" role="button" tabindex="0"`:''}>
+      <div class="tt"><b>${s.t}</b>${dur?`<span>${dur}</span>`:''}</div>
+      <div class="ax${i===0?' first':''}${!nx?' last':''}"><i style="background:${col}"></i></div>
+      <div class="bd"><div class="n">${s.i} ${s.n}</div><div class="m"><span class="k" style="background:${col}">${s.k}</span>${s.d?`<span class="d">${s.d}</span>`:''}</div></div>
+    </li>`;
+    const go=s.go?`<li class="go"><div></div><div class="ax dash"></div><div><span class="pill">${s.go.i} ${s.go.t}</span></div></li>`:'';
+    return row+go;}).join('')}</ol>`;
+}
 const dayBlocks=DAYS.map(d=>{
   const seen=new Set(), rows=[];
   (d.map.lines||[]).concat(d.map.legs).forEach(l=>{
@@ -1103,7 +1157,7 @@ const dayBlocks=DAYS.map(d=>{
     <div class="day-body">
       <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(d.map,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
-        <ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>
+        ${MOB&&d.stops?stopsHTML(d):`<ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>`}
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
@@ -1177,6 +1231,7 @@ document.addEventListener('click',e=>{
   const mh=e.target.closest('.maphead');if(mh&&MOB){mh.closest('.mapcard').classList.toggle('min');return;}
   if(e.target.closest('#lbX')){closeLb();return;}
   if(e.target.closest('#lbZ')||e.target.closest('#lbScroll img')){toggleZoom();return;}
+  const stp=e.target.closest('.tlx li.st');if(stp){if(stp.dataset.card)openCard(stp.dataset.card);else stp.classList.toggle('open');return;}
   const card=e.target.closest('.card[data-card]');if(card){openCard(card.dataset.card);return;}
   if(e.target.closest('.modal-x')||e.target.classList.contains('modal-bg'))closeModal();
 });
