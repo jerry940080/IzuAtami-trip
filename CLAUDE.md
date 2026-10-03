@@ -38,11 +38,26 @@
 - 熱海城加過又移除（使用者不要，勿再建議）。今井濱東急飯店卡片已隨住宿取消而刪除。
 - 泰迪熊博物館重點：可 DIY 龍貓玩偶（使用者特別要求寫進去）。
 
+### 2026-10-03 變更
+- 卡片刪除：`byuo`（併進 `numazuport` 內文）、`senbon`、`shimoda`、`inatori`（使用者說沒什麼好逛）。
+  `shimoda`、`inatori` 的**座標仍保留在 `P`／`NAMES`**（下田是 Day 5 地圖標記與巴士轉運點、
+  稻取是熱海→河津鐵路線的 `via` 幾何點），只刪卡片。`byuo`／`senbon` 連 `P`／`NAMES`／`GQ` 一起刪。
+- 交通卡片 `nex`、`shinkansen`、`odoriko` 刪除，內容整併到 `#tickets` 新增的
+  **「訂位・搭車要訣」**（`.tipgrid` 六張小卡：N'EX／新幹線／踊子／靜岡租車／當天買票就好／
+  其他要先預約的）。`#tickets` 標題改為「交通總覽：車票、費用與訂位」，導覽列字樣改「交通・訂票」。
+- 新增影片：`numazuport`（AjrjrOr34mc）、`banana`（Re5eRTBCwAk）。
+
+> **踩雷筆記**：用字串切割改 `CARDS` 時，anchor 要限定在 `const CARDS={ … };` 區段內再切。
+> `MODE` 裡也有 ` shinkansen:{`，直接 `s.index('\n shinkansen:{')` 會命中 `MODE` 而把
+> `KIND`／`NAMES`／`GQ` 整段吃掉。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
-2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`zoo`、`yume`、`toshogu`、`ichigo`、
-   `aoba`、`miho`、`satta`、`shimizu`、`shimoda`、`inatori`、`yakiniku`、`roppongi`、`akiba`、
-   `souvenir`；`minami` 目前是低解析 2024 海報待換。
+2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
+   `hobby`、`sengen`、`aoba`、`ichigo`、`miho`、`shimizu`、`maruko`、`yunoki`、`yakiniku`、
+   `roppongi`、`akiba`、`souvenir`；`minami` 目前是低解析 2024 海報待換。
+   缺影片的卡片：`prince`、`shizuhotel`、`livemax`、`yakiniku`、`roppongi`、`yokocho`、`souvenir`
+   （`katsumoto`、`akiba` 使用者說去過不用放）。
 3. Day 7 居酒屋橫丁地點待定（已討論候選：野毛(最推,品川25分)、大井町東小路、上野アメ横、
    赤羽、北千住、蒲田、武藏小山；使用者喜歡大阪天滿的氛圍）。
 4. 訂票時程到期時提醒：1/11 前後 smart-EX 兩段新幹線；**1/14 台灣 09:00** えきねっと搶

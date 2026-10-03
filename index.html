@@ -71,6 +71,13 @@ td b{font-weight:500}
 .money div{flex:1;min-width:150px;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
 .money .big{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ai)}
 .money .lab{font-size:12.5px;color:var(--ink3)}
+.tipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:16px;margin-top:12px}
+.tipgrid > div{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:13px 16px 15px}
+.tipgrid h4{font-family:var(--serif);font-size:16.5px;font-weight:700;color:var(--ai);margin-bottom:3px}
+.tipgrid .when{font-size:12px;color:var(--shu);margin-bottom:7px}
+.tipgrid p{font-size:13.5px;line-height:1.8;color:var(--ink2)}
+.tipgrid b{color:var(--shu);font-weight:600}
+.sub-h{margin-top:30px;font-size:18px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
 .todo li{list-style:none;display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--rule);font-size:14px}
 .todo .d{flex:none;width:118px;color:var(--shu);font-weight:500}
 
@@ -257,7 +264,7 @@ footer p{max-width:70ch}
 <!-- ============ TICKETS ============ -->
 <section class="block" id="tickets">
   <div class="wrap">
-    <h2>車票、費用與訂票時程</h2>
+    <h2>交通總覽：車票、費用與訂位</h2>
     <div class="pre">
       <div>
         <h3>車票與費用</h3>
@@ -292,6 +299,41 @@ footer p{max-width:70ch}
           <li><span class="d">出發前一週</span><span>看河津町開花情報，決定 2/14 要不要往南伊豆或下田跑</span></li>
         </ul>
         <p class="mute" style="margin-top:8px">JR 東日本車票於乘車日前一個月的日本時間 10:00 開賣，即台灣 09:00。</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">訂位・搭車要訣</h3>
+    <p class="mute" style="margin-top:8px">這趟要事先劃位的只有三段：成田特快來回、兩段東海道新幹線、2/14 的踊子。其餘區間當天買票或嗶 Suica 就好。</p>
+    <div class="tipgrid">
+      <div>
+        <h4>成田特快 N'EX</h4>
+        <div class="when">2/10 成田→品川 ・ 2/17 品川→成田 ・ ¥3,330</div>
+        <p><b>全車指定席</b>，沒劃位不能上車，えきねっと 線上訂即可，這條不難買，出發前訂就行。車廂<b>兩端有大型行李放置區</b>（附號碼鎖），29 吋行李箱放得下。去程班機 17:30 落地，通關＋領行李抓 2 小時，搭 19:53、21:00 到品川；回程 13:00 的飛機，坐 08:05 發、09:30 到第二航廈，留 3 小時很充裕。</p>
+      </div>
+      <div>
+        <h4>東海道新幹線</h4>
+        <div class="when">2/11 品川→靜岡 ¥6,470 ・ 2/15 熱海→品川 ¥4,070 ・ 1/11 前後訂</div>
+        <p>用 <b>smart-EX</b> 線上訂，台灣發行的信用卡可以刷，進站直接嗶手機 QR。品川→靜岡務必挑<b>ひかり</b>（約 1 小時）；こだま 班次多但要 1 小時 25 分，差 25 分鐘。行李箱三邊合計超過 160 cm 要訂<b>「特大行李放置處附帶席」</b>，沒訂被查到要補 ¥1,000；或是訂該車廂<b>最後一排</b>，座位後方的空間可以放。想看富士山坐 <b>E 席</b>（山側），這點跟踊子相反，別記混了。</p>
+      </div>
+      <div>
+        <h4>JR 特急 踊子</h4>
+        <div class="when">2/14 熱海→河津 ¥3,490 ・ <b>台灣時間 1/14 09:00 開賣</b></div>
+        <p>河津櫻まつり期間最難搶的一段，<b>えきねっと 一開賣就要下手</b>（日本 1/14 10:00＝台灣 09:00），晚一小時就只剩站票。座位挑 <b>A 席</b>，往下田方向的左側＝<b>靠海</b>，相模灣與伊豆大島一路看到底。行李箱放 <b>1 號或 9 號車廂</b>的置物區。夜櫻看完已經沒有踊子，改搭伊豆急＋JR 普通車回熱海，約 2 小時、約 ¥2,100，<b>不用訂票</b>。</p>
+      </div>
+      <div>
+        <h4>靜岡租車</h4>
+        <div class="when">2/11 中午 – 2/12 傍晚 ・ 概算 ¥12,000 ＋ 停車約 ¥3,500</div>
+        <p>用 <b>tabirai</b> 比價，訂靜岡站前營業所。<b>台灣的國際駕照在日本無效</b>，一定要帶<b>台灣駕照正本＋監理站核發的日文譯本</b>（NT 100，可線上申請郵寄），兩份缺一不可，現場少一樣就租不到車。日本平、久能山下、三保松原、清水河岸の市都有停車場，不難停。日本是<b>方向盤在右、靠左行駛</b>，加油站多為自助式（セルフ）。</p>
+      </div>
+      <div>
+        <h4>當天買票就好</h4>
+        <div class="when">不用預約的區間</div>
+        <p>靜岡→沼津 ¥990（約 1 小時）、沼津→熱海 ¥420（約 25 分）、河津→熱海普通車約 ¥2,100，以及沼津港、日本平、來宮等各地巴士，全部<b>當天買票或嗶 Suica／PASMO</b>。手機的 Apple Pay／Google Pay 可以直接加 Suica，省去買實體卡。特急券與新幹線不能用 Suica 進站，記得走人工或 QR 閘門。</p>
+      </div>
+      <div>
+        <h4>其他要先預約的</h4>
+        <div class="when">非交通，但一樣會額滿</div>
+        <p><b>石垣草莓採果</b>（2/12 上午場）要先打電話或線上預約，2 月是旺季，週末常滿。<b>靜岡站前飯店 2/11–12 兩晚</b>目前還沒訂，越早越好。<b>Visit Japan Web</b> 出發前填好入境與海關 QR。2/15 的燒肉若想吃好一點的店，建議出發前一週訂位。</p>
       </div>
     </div>
   </div>
@@ -353,7 +395,7 @@ const P={ // [lat,lng]
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
  shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], yunoki:[34.9780,138.4110],
  ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], shimizu:[35.0158,138.4900], maruko:[35.0206,138.5081], satta:[35.0975,138.5350],
- mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], byuo:[35.0873,138.8548], senbon:[35.0920,138.8452], lalaport:[35.0940,138.8860],
+ mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], lalaport:[35.0940,138.8860],
  atami:[35.1036,139.0780], livemax:[35.0954,139.0777], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0975,139.0800],
  ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], banana:[34.8135,139.0790], atagawa:[34.8140,139.0720], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], shimoda:[34.6764,138.9447], shirahama:[34.6978,138.9750], minami:[34.6472,138.8764],
  jimbocho:[35.6958,139.7580], shimokita:[35.6613,139.6681], akiba:[35.6984,139.7731], roppongi:[35.6627,139.7314], yokocho:[35.6749,139.7628]
@@ -374,7 +416,7 @@ const NAMES={
  nrt:['成田機場 T2','air'], shinagawa:['品川站','station'], prince:['品川王子大飯店','hotel'], tokyo:['東京站','station'],
  shizuoka:['靜岡站','station'], shizuhotel:['靜岡站前飯店（待訂）','hotel'], hobby:['Hobby Square','spot'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷','spot'],
  ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], shimizu:['清水 河岸の市','spot'], maruko:['小丸子樂園','spot'], satta:['薩埵峠','spot'],
- mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], byuo:['びゅうお 展望水門','spot'], senbon:['千本松原','spot'], lalaport:['ららぽーと沼津','spot'],
+ mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], lalaport:['ららぽーと沼津','spot'],
  atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], beach:['熱海陽光海灘','spot'],
  ito:['伊東','station'], izukogen:['伊豆高原','station'], teddy:['泰迪熊博物館（選項）','spot'], banana:['熱川香蕉鱷魚園（選項）','spot'], atagawa:['伊豆熱川','station'], inatori:['伊豆稻取','station'], kawazu:['河津站','station'], sakura:['河津櫻並木','spot'], shimoda:['伊豆急下田','station'], shirahama:['白濱神社','spot'], minami:['南伊豆 櫻花・油菜花祭','spot'],
  jimbocho:['神保町・神田勝本','spot'], shimokita:['下北澤（選項）','spot'], akiba:['秋葉原','spot'], roppongi:['六本木','spot'], yokocho:['居酒屋橫丁（待定）','spot'], odawara:['小田原','station']
@@ -388,7 +430,7 @@ const GQ={
  toshogu:'久能山東照宮', aoba:'青葉横丁 静岡市', ichigo:'久能 石垣いちご', miho:'三保の松原',
  shimizu:'清水魚市場 河岸の市', maruko:'ちびまる子ちゃんランド', yunoki:'東静岡天然温泉 柚木の郷',
  mishima:'三島駅', numazuStn:'沼津駅', numazuport:'沼津港', aquarium:'沼津港深海水族館',
- byuo:'沼津港大型展望水門 びゅうお', senbon:'千本浜公園', lalaport:'ららぽーと沼津',
+ lalaport:'ららぽーと沼津',
  atami:'熱海駅', livemax:'リブマックスリゾート熱海Ocean', baien:'熱海梅園', kinomiya:'来宮神社 熱海',
  itogawa:'糸川遊歩道 熱海', beach:'熱海サンビーチ',
  ito:'伊東駅', izukogen:'伊豆高原駅', teddy:'伊豆テディベア・ミュージアム', banana:'熱川バナナワニ園',
@@ -405,15 +447,9 @@ function gUrl(k){
 }
 
 const CARDS={
- nex:{url:'https://www.jreast.co.jp/multi/nex/',name:"成田特快 N'EX",jp:'成田エクスプレス',kind:'交通',short:'成田 T2 直達品川約 1 小時',wiki:['成田エクスプレス'],
-  text:'成田 T2 直達品川約 1 小時 5 分，全車指定席，車廂兩端有可上鎖的行李箱區。去程 19:53 那班到品川剛好 21:00，出站過馬路就是飯店。',
-  chips:['¥3,330 單程','えきねっと訂票','全車指定席']},
  prince:{url:'https://www.princehotels.co.jp/shinagawa/',name:'品川王子大飯店 北塔',jp:'品川プリンスホテル N タワー',kind:'住宿',short:'品川站高輪口正對面',wiki:['品川プリンスホテル'],
   text:'JR 品川站高輪口正對面，成田特快、新幹線、山手線全在同一站，頭尾兩段東京住宿都選這裡，就是為了不用拖行李換車。館內有水族館、電影院與保齡球館。',
   chips:['品川站步行 3 分','2/10・2/15–16 共三晚']},
- shinkansen:{url:'https://smart-ex.jp/',name:'東海道新幹線 品川→靜岡',jp:'東海道新幹線 ひかり',kind:'交通',short:'品川→靜岡 約 1 小時',wiki:['東海道新幹線'],
-  text:'ひかり號從品川直達靜岡約 1 小時（こだま約 1 小時 25 分）。smart-EX 訂票時要選「特大行李放置區附座席」或最後一排；20 吋以下行李箱可放上方置物架。回程 2/15 熱海→品川 這段也一起在 smart-EX 訂。',
-  chips:['¥6,470 指定席','約 1 小時','smart-EX','1/11 前後訂票']},
  shizuhotel:{name:'靜岡站前飯店（待訂）',jp:'静岡駅前ホテル',kind:'住宿',short:'2/11–12 兩晚，尚未訂房',wiki:['静岡駅'],
   text:'2/11–12 兩晚住靜岡站周邊，訂了就不用搬行李、晚上還能走去青葉橫丁吃おでん。候選：ホテルアソシア静岡（直結靜岡站，最方便）、東橫INN 靜岡站北口、静鉄ホテルプレジオ 等。訂好後記得回頭更新住宿表與費用。',
   chips:['2/11–12 兩晚','待訂','站前徒步圈','要確認有無洗衣機','訂房後補上官網連結']},
@@ -450,45 +486,30 @@ const CARDS={
  yunoki:{url:'https://www.yunokinosato.com/',name:'柚木の郷 天然溫泉',jp:'東静岡 天然温泉 柚木の郷',kind:'溫泉',video:[{u:'https://www.youtube.com/watch?v=DnN4OKowkec&t=208',l:'從 3:28 館內段落開始'}],short:'東靜岡站步行 1 分，岩風呂與兩種三溫暖',
   text:'東靜岡站走路 1 分鐘就到的天然溫泉，規模比想像中大：岩風呂、源泉立湯、高濃度碳酸泉、寢湯、水風呂，另有兩種三溫暖——熱風蒸屋（ロウリュウ）與美潤蒸屋（奈米霧），岩盤浴另計。館內有「ほんまもん食堂」與「囲炉裏茶房」兩處食事處（11:00–22:00，最後點餐 21:30），<b>泡完直接吃晚餐不用再移動</b>。從靜岡站搭 JR 一站 3 分鐘，是還車後最順的收尾，也補上從靜岡到熱海之間唯一的泡湯機會。',
   chips:['平日 ¥1,200・假日 ¥1,430','10:00–24:00（最後入場 23:30）','東靜岡站步行 1 分','年中無休','館內有食事處']},
- numazuport:{url:'https://numazukanko.jp/',name:'沼津港 港口美食',jp:'沼津港・沼津みなと新鮮館',kind:'午餐',short:'丸天かき揚げ丼、深海魚料理、干物伴手禮',wiki:['沼津港'],
-  text:'深海水族館旁邊就是沼津港的餐飲區，走路 3 分鐘內都吃得到。必吃清單：魚河岸「丸天」的巨無霸かき揚げ丼（高達 15 公分的酥炸海鮮塔，兩人分一份剛好）；「港八十三番地」的深海魚料理與深海魚漢堡；「双葉寿司」「千本一」的海鮮丼與金目鯛煮付け；「みなと新鮮館」市場買竹筴魚干物、櫻花蝦、蜜柑當伴手禮，可真空包裝帶回台灣。注意 2 月駿河灣禁捕しらす，生しらす丼吃不到，桜えび也是冷凍的，這兩樣別特地點。',
-  chips:['沼津站巴士約 10 分','丸天 かき揚げ丼','深海魚漢堡','干物・櫻花蝦伴手禮','2 月無生しらす']},
+ numazuport:{url:'https://numazukanko.jp/',name:'沼津港 港口美食',jp:'沼津港・沼津みなと新鮮館',kind:'午餐',video:[{u:'https://www.youtube.com/watch?v=AjrjrOr34mc',l:'沼津港美食散步 9 選'}],short:'丸天かき揚げ丼、深海魚料理、干物伴手禮',wiki:['沼津港'],
+  text:'深海水族館旁邊就是沼津港的餐飲區，走路 3 分鐘內都吃得到。必吃清單：魚河岸「丸天」的巨無霸かき揚げ丼（高達 15 公分的酥炸海鮮塔，兩人分一份剛好）；「港八十三番地」的深海魚料理與深海魚漢堡；「双葉寿司」「千本一」的海鮮丼與金目鯛煮付け；「みなと新鮮館」市場買竹筴魚干物、櫻花蝦、蜜柑當伴手禮，可真空包裝帶回台灣。市場旁邊就是<b>「びゅうお」大型展望水門</b>，地上 30 公尺的展望台看得到富士山與港口全景，¥100，想上去隨時可以。注意 2 月駿河灣禁捕しらす，生しらす丼吃不到，桜えび也是冷凍的，這兩樣別特地點。',
+  chips:['沼津站巴士約 10 分','丸天 かき揚げ丼','深海魚漢堡','干物・櫻花蝦伴手禮','びゅうお 展望水門 ¥100','2 月無生しらす']},
  aquarium:{url:'https://www.numazu-deepsea.com/',name:'沼津港深海水族館',jp:'沼津港深海水族館',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=hjfVZ19g2pI',l:''}],short:'駿河灣深海生物與腔棘魚',wiki:['沼津港深海水族館'],
   text:'面對日本最深的駿河灣（深達 2,500 m），是世界少見以深海生物為主題的水族館，鎮館之寶是兩尾冷凍保存的腔棘魚（シーラカンス）。約 1 小時逛完，隔壁就是「みなと新鮮館」，海鮮丼與干物伴手禮都在這。',
   chips:['10:00–17:00','¥2,200','沼津港']},
- byuo:{url:'https://www.city.numazu.shizuoka.jp/kurashi/shisetsu/byuo.htm',name:'びゅうお 大型展望水門',jp:'沼津港大型展望水門「びゅうお」',kind:'景點',short:'地上 30 m，這一區看富士山最高的點',wiki:['沼津港大型展望水門'],
-  text:'2004 年完工的防海嘯水門，寬 40 公尺、高 9.3 公尺、重 406 噸，是日本最大級的水門。特別的是它把地上 30 公尺處做成展望台：往北是富士山與箱根連山，往南是駿河灣與突進海裡的大瀬崎，腳下就是漁港與市場的全景。從深海水族館走過去 3 分鐘，上去待 15 分鐘剛好。<b>週四只開到 14:00</b>，我們去的 2/13 是週六不受影響。',
-  chips:['10:00–20:00（週四至 14:00）','¥100','水族館步行 3 分','日本最大級水門']},
- senbon:{url:'https://www.city.numazu.shizuoka.jp/kurashi/sumai/park/kouen/kobetu/senbonhama.htm',name:'千本松原・千本浜公園',jp:'千本松原・千本浜公園',kind:'景點',short:'白砂青松 100 選，10 公里黑松林',wiki:['千本浜公園','千本松原'],
-  text:'沿駿河灣延伸約 10 公里的黑松林，入選「白砂青松 100 選」。海岸與公園之間築了階梯狀的堤防，坐上去可以同時看到日本最高的富士山與日本最深的駿河灣，冬天空氣清澈時最漂亮。園內有若山牧水的歌碑與井上靖的文學碑——這兩位文人都寫過這片松原。從沼津港往西走約 10 分鐘就到，回程要搭往沼津站的巴士在「千本松公園」站上車也行，等於順路。',
-  chips:['24 小時','免費','沼津港步行約 10 分','白砂青松 100 選','回程巴士順路']},
  livemax:{url:'https://www.livemax-resort.com/shizuoka/atami-ocean/',name:'LiVEMAX Resort 熱海 Ocean',jp:'リブマックスリゾート熱海 Ocean',kind:'住宿',short:'海景溫泉，熱海站計程車 5 分',wiki:['熱海温泉'],
   text:'面相模灣的溫泉度假飯店，大浴場看得到海。距熱海站計程車約 5 分。2/13 傍晚從沼津搭 JR 進熱海後 check-in，連住兩晚：2/14 當天來回河津看櫻花，2/15 早上再逛熱海市區才回東京。',
   chips:['2/13–14 兩晚','海景溫泉','確認洗衣機']},
- odoriko:{url:'https://www.jreast.co.jp/multi/traininformation/odoriko/',name:'JR 特急踊子',jp:'特急踊り子',kind:'交通',short:'沿海南下，選 A 席靠海',wiki:['踊り子 (列車)'],
-  text:'從東京・品川直通伊豆急下田的特急，熱海到河津約 1 小時 10 分，一路沿海岸南下。訂票重點：1 號或 9 號車廂有行李箱放置區，選「A 席」靠海側，右手邊就是相模灘。乘車日前一個月台灣時間 09:00 開賣，也就是 <b>1/14 09:00</b> 搶 2/14 的位子。晚上看完夜櫻回程沒有特急，改搭伊豆急＋JR 普通車約 2 小時、約 ¥2,100。',
-  chips:['熱海→河津 ¥3,490','A 席靠海','1／9 號車廂','1/14 09:00 開賣']},
  sakura:{url:'https://kawazuzakura.jp/',name:'河津櫻並木',jp:'河津桜並木',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=sMKtXfLhFZU',l:'白天'},{u:'https://www.youtube.com/watch?v=O6AGMRwyL1U&t=53s',l:'夜晚'}],short:'4 公里 850 棵早開河津櫻',wiki:['河津桜'],
   text:'河津川兩岸約 4 公里、850 棵早開的河津桜，桃紅花瓣配上黃色油菜花，是全日本最早的賞櫻名所。河津桜まつり通常在 2 月上旬到 3 月上旬（2026 年為 2/7–3/8），2/14 開花進度約五五波（偏樂觀），出發前一週看河津町官網的開花情報再決定當天怎麼排。晚上點燈到 21:00，從河津站出來就是並木起點，攤位集中在站前到豐泉橋一帶。',
   chips:['24 小時','免費','夜櫻點燈至 21:00','出發前查開花情報']},
  teddy:{url:'https://teddynet.co.jp/',name:'伊豆泰迪熊博物館（選項）',jp:'伊豆テディベア・ミュージアム',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=302YvTBzyRM',l:''}],short:'古董泰迪熊與龍貓 DIY，中途下車選項',wiki:['伊豆テディベア・ミュージアム'],
   text:'位在伊豆高原的英式紅磚小屋，1995 年開館，收藏世界各地的古董泰迪熊，鎮館之寶是 1904 年的 Steiff「Teddy Girl」。館內附設常設的龍貓布偶展，有龍貓公車與森林場景可以拍照，還能<b>參加體驗課自己動手做一隻龍貓玩偶、繡上名字帶回家</b>；另有英式茶室，喜歡吉卜力的話很值得。伊豆高原是踊子號的停靠站，可以中途下車逛 1 小時；但 17:00 閉館，要排就得放棄當天的夜櫻、提早回程。',
   chips:['9:30–17:00（入館至 16:30）','大人 ¥1,800','龍貓玩偶 DIY 體驗','伊豆高原站步行 9 分','休館日請確認']},
- banana:{url:'https://bananawani.jp/',name:'熱川香蕉鱷魚園（選項）',jp:'熱川バナナワニ園',kind:'選項',short:'二十幾隻小熊貓近距離看，中途下車選項',wiki:['熱川バナナワニ園'],
+ banana:{url:'https://bananawani.jp/',name:'熱川香蕉鱷魚園（選項）',jp:'熱川バナナワニ園',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=Re5eRTBCwAk',l:'小熊貓在分園，影片有拍到'}],short:'二十幾隻小熊貓近距離看，中途下車選項',wiki:['熱川バナナワニ園'],
   text:'名字掛著鱷魚，但現在的主角是小熊貓：園內養了二十多隻，是日本數一數二的繁殖群，飼養區沒有玻璃、離得很近，冬天最活潑。另一個招牌是全日本唯一的亞馬遜海牛，加上用溫泉熱能養的熱帶植物與香蕉溫室，室內區多、下雨也能逛。伊豆熱川站出來步行 1 分，踊子號有停，中途下車一小時剛好；同樣是 17:00 閉館。',
   chips:['9:00–17:00','約 ¥2,000','伊豆熱川站步行 1 分','室內多可雨備']},
- shimoda:{url:'https://www.shimoda-city.info/kanko/perryroad',name:'伊豆急下田・培里小路',jp:'伊豆急下田・ペリーロード',kind:'選項',short:'開國之港與培里小路',wiki:['ペリーロード','下田市'],
-  text:'伊豆急行線終點。1854 年培里艦隊在此登陸、簽訂日美和親條約，是日本的「開國之港」。站前走 10 分鐘的培里小路保留石板路與柳樹，老屋改成的咖啡館與雜貨店適合午餐前後散步；金目鯛料理也是這裡的名物。2/14 若河津櫻開得不如預期，可以把時間挪來下田。',
-  chips:['河津→下田 約 25 分','午餐：金目鯛','2/14 選項']},
  shirahama:{url:'https://ikonahime.jp/',name:'白濱神社',jp:'伊古奈比咩命神社',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=iOLLz5F1cCU',l:''}],short:'大明神岩上的紅鳥居',wiki:['伊古奈比咩命神社'],
   text:'伊豆最古老的神社，據傳有 2,400 年歷史，鎮座於白濱海岸旁。穿過境內走到海邊，可以看到立在「大明神岩」上的紅色鳥居正對太平洋，浪打在岩石上，是下田最經典的一幕。從下田站搭東海巴士約 10 分。',
   chips:['免費','下田站公車約 10 分','2/14 選項']},
  minami:{url:'http://www.minami-izu.vision/',name:'南伊豆 櫻花與油菜花祭',jp:'みなみの桜と菜の花まつり',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=d_MxnlrDdSc',l:''}],short:'青野川櫻花與油菜花田',wiki:['みなみの桜と菜の花まつり','青野川'],
   text:'南伊豆町下賀茂溫泉一帶，青野川沿岸約 800 棵河津櫻加上整片油菜花田，人潮比河津少、視野更開闊，同樣有夜間點燈。從伊豆急下田站搭東海巴士約 25 分，站名「九条橋」或「下賀茂」。2/14 若想避開河津的人潮，可以整個下午換到這裡。',
   chips:['約 2/1–3/10','免費','下田站巴士 25 分','2/14 選項']},
- inatori:{url:'https://inatorionsen.or.jp/hina/',name:'伊豆稻取（雨備）',jp:'伊豆稲取・雛のつるし飾り',kind:'雨備',short:'雛のつるし飾り，室內雨備',wiki:['雛のつるし飾り','稲取温泉'],
-  text:'每年 1 月下旬到 3 月底，稻取整個街區掛滿手工吊飾「雛のつるし飾り」，展館都在室內，下雨天剛好；車站旁也有金目鯛餐廳，是 2/14 下雨時的替代方案。',
-  chips:['室內','伊豆急 稻取站']},
  baien:{url:'https://www.city.atami.lg.jp/kanko/kankoshisetsu/1001832/1001834.html',name:'熱海梅園',jp:'熱海梅園',kind:'景點',video:['https://www.youtube.com/watch?v=yRSMLB10Srw'],short:'日本最早開的梅，2 月中正見頃',wiki:['熱海梅園'],
   text:'1886 年開園的市營庭園，號稱「日本最早開的梅」。60 品種、約 470 棵梅樹沿初川溪谷排開，早、中、晚開品種接力，<b>2 月中正是中咲品種的正見頃</b>，也是這趟最穩的一片花。梅まつり期間（約 1 月上旬–3 月上旬）8:30–16:00 收費，園內有足湯與攤位。',
   chips:['梅まつり ¥300','梅まつり期間 8:30–16:00','來宮站步行 10 分','2/15 上午']},
@@ -532,7 +553,7 @@ const DAYS=[
    {t:'18:00',i:'🧳',h:'領行李、入境（Visit Japan Web 先填好）'},
    {t:'19:53–21:00',i:'🚆',h:'成田 T2 → 品川　JR 成田特快・¥3,330',move:1},
    {t:'21:00',i:'🛏',h:'品川王子大飯店 北塔 check-in，站內覓食'}
-  ],cards:['nex','prince']},
+  ],cards:['prince']},
  {n:2,date:'2/11',wd:'四',title:'品川 → 靜岡',sub:'建國紀念日，新幹線一小時到靜岡，站前取車自駕上日本平',stay:'靜岡站前飯店（待訂）',
   map:{pts:['shizuoka','zoo','yume','toshogu','aoba'],legs:[{a:'shizuoka',b:'yume',mode:'car',line:'租車（日本平パークウェイ・免費）'},{a:'yume',b:'toshogu',mode:'ropeway',line:'日本平ロープウェイ'},{a:'toshogu',b:'yume',mode:'ropeway',line:'日本平ロープウェイ',curve:.3},{a:'yume',b:'zoo',mode:'car',line:'租車（日本平パークウェイ・免費）'},{a:'zoo',b:'shizuoka',mode:'car',line:'租車（日本平パークウェイ・免費）',curve:.2},{a:'shizuoka',b:'aoba',mode:'walk'}],labels:{shizuoka:'b',zoo:'t',yume:'r',toshogu:'b',aoba:'t'},minSpan:.055,lines:[{mode:'shinkansen',line:'東海道新幹線 ひかり（品川→靜岡・圖幅外）'}]},
   tl:[
@@ -552,7 +573,7 @@ const DAYS=[
    {t:'17:00',i:'🛏',h:'停好車 check-in（房間待訂）'},
    {t:'注意',i:'⚠',h:'晚上要喝酒，車停好就別再動 —— 日本酒駕零容忍，同車的人也會被追究'},
    {t:'19:00',i:'🍢',h:'走路去青葉橫丁　約 10 分・靜岡おでん'}
-  ],cards:['shinkansen','shizuhotel','zoo','yume','toshogu','aoba'],
+  ],cards:['shizuhotel','zoo','yume','toshogu','aoba'],
   rain:'<b>雨備</b>　富士山看不到就跳過夢テラス（戶外居多）：改走久能山東照宮博物館＋動物園室內館（猛獸館 299、夜行性動物館），有車時間很鬆，回靜岡後直接去青葉橫丁。'},
  {n:3,date:'2/12',wd:'五',title:'租車一日：久能・三保・清水',sub:'石垣草莓、三保松原、鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
   map:{pts:['shizuoka','ichigo','miho','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'miho',mode:'car'},{a:'miho',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail',line:'JR 東海道本線'}],labels:{shizuoka:'l',ichigo:'b',miho:'r',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
@@ -571,23 +592,21 @@ const DAYS=[
   ],cards:['ichigo','miho','shimizu','maruko','yunoki'],
   rain:'<b>雨備</b>　這天本來就有一半在室內。不租車的話：JR 到清水站，巴士接河岸の市午餐，再走ドリームプラザ 逛小丸子樂園與商場；草莓園是溫室，下雨照採；三保松原看不到富士山就縮短或跳過；晚上的柚木の郷 全在室內，照去。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'移動日順路吃沼津港，傍晚進熱海泡溫泉',stay:'LiVEMAX Resort 熱海 Ocean',
-  map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',line:'JR 東海道本線',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45'},{a:'aquarium',b:'byuo',mode:'walk'},{a:'byuo',b:'senbon',mode:'walk'},{a:'senbon',b:'numazuStn',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45',curve:.3},{a:'numazuStn',b:'atami',mode:'rail',line:'JR 東海道本線',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
+  map:{pts:['shizuoka','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'numazuStn',mode:'rail',line:'JR 東海道本線',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45'},{a:'aquarium',b:'numazuStn',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45',curve:.35},{a:'numazuStn',b:'atami',mode:'rail',line:'JR 東海道本線',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',numazuStn:'t',aquarium:'b',atami:'t',livemax:'r'},minSpan:.16},
   tl:[
    {t:'08:00',i:'🍳',h:'飯店早餐'},
    {t:'09:00',i:'🧳',h:'Check-out'},
    {t:'10:00',i:'🚆',h:'靜岡 → 沼津　JR 東海道本線・約 1 小時・¥990',move:1},
-   {t:'11:10',i:'🚌',h:'沼津站 → 沼津港　巴士約 10 分',move:1},
+   {t:'11:10',i:'🚌',h:'沼津站 → 沼津港　巴士約 10 分・¥200',move:1},
    {t:'11:40',i:'🍽',h:'沼津港午餐　丸天かき揚げ丼／深海魚料理'},
    {t:'13:00',i:'🐟',h:'沼津港深海水族館　¥2,200'},
-   {t:'14:30',i:'🗼',h:'びゅうお 大型展望水門　步行 3 分・地上 30 m 看富士山・¥100',move:1},
-   {t:'15:10',i:'🦐',h:'みなと新鮮館買干物、櫻花蝦'},
-   {t:'15:50',i:'🌲',h:'千本松原・千本浜公園　步行約 10 分・松林與富士山',move:1},
-   {t:'16:40',i:'🚌',h:'千本松公園 → 沼津站　巴士約 10 分',move:1},
-   {t:'17:00',i:'🚆',h:'沼津 → 熱海　JR 東海道本線・約 25 分・¥420',move:1},
-   {t:'17:40',i:'🚕',h:'熱海站 → LiVEMAX check-in　計程車約 5 分',move:1},
+   {t:'14:30',i:'🦐',h:'沼津港逛吃、みなと新鮮館買干物（びゅうお 展望水門就在旁邊，想上去 ¥100）'},
+   {t:'16:00',i:'🚌',h:'沼津港 → 沼津站　巴士約 10 分',move:1},
+   {t:'16:30',i:'🚆',h:'沼津 → 熱海　JR 東海道本線・約 25 分・¥420',move:1},
+   {t:'17:10',i:'🚕',h:'熱海站 → LiVEMAX check-in　計程車約 5 分',move:1},
    {t:'19:00',i:'🍽',h:'熱海晚餐、泡溫泉'}
-  ],cards:['numazuport','aquarium','byuo','senbon','livemax'],
-  rain:'<b>雨備</b>　整天都在室內：水族館逛久一點，びゅうお 展望台與千本松原改天再說，午餐後直接去 ららぽーと沼津（沼津站巴士約 20 分）避雨，再搭 JR 進熱海。'},
+  ],cards:['numazuport','aquarium','livemax'],
+  rain:'<b>雨備</b>　整天都在室內：水族館逛久一點，午餐後直接去 ららぽーと沼津（沼津站巴士約 20 分）避雨，再搭 JR 進熱海。'},
  {n:5,date:'2/14',wd:'日',title:'河津一日遊',sub:'踊子號靠海側南下賞櫻，看完夜櫻搭普通車回熱海',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
   map:{pts:['livemax','atami','teddy','banana','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',banana:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
   tl:[
@@ -597,13 +616,13 @@ const DAYS=[
    {t:'11:00',i:'🌸',h:'河津櫻並木　從河津站沿河走到豐泉橋'},
    {t:'12:30',i:'🍽',h:'河津午餐　祭典攤位或金目鯛'},
    {t:'選項',i:'🌼',h:'南伊豆 櫻花與油菜花祭　伊豆急 25 分＋巴士 25 分'},
-   {t:'選項',i:'⛩',h:'下田 培里小路・白濱神社　伊豆急 25 分＋巴士 10 分'},
+   {t:'選項',i:'⛩',h:'白濱神社　伊豆急到下田 25 分＋東海巴士 10 分'},
    {t:'選項',i:'🧸',h:'提早回程中途下車：泰迪熊博物館／香蕉鱷魚園（皆 17:00 閉館，得放棄夜櫻）'},
    {t:'17:30',i:'🌙',h:'河津川夜櫻點燈　點燈至 21:00'},
    {t:'19:30',i:'🚃',h:'河津 → 熱海　伊豆急＋JR 普通車・約 2 小時・約 ¥2,100',move:1},
    {t:'21:40',i:'♨',h:'回飯店泡溫泉'}
-  ],cards:['odoriko','sakura','minami','shimoda','shirahama','teddy','banana','inatori'],
-  rain:'<b>雨備</b>　伊豆稻取「雛のつるし飾り」展館全在室內，加上下田培里小路與了仙寺；河津只在傍晚點燈時段撐傘走一段，其餘時間縮短。'},
+  ],cards:['sakura','minami','shirahama','teddy','banana'],
+  rain:'<b>雨備</b>　河津櫻在雨中人少、拍起來另有味道，建議照去，只把戶外時間壓到傍晚點燈那一段（至 21:00）；白天改去泰迪熊博物館（室內、可 DIY 龍貓玩偶）或熱川香蕉鱷魚園（溫室為主），或留在 LiVEMAX 泡湯，整趟縮成半日來回。'},
  {n:6,date:'2/15',wd:'一',title:'熱海 → 品川',sub:'上午梅園正見頃、來宮大楠，下午新幹線回東京吃烤肉',stay:'品川王子大飯店 北塔',
   map:{pts:['livemax','baien','kinomiya','itogawa','atami','shinagawa','prince','roppongi','shimokita'],legs:[{a:'livemax',b:'baien',mode:'taxi'},{a:'baien',b:'kinomiya',mode:'walk'},{a:'kinomiya',b:'itogawa',mode:'walk'},{a:'itogawa',b:'atami',mode:'walk'},{a:'atami',b:'shinagawa',mode:'shinkansen',line:'東海道新幹線 こだま',via:['odawara','shinyoko']},{a:'shinagawa',b:'prince',mode:'walk'},{a:'prince',b:'roppongi',mode:'subway',line:'都營淺草線→都營大江戶線'}],labels:{atami:'b',shinagawa:'r',prince:'r',roppongi:'t',shimokita:'l'},minSpan:.3},
   tl:[
@@ -791,7 +810,7 @@ function animateMap(svg){
 
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML='<a href="#pre">行前</a>'+DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">車票・訂票</a><a href="#food">美食・行李</a>';
+strip.innerHTML='<a href="#pre">行前</a>'+DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#food">美食・行李</a>';
 
 // days
 function imgsHTML(c,id){
