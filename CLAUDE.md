@@ -189,17 +189,25 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   另外 `.money div` 原本會命中巢狀的 `.big`／`.lab` 造成雙框，改 `.money>div`（桌機也受益）。
 - 驗證腳本在 scratchpad：`audit.js`（各區高度、橫向溢出）、`probe.js`（三種寬度的版面指標）。
 
-### 地圖標記改開字卡（2026-10-03）
-使用者要求：點地圖標記直接浮現**完整字卡**，不要外連 Google；Google 地圖連結只留在字卡裡。
-- `marker()` 不再包 `<a href=gUrl>`，改成 `<g class="mk-a" data-k role="button" tabindex="0">`，
-  而且**只有 `CARDS[key]` 存在才可點**（車站這類純座標點是普通 `<g>`）。
-- 全域 click／keydown（Enter、Space）攔 `.mk-a[data-k]` → `hideTip(); openCard(k)`。
-- hover 預覽尾句改「點擊看完整介紹 ↗」；沒卡片的點不顯示尾句。
-- `openCard` 的照片備援 `card.querySelectorAll` 加了 `card?…:[]` 保護（從地圖開啟時頁面上
-  未必有對應卡片）。
-- 字卡裡的「在 Google 地圖開啟 ↗」按鈕（`#mAct`）維持不變，這就是唯一的外連入口。
-- 驗證：`scratchpad/mkclick.js` —— 桌機日圖／總覽圖點擊、手機 tap 三種都開字卡、
-  不開新分頁、`shizuoka` 車站標記不可點。
+### 地圖標記：兩段式字卡（2026-10-03，最終版）
+使用者要求：點標記 → 浮出**簡略字卡**；再點一次（標記或字卡）→ **完整字卡**；完整字卡左上
+「← 返回地圖」回到原位；全程不外連。Google 地圖連結只留在完整字卡的 `#mAct` 按鈕。
+
+- `marker()`：有 `CARDS[key]` 的點輸出 `<g class="mk-a" data-k role="button" tabindex="0">`，
+  裡面先放一圈 **透明命中圈** `<circle class="hit" r=max(r+6,16) pointer-events="all">`
+  再放圓標。沒有這圈，SVG `<g>` 本身沒有填色面積，手指點在圓標旁的空隙會漏接
+  （Playwright 在手機模擬下 tap `<g>` 中心就是這樣全部沒反應，查了很久）。
+  `placeTip` 定位要抓 `.mk circle,.mk rect`，別抓到透明圈。
+- 簡略字卡沿用 `.mktip`，多了 `pinKey／pinEl`：`pinTip(a)` 釘住（加 `.pin`：可點、手機也顯示、
+  藍框），`unpinTip()` 解除；釘住期間 hover 的 `showTip／hideTip` 直接 return；
+  scroll／resize 改成 `placeTip(pinEl)` 重新定位而不是收掉（手機地圖是 sticky 的，標記不動）。
+- 點擊流程（全域 click）：`#mBack` → closeModal；點 `.mktip`（釘住中）→ `openCard(pinKey,true)`；
+  點標記：同一個 key 第二次 → 開完整字卡，否則 `pinTip`；點其他地方（非 `.modal`）→ `unpinTip`。
+  鍵盤 Enter／Space 直接開完整字卡；Esc 在彈窗關閉時解除釘住。
+- `openCard(id,fromMap)` 第二參數決定返回鍵文字：「← 返回地圖」或「← 返回」。
+  `.modal-back` 固定在彈窗左上，右上的 `×` 保留。返回後簡略字卡仍釘著，再點別處才收。
+- `@media (hover:none){.mktip:not(.pin){display:none}}`：手機不會有 hover 殘影，但釘住的會顯示。
+- 驗證：`scratchpad/twostep.js` 桌機＋手機各四步（釘住／開完整／返回／點別處收掉），零新分頁。
 
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。

@@ -159,7 +159,11 @@ details.acc>summary .s{font-family:var(--sans);font-weight:400;font-size:12px;co
 .mktip .tc{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 .mktip .tc span{font-size:10.5px;padding:1px 6px;border-radius:4px;background:var(--paper2);color:var(--ink2)}
 .mktip .tm{font-size:11px;color:var(--ai);margin-top:9px}
-@media (hover:none){.mktip{display:none}}
+@media (hover:none){.mktip:not(.pin){display:none}}
+.mktip.pin{pointer-events:auto;cursor:pointer;max-width:calc(100vw - 16px);box-shadow:0 14px 40px rgba(38,41,46,.28);border-color:var(--ai)}
+.mktip.pin .tm{font-weight:600}
+.modal-back{position:absolute;left:12px;top:10px;z-index:3;height:36px;padding:0 14px 0 10px;border-radius:999px;border:0;background:rgba(255,255,255,.92);font:inherit;font-size:14px;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:4px;box-shadow:0 1px 4px rgba(38,41,46,.18)}
+.modal-back:focus-visible{outline:2px solid var(--ai)}
 .mk-a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
 .mk-a:hover .mk circle,.mk-a:hover .mk rect{stroke:var(--ai);stroke-width:3}
 .mact{margin-top:16px}
@@ -506,7 +510,7 @@ footer p{max-width:70ch}
 </section>
 
 <div class="lb" id="lb" hidden><div class="lb-bar"><span class="t" id="lbT"></span><span class="s" id="lbS"></span><span class="sp"></span><button type="button" id="lbZ">放大原尺寸</button><button type="button" id="lbX">關閉 ×</button></div><div class="lb-scroll" id="lbScroll"></div></div>
-<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><dl class="minfo" id="mInfo" hidden></dl><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
+<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-back" id="mBack">← 返回</button><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><dl class="minfo" id="mInfo" hidden></dl><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
 <footer><div class="wrap">
   <p>行程為 2026-09-01 定案的 v3 版（原始資料「熱海伊豆行.xlsx」的品川→熱海→河津住兩晚版本已過時，僅供參考）；巴士、步行與開車時間為估算，班次時刻與祭典日期以 2027 年官方公告為準。景點照片部分為現場照，其餘透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土数値情報（dataofjapan/land）；鐵道線形為「国土数値情報（鉄道データ）」（国土交通省）加工製作，CC BY 4.0。</p>
 </div></footer>
@@ -917,7 +921,9 @@ function marker(key,pr,side,big,num){
   const anchor=sd==='l'?'end':sd==='r'?'start':'middle';
   const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
   const g=`<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
-  return CARDS[key]?`<g class="mk-a" data-k="${key}" role="button" tabindex="0" aria-label="${name}，看完整介紹">${g}</g>`:g;
+  // 可點的標記外加一圈透明命中區（手指點在圓標附近也算），SVG 的 <g> 本身沒有填色面積，點到空隙會漏接
+  const hit=`<circle class="hit" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${Math.max(r+6,16)}" fill="transparent" pointer-events="all"/>`;
+  return CARDS[key]?`<g class="mk-a" data-k="${key}" role="button" tabindex="0" aria-label="${name}，看完整介紹">${hit}${g}</g>`:g;
 }
 let bgLines=[];
 function railBg(pr,bbox){
@@ -1026,7 +1032,7 @@ function areaHTML(){
   return `<section class="block" id="shizuoka">
   <div class="wrap">
     <h2>靜岡・清水 有什麼</h2>
-    ${MOB?'<p class="lead">這一帶所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點卡片或地圖標記都會打開完整介紹，Google 地圖連結在介紹裡。</p>':`<p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；點任一個標記直接打開完整介紹，Google 地圖連結在介紹裡。</p>`}
+    ${MOB?'<p class="lead">這一帶所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點標記先看簡略字卡、再點看完整介紹；Google 地圖連結在完整介紹裡。</p>':`<p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；點一下標記先看簡略字卡，再點一下看完整介紹；Google 地圖連結在完整介紹裡。</p>`}
     <details class="acc"${MOB?'':' open'}><summary>位置圖 <span class="s">全域＋靜岡站周邊＋清水・三保，共 3 張</span></summary><div class="in">
     <div class="areamap">${mp}${bg1}</div>
     <div class="areamap"><div class="mapcap">靜岡站周邊放大（上圖左下角那一帶）</div>${mp2}${bgRow(bgLines)}</div>
@@ -1123,8 +1129,9 @@ document.querySelectorAll('section[id]').forEach(s=>spy.observe(s));
 
 // card -> modal
 const modal=document.getElementById('modal');
-function openCard(id){
+function openCard(id,fromMap){
   const c=CARDS[id];if(!c)return;
+  document.getElementById('mBack').textContent=fromMap?'← 返回地圖':'← 返回';
   const card=document.querySelector(`.card[data-card="${id}"]`);
   const srcs=Array.isArray(IMG[id])?IMG[id]:IMG[id]?[IMG[id]]:card?[...card.querySelectorAll('.ph img')].map(i=>i.currentSrc||i.src).filter(Boolean):[];
   const ph=document.getElementById('mPh');
@@ -1160,7 +1167,12 @@ function slide(d){
 }
 document.addEventListener('click',e=>{
   if(e.target.closest('.modal .nav')){slide(e.target.closest('.nav').classList.contains('next')?1:-1);return;}
-  const mk=e.target.closest('.mk-a[data-k]');if(mk){e.preventDefault();hideTip();openCard(mk.dataset.k);return;}
+  if(e.target.closest('#mBack')){closeModal();return;}
+  const onTip=e.target.closest('.mktip');
+  if(onTip&&pinKey){openCard(pinKey,true);return;}
+  const mk=e.target.closest('.mk-a[data-k]');
+  if(mk){e.preventDefault();if(pinKey===mk.dataset.k){openCard(pinKey,true);}else{pinTip(mk);}return;}
+  if(pinKey&&!e.target.closest('.modal'))unpinTip();
   const om=e.target.closest('.offmap[data-lb]');if(om){openLb(+om.dataset.lb);return;}
   const mh=e.target.closest('.maphead');if(mh&&MOB){mh.closest('.mapcard').classList.toggle('min');return;}
   if(e.target.closest('#lbX')){closeLb();return;}
@@ -1196,7 +1208,8 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!modal.hidden)closeModal();
   if(!modal.hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))slide(e.key==='ArrowRight'?1:-1);
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.card[data-card]')){e.preventDefault();openCard(e.target.dataset.card);}
-  if((e.key==='Enter'||e.key===' ')&&e.target.matches('.mk-a[data-k]')){e.preventDefault();hideTip();openCard(e.target.dataset.k);}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('.mk-a[data-k]')){e.preventDefault();unpinTip();openCard(e.target.dataset.k,true);}
+  if(e.key==='Escape'&&modal.hidden&&pinKey)unpinTip();
 });
 
 /* ============ 地圖標記 hover 預覽 ============ */
@@ -1214,26 +1227,43 @@ function tipHTML(k){
   return ph+`<div class="tb"><div class="tk">${c.kind}</div><h5>${c.name}</h5>`
     +(c.jp?`<div class="tj">${c.jp}</div>`:'')
     +`<p>${c.short||''}</p><div class="tc">${chips}</div>`
-    +`<p class="tm">點擊看完整介紹 ↗</p></div>`;
+    +`<p class="tm">再點一下看完整介紹 →</p></div>`;
 }
-function showTip(a){
-  if(!matchMedia('(hover:hover)').matches) return;
-  const k=a.dataset.k; if(!k) return;
-  mkTip.innerHTML=tipHTML(k); mkTip.hidden=false;
-  const d=a.querySelector('circle,rect')||a, r=d.getBoundingClientRect();
+let pinKey=null, pinEl=null;
+function placeTip(a){
+  const d=a.querySelector('.mk circle,.mk rect')||a, r=d.getBoundingClientRect();
   const tw=mkTip.offsetWidth, th=mkTip.offsetHeight;
   let x=r.left+r.width/2-tw/2, y=r.top-th-14;
   if(y<8) y=r.bottom+14;
   x=Math.max(8,Math.min(x,innerWidth-tw-8));
   mkTip.style.left=x+'px'; mkTip.style.top=y+'px';
 }
-function hideTip(){mkTip.hidden=true;}
+function pinTip(a){
+  const k=a.dataset.k; if(!k) return;
+  pinKey=k; pinEl=a;
+  mkTip.innerHTML=tipHTML(k); mkTip.classList.add('pin'); mkTip.hidden=false;
+  placeTip(a);
+}
+function unpinTip(){pinKey=null;pinEl=null;mkTip.classList.remove('pin');mkTip.hidden=true;}
+function showTip(a){
+  if(pinKey) return;
+  if(!matchMedia('(hover:hover)').matches) return;
+  const k=a.dataset.k; if(!k) return;
+  mkTip.innerHTML=tipHTML(k); mkTip.hidden=false;
+  const d=a.querySelector('.mk circle,.mk rect')||a, r=d.getBoundingClientRect();
+  const tw=mkTip.offsetWidth, th=mkTip.offsetHeight;
+  let x=r.left+r.width/2-tw/2, y=r.top-th-14;
+  if(y<8) y=r.bottom+14;
+  x=Math.max(8,Math.min(x,innerWidth-tw-8));
+  mkTip.style.left=x+'px'; mkTip.style.top=y+'px';
+}
+function hideTip(){if(pinKey)return;mkTip.hidden=true;}
 document.addEventListener('mouseover',e=>{const a=e.target.closest&&e.target.closest('.mk-a');if(a){clearTimeout(tipT);showTip(a);}});
 document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.mk-a')){clearTimeout(tipT);tipT=setTimeout(hideTip,120);}});
 document.addEventListener('focusin',e=>{const a=e.target.closest&&e.target.closest('.mk-a');if(a)showTip(a);});
 document.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('.mk-a'))hideTip();});
-addEventListener('scroll',hideTip,{passive:true});
-addEventListener('resize',hideTip);
+addEventListener('scroll',()=>{pinEl?placeTip(pinEl):hideTip();},{passive:true});
+addEventListener('resize',()=>{pinEl?placeTip(pinEl):hideTip();});
 
 /* ================= PHOTOS (Wikipedia page images) ================= */
 (async function(){
