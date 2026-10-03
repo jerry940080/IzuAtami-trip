@@ -150,8 +150,12 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
   讓地圖／時刻表／卡片變成 `.wrap` 的同層子元素，sticky 的範圍才涵蓋到卡片。
 - `.mapcard` 在 **≤640px** 改 `position:sticky;top:39px;z-index:6`（39px 是 `.strip` 的高度）；
   641–860px 維持原本的單欄＋靜態地圖（平板上地圖高達 632px，釘住反而佔掉大半畫面）。
-- 手機版卡片改 **兩欄**（`grid-template-columns:1fr 1fr`）並縮排版：標題 14px、說明 11.5px、
-  圓標 20px。手機版隱藏 `.mapcard .mapbg`（圖中鐵道那排）省垂直空間。
+- 卡片在 **≤860px 一律兩欄**（`grid-template-columns:1fr 1fr`，不靠 auto-fill 推算），
+  ≤640px 再縮排版：標題 14px、說明 11.5px、圓標 20px。手機版隱藏 `.mapcard .mapbg`
+  （圖中鐵道那排）省垂直空間。
+- `.mapcard` 最上方加 `.maphead`：**Day 編號圓標＋日期（星期）＋當天標題**，一行、過長
+  `text-overflow:ellipsis`。地圖釘住後使用者才知道看的是哪一天（這是使用者明確要求的）。
+  桌機也有，因為桌機的 `.day-head` 一樣會捲掉。
 - **不要對 `.mapcard svg` 設 `max-height`** —— SVG 有 viewBox，壓高度會依
   `preserveAspectRatio` 等比縮小並左右留白，很醜。讓它維持 `width:100%;height:auto` 就好。
 
