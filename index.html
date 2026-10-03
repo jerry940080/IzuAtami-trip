@@ -77,6 +77,10 @@ td b{font-weight:500}
 .tipgrid .when{font-size:12px;color:var(--shu);margin-bottom:7px}
 .tipgrid p{font-size:13.5px;line-height:1.8;color:var(--ink2)}
 .tipgrid b{color:var(--shu);font-weight:600}
+.minfo{margin-top:13px;padding-top:11px;border-top:1px solid var(--rule);display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 14px;font-size:13px;line-height:1.75}
+.minfo dt{color:var(--ink3);white-space:nowrap}
+.minfo dd{color:var(--ink2);min-width:0}
+.minfo dd b{color:var(--shu);font-weight:600}
 .sub-h{margin-top:30px;font-size:18px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
 .todo li{list-style:none;display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--rule);font-size:14px}
 .todo .d{flex:none;width:118px;color:var(--shu);font-weight:500}
@@ -379,7 +383,7 @@ footer p{max-width:70ch}
   </div>
 </section>
 
-<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
+<div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><dl class="minfo" id="mInfo" hidden></dl><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
 <footer><div class="wrap">
   <p>行程為 2026-09-01 定案的 v3 版（原始資料「熱海伊豆行.xlsx」的品川→熱海→河津住兩晚版本已過時，僅供參考）；巴士、步行與開車時間為估算，班次時刻與祭典日期以 2027 年官方公告為準。景點照片部分為現場照，其餘透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土数値情報（dataofjapan/land）；鐵道線形為「国土数値情報（鉄道データ）」（国土交通省）加工製作，CC BY 4.0。</p>
 </div></footer>
@@ -393,8 +397,8 @@ const LINES=[{"n":"JR 伊東線","c":"#3E9A55","s":[[[139.0778,35.1036],[139.073
 const P={ // [lat,lng]
  nrt:[35.7726,140.3878], chiba:[35.6130,140.1130], tokyo:[35.6812,139.7671], shinagawa:[35.6285,139.7387], prince:[35.6305,139.7345],
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
- shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], yunoki:[34.9780,138.4110],
- ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], shimizu:[35.0158,138.4900], maruko:[35.0206,138.5081], satta:[35.0975,138.5350],
+ shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ndhotel:[34.9752,138.4713], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], maruzen:[34.9748,138.3845], yunoki:[34.9780,138.4110],
+ ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], mihoshrine:[35.0040,138.5235], shimizu:[35.0158,138.4900], kinnoji:[35.0180,138.4878], maruko:[35.0206,138.5081], cruise:[35.0183,138.5095], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], lalaport:[35.0940,138.8860],
  atami:[35.1036,139.0780], livemax:[35.0954,139.0777], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0975,139.0800],
  ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], banana:[34.8135,139.0790], atagawa:[34.8140,139.0720], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], shimoda:[34.6764,138.9447], shirahama:[34.6978,138.9750], minami:[34.6472,138.8764],
@@ -414,8 +418,8 @@ const MODE={
 const KIND={hotel:{c:'#c8452e',r:6,t:'🛏'},spot:{c:'#e28aa5',r:5.5},station:{c:'#fff',r:4,s:'#2b4c7e'},air:{c:'#26292e',r:5.5,sq:true}};
 const NAMES={
  nrt:['成田機場 T2','air'], shinagawa:['品川站','station'], prince:['品川王子大飯店','hotel'], tokyo:['東京站','station'],
- shizuoka:['靜岡站','station'], shizuhotel:['靜岡站前飯店（待訂）','hotel'], hobby:['Hobby Square','spot'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], yunoki:['柚木の郷','spot'],
- ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], shimizu:['清水 河岸の市','spot'], maruko:['小丸子樂園','spot'], satta:['薩埵峠','spot'],
+ shizuoka:['靜岡站','station'], shizuhotel:['靜岡站前飯店（待訂）','hotel'], hobby:['Hobby Square','spot'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ndhotel:['日本平飯店','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], maruzen:['MARUZEN Tea','spot'], yunoki:['柚木の郷','spot'],
+ ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], mihoshrine:['御穗神社','spot'], shimizu:['清水 河岸の市','spot'], kinnoji:['金之字 本店','spot'], maruko:['小丸子樂園','spot'], cruise:['清水港遊覽船','spot'], satta:['薩埵峠','spot'],
  mishima:['三島站','station'], numazuStn:['沼津站','station'], aquarium:['沼津港深海水族館','spot'], lalaport:['ららぽーと沼津','spot'],
  atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], beach:['熱海陽光海灘','spot'],
  ito:['伊東','station'], izukogen:['伊豆高原','station'], teddy:['泰迪熊博物館（選項）','spot'], banana:['熱川香蕉鱷魚園（選項）','spot'], atagawa:['伊豆熱川','station'], inatori:['伊豆稻取','station'], kawazu:['河津站','station'], sakura:['河津櫻並木','spot'], shimoda:['伊豆急下田','station'], shirahama:['白濱神社','spot'], minami:['南伊豆 櫻花・油菜花祭','spot'],
@@ -437,7 +441,9 @@ const GQ={
  atagawa:'伊豆熱川駅', inatori:'伊豆稲取駅', kawazu:'河津駅', sakura:'河津桜並木',
  shimoda:'ペリーロード 下田', shirahama:'白濱神社 下田', minami:'下賀茂 みなみの桜と菜の花まつり',
  jimbocho:'つけそば 神田勝本', katsumoto:'つけそば 神田勝本', akiba:'秋葉原電気街',
- roppongi:'六本木ヒルズ', shimokita:'下北沢駅', souvenir:'成田空港第2ターミナル'
+ roppongi:'六本木ヒルズ', shimokita:'下北沢駅', souvenir:'成田空港第2ターミナル',
+ mihoshrine:'御穂神社 静岡市清水区三保', ndhotel:'日本平ホテル', kinnoji:'金の字 本店 静岡市清水区真砂町',
+ cruise:'富士山清水港クルーズ 日の出乗船場', maruzen:'MARUZEN Tea Roastery 静岡', issa:'茶店 一茶 静岡駅前地下街しずチカ',
 };
 function gUrl(k){
   const base='https://www.google.com/maps/search/?api=1&query=';
@@ -450,41 +456,76 @@ const CARDS={
  prince:{url:'https://www.princehotels.co.jp/shinagawa/',name:'品川王子大飯店 北塔',jp:'品川プリンスホテル N タワー',kind:'住宿',short:'品川站高輪口正對面',wiki:['品川プリンスホテル'],
   text:'JR 品川站高輪口正對面，成田特快、新幹線、山手線全在同一站，頭尾兩段東京住宿都選這裡，就是為了不用拖行李換車。館內有水族館、電影院與保齡球館。',
   chips:['品川站步行 3 分','2/10・2/15–16 共三晚']},
+ mihoshrine:{url:'https://miho-no-matsubara.jp/about/mihojinja',name:'御穗神社・神の道',jp:'御穂神社・神の道',kind:'景點',short:'羽衣傳說的本家，500 公尺松林參道',wiki:['御穂神社'],
+  text:'平安時代文獻裡就記載過的古老神社，傳說天女遺落在「羽衣の松」上的羽衣碎片就收藏在這裡。真正好看的是神社到海邊之間那條<b>長約 500 公尺、兩側全是老松的「神の道」</b>——石板路夾在松林中央，比三保松原的海灘安靜得多，也是這一帶最好拍的一段。神社本身小而樸素，花不了多少時間，<b>當作三保松原的延伸散步路線剛剛好</b>。',
+  info:[['地址','清水區三保 1073'],['電話','054-334-0828'],['交通','JR清水站搭巴士約 25 分，下車步行約 10 分；從三保松原走神の道過來約 10 分'],['開放','境內自由・免費']],
+  chips:['24 小時','免費','神の道 500 公尺松林','三保松原步行可達']},
+ ndhotel:{url:'https://www.ndhl.jp/',name:'日本平飯店 露台酒廊',jp:'日本平ホテル テラスラウンジ',kind:'咖啡',short:'30 公尺全景玻璃窗，富士山當畫框',
+  text:'日本平北側山腰的老牌飯店，一樓的 <b>Terrace Lounge</b> 是一面寬 30 公尺、挑高兩層的全景玻璃窗，正對富士山與駿河灣，窗外的草坪庭園一路延伸出去，常被形容成「把富士山裱進畫框」。<b>不住宿也能進去</b>喝下午茶，11:30 起有鬆餅，停車免費。從夢テラス走過來約 10 分鐘——冬天山上風大，看完展望台進來坐著看一樣的景，是很舒服的收尾。',
+  info:[['地址','清水區馬走 1500-2（Terrace Lounge 在 1 樓）'],['電話','054-335-1157'],['開放','10:00–19:00・無休；<b>下午茶 14:00–17:00</b>、鬆餅 11:30 起'],['交通','日本平夢テラス步行約 10 分；JR靜岡站搭巴士約 40 分'],['停車','免費']],
+  chips:['10:00–19:00','下午茶 14:00–17:00','無休・免費停車','夢テラス步行 10 分']},
+ kinnoji:{url:'https://www.at-s.com/gourmet/article/124703',name:'金之字 本店',jp:'金の字 本店',kind:'晚餐（選項）',short:'清水靈魂美食「もつカレー」的元祖',
+  text:'戰後初代老闆把在滿州學到的咖哩和名古屋的土手鍋湊成一道，發明了<b>「清水もつカレー」</b>：牛雜串先滷到軟爛，再浸進咖哩粉調的黑色味噌醬汁，一串一串端上來，配白飯或啤酒都行。這道後來變成整個清水的靈魂美食，連罐頭版都在靜岡站賣。本店就在 JR 清水站旁邊，是站著吃的居酒屋格局。<b>只有晚上營業、週日與國定假日公休</b>——要吃得當天傍晚還留在清水才行，跟我們 2/12 傍晚回靜岡還車的動線有衝突，列為選項。',
+  info:[['地址','清水區真砂町 1-14'],['電話','054-364-1203'],['開放','<b>17:00–21:00</b>'],['公休','<b>週日與國定假日</b>'],['交通','JR清水站步行即到']],
+  chips:['17:00–21:00','週日・假日休','清水站步行即到','もつカレー 元祖']},
+ cruise:{url:'https://www.shimizu-cruise.co.jp/',name:'富士山清水港遊覽船',jp:'富士山清水港クルーズ',kind:'體驗',short:'從海上 360 度看富士山與清水港',
+  text:'從駿河灣海面回頭看富士山，前景是清水港的國際貨櫃碼頭、大型起重機與停泊的油輪，跟陸地上完全不同的視角。乘船處就在清水夢幻廣場走路 3 分鐘，<b>同一個碼頭也是「水上巴士 三保羽衣線」的日之出乘船處</b>——想省掉繞半圈的車程，可以從這裡坐 15 分鐘的船直接到三保。冬天空氣乾淨時富士山最清楚，但<b>海況不好會停駛</b>，當天先打電話確認。',
+  info:[['地址','清水區日之出町 10-80'],['電話','054-353-2222'],['交通','清水夢幻廣場步行約 3 分；JR清水站東口搭免費接駁巴士約 10 分'],['水上巴士','日之出 ⇄ 江尻 ⇄ 三保，各約 15 分・9:00–17:00'],['備註','依當日天氣與海況可能臨時停駛']],
+  chips:['054-353-2222','水上巴士 9:00–17:00','夢幻廣場步行 3 分','海況差會停駛']},
+ maruzen:{url:'https://www.maruzentea.com/',name:'MARUZEN Tea Roastery',jp:'マルゼンティーロースタリー',kind:'咖啡',short:'焙煎溫度自己選的日本茶與茶霜淇淋',
+  text:'2018 年開在呉服町商店街的日本茶專門店，店裡就設了焙煎工房——<b>同一款茶葉可以選 80℃／100℃／130℃／160℃／200℃ 五種焙煎溫度</b>，溫度越高越接近焙茶的焦香，越低越保留綠茶的鮮味，點一杯就喝得出差別。招牌的<b>茶霜淇淋</b>也是同樣邏輯，可以指定濃度。靜岡是日本數一數二的產茶地，這家大概是最快把「靜岡茶到底厲害在哪」喝明白的一間。',
+  info:[['地址','葵區呉服町 2-2-5'],['電話','054-204-1737'],['開放','約 11:00–18:00・不定休（出發前查官網）'],['交通','JR靜岡站步行約 10 分，往青葉橫丁的路上']],
+  chips:['約 11:00–18:00','不定休','靜岡站步行 10 分','五段焙煎溫度']},
+ issa:{url:'https://www.shizuoka-cha.com/',name:'茶店 一茶',jp:'SHIZUCHIKA 茶店 一茶',kind:'咖啡',short:'靜岡站地下街，坐下來喝職人選的茶',
+  text:'就在 JR 靜岡站北口地下街「SHIZUCHIKA」裡面，從站內地下道走過去 1 分鐘。這家店集合了<b>全市約 50 家茶商、由茶藝師挑出來的茗茶</b>，每週換三款讓客人挑一種，搭配茶餅坐下來喝；小賣部另外賣袋裝茶（約 ¥500）。<b>等新幹線或等雨停的 20 分鐘</b>，這裡是最順手的去處，完全不用出站。',
+  info:[['地址','葵區紺屋町 149-1　JR靜岡站北口地下街 SHIZUCHIKA 內'],['電話','054-253-0030'],['開放','10:00–19:00（最後點餐 18:30）'],['公休','<b>週三</b>（遇假日順延）、年末年初'],['交通','JR靜岡站北口地下道步行 1 分']],
+  chips:['10:00–19:00','週三休','靜岡站北口地下街','每週三款選一']},
  shizuhotel:{name:'靜岡站前飯店（待訂）',jp:'静岡駅前ホテル',kind:'住宿',short:'2/11–12 兩晚，尚未訂房',wiki:['静岡駅'],
   text:'2/11–12 兩晚住靜岡站周邊，訂了就不用搬行李、晚上還能走去青葉橫丁吃おでん。候選：ホテルアソシア静岡（直結靜岡站，最方便）、東橫INN 靜岡站北口、静鉄ホテルプレジオ 等。訂好後記得回頭更新住宿表與費用。',
   chips:['2/11–12 兩晚','待訂','站前徒步圈','要確認有無洗衣機','訂房後補上官網連結']},
  zoo:{url:'https://www.nhdzoo.jp/',name:'日本平動物園',jp:'静岡市立日本平動物園',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=0Sut_T4PbWs',l:''}],short:'小熊貓的家，猛獸館與空中步道',wiki:['静岡市立日本平動物園'],
   text:'靜岡市營動物園，最有名的就是小熊貓（レッサーパンダ）——這裡的繁殖成績是日本數一數二，戶外運動場加上室內展示，冬天正是牠們最活潑的季節。園內還有猛獸館 299、可以從上方俯瞰的空中步道與夜行性動物館，慢慢逛約 2 小時。2/11 是日本建國紀念日，親子人潮會比平日多，早點到比較好。',
-  chips:['9:00–16:30（入園至 16:00）','¥620','週一休園','靜岡站巴士約 35 分']},
+  info:[['地址','靜岡市駿河區池田 1767-6'],['電話','054-262-3251'],['交通','JR靜岡站搭巴士約 20–25 分；<b>JR草薙站搭巴士約 10 分</b>＋步行 5 分'],['開放','9:00–16:30（入園至 16:00）・週一休園（遇假日順延）'],['門票','大人 ¥620']],
+  chips:['9:00–16:30（入園至 16:00）','¥620','週一休園','靜岡站巴士約 25 分']},
  yume:{url:'https://nihondaira-yume-terrace.jp/',name:'日本平夢テラス',jp:'日本平夢テラス',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=UiNc1dyPv-I',l:'日本平夢テラス 與久能山東照宮 健行'}],short:'木造展望迴廊，富士山與駿河灣',wiki:['日本平'],
   text:'2018 年開幕的展望設施，隈研吾設計，用靜岡產檜木以法隆寺夢殿為意象組成八角形建築，外圈是 200 公尺長的展望迴廊。晴天可以一次看到富士山、駿河灣、清水港與伊豆半島，冬天空氣最清澈，是這趟最有機會拍到富士山全景的地方。館內有展示室與咖啡座；<b>屋外那圈 200 公尺的展望回廊（夢迴廊）是終日開放的</b>，本館才有開放時間。出發前先看官網即時影像確認富士山露不露臉。',
+  info:[['地址','清水區草薙 600-1'],['電話','054-340-1172'],['交通','JR靜岡站搭巴士約 40 分；日本平久能山 S.I.C 下交流道開車約 20 分'],['開放','本館 9:00–17:00（週六至 21:00）・第二個週二休<br><b>屋外 200 公尺展望迴廊 24 小時自由進出</b>'],['門票','免費'],['備註','海拔 216 公尺，入選「日本夜景遺產」；每月第 4 個週六有「日本平夜市」市集']],
   chips:['9:00–17:00（六至 21:00）','免費','第二個週二休','動物園開車約 10 分']},
  toshogu:{url:'https://www.toshogu.or.jp/',name:'久能山東照宮',jp:'久能山東照宮',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=UiNc1dyPv-I&t=432',l:'從 7:12 久能山東照宮段落開始'}],short:'德川家康長眠地，纜車 5 分直達',wiki:['久能山東照宮'],
   text:'德川家康過世後最初的埋葬地，1617 年建成的社殿是靜岡唯一的國寶建築，權現造的漆金彩繪與極彩色雕刻保存得很完整。從日本平搭空中纜車約 5 分鐘就到（走石階要 1,159 階，別想不開）。境內博物館收藏家康的洋時鐘與甲冑。<b>冬季纜車末班約 16:00、拜觀也是 16:00 截止</b>，行程要抓早。',
+  info:[['地址','駿河區根古屋 390'],['電話','054-237-2438'],['交通','日本平搭纜車約 5 分；或從海側爬 <b>1,159 石階</b>約 20 分（途中「一ノ門」可眺望伊豆半島）'],['開放','9:00–16:00（冬季）'],['門票','拜觀 ¥800／纜車來回 ¥1,400']],
   chips:['9:00–16:00（冬季）','拜觀 ¥800','纜車來回 ¥1,400','末班 16:00 要確認']},
  hobby:{url:'https://www.hobbysquare.jp/',name:'靜岡 Hobby Square',jp:'静岡ホビースクエア',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=BECAMQAuZMQ',l:'Hobby Square 與靜岡其他模型朝聖點'}],short:'模型之都的常設展，靜岡站南口 1 分',
   text:'靜岡是日本塑膠模型的大本營 —— TAMIYA（田宮）、青島文化教材社、HASEGAWA、BANDAI 的模型工廠都在這裡，全日本約八成的塑膠模型產自靜岡。ホビースクエア 就是這座「模型世界首都」的展示窗口，常設展把各家廠商的代表作與靜岡傳統工藝並陳，另有賣店與付費的手作工作坊。位置在靜岡站南口徒步 1 分的サウスポット静岡 3 樓，<b>常設展與賣店免費</b>，下雨或等車空檔很好用。',
+  info:[['地址','駿河區南町 18-1　Southpot 靜岡 3F'],['電話','054-289-3033'],['交通','JR靜岡站<b>南口步行 1 分</b>']],
   chips:['免費（工作坊另計）','平日 11:00–18:00','假日 10:00–18:00','週一休（遇假日順延）','靜岡站南口步行 1 分']},
  sengen:{url:'http://www.shizuokasengen.net/',name:'靜岡淺間神社',jp:'静岡浅間神社',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=JRI1pq4RMWE',l:'靜岡淺間神社與靜岡縣富士山世界遺產中心'}],short:'26 棟國家重要文化財，漆塗極彩色',wiki:['静岡浅間神社'],
   text:'當地人叫「おせんげんさま」，其實是神部神社、淺間神社、大歳御祖神社三社的總稱。1804 年起花了 60 多年重建，<b>社殿 26 棟全部是國家重要文化財</b>，整片漆塗加極彩色雕刻，華麗程度接近縮小版的日光東照宮，而且幾乎沒有外國觀光客。德川家康在這裡舉行元服禮（成年禮）。免費停車 90 台，從駿府城公園往北走約 10 分。',
+  info:[['地址','葵區宮ヶ崎町 102-1'],['電話','054-245-1820'],['交通','JR靜岡站北口 9 號乘車處搭安倍線或美和大谷線巴士約 8 分，「赤鳥居 淺間神社入口」下車'],['開放','7:00–18:00・免費・每天開放'],['備註','可求英文版御守；免費停車 90 台']],
   chips:['7:00–18:00','免費','26 棟重要文化財','免費停車 90 台']},
  aoba:{url:'https://www.visit-shizuoka.com/spot/detail_463.html',name:'青葉橫丁・靜岡おでん',jp:'青葉横丁・静岡おでん',kind:'晚餐',video:[{u:'https://www.youtube.com/watch?v=y5VA1EdSSrg',l:''}],short:'黑高湯串燒關東煮，昭和橫丁',wiki:['静岡おでん'],
   text:'靜岡おでん的特色是牛筋熬的黑色高湯、所有料都串成一串，起鍋撒上「だし粉」（沙丁魚粉＋青海苔）。黑はんぺん（黑輪片）是靜岡限定。青葉橫丁與隔壁的青葉おでん街是兩排昭和味的小店，一家約 10 個座位，通常 17:00 後開始熱鬧，從靜岡站走過去約 10 分鐘。',
+  info:[['地址','青葉橫丁 葵區常磐町 1-8-7／青葉關東煮街 葵區常磐町 2-3-6'],['交通','JR靜岡站步行約 12 分'],['備註','這條青葉 Symbol Road 每年 11 月下旬–2 月上旬有霓彩燈飾，2/11 可能剛好是最後幾天']],
   chips:['約 17:00 開店','靜岡站步行 10 分','黑はんぺん・だし粉']},
  ichigo:{url:'https://www.city.shizuoka.lg.jp/s5984/s005520.html',name:'石垣草莓',jp:'石垣いちご',kind:'體驗',video:[{u:'https://www.youtube.com/watch?v=kapbppRSvV0',l:''}],short:'久能海岸石牆梯田，紅頰現採',wiki:['石垣イチゴ'],
   text:'久能山南麓的海岸斜坡上，用石頭堆成一階階的石牆，白天吸熱、晚上放熱，讓草莓在冬天也能長得又甜又大——這種百年前發明的「石垣いちご」是靜岡特產，沿著國道 150 號一整排都是採果園。品種以「紅ほっぺ」為主，1 月到 5 月開放採果，多半是 30 分鐘吃到飽。<b>上午場人少果多，記得先預約</b>。',
+  info:[['交通','國道 150 號「草莓海岸公路」沿線；靜岡站開車約 30 分'],['期間','1 月上旬–5 月上旬，2 月正中間'],['備註','上午場要先預約；品種以紅ほっぺ為主，多為 30 分吃到飽']],
   chips:['約 ¥2,000／30 分吃到飽','上午場要預約','紅ほっぺ','靜岡站開車約 30 分']},
  miho:{url:'https://miho-no-matsubara.jp/',name:'三保松原',jp:'三保の松原',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=8JbZHW0QXfw',l:''}],short:'羽衣傳說的松林海岸，世界遺產',wiki:['三保の松原'],
   text:'約 3 萬棵黑松沿著 7 公里的海岸線排開，隔著駿河灣正對富士山，是浮世繪與和歌裡畫過無數次的日本三大松原之一，2013 年以「富士山—信仰的對象與藝術的泉源」的一部分列入世界文化遺產。海邊有能劇《羽衣》傳說中的「羽衣の松」，入口的「みほしるべ」是免費的展示館。冬天早上到中午之間富士山最清楚。',
+  info:[['地址','清水區三保'],['電話','054-340-2100（みほしるべ）'],['交通','JR清水站搭巴士約 25 分，<b>下車後還要走約 20 分</b>；東名清水 IC 或日本平久能山 S.I.C 開車約 25 分'],['開放','24 小時・免費（みほしるべ 另有開放時間）'],['另一種走法','從清水日之出搭<b>水上巴士</b>到三保約 15 分（054-353-2222・9:00–17:00・海況差停駛）']],
   chips:['24 小時','免費','石垣草莓開車約 30 分','世界文化遺產']},
  shimizu:{url:'https://kashinoichi.com/',name:'清水 河岸の市',jp:'清水魚市場 河岸の市',kind:'午餐',video:[{u:'https://www.youtube.com/watch?v=Es9ysrxyAnA',l:''}],short:'鮪魚之港的海鮮丼，下一站小丸子樂園',wiki:['清水港'],
   text:'清水港是日本冷凍鮪魚卸貨量第一的港口，「河岸の市」是漁協直營的市場，由兩棟組成：<b>いちば館</b>賣魚貨與干物，<b>まぐろ館</b>（鮪魚館）裡二十幾家食堂比鄰，鮪魚丼、生櫻花蝦（2 月是冷凍的）、靜岡黑輪都吃得到，價格比觀光區實在。吃完開車 5 分鐘就到隔壁的<b>エスパルスドリームプラザ</b>，下午的小丸子樂園與摩天輪都在那裡。',
-  chips:['まぐろ館 11:00–15:00','週三多休市','三保松原開車約 15 分','下一站：小丸子樂園']},
+  info:[['地址','清水區島崎町 149'],['電話','054-355-3575'],['交通','JR清水站東口步行 5 分'],['開放','いちば館 9:30–17:30；まぐろ館各店時間不一'],['公休','<b>週三</b>（部分店舖仍營業）—— 我們 2/12 是週五，沒問題']],
+  chips:['いちば館 9:30–17:30','まぐろ館 各店時間不一','<b>週三公休</b>（部分營業）','三保松原開車約 15 分']},
  maruko:{url:'https://www.chibimarukochan-land.com/',name:'小丸子樂園',jp:'ちびまる子ちゃんランド',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=gPenW3EApA0&t=302',l:'從 5:02 小丸子樂園段落開始'}],short:'清水就是小丸子的故鄉',wiki:['ちびまる子ちゃん','エスパルスドリームプラザ'],
   text:'作者櫻桃子出身清水，《櫻桃小丸子》整部作品的舞台就是這一帶。1999 年開幕的小丸子樂園在<b>エスパルスドリームプラザ 3 樓</b>，把漫畫場景等比例做出來：小丸子的家、三年四班的教室、公園與商店街都能走進去拍照，還有限定周邊與扭蛋。逛完到同棟的清水すし横丁吃壽司、搭海邊的大摩天輪「ドリームスカイ」，天氣好的話從海側平台能看到富士山。整棟都是室內，下雨天也不怕。',
+  info:[['地址','清水區入船町 13-15　エスパルスドリームプラザ 3F'],['電話','054-354-3360'],['開放','10:00–20:00（最後入館 19:30）・全年無休'],['門票','國中以上 ¥1,200／3 歲以上 ¥700'],['交通','JR清水站東口有<b>免費接駁巴士</b>約 10 分（平日每 30 分、週末假日每 15 分一班）；夢幻廣場商店 10:00–20:00、餐廳 11:00–21:00']],
   chips:['10:00–20:00（最終入館 19:30）','大人 ¥1,200・小孩 ¥700','エスパルスドリームプラザ 3F','清水 河岸の市開車 5 分']},
  yunoki:{url:'https://www.yunokinosato.com/',name:'柚木の郷 天然溫泉',jp:'東静岡 天然温泉 柚木の郷',kind:'溫泉',video:[{u:'https://www.youtube.com/watch?v=DnN4OKowkec&t=208',l:'從 3:28 館內段落開始'}],short:'東靜岡站步行 1 分，岩風呂與兩種三溫暖',
   text:'東靜岡站走路 1 分鐘就到的天然溫泉，規模比想像中大：岩風呂、源泉立湯、高濃度碳酸泉、寢湯、水風呂，另有兩種三溫暖——熱風蒸屋（ロウリュウ）與美潤蒸屋（奈米霧），岩盤浴另計。館內有「ほんまもん食堂」與「囲炉裏茶房」兩處食事處（11:00–22:00，最後點餐 21:30），<b>泡完直接吃晚餐不用再移動</b>。從靜岡站搭 JR 一站 3 分鐘，是還車後最順的收尾，也補上從靜岡到熱海之間唯一的泡湯機會。',
+  info:[['交通','JR東靜岡站步行 1 分（靜岡站搭 JR 一站約 3 分）']],
   chips:['平日 ¥1,200・假日 ¥1,430','10:00–24:00（最後入場 23:30）','東靜岡站步行 1 分','年中無休','館內有食事處']},
  numazuport:{url:'https://numazukanko.jp/',name:'沼津港 港口美食',jp:'沼津港・沼津みなと新鮮館',kind:'午餐',video:[{u:'https://www.youtube.com/watch?v=AjrjrOr34mc',l:'沼津港美食散步 9 選'}],short:'丸天かき揚げ丼、深海魚料理、干物伴手禮',wiki:['沼津港'],
   text:'深海水族館旁邊就是沼津港的餐飲區，走路 3 分鐘內都吃得到。必吃清單：魚河岸「丸天」的巨無霸かき揚げ丼（高達 15 公分的酥炸海鮮塔，兩人分一份剛好）；「港八十三番地」的深海魚料理與深海魚漢堡；「双葉寿司」「千本一」的海鮮丼與金目鯛煮付け；「みなと新鮮館」市場買竹筴魚干物、櫻花蝦、蜜柑當伴手禮，可真空包裝帶回台灣。市場旁邊就是<b>「びゅうお」大型展望水門</b>，地上 30 公尺的展望台看得到富士山與港口全景，¥100，想上去隨時可以。注意 2 月駿河灣禁捕しらす，生しらす丼吃不到，桜えび也是冷凍的，這兩樣別特地點。',
@@ -827,22 +868,48 @@ function cardHTML(id){
   </article>`;
 }
 function areaHTML(){
-  const cfg={pts:['shizuoka','sengen','aoba','yunoki','zoo','yume','toshogu','ichigo','miho','shimizu','maruko'],legs:[],
-    labels:{shizuoka:'b',sengen:'t',aoba:'l',yunoki:'t',zoo:'b',yume:'r',toshogu:'r',ichigo:'b',miho:'r',shimizu:'l',maruko:'r'},minSpan:.115};
+  const cfg={pts:['shizuoka','sengen','aoba','yunoki','zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','maruko','cruise'],legs:[],
+    labels:{shizuoka:'b',sengen:'t',aoba:'l',yunoki:'t',zoo:'b',yume:'r',ndhotel:'t',toshogu:'r',ichigo:'b',miho:'r',mihoshrine:'t',shimizu:'l',kinnoji:'t2',maruko:'r',cruise:'b'},minSpan:.115};
   const mp=buildMap(cfg,{aria:'靜岡・清水 景點位置圖',W:760,H:560});
   const bg1=bgRow(bgLines);
-  const cfg2={pts:['shizuoka','shizuhotel','hobby','aoba','sengen','yunoki'],legs:[],
-    labels:{shizuoka:'r',shizuhotel:'l',hobby:'b',aoba:'t',sengen:'t',yunoki:'t'},minSpan:.016};
+  const cfg2={pts:['shizuoka','shizuhotel','hobby','aoba','maruzen','sengen','yunoki'],legs:[],
+    labels:{shizuoka:'r',shizuhotel:'l',hobby:'b',aoba:'l',maruzen:'r',sengen:'t',yunoki:'t'},minSpan:.016};
   const mp2=buildMap(cfg2,{aria:'靜岡站周邊放大圖',W:760,H:420});
-  const cards=['zoo','yume','toshogu','ichigo','miho','shimizu','maruko','aoba','hobby','sengen','yunoki','shizuhotel'];
+  const cards=['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','maruzen','issa','hobby','sengen','yunoki','shizuhotel'];
   return `<section class="block" id="shizuoka">
   <div class="wrap">
     <h2>靜岡・清水 有什麼</h2>
-    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把 12 個候選點全部標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</b></p>
+    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</b></p>
     <div class="areamap">${mp}${bg1}</div>
     <div class="areamap"><div class="mapcap">靜岡站周邊放大（上圖左下角那一帶）</div>${mp2}${bgRow(bgLines)}</div>
     <div class="cards">${cards.map(cardHTML).join('')}</div>
-    <p class="mute" style="margin-top:14px">以上 12 個是候選清單，<b>不是全都要去</b>。其中靜岡淺間神社與 Hobby Square 沒有排進下面的推薦路線，想去的話得拿掉別的。另外還有駿府城公園、登呂遺跡、丸子宿 丁子屋（方向相反，來回多 40 分鐘）、薩埵峠（在由比，清水再往東北 25 分）也沒收進來。</p>
+    <p class="mute" style="margin-top:14px">以上 18 個是候選清單，<b>不是全都要去</b>。其中靜岡淺間神社、Hobby Square、MARUZEN、一茶、日本平飯店、御穗神社、遊覽船、金之字都沒排進下面的推薦路線，想去的話得拿掉別的。另外還有駿府城公園與葵舟（護城河遊船）、登呂遺跡、芹澤銈介美術館、清水的 Verkehr 博物館與次郎長老家、用宗漁港溫泉＋漁港橫丁（靜岡站 JR 兩站）、丸子宿 丁子屋的山藥泥（方向相反，來回多 40 分鐘）、薩埵峠（在由比，清水再往東北 25 分）也沒收進來。</p>
+
+    <div class="two" style="margin-top:26px">
+      <div>
+        <h3>2 月的靜岡有什麼</h3>
+        <ul class="one">
+          <li><b>石垣草莓採果</b>　1 月上旬–5 月上旬，2 月正中間，而且是最甜的時候。</li>
+          <li><b>興津宿 寒櫻祭</b>　2 月上旬。早開的「淡色寒櫻」，興津在清水再往東北 JR 兩站。</li>
+          <li><b>日本平梅花祭</b>　2 月中旬，久能山的梅園。跟我們上日本平的日子重疊，純粹因為整趟花已經看太多才沒排。</li>
+          <li><b>青葉 Symbol Road 霓彩燈飾</b>　11 月下旬–2 月上旬。青葉橫丁就在這條路上，2/11 可能是最後幾天。</li>
+          <li><b>丸子宿場祭</b>　2 月下旬。我們 2/12 就離開靜岡，趕不上。</li>
+        </ul>
+        <p class="mute" style="margin-top:8px">以上是 2025 年版手冊的行事曆，<b>2027 年的確切日期出發前要再查一次</b>。</p>
+      </div>
+      <div>
+        <h3>不租車的話</h3>
+        <ul class="one">
+          <li><b>電車・巴士 1 日通票 ¥1,600</b>（兒童 ¥800）　靜鐵電車全線＋靜岡與清水兩區的指定巴士。2/11 只靠巴士跑日本平的話值得算一下。</li>
+          <li><b>清水港鮪魚券 ¥4,000</b>（兒童 ¥3,000）　含水上巴士 1 日券＋靜鐵電車 1 日券＋三保山之手線巴士 1 日券＋<b>¥1,000 餐券</b>＋觀光設施利用券。要走「三保＋河岸の市＋小丸子」又不開車，這張最划算。</li>
+          <li><b>清水夢幻廣場免費接駁巴士</b>　JR清水站東口搭，約 10 分；平日每 30 分、週末假日每 15 分一班。</li>
+          <li><b>水上巴士 三保羽衣線</b>　日之出 ⇄ 江尻 ⇄ 三保，各約 15 分，9:00–17:00，054-353-2222，海況差停駛。</li>
+        </ul>
+        <p class="mute" style="margin-top:8px">我們 2/12 租車，所以這些主要是 <b>2/11</b> 和「臨時改計畫」時的備案。</p>
+      </div>
+    </div>
+
+    <p class="mute" style="margin-top:16px">在地洽詢：靜鐵 Justline 巴士客服 054-252-0505（7:30–20:00）／日本平纜車 054-334-2026／水上巴士 054-353-2222（9:00–17:00）／靜岡市綜合觀光案內所・靜岡站北口 054-253-1170（9:00–17:45）／清水站前觀光案內所・西口江尻口 054-367-9613（9:00–17:45，13:00–14:00 午休）。<br>本區資料整理自靜岡市觀光指南《靜岡探索之旅》（2025 年 9 月）、清水區市區觀光地圖（2025 年 11 月）與靜岡市街圖（2023 年 9 月）。</p>
     <div class="areanote">↓ 以下 <b>2/11（四）、2/12（五）</b> 兩天，是從上面這些點挑出來、排得進時間的<b>推薦路線</b>。不是全部都去。</div>
   </div>
 </section>`;
@@ -908,6 +975,9 @@ function openCard(id){
   document.getElementById('mJp').textContent=c.jp||'';
   document.getElementById('mText').innerHTML=c.text;
   document.getElementById('mChips').innerHTML=(c.chips||[]).map(x=>`<span>${x}</span>`).join('');
+  const inf=document.getElementById('mInfo');
+  inf.innerHTML=(c.info||[]).map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('');
+  inf.hidden=!(c.info&&c.info.length);
   const act=document.getElementById('mAct');act.textContent='';
   const gu=gUrl(id);
   if(gu){const ga=document.createElement('a');ga.href=gu;ga.target='_blank';ga.rel='noopener noreferrer';
