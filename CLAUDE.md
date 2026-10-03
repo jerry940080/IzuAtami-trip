@@ -142,6 +142,25 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
 - 卡片顯示才 250–400px、彈窗 700px，1000px 綽綽有餘。實測三保松原 3 張共 159 KB，
   比舊的 base64 JPEG（平均 112 KB/張）省很多。
 
+### 手機版版面（2026-10-03）
+使用者回報：手機上每張景點卡佔滿寬度，捲到卡片區時當天的路線圖已經不見了。
+
+- 原因：`.cards` 是 `.day-body` 的**兄弟節點**，所以 `.mapcard` 就算設 sticky，
+  捲出 `.day-body` 就會脫離。解法是 **`@media (max-width:640px){.day-body{display:contents}}`**，
+  讓地圖／時刻表／卡片變成 `.wrap` 的同層子元素，sticky 的範圍才涵蓋到卡片。
+- `.mapcard` 在 **≤640px** 改 `position:sticky;top:39px;z-index:6`（39px 是 `.strip` 的高度）；
+  641–860px 維持原本的單欄＋靜態地圖（平板上地圖高達 632px，釘住反而佔掉大半畫面）。
+- 手機版卡片改 **兩欄**（`grid-template-columns:1fr 1fr`）並縮排版：標題 14px、說明 11.5px、
+  圓標 20px。手機版隱藏 `.mapcard .mapbg`（圖中鐵道那排）省垂直空間。
+- **不要對 `.mapcard svg` 設 `max-height`** —— SVG 有 viewBox，壓高度會依
+  `preserveAspectRatio` 等比縮小並左右留白，很醜。讓它維持 `width:100%;height:auto` 就好。
+
+> **順手修的 bug**：`d.cards.map(cardHTML)` 會把 `Array.map` 的 index 當成 `cardHTML(id,num)`
+> 的第二個參數，導致編號從 0 開始（第一張因為 0 是 falsy 而沒有號碼）。改成
+> `d.cards.map((k,i)=>cardHTML(k,i+1))`，並讓**每日地圖也帶編號**（`d.map.nums`），
+> 和當天卡片同一組號碼 —— 這正好解決「地圖對不到景點」的原始需求。
+> 注意：不在 `d.map.pts` 裡的卡片（例如 Day 3 的 `mihoshrine`）會有號碼但地圖上沒有標記。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
