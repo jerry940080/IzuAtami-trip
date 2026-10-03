@@ -2,11 +2,12 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>熱海・伊豆・靜岡 8天7夜 旅のしおり｜2027.2.10–2.17</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下，並載入模板字型 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700&display=swap";document.head.appendChild(l);}</script>
 <style>
 :root{
   --paper:#f8f5ee; --paper2:#efe9dc; --ink:#26292e; --ink2:#4d5259; --ink3:#7d8188;
@@ -290,31 +291,6 @@ footer p{max-width:70ch}
 @media (max-width:640px){
   .hero svg{height:220px}
   section.block{padding:34px 0 12px}
-  /* 時間軸（停留點＋移動藥丸） */
-  .tlx{list-style:none;margin:4px 0 0;padding:0}
-  .tlx li{display:grid;grid-template-columns:48px 22px minmax(0,1fr);column-gap:8px}
-  .tlx li.st{padding:0;border-radius:14px;cursor:pointer}
-  .tlx li.st:active{background:#fff}
-  .tlx .tt{padding:11px 0 0;text-align:right;line-height:1.2}
-  .tlx .tt b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums;color:var(--ink)}
-  .tlx .tt span{display:block;font-size:10.5px;color:var(--ink3);margin-top:3px}
-  .tlx .ax{position:relative}
-  .tlx .ax::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--rule)}
-  .tlx .ax.first::before{top:20px}
-  .tlx .ax.last::before{bottom:calc(100% - 20px)}
-  .tlx .ax i{position:absolute;top:13px;left:3px;width:16px;height:16px;border-radius:50%;border:3px solid var(--paper)}
-  .tlx .ax.dash::before{background:none;border-left:2px dashed var(--coast)}
-  .tlx .bd{padding:9px 0 11px;min-width:0}
-  .tlx .n{font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
-  .tlx .m{display:flex;align-items:center;gap:6px;margin-top:4px;min-width:0}
-  .tlx .k{flex:none;font-size:10.5px;padding:1px 7px;border-radius:999px;color:#fff;font-weight:600}
-  .tlx .d{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .tlx li.open .m{flex-wrap:wrap}
-  .tlx li.open .d{white-space:normal;overflow:visible}
-  .tlx li.go{height:38px}
-  .tlx li.go:last-child .ax::before{bottom:50%}
-  .tlx li.go>div:last-child{display:flex;align-items:center}
-  .tlx .pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;background:var(--paper2);color:var(--ink2);font-size:12px;font-weight:600}
   section.block>.wrap>h2{font-size:24px;margin-bottom:12px}
   .lead{font-size:14.5px;margin-bottom:16px}
   .areanote{font-size:13.5px;padding:10px 13px}
@@ -375,6 +351,194 @@ footer p{max-width:70ch}
   .money>div{min-width:120px;padding:9px 11px}
   .money .big{font-size:20px}
 }
+
+/* ================= 手機 App（≤640px，html.app）：Claude Design「1b 時間軸」模板 + Organic 設計系統 ================= */
+html.app{
+  --color-bg:#f5ead8;--color-surface:#ebddc5;--color-text:#201e1d;--color-accent:#c67139;--color-accent-2:#7a8a5e;
+  --color-divider:color-mix(in srgb,#201e1d 16%,transparent);
+  --color-neutral-100:#f9f4ed;--color-neutral-200:#eee7db;--color-neutral-300:#dcd3c4;--color-neutral-400:#c0b6a5;--color-neutral-500:#a19786;--color-neutral-600:#82796a;--color-neutral-700:#645c50;--color-neutral-800:#474238;--color-neutral-900:#2e2b25;
+  --color-accent-100:#fff2eb;--color-accent-200:#ffe1d0;--color-accent-300:#ffc6a5;--color-accent-400:#f6a06b;--color-accent-500:#d67f48;--color-accent-600:#b2622d;--color-accent-700:#8c491a;--color-accent-800:#643312;--color-accent-900:#402310;
+  --color-accent-2-100:#f0fae1;--color-accent-2-200:#e1eecc;--color-accent-2-300:#ccdbb2;--color-accent-2-400:#aebf92;--color-accent-2-500:#8fa073;--color-accent-2-600:#728157;--color-accent-2-700:#56633f;--color-accent-2-800:#3d472b;--color-accent-2-900:#272e1b;
+  --shadow-md:0 3px 10px color-mix(in srgb,#2e2b25 16%,transparent);--shadow-lg:0 12px 32px color-mix(in srgb,#2e2b25 22%,transparent);
+  --font-heading:"Caprasimo","Noto Sans TC",system-ui,sans-serif;--font-body:"Figtree","Noto Sans TC",system-ui,sans-serif;
+  /* 舊色票對應到 Organic，搬進「資訊」分頁的區塊與字卡彈窗一起換色 */
+  --paper:#f5ead8;--paper2:#ebddc5;--ink:#201e1d;--ink2:#474238;--ink3:#645c50;--rule:color-mix(in srgb,#201e1d 16%,transparent);
+  --ai:#8c491a;--sakura:#c67139;--sakura2:#ffe1d0;--shu:#b2622d;--wakatake:#728157;--serif:var(--font-heading);--sans:var(--font-body);
+  --tabh:66px;
+}
+html.app,html.app body{height:100%;overflow:hidden;background:var(--color-bg)}
+html.app body{font-family:var(--font-body)}
+html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!important}
+#mapp{position:fixed;inset:0;z-index:30;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent;font-synthesis:none}
+#mapp button{font-family:inherit;color:inherit}
+#mapp :focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.ma-scr{position:absolute;left:0;right:0;top:0;bottom:calc(var(--tabh) + env(safe-area-inset-bottom));display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.ma-scr.on{display:flex}
+.ma-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
+.ma-body::-webkit-scrollbar{display:none}
+.ma-body.pad{padding:18px 24px 40px}
+/* 底部分頁 */
+.ma-tabs{position:absolute;left:0;right:0;bottom:0;z-index:30;height:calc(var(--tabh) + env(safe-area-inset-bottom));background:var(--color-neutral-100);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 var(--color-divider);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px env(safe-area-inset-bottom)}
+.ma-tabs button{border:0;background:transparent;color:var(--color-neutral-700);display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;cursor:pointer}
+.ma-tabs .ic{width:56px;height:32px;border-radius:999px;display:grid;place-items:center;transition:background .2s}
+.ma-tabs .tx{font-size:11px;font-weight:700}
+.ma-tabs button.on{color:var(--color-accent-800)}
+.ma-tabs button.on .ic{background:var(--color-accent-200)}
+/* 首頁 */
+.mh-kick{font-size:11px;letter-spacing:.12em;color:var(--color-accent-700);font-weight:700}
+.mh-cd{display:flex;align-items:flex-end;gap:12px;margin-top:6px;cursor:pointer}
+.mh-cd .n{font:400 112px/.9 var(--font-heading);color:var(--color-accent-600);letter-spacing:-.03em}
+.mh-cd div{padding-bottom:12px}
+.mh-cd b{display:block;font:700 20px/1.2 var(--font-heading)}
+.mh-cd span{font-size:13px;color:var(--color-neutral-700)}
+.mh-ttl{font:700 30px/1.15 var(--font-heading);margin-top:18px;cursor:pointer}
+.mh-en{font:400 15px var(--font-heading);color:var(--color-neutral-700);margin-top:2px}
+.mh-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:20px 0 14px}
+.mh-stats>div{background:var(--color-surface);border-radius:22px;padding:12px 14px}
+.mh-stats b{display:block;font:400 22px/1.1 var(--font-heading)}
+.mh-stats span{font-size:12px;color:var(--color-neutral-700)}
+.mh-stats .pk{background:var(--color-accent-2-200);cursor:pointer}
+.mh-stats .pk b,.mh-stats .pk span{color:var(--color-accent-2-800)}
+.mh-cta{width:100%;height:56px;border:0;border-radius:999px;background:var(--color-text);color:var(--color-bg)!important;font:400 17px var(--font-heading)!important;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.mh-cta:active{background:var(--color-neutral-800)}
+.mh-flt{margin-top:14px;background:var(--color-neutral-100);border-radius:22px;padding:6px 16px}
+.mh-flt>div{display:flex;align-items:center;gap:10px;min-height:40px;font-size:13px;color:var(--color-neutral-800)}
+.mh-flt>div+div{border-top:1px solid var(--color-divider)}
+.mh-flt b{font-weight:700;margin-right:4px}
+.mh-h{font:700 18px var(--font-heading);margin:30px 0 8px}
+.mh-days{display:flex;flex-direction:column;gap:2px}
+.ma-drow{display:flex;align-items:center;gap:14px;padding:8px;margin:0 -8px;width:calc(100% + 16px);border:0;border-radius:24px;background:transparent;text-align:left;cursor:pointer}
+.ma-drow:active{background:var(--color-surface)}
+.dt-tile{width:56px;height:60px;flex:none;border-radius:20px;background:var(--color-surface);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dt-tile span{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--color-neutral-700)}
+.dt-tile b{font:400 20px/1.1 var(--font-heading)}
+.dr-tx{flex:1;min-width:0}
+.dr-tx b{display:block;font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dr-tx span{display:block;font-size:12px;color:var(--color-neutral-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dr-pill{flex:none;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--color-accent-100);color:var(--color-accent-800)}
+.ma-drow .chev{color:var(--color-neutral-500)}
+/* 行程：標題＋週曆 */
+.ma-phead{flex:none;background:var(--color-bg);padding:4px 20px 6px}
+.ph-top{display:flex;align-items:center;justify-content:space-between;height:52px}
+.ma-kick{font-size:11px;letter-spacing:.1em;color:var(--color-accent-700);font-weight:700}
+.ph-date{font:700 22px/1.2 var(--font-heading)}
+.ma-ibtn{width:44px;height:44px;border-radius:50%;border:0;background:var(--color-surface);display:grid;place-items:center;cursor:pointer}
+.ma-week{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));margin-top:8px}
+.ma-week button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;height:62px;cursor:pointer}
+.ma-week span{font-size:11px;color:var(--color-neutral-700)}
+.ma-week b{width:38px;height:38px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;font:400 16px var(--font-heading);transition:background .2s}
+.ma-week .on b{background:var(--color-accent-600);color:var(--color-neutral-100)}
+.ma-week .today span{color:var(--color-accent-700);font-weight:700}
+#maPlan{padding:12px 16px 40px;touch-action:pan-y}
+.ma-area{background:var(--color-surface);border-radius:22px;padding:11px 18px;margin-bottom:14px}
+.ma-area b{display:block;font:700 17px/1.3 var(--font-heading)}
+.ma-area span{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--color-neutral-800);margin-top:3px}
+/* 時間軸 */
+.ma-row{border-radius:24px;cursor:pointer}
+.ma-row:active{background:var(--color-surface)}
+.ma-r,.ma-go{display:grid;grid-template-columns:54px 22px minmax(0,1fr);column-gap:9px}
+.ma-tm{padding:14px 0 0;text-align:right}
+.ma-tm b{display:block;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.ma-tm b.tx{font-size:12px;color:var(--color-neutral-700);padding-top:2px}
+.ma-tm span{display:block;font-size:10.5px;white-space:nowrap;letter-spacing:-.02em;color:var(--color-neutral-700);line-height:1.3;margin-top:2px}
+.ma-ax{position:relative}
+.ma-ax .ln{position:absolute;left:10px;width:2px;background:var(--color-neutral-300)}
+.ma-ax .dt{position:absolute;top:16px;left:2px;width:18px;height:18px;border-radius:50%;border:4px solid var(--color-bg)}
+.ma-ax .dash{position:absolute;left:10px;top:0;bottom:0;border-left:2px dashed var(--color-neutral-400)}
+.ma-tx{padding:12px 6px 14px 0;min-width:0}
+.ma-tx .nm{font-weight:700;font-size:16px;line-height:1.3}
+.ma-row.opt .ma-tx .nm{font-weight:600;color:var(--color-neutral-800)}
+.ma-tx .mt{display:flex;align-items:center;gap:6px;margin-top:4px;min-width:0}
+#mapp .kp,.ma-sheet .kp{flex:none;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;line-height:1.5}
+.ma-tx .jp{font-size:12px;color:var(--color-neutral-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ma-tx .nt{font-size:12px;line-height:1.5;color:var(--color-neutral-700);margin-top:6px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.ma-go{height:40px}
+.ma-go>div:last-child{display:flex;align-items:center;min-width:0}
+.gp{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);font-size:12px;font-weight:600;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ma-dash{display:block;margin:12px 0 0 82px;width:calc(100% - 82px);height:48px;border-radius:999px;border:2px dashed var(--color-neutral-400);background:transparent;color:var(--color-neutral-700)!important;font:600 14px var(--font-body)!important;cursor:pointer}
+.ma-rain{margin:10px 0 0 82px;background:var(--color-surface);border-radius:22px;padding:14px 16px;font-size:14px;line-height:1.65;color:var(--color-neutral-800)}
+.ma-rain b{color:var(--color-accent-700)}
+.ma-hint{font-size:11px;color:var(--color-neutral-600);text-align:center;margin-top:18px}
+/* 地圖 */
+.ma-map{flex:none;position:relative;height:min(400px,48vh);background:#d7e3ea;border-radius:0 0 36px 36px;overflow:hidden}
+.mm-svg,.mm-svg svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mm-pill{position:absolute;top:12px;left:16px;right:16px;height:56px;border-radius:999px;background:var(--color-bg);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:space-between;padding:0 6px;gap:4px}
+.mm-pill button{width:44px;height:44px;flex:none;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
+.mm-pill button:disabled{opacity:.35}
+.mm-pill>div{flex:1;min-width:0;text-align:center}
+.mm-pill b{display:block;font:700 15px/1.2 var(--font-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-pill span{font-size:11px;color:var(--color-neutral-700)}
+html.app .mk-a:focus{outline:none}
+html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
+#maMap .mk-a.on .mk circle{fill:var(--color-accent-600);stroke:var(--color-accent-200);stroke-width:5}
+#maRoute{padding:18px 16px 24px}
+.mr-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 8px 8px}
+.mr-h b{font:700 17px var(--font-heading)}
+.mr-h span{font-size:12px;color:var(--color-neutral-700)}
+.mr-row{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 10px;border-radius:22px;cursor:pointer;transition:background .2s}
+.mr-row.on{background:var(--color-surface)}
+.mr-n{width:30px;height:30px;flex:none;border-radius:50%;background:var(--color-text);color:var(--color-neutral-100);display:grid;place-items:center;font-weight:700;font-size:13px}
+.mr-row.on .mr-n{background:var(--color-accent-600)}
+.mr-n.off{background:var(--color-neutral-400)}
+.mr-tx{flex:1;min-width:0}
+.mr-tx b{display:block;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mr-tx span{font-size:12px;color:var(--color-neutral-700)}
+.mr-btn{height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--color-divider);background:var(--color-bg);font:600 13px var(--font-body)!important;cursor:pointer}
+/* 底部抽屜 */
+.ma-back{position:absolute;inset:0;z-index:50;background:color-mix(in srgb,var(--color-neutral-900) 45%,transparent);opacity:0;pointer-events:none;transition:opacity .3s}
+.ma-back.on{opacity:1;pointer-events:auto}
+.ma-sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;max-height:88%;overflow-y:auto;background:var(--color-bg);border-radius:34px 34px 0 0;padding:10px 20px calc(24px + env(safe-area-inset-bottom));transform:translateY(104%);transition:transform .34s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow-lg)}
+.ma-sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--color-neutral-300);margin:0 auto 16px;cursor:pointer}
+.sh-top{display:flex;gap:14px;align-items:flex-start}
+.sh-tx{flex:1;min-width:0}
+.sh-tags{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.sh-day{font-size:12px;color:var(--color-neutral-700)}
+.sh-nm{font:700 24px/1.2 var(--font-heading)}
+.sh-jp{font:400 15px var(--font-heading);color:var(--color-neutral-700);margin-top:2px}
+.sh-ph{width:96px;height:96px;flex:none;border-radius:50%;overflow:hidden;background:repeating-linear-gradient(135deg,var(--color-neutral-200) 0 7px,var(--color-neutral-300) 7px 8px);display:grid;place-items:center}
+.sh-ph img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.6) contrast(.85) brightness(1.1)}
+.sh-ph span{font:400 22px var(--font-heading);color:var(--color-neutral-600)}
+.sh-rows{display:flex;flex-direction:column;gap:2px;margin:16px 0 6px}
+.sh-rows>div{display:flex;align-items:center;gap:12px;min-height:44px;font-size:14px}
+.sh-note{background:var(--color-surface);border-radius:22px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--color-neutral-800)}
+.sh-act{display:flex;gap:10px;margin-top:18px}
+.sh-circ{width:56px;height:56px;flex:none;border-radius:50%;border:1.5px solid var(--color-divider);display:grid;place-items:center;color:var(--color-neutral-800)}
+.sh-main{flex:1;height:56px;border-radius:999px;border:0;background:var(--color-accent-600);color:var(--color-neutral-100)!important;display:flex;align-items:center;justify-content:center;gap:8px;font:400 17px var(--font-heading)!important;cursor:pointer}
+.sh-main:active{background:var(--color-accent-700)}
+/* 清單 */
+.pk-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+.pk-ttl{font:700 30px/1.15 var(--font-heading)}
+.pk-n{font:400 22px var(--font-heading);color:var(--color-accent-2-700)}
+.pk-bar{height:6px;border-radius:3px;background:var(--color-neutral-300);overflow:hidden;margin-bottom:18px}
+.pk-bar i{display:block;height:100%;background:var(--color-accent-2-600);transition:width .3s}
+.ma-segc,.ma-seg{display:flex;padding:4px;border-radius:999px;background:var(--color-surface)}
+.ma-segc{margin-bottom:6px}
+.ma-seg{flex:none;margin:12px 16px 4px}
+.ma-segc button,.ma-seg button{flex:1;height:40px;border:0;border-radius:999px;background:transparent;font:700 13px var(--font-body)!important;cursor:pointer;transition:all .2s}
+.ma-segc button.on,.ma-seg button.on{background:var(--color-text);color:var(--color-bg)!important}
+.pk-g{display:flex;align-items:baseline;gap:8px;margin:20px 0 4px}
+.pk-g span{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--color-neutral-700);text-transform:uppercase}
+.pk-g b{font-size:13px;font-weight:700}
+.pk-it{display:flex;align-items:center;gap:14px;min-height:50px;width:100%;border:0;background:transparent;text-align:left;cursor:pointer;padding:0}
+.pk-it .bx{width:24px;height:24px;flex:none;border-radius:8px;border:2px solid var(--color-neutral-500);display:grid;place-items:center;color:transparent;transition:all .15s}
+.pk-it.on .bx{background:var(--color-accent-2-600);border-color:var(--color-accent-2-600);color:var(--color-neutral-100)}
+.pk-it .lb2{font-size:15px;line-height:1.4}
+.pk-it.on .lb2{text-decoration:line-through;opacity:.5}
+.pk-add{display:flex;gap:8px;margin-top:18px}
+.pk-add input{flex:1;min-width:0;height:50px;border-radius:999px;border:1.5px solid var(--color-divider);background:var(--color-neutral-100);padding:0 20px;font:400 15px var(--font-body);color:var(--color-text);outline:none}
+.pk-add input:focus{border-color:var(--color-accent)}
+.pk-add button{width:50px;height:50px;flex:none;border-radius:50%;border:0;background:var(--color-text);color:var(--color-bg)!important;display:grid;place-items:center;cursor:pointer}
+.pk-note{font-size:11px;color:var(--color-neutral-600);text-align:center;margin-top:16px}
+/* 資訊分頁：沿用搬進來的桌機區塊 */
+.ma-pane{display:none}
+.ma-pane.on{display:block}
+#maInfo section.block{padding:14px 0 10px}
+#maInfo .wrap{padding:0 16px}
+#maInfo section.block>.wrap>h2{font-size:22px}
+#maInfo footer{margin-top:10px;padding:20px 0 30px}
+#maInfo .card,#maInfo .tipgrid>div,#maInfo details.acc,#maInfo .money>div,#maInfo .areamap,#maInfo .offmap{border-radius:22px}
+
 </style>
 </head>
 <body>
@@ -786,18 +950,6 @@ const DAYS=[
    {t:'18:45',i:'🚆',h:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190',move:1},
    {t:'19:05',i:'♨',h:'柚木の郷　天然溫泉＋三溫暖，館內食事處吃晚餐（食事處 LO 21:30）'},
    {t:'22:00',i:'🚆',h:'東靜岡 → 靜岡　回飯店',move:1}
-  ],
-  stops:[
-   {t:'08:30',i:'🍳',n:'飯店早餐',k:'美食',go:{i:'🚗',t:'30 分'}},
-   {t:'10:00',i:'🍓',n:'石垣草莓 久能海岸',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',go:{i:'🚗',t:'25 分'}},
-   {t:'11:05',i:'🦐',n:'清水 河岸の市',k:'景點',d:'先逛いちば館買干物與櫻花蝦',card:'shimizu'},
-   {t:'12:00',i:'🍽',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',go:{i:'🚗',t:'5 分'}},
-   {t:'13:20',i:'🎪',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko'},
-   {t:'14:30',i:'🎡',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',go:{i:'🚗',t:'20 分'}},
-   {t:'15:50',i:'🌲',n:'三保松原・御穗神社・神の道',k:'景點',d:'500 公尺松林參道散步',card:'miho'},
-   {t:'16:50',i:'🌅',n:'羽衣の松海岸 等夕陽',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',go:{i:'🚗',t:'40 分'}},
-   {t:'18:30',i:'🔑',n:'還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',go:{i:'🚆',t:'JR 3 分・¥190'}},
-   {t:'19:05',i:'♨',n:'柚木の郷',k:'溫泉',d:'天然溫泉＋三溫暖，館內食事處吃晚餐（LO 21:30）',card:'yunoki',go:{i:'🚆',t:'22:00 回飯店'}}
   ],cards:['ichigo','shimizu','maruko','miho','mihoshrine','yunoki'],
   rain:'<b>雨備</b>　上午到下午幾乎都在室內，照跑：草莓園是溫室、河岸の市 與ドリームプラザ 都有屋頂。會泡湯的只有傍晚的三保夕陽 —— 看不到就跳過，提早還車去柚木の郷 多泡一小時。不租車的話：JR 到清水站，走路 5 分到河岸の市，再搭東口的免費接駁巴士去ドリームプラザ（約 10 分）。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'上午搭車去日本平動物園看小熊貓，中午移動，順路吃沼津港',stay:'LiVEMAX Resort 熱海 Ocean',
@@ -886,13 +1038,15 @@ const AREAMAPS=[
 /* ================= MAP ENGINE ================= */
 let W=600,H=440;
 const MOB=matchMedia('(max-width:640px)').matches;
+if(MOB){KIND.spot.c='#201e1d';KIND.hotel.c='#56633f';KIND.station.s='#201e1d';}
 if(MOB){W=380;H=280;}
+let PADT=0;
 function proj(bbox){ // bbox {la0,la1,lo0,lo1}
   const k=Math.cos((bbox.la0+bbox.la1)/2*Math.PI/180);
-  const pad=34;
-  const s=Math.min((W-2*pad)/((bbox.lo1-bbox.lo0)*k),(H-2*pad)/(bbox.la1-bbox.la0));
+  const pad=34,ex=PADT; // PADT：上方額外留白（手機 App 地圖頂端有浮動膠囊），桌機為 0
+  const s=Math.min((W-2*pad)/((bbox.lo1-bbox.lo0)*k),(H-2*pad-ex)/(bbox.la1-bbox.la0));
   const cx=(bbox.lo0+bbox.lo1)/2, cy=(bbox.la0+bbox.la1)/2;
-  return {s,k,pt:(p)=>[W/2+(p[1]-cx)*k*s, H/2-(p[0]-cy)*s]};
+  return {s,k,pt:(p)=>[W/2+(p[1]-cx)*k*s, H/2+ex/2-(p[0]-cy)*s]};
 }
 function bboxOf(keys,minSpan){
   let la0=90,la1=-90,lo0=180,lo1=-180;
@@ -957,7 +1111,7 @@ function marker(key,pr,side,big,num){
   const dx=sd==='l'?-(r+6+ex):sd==='r'?(r+6+ex):0, dy=sd==='t'?-(r+7+ex):sd==='b'?(r+14+ex):4.5;
   const anchor=sd==='l'?'end':sd==='r'?'start':'middle';
   const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
-  const g=`<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
+  const g=`<g class="mk" data-key="${key}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
   // 可點的標記外加一圈透明命中區（手指點在圓標附近也算），SVG 的 <g> 本身沒有填色面積，點到空隙會漏接
   const hit=`<circle class="hit" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${Math.max(r+6,16)}" fill="transparent" pointer-events="all"/>`;
   return CARDS[key]?`<g class="mk-a" data-k="${key}" role="button" tabindex="0" aria-label="${name}，看完整介紹">${hit}${g}</g>`:g;
@@ -981,7 +1135,7 @@ function railBg(pr,bbox){
   return out;
 }
 function buildMap(cfg,opts={}){
-  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;}
+  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;} PADT=opts.padT||0;
   const bbox=cfg.bbox||bboxOf(cfg.pts,cfg.minSpan||.05);
   const pr=proj(bbox);
   const legs=cfg.legs.map((lg,i)=>{const M=MODE[lg.mode];return `<path class="leg" data-i="${i}" d="${legPath(lg,pr)}" fill="none" stroke="${M.c}" stroke-width="${M.w}" ${M.d?`stroke-dasharray="${M.d}"`:''} stroke-linecap="${M.cap||'round'}" stroke-linejoin="round"/>`;}).join('');
@@ -996,7 +1150,7 @@ ${railBg(pr,bbox)}
 <g class="mks">${mks}</g>
 ${scaleBar(pr)}
 </svg>`;
-  W=oW;H=oH;
+  W=oW;H=oH;PADT=0;
   return out;
 }
 function animateMap(svg){
@@ -1122,23 +1276,6 @@ function bgRow(ls){
   return '<div class="mapbg"><b>圖中鐵道</b>'+ls.map(L=>'<span class="lg"><i style="border-color:'+L.c+'"></i>'+L.n+'</span>').join('')+'</div>';
 }
 const daysEl=document.getElementById('days');
-const KCOL={'美食':'var(--shu)','景點':'var(--sakura)','體驗':'var(--sakura)','住宿':'var(--ai)','交通':'var(--ink3)','溫泉':'var(--murasaki)','提醒':'var(--nanohana)','選項':'var(--wakatake)'};
-function mins(t){const m=/^(\d{1,2}):(\d{2})$/.exec(t);return m?(+m[1])*60+(+m[2]):null;}
-function fmtDur(m){if(m<=0)return'';if(m<60)return m+' 分';const h=Math.floor(m/60),r=m%60;return h+' 小時'+(r?' '+r+' 分':'');}
-function stopsHTML(d){
-  const S=d.stops;
-  return `<ol class="tlx">${S.map((s,i)=>{
-    const nx=S[i+1];let dur='';
-    if(nx){const a=mins(s.t),b=mins(nx.t);if(a!=null&&b!=null){let leg=0;const gm=s.go&&/(\d+)\s*分/.exec(s.go.t);if(gm&&!/\d{2}:\d{2}/.test(s.go.t))leg=+gm[1];dur=fmtDur(b-a-leg);}}
-    const col=KCOL[s.k]||'var(--sakura)';
-    const row=`<li class="st${s.card?' has':''}"${s.card?` data-card="${s.card}" role="button" tabindex="0"`:''}>
-      <div class="tt"><b>${s.t}</b>${dur?`<span>${dur}</span>`:''}</div>
-      <div class="ax${i===0?' first':''}${!nx?' last':''}"><i style="background:${col}"></i></div>
-      <div class="bd"><div class="n">${s.i} ${s.n}</div><div class="m"><span class="k" style="background:${col}">${s.k}</span>${s.d?`<span class="d">${s.d}</span>`:''}</div></div>
-    </li>`;
-    const go=s.go?`<li class="go"><div></div><div class="ax dash"></div><div><span class="pill">${s.go.i} ${s.go.t}</span></div></li>`:'';
-    return row+go;}).join('')}</ol>`;
-}
 const dayBlocks=DAYS.map(d=>{
   const seen=new Set(), rows=[];
   (d.map.lines||[]).concat(d.map.legs).forEach(l=>{
@@ -1157,7 +1294,7 @@ const dayBlocks=DAYS.map(d=>{
     <div class="day-body">
       <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(d.map,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
-        ${MOB&&d.stops?stopsHTML(d):`<ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>`}
+        <ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
@@ -1220,6 +1357,7 @@ function slide(d){
   ph.querySelectorAll('.dots i').forEach((el,k)=>el.classList.toggle('on',k===i));
 }
 document.addEventListener('click',e=>{
+  if(MOB&&appClick(e))return;
   if(e.target.closest('.modal .nav')){slide(e.target.closest('.nav').classList.contains('next')?1:-1);return;}
   if(e.target.closest('#mBack')){closeModal();return;}
   const onTip=e.target.closest('.mktip');
@@ -1231,7 +1369,6 @@ document.addEventListener('click',e=>{
   const mh=e.target.closest('.maphead');if(mh&&MOB){mh.closest('.mapcard').classList.toggle('min');return;}
   if(e.target.closest('#lbX')){closeLb();return;}
   if(e.target.closest('#lbZ')||e.target.closest('#lbScroll img')){toggleZoom();return;}
-  const stp=e.target.closest('.tlx li.st');if(stp){if(stp.dataset.card)openCard(stp.dataset.card);else stp.classList.toggle('open');return;}
   const card=e.target.closest('.card[data-card]');if(card){openCard(card.dataset.card);return;}
   if(e.target.closest('.modal-x')||e.target.classList.contains('modal-bg'))closeModal();
 });
@@ -1345,6 +1482,330 @@ addEventListener('resize',()=>{pinEl?placeTip(pinEl):hideTip();});
     img.src=thumb[t];
   });
 })();
+
+/* ================= 手機 App：每日停留點（時間軸用；桌機仍讀 DAYS[].tl） ================= */
+const STOPS={
+1:[
+ {t:'13:30',n:'桃園 T1 → 成田 T2',k:'交通',d:'虎航 IT202・17:30 抵達成田',dur:'3 小時'},
+ {t:'18:00',n:'領行李、入境',k:'交通',d:'Visit Japan Web 先填好',dur:'約 2 小時',go:{i:'🚆',t:'成田特快 19:53–21:00・¥3,330'}},
+ {t:'21:00',n:'品川王子大飯店 北塔',k:'住宿',d:'check-in，站內覓食',card:'prince'}
+],
+2:[
+ {t:'08:00',n:'飯店早餐',k:'美食'},
+ {t:'09:00',n:'Check-out',k:'住宿',d:'品川王子大飯店',go:{i:'🚄',t:'ひかり 約 1 小時・¥6,470'}},
+ {t:'11:20',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂'},
+ {t:'11:40',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:{i:'🚗',t:'25 分・パークウェイ免費'}},
+ {t:'13:10',n:'日本平夢テラス',k:'景點',d:'富士山與駿河灣展望迴廊，屋外迴廊 24 小時開放',card:'yume',dur:'45 分',go:{i:'🚡',t:'纜車 5 分・來回 ¥1,400'}},
+ {t:'14:15',n:'久能山東照宮',k:'景點',d:'國寶社殿與博物館，冬季 16:00 截止拜觀',card:'toshogu',dur:'1 小時 10 分',go:{i:'🚡',t:'纜車回日本平 5 分'}},
+ {t:'選項',n:'日本平飯店 露台酒廊下午茶',k:'選項',d:'14:00–17:00・30 公尺全景窗看富士山',card:'ndhotel',go:{i:'🚗',t:'25 分回靜岡站'}},
+ {t:'16:10',n:'靜岡站前飯店 check-in',k:'住宿',d:'房間待訂',card:'shizuhotel'},
+ {t:'提醒',n:'晚上要喝酒，車停好就別再動',k:'提醒',d:'日本酒駕零容忍，同車的人也會被追究',go:{i:'🚶',t:'步行 10 分'}},
+ {t:'19:00',n:'青葉橫丁',k:'美食',d:'靜岡おでん，黑高湯串燒關東煮',card:'aoba'}
+],
+3:[
+ {t:'08:30',n:'飯店早餐',k:'美食',go:{i:'🚗',t:'30 分'}},
+ {t:'10:00',n:'石垣草莓 久能海岸',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',dur:'40 分',go:{i:'🚗',t:'25 分'}},
+ {t:'11:05',n:'清水 河岸の市',k:'景點',d:'先逛いちば館買干物與櫻花蝦',card:'shimizu',dur:'55 分'},
+ {t:'12:00',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:{i:'🚗',t:'5 分'}},
+ {t:'13:20',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時'},
+ {t:'14:30',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',dur:'1 小時',go:{i:'🚗',t:'20 分'}},
+ {t:'15:50',n:'三保松原・御穗神社・神の道',k:'景點',d:'500 公尺松林參道散步',card:'mihoshrine',dur:'1 小時'},
+ {t:'16:50',n:'羽衣の松海岸 等夕陽',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',dur:'55 分',go:{i:'🚗',t:'40 分回靜岡'}},
+ {t:'18:30',n:'還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',go:{i:'🚆',t:'JR 1 站 3 分・¥190'}},
+ {t:'19:05',n:'柚木の郷',k:'溫泉',d:'天然溫泉＋三溫暖，館內吃晚餐（LO 21:30）',card:'yunoki',dur:'3 小時',go:{i:'🚆',t:'22:00 回飯店'}}
+],
+4:[
+ {t:'07:45',n:'飯店早餐',k:'美食'},
+ {t:'08:30',n:'Check-out',k:'住宿',d:'行李寄靜岡站投幣櫃（大型櫃約 ¥700）',go:{i:'🚆',t:'JR 4 分到草薙＋巴士 10 分'}},
+ {t:'09:30',n:'日本平動物園',k:'景點',d:'小熊貓、猛獸館 299、空中步道，一開門人最少',card:'zoo',dur:'1 小時 50 分'},
+ {t:'提醒',n:'草薙往動物園的巴士班次不密',k:'提醒',d:'前一晚查好時刻；趕不上就搭計程車約 7 分',go:{i:'🚆',t:'25 分回靜岡站取行李'}},
+ {t:'12:10',n:'靜岡 → 沼津',k:'交通',d:'JR 東海道本線・約 1 小時・¥990',go:{i:'🚌',t:'巴士 10 分・¥200'}},
+ {t:'13:40',n:'沼津港午餐',k:'美食',d:'丸天かき揚げ丼／深海魚料理',card:'numazuport',dur:'1 小時'},
+ {t:'14:50',n:'沼津港深海水族館',k:'景點',d:'¥2,200',card:'aquarium',dur:'1 小時 30 分'},
+ {t:'16:20',n:'沼津港逛吃・買干物',k:'購物',d:'みなと新鮮館；びゅうお 展望水門就在旁邊 ¥100',card:'numazuport',dur:'50 分',go:{i:'🚌',t:'巴士 10 分回沼津站'}},
+ {t:'17:40',n:'沼津 → 熱海',k:'交通',d:'JR 東海道本線・約 25 分・¥420',go:{i:'🚕',t:'計程車 5 分'}},
+ {t:'18:15',n:'LiVEMAX 熱海 Ocean',k:'住宿',d:'check-in，晚餐、泡溫泉',card:'livemax'}
+],
+5:[
+ {t:'08:00',n:'飯店早餐',k:'美食',go:{i:'🚕',t:'計程車 5 分到熱海站'}},
+ {t:'09:30',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分・¥3,490・A 席靠海'},
+ {t:'11:00',n:'河津櫻並木',k:'景點',d:'從河津站沿河走到豐泉橋',card:'sakura',dur:'1 小時 30 分'},
+ {t:'12:30',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛'},
+ {t:'選項',n:'南伊豆 櫻花與油菜花祭',k:'選項',d:'伊豆急 25 分＋巴士 25 分',card:'minami'},
+ {t:'選項',n:'白濱神社',k:'選項',d:'伊豆急到下田 25 分＋東海巴士 10 分',card:'shirahama'},
+ {t:'選項',n:'泰迪熊博物館（中途下車）',k:'選項',d:'可 DIY 龍貓玩偶；17:00 閉館，得放棄夜櫻',card:'teddy'},
+ {t:'選項',n:'熱川香蕉鱷魚園（中途下車）',k:'選項',d:'二十幾隻小熊貓；17:00 閉館',card:'banana'},
+ {t:'17:30',n:'河津川夜櫻點燈',k:'景點',d:'點燈至 21:00',card:'sakura',dur:'2 小時',go:{i:'🚃',t:'伊豆急＋JR 約 2 小時・約 ¥2,100'}},
+ {t:'21:40',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'}
+],
+6:[
+ {t:'08:00',n:'飯店早餐',k:'美食'},
+ {t:'09:00',n:'Check-out',k:'住宿',d:'行李寄櫃台',go:{i:'🚕',t:'計程車 10 分'}},
+ {t:'10:00',n:'熱海梅園',k:'景點',d:'2 月中正見頃・梅まつり ¥300',card:'baien',dur:'1 小時',go:{i:'🚶',t:'步行 15 分'}},
+ {t:'11:20',n:'來宮神社',k:'景點',d:'繞大楠一圈',card:'kinomiya',dur:'40 分',go:{i:'🚶',t:'步行約 25 分'}},
+ {t:'途中',n:'糸川遊步道',k:'景點',d:'あたみ桜 已近尾聲，邊走邊看',card:'itogawa'},
+ {t:'12:40',n:'熱海站前午餐',k:'美食',d:'回飯店拿行李',go:{i:'🚄',t:'14:00 新幹線 約 30 分・¥4,070'}},
+ {t:'15:00',n:'品川王子大飯店',k:'住宿',d:'check-in',card:'prince'},
+ {t:'17:00',n:'烤肉大餐',k:'美食',d:'品川或六本木，先訂位',card:'yakiniku',dur:'2 小時',go:{i:'🚇',t:'地鐵約 20 分'}},
+ {t:'19:00',n:'六本木 live house',k:'景點',d:'自由行程',card:'roppongi'},
+ {t:'選項',n:'或去下北澤',k:'選項',d:'古著、小酒館、live house',card:'shimokita'}
+],
+7:[
+ {t:'09:00',n:'自由時間',k:'選項',d:'睡到自然醒，或去品川水族館',go:{i:'🚇',t:'淺草線→三田線 約 20 分'}},
+ {t:'12:30',n:'神田勝本',k:'美食',d:'沾麵，排隊約 20 分',card:'katsumoto',dur:'1 小時',go:{i:'🚶',t:'步行 20 分穿過御茶之水'}},
+ {t:'14:00',n:'秋葉原',k:'景點',d:'電器街、動漫店',card:'akiba',dur:'4 小時',go:{i:'🚇',t:'到橫丁，首推野毛 約 25 分'}},
+ {t:'19:00',n:'居酒屋橫丁',k:'美食',d:'地點待定',card:'yokocho'}
+],
+8:[
+ {t:'07:00',n:'早餐',k:'美食'},
+ {t:'08:00',n:'Check-out',k:'住宿',go:{i:'🚆',t:'成田特快 08:05–09:30・¥3,330'}},
+ {t:'10:00',n:'機場逛逛、買伴手禮',k:'購物',d:'液體類出境後再買',card:'souvenir'},
+ {t:'13:00',n:'成田 T2 → 桃園 T1',k:'交通',d:'虎航 IT201・16:25 抵達桃園'}
+]};
+DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
+
+/* ================= 手機 App（Claude Design「1b 時間軸」模板，與桌機完全分開） ================= */
+const KSTY={
+ '交通':['var(--color-neutral-200)','var(--color-neutral-800)','var(--color-neutral-600)'],
+ '景點':['var(--color-accent-2-100)','var(--color-accent-2-800)','var(--color-accent-2-600)'],
+ '體驗':['var(--color-accent-2-200)','var(--color-accent-2-900)','var(--color-accent-2-500)'],
+ '美食':['var(--color-accent-100)','var(--color-accent-800)','var(--color-accent)'],
+ '購物':['var(--color-accent-200)','var(--color-accent-800)','var(--color-accent-400)'],
+ '住宿':['var(--color-accent-2-700)','var(--color-neutral-100)','var(--color-accent-2-800)'],
+ '溫泉':['var(--color-accent-300)','var(--color-accent-900)','var(--color-accent-700)'],
+ '選項':['var(--color-neutral-100)','var(--color-neutral-700)','var(--color-neutral-400)'],
+ '提醒':['#fbecc4','#6b4a00','#d9a21b']
+};
+const ICO={
+ house:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ calendar:'<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+ map:'<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/>',
+ pack:'<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+ plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',
+ left:'<path d="m15 18-6-6 6-6"/>', right:'<path d="m9 18 6-6-6-6"/>',
+ pin:'<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+ car:'<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ nav:'<polygon points="3 11 22 2 13 21 11 13 3 11"/>',
+ bed:'<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+ plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>'
+};
+function ico(k,sz){sz=sz||22;return `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;flex:none">${ICO[k]}</svg>`;}
+const PACK=[
+ {id:'doc',zh:'證件',en:'Documents',items:[['p1','護照・機票・日幣・信用卡'],['p2','台灣駕照正本＋日文譯本（租車必帶，兩份缺一不可）']]},
+ {id:'wear',zh:'衣物',en:'Clothing',items:[['p3','衣服（至少 4 天份）'],['p4','發熱衣褲・外套・手套・圍巾']]},
+ {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
+ {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
+];
+const INFO_PANES=[['pre','行前',['#pre','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
+const APP={tab:'home',day:0,pin:null,pane:'pre',sheet:false,pack:{packed:{},extra:[],filter:'all'}};
+const $a=id=>document.getElementById(id);
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
+function dayDiff(){const t=new Date();t.setHours(0,0,0,0);return Math.round((t-new Date(2027,1,10))/864e5);}
+function todayIdx(){const d=dayDiff();return d>=0&&d<DAYS.length?d:-1;}
+function normK(kind){kind=kind||'';if(/餐|咖啡/.test(kind))return /選項/.test(kind)?'選項':'美食';if(/選項/.test(kind))return '選項';return KSTY[kind]?kind:'景點';}
+function kpill(k){const c=KSTY[k]||KSTY['景點'];return `<span class="kp" style="background:${c[0]};color:${c[1]}">${k}</span>`;}
+function cardImg(k){const v=IMG[k];if(v)return Array.isArray(v)?v[0]:v;const im=document.querySelector(`.card[data-card="${k}"] .ph img.ok`);return im?(im.currentSrc||im.src):'';}
+function packCount(){let d=0,t=0;PACK.concat(APP.pack.extra.length?[{items:APP.pack.extra}]:[]).forEach(g=>g.items.forEach(([id])=>{t++;if(APP.pack.packed[id])d++;}));return [d,t];}
+
+function renderTabs(){
+  const T=[['home','首頁','house'],['plan','行程','calendar'],['map','地圖','map'],['pack','清單','pack'],['info','資訊','info']];
+  $a('maTabs').innerHTML=T.map(([k,l,i])=>`<button data-tab-go="${k}" class="${APP.tab===k?'on':''}" aria-label="${l}"><span class="ic">${ico(i)}</span><span class="tx">${l}</span></button>`).join('');
+}
+function go(tab){
+  APP.tab=tab;document.querySelectorAll('#mapp .ma-scr').forEach(s=>s.classList.toggle('on',s.dataset.tab===tab));
+  renderTabs();if(tab==='map')renderMap();if(tab==='home')renderHome();saveApp();
+}
+function setDay(i){
+  i=Math.max(0,Math.min(DAYS.length-1,i));if(i===APP.day)return;APP.day=i;APP.pin=null;
+  renderPlan();if(APP.tab==='map')renderMap();saveApp();
+  const b=$a('maPlan');if(b)b.scrollTop=0;
+}
+function renderHome(){
+  const diff=dayDiff(),ti=todayIdx();
+  let big,l1,l2,kick;
+  if(diff<0){big=-diff;l1='天後出發';l2='days to go';kick='NEXT TRIP · 下一趟';}
+  else if(ti>=0){big=ti+1;l1='第幾天';l2='day of trip';kick='ON THE ROAD · 旅途中';}
+  else{big='✓';l1='旅程結束';l2='see you again';kick='TRIP DONE · 已完成';}
+  const spots=new Set(DAYS.flatMap(d=>d.cards)).size, [pd,pt]=packCount();
+  $a('maHome').innerHTML=`
+  <div class="mh-kick">${kick}</div>
+  <div class="mh-cd" data-go="plan"><span class="n">${big}</span><div><b>${l1}</b><span>${l2}</span></div></div>
+  <div class="mh-ttl" data-go="plan">熱海・伊豆・靜岡</div>
+  <div class="mh-en">Atami · Izu · Shizuoka · 2.10 – 2.17</div>
+  <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${pd}/${pt}</b><span>行李</span></div></div>
+  <button class="mh-cta" data-go="plan">打開行程${ico('right',18)}</button>
+  <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 虎航 IT202　2/10 桃園 13:30 → 成田 17:30</span></div><div>${ico('plane',16)}<span><b>回程</b> 虎航 IT201　2/17 成田 13:00 → 桃園 16:25</span></div></div>
+  <div class="mh-h">每日行程</div>
+  <div class="mh-days">${DAYS.map((d,i)=>`<button class="ma-drow" data-day="${i}"><div class="dt-tile"><span>DAY ${d.n}</span><b>${d.date.split('/')[1]}</b></div><div class="dr-tx"><b>${d.title}</b><span>週${d.wd} · 住 ${d.stay.replace(/（.*?）/g,'')}</span></div>${i===ti?'<span class="dr-pill">今天</span>':''}<span class="chev">${ico('right',16)}</span></button>`).join('')}</div>`;
+}
+function renderPlan(){
+  const d=DAYS[APP.day],ti=todayIdx(),[m,dd]=d.date.split('/');
+  $a('maPhead').innerHTML=`
+  <div class="ph-top"><div><div class="ma-kick">熱海・伊豆・靜岡 · DAY ${d.n}/${DAYS.length}</div><div class="ph-date">${m}月${dd}日 週${d.wd}</div></div><button class="ma-ibtn" data-go="map" aria-label="看當天地圖">${ico('map')}</button></div>
+  <div class="ma-week">${DAYS.map((x,i)=>`<button data-day="${i}" class="${i===APP.day?'on':''}${i===ti?' today':''}" aria-label="Day ${x.n}"><span>${x.wd}</span><b>${x.date.split('/')[1]}</b></button>`).join('')}</div>`;
+  const S=d.stops||[];
+  const rows=S.map((s,i)=>{
+    const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,hasGo=!!s.go,isT=/^\d/.test(s.t);
+    const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
+    return `<div class="ma-row${isT?'':' opt'}" data-stop="${i}" role="button" tabindex="0">
+      <div class="ma-r"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
+      <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
+      <div class="ma-tx"><div class="nm">${s.n}</div><div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div></div>
+      ${hasGo?`<div class="ma-go"><div></div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${s.go.i} ${s.go.t}</span></div></div>`:''}
+    </div>`;}).join('');
+  $a('maPlan').innerHTML=`
+  <div class="ma-area"><b>${d.title}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>
+  ${rows}
+  ${d.rain?`<button class="ma-dash" data-rain>☔ 雨備方案</button><div class="ma-rain" hidden>${d.rain}</div>`:''}
+  <div class="ma-hint">點任一站看詳情 · 左右滑動切換日期</div>`;
+}
+function stopFor(k){
+  const st=(DAYS[APP.day].stops||[]).find(s=>s.card===k);if(st)return st;
+  const c=CARDS[k];return {t:'',n:c.name,k:normK(c.kind),card:k};
+}
+/* 手機地圖窄，標籤常超出邊界、互相重疊或躲在上方浮動膠囊下：
+   畫一次後逐一檢查每個標籤，依「原方位 → 對側 → 其他兩側」找第一個不出界、不壓到其他標籤與圓標的位置；
+   擺放順序：住宿 → 有編號的景點 → 車站；壓到圓標的代價是壓到文字的 3 倍。
+   住宿以外的標籤找不到乾淨位置就藏起來（下方路線列表有對應編號）。只動 DOM 屬性，不重畫。 */
+function fitLabels(cfg,box,aria){
+  box.innerHTML=buildMap(cfg,{W:390,H:400,big:true,aria,padT:52});
+  const svg=box.querySelector('svg');if(!svg)return;
+  const sb=svg.getBoundingClientRect();if(!sb.width)return;
+  const pl=document.querySelector('#maMap .mm-pill'),top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
+  const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+  const dots=[...svg.querySelectorAll('.mk>circle,.mk>rect')].map(c=>c.getBoundingClientRect());
+  const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
+  const put=(t,sd,r)=>{const A={l:['end',-(r+6),4.5],r:['start',r+6,4.5],t:['middle',0,-(r+7)],b:['middle',0,r+14]}[sd];
+    t.setAttribute('text-anchor',A[0]);t.setAttribute('x',A[1]);t.setAttribute('y',A[2]);};
+  const lab=g=>{const ts=g.querySelectorAll('text'),t=ts[ts.length-1];return t&&!/^\d+$/.test(t.textContent)?t:null;};
+  const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll('text').length>1?1:2;};
+  [...svg.querySelectorAll('.mk[data-key]')].filter(lab).sort((a,b)=>pri(a)-pri(b)).forEach(g=>{
+    const t=lab(g),hotel=pri(g)===0;
+    const dot=g.querySelector(':scope>circle,:scope>rect'),r=dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
+    const cur=((cfg.labels||{})[g.dataset.key]||'b').charAt(0);
+    const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]));
+    let best=null;
+    for(const sd of cands){put(t,sd,r);const b=t.getBoundingClientRect();
+      const out=Math.max(0,sb.left+2-b.left)+Math.max(0,b.right-sb.right+2)+Math.max(0,top-b.top)+Math.max(0,b.bottom-sb.bottom+2);
+      const hit=placed.reduce((n,p)=>n+ov(b,p),0)+dots.reduce((n,d)=>n+3*ov(b,d),0);
+      const score=out*1000+hit;if(!best||score<best.score)best={sd,score,b};if(score===0)break;}
+    if(best.score>0&&!hotel){t.style.display='none';return;}
+    put(t,best.sd,r);placed.push(best.b);
+  });
+}
+/* 路線順序依當天停留點時間排（桌機 DAYS[].cards 的順序是住宿排第一），地圖編號跟著重編 */
+function routeOrder(d){const st=d.stops||[],at=k=>{const i=st.findIndex(s=>s.card===k);return i<0?999:i;};
+  return d.cards.map((k,i)=>[k,at(k),i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(x=>x[0]);}
+function renderMap(){
+  const d=DAYS[APP.day];
+  const ord=routeOrder(d),nums={};ord.forEach((k,i)=>nums[k]=i+1);
+  $a('maMap').innerHTML=`<div class="mm-svg"></div>
+  <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>`;
+  const cfg=Object.assign({},d.map,{nums,labels:Object.assign({},d.map.labels)});
+  fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
+  const svg=$a('maMap').querySelector('svg');if(svg)animateMap(svg);
+  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${ord.length} 站 · 點標記兩下看詳情</span></div>`+ord.map((k,i)=>{
+    const c=CARDS[k],st=(d.stops||[]).find(s=>s.card===k),on=d.map.pts.includes(k);
+    return `<div class="mr-row${APP.pin===k?' on':''}" data-pin="${k}"><span class="mr-n${on?'':' off'}">${i+1}</span><div class="mr-tx"><b>${c.name}</b><span>${st&&/^\d/.test(st.t)?st.t+' · ':''}${c.kind}</span></div><button class="mr-btn" data-detail="${k}">詳情</button></div>`;}).join('');
+  if(APP.pin)focusPin(APP.pin,true);
+}
+function focusPin(k,quiet){
+  APP.pin=k;
+  document.querySelectorAll('#maMap .mk-a').forEach(a=>a.classList.toggle('on',a.dataset.k===k));
+  document.querySelectorAll('#maRoute .mr-row').forEach(r=>r.classList.toggle('on',r.dataset.pin===k));
+  if(!quiet){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
+}
+function openSheet(s){
+  const c=s.card&&CARDS[s.card],d=DAYS[APP.day],img=c?cardImg(s.card):'',nm=c&&s.k!=='美食'&&s.k!=='選項'?c.name:s.n;
+  const addr=c&&c.info?((c.info.find(r=>r[0]==='地址')||[])[1]||''):'';
+  const gu=s.card?gUrl(s.card):'';
+  $a('maSheet').innerHTML=`<div class="grab" data-close role="button" aria-label="關閉"></div>
+  <div class="sh-top"><div class="sh-tx"><div class="sh-tags">${kpill(s.k)}<span class="sh-day">Day ${d.n} · ${d.date} 週${d.wd}</span></div><div class="sh-nm">${nm}</div>${c&&c.jp?`<div class="sh-jp">${c.jp}</div>`:''}</div>
+  <div class="sh-ph">${img?`<img src="${img}" alt="">`:`<span>${nm.replace(/[（(].*$/,'').slice(0,2)}</span>`}</div></div>
+  <div class="sh-rows">
+   ${/^\d/.test(s.t)?`<div>${ico('clock',16)}<span>${s.t} 抵達${s.dur?' · 停留 '+s.dur:''}</span></div>`:''}
+   ${s.go?`<div>${ico('car',16)}<span>下一段 ${s.go.i} ${s.go.t}</span></div>`:''}
+   ${addr?`<div>${ico('pin',16)}<span>${addr}</span></div>`:''}
+  </div>
+  ${s.d||(c&&c.short)?`<div class="sh-note">${s.d||c.short}</div>`:''}
+  <div class="sh-act">${gu?`<a class="sh-circ" href="${gu}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('nav')}</a>`:''}${c?`<button class="sh-main" data-full="${s.card}">看完整介紹${ico('right',18)}</button>`:''}</div>`;
+  APP.sheet=true;$a('maBack').classList.add('on');$a('maSheet').classList.add('on');
+}
+function closeSheet(){APP.sheet=false;$a('maBack').classList.remove('on');$a('maSheet').classList.remove('on');}
+function renderPack(){
+  const P=APP.pack,todo=P.filter==='todo',[pd,pt]=packCount(),pct=pt?Math.round(pd/pt*100):0;
+  const groups=PACK.concat(P.extra.length?[{id:'other',zh:'其他',en:'Other',items:P.extra}]:[]);
+  $a('maPack').innerHTML=`<div class="mh-kick">PACKING</div>
+  <div class="pk-top"><div class="pk-ttl">行李清單</div><div class="pk-n">${pd}/${pt}</div></div>
+  <div class="pk-bar"><i style="width:${pct}%"></i></div>
+  <div class="ma-segc">${[['all','全部'],['todo','還沒打包']].map(([k,l])=>`<button data-pf="${k}" class="${P.filter===k?'on':''}">${l}</button>`).join('')}</div>
+  ${groups.map(g=>{const vis=g.items.filter(([id])=>!todo||!P.packed[id]);if(!vis.length)return'';
+    return `<div class="pk-g"><span>${g.en}</span><b>${g.zh}</b></div>`+vis.map(([id,l])=>{const on=!!P.packed[id];return `<button class="pk-it${on?' on':''}" data-pk="${id}"><span class="bx">${ico('check',16)}</span><span class="lb2">${l}</span></button>`;}).join('');}).join('')}
+  <div class="pk-add"><input id="pkIn" placeholder="新增物品…" aria-label="新增物品"><button id="pkAdd" aria-label="加入">${ico('plus')}</button></div>
+  <p class="pk-note">勾選只存在這支手機上，不會同步給其他人。</p>`;
+}
+function savePack(){lsSet('izu-pack',APP.pack);}
+function renderSeg(){
+  $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
+  document.querySelectorAll('#maInfo .ma-pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===APP.pane));
+}
+function appClick(e){
+  const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
+  let el;
+  if(el=t.closest('[data-full]')){openCard(el.dataset.full);return true;}
+  if(t.closest('[data-close]')||t.closest('#maBack')){closeSheet();return true;}
+  if(el=t.closest('[data-tab-go]')){go(el.dataset.tabGo);return true;}
+  if(el=t.closest('.ma-drow[data-day]')){setDay(+el.dataset.day);go('plan');return true;}
+  if(el=t.closest('.ma-week [data-day]')){setDay(+el.dataset.day);return true;}
+  if(el=t.closest('[data-go]')){go(el.dataset.go);return true;}
+  if(t.closest('[data-prev]')){setDay(APP.day-1);return true;}
+  if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
+  if(el=t.closest('.ma-row[data-stop]')){openSheet(DAYS[APP.day].stops[+el.dataset.stop]);return true;}
+  if(el=t.closest('[data-rain]')){const r=el.nextElementSibling;r.hidden=!r.hidden;el.textContent=r.hidden?'☔ 雨備方案':'收起雨備方案';return true;}
+  if(el=t.closest('#maRoute [data-detail]')){openSheet(stopFor(el.dataset.detail));return true;}
+  if(el=t.closest('#maMap .mk-a[data-k]')){const k=el.dataset.k;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k);return true;}
+  if(el=t.closest('#maRoute .mr-row[data-pin]')){focusPin(el.dataset.pin);return true;}
+  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();return true;}
+  if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
+  if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
+  if(t.closest('#pkAdd')){addPack();return true;}
+  return false;
+}
+function addPack(){const i=$a('pkIn'),v=(i.value||'').trim();if(!v)return;APP.pack.extra.push(['x'+Date.now(),v]);savePack();renderPack();const n=$a('pkIn');if(n)n.focus();}
+function appInit(){
+  if(!MOB)return;
+  document.documentElement.classList.add('app');
+  const root=document.createElement('div');root.id='mapp';
+  root.innerHTML=`<section class="ma-scr" data-tab="home"><div class="ma-body pad" id="maHome"></div></section>
+  <section class="ma-scr" data-tab="plan"><div class="ma-phead" id="maPhead"></div><div class="ma-body" id="maPlan"></div></section>
+  <section class="ma-scr" data-tab="map"><div class="ma-map" id="maMap"></div><div class="ma-body" id="maRoute"></div></section>
+  <section class="ma-scr" data-tab="pack"><div class="ma-body pad" id="maPack"></div></section>
+  <section class="ma-scr" data-tab="info"><div class="ma-seg" id="maSeg"></div><div class="ma-body" id="maInfo"></div></section>
+  <nav class="ma-tabs" id="maTabs" aria-label="分頁"></nav>
+  <div class="ma-back" id="maBack"></div><div class="ma-sheet" id="maSheet" role="dialog" aria-modal="true" aria-label="景點詳情"></div>`;
+  document.body.appendChild(root);
+  const info=$a('maInfo');
+  INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});info.appendChild(p);});
+  const sv=lsGet('izu-app',{}),ti=todayIdx();
+  APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
+  APP.tab=['home','plan','map','pack','info'].includes(sv.tab)?sv.tab:'home';
+  APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'pre';
+  const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
+  renderPlan();renderPack();renderSeg();go(APP.tab);
+  const plan=$a('maPlan');let sx=null;
+  plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
+  plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(DAYS[APP.day].stops[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
+  root.addEventListener('scroll',()=>{if(pinEl)placeTip(pinEl);},{capture:true,passive:true});
+}
+appInit();
+
 </script>
 
 </body>
