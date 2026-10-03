@@ -131,11 +131,23 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
 > 建物圖示都需要我手上沒有的圖資，硬畫等於捏造地理位置，所以只做了「編號圓標＋卡片對應」
 > 這個不需要新圖資的部分。真要畫道路，得像當初鐵道那樣另外找国土数値情報的道路資料。
 
+### 照片嵌入工具（2026-10-03 起）
+`tools/addphotos.py <cardKey> <圖檔...>` —— 使用者在對話中貼圖後，圖檔會落在
+`/tmp/claude-0/<專案>/<session>/images/N.webp`，直接餵給這支就好。
+
+- 橫式縮到寬 1000、直式縮到高 1000，**WebP q78**（不是 JPEG；實測這批照片 WebP
+  約是 JPEG 的 72%，而官方地圖那種平塗圖只有 43%）。
+- 第一張是卡片封面，所以**橫式照片要排前面**，直式放後面（封面是 16:10 裁切）。
+- 會擋重複：該 key 已有 IMG 就中止，要換圖得先手動移除。
+- 卡片顯示才 250–400px、彈窗 700px，1000px 綽綽有餘。實測三保松原 3 張共 159 KB，
+  比舊的 base64 JPEG（平均 112 KB/張）省很多。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
-   `hobby`、`sengen`、`aoba`、`ichigo`、`miho`、`shimizu`、`maruko`、`yunoki`、`yakiniku`、
-   `roppongi`、`akiba`、`souvenir`；`minami` 目前是低解析 2024 海報待換。
+   `ndhotel`、`kinnoji`、`cruise`、`maruzen`、`issa`、`mihoshrine`、`hobby`、`sengen`、`aoba`、
+   `ichigo`、`shimizu`、`maruko`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
+   `minami` 目前是低解析 2024 海報待換。**`miho` 已於 2026-10-03 補上 3 張。**
    缺影片的卡片：`prince`、`shizuhotel`、`livemax`、`yakiniku`、`roppongi`、`yokocho`、`souvenir`
    （`katsumoto`、`akiba` 使用者說去過不用放）。
 3. Day 7 居酒屋橫丁地點待定（已討論候選：野毛(最推,品川25分)、大井町東小路、上野アメ横、
