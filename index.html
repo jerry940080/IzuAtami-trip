@@ -398,10 +398,10 @@ const P={ // [lat,lng]
  nrt:[35.7726,140.3878], chiba:[35.6130,140.1130], tokyo:[35.6812,139.7671], shinagawa:[35.6285,139.7387], prince:[35.6305,139.7345],
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
  shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ndhotel:[34.9752,138.4713], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], maruzen:[34.9748,138.3845], yunoki:[34.9780,138.4110],
- ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], mihoshrine:[35.0040,138.5235], shimizu:[35.0158,138.4900], kinnoji:[35.0180,138.4878], maruko:[35.0206,138.5081], cruise:[35.0183,138.5095], satta:[35.0975,138.5350],
+ ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], mihoshrine:[35.0040,138.5235], shimizu:[35.0158,138.4900], kinnoji:[35.0180,138.4878], maruko:[35.0138,138.5050], cruise:[35.0121,138.5076], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590], aquarium:[35.0880,138.8571], lalaport:[35.0940,138.8860],
- atami:[35.1036,139.0780], livemax:[35.0954,139.0777], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0975,139.0800],
- ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], banana:[34.8135,139.0790], atagawa:[34.8140,139.0720], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], shimoda:[34.6764,138.9447], shirahama:[34.6978,138.9750], minami:[34.6472,138.8764],
+ atami:[35.1036,139.0780], livemax:[35.0946,139.0738], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], beach:[35.0963,139.0752],
+ ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], banana:[34.8155,139.0730], atagawa:[34.8151,139.0714], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], shimoda:[34.6764,138.9447], shirahama:[34.6978,138.9750], minami:[34.6472,138.8764],
  jimbocho:[35.6958,139.7580], shimokita:[35.6613,139.6681], akiba:[35.6984,139.7731], roppongi:[35.6627,139.7314], yokocho:[35.6749,139.7628]
 };
 const MODE={
@@ -615,8 +615,8 @@ const DAYS=[
    {t:'19:00',i:'🍢',h:'走路去青葉橫丁　約 10 分・靜岡おでん'}
   ],cards:['shizuhotel','yume','toshogu','ndhotel','aoba'],
   rain:'<b>雨備</b>　富士山看不到，夢テラス 就只進館內展示室與咖啡座看一下（戶外迴廊撐傘不好逛）；久能山東照宮的社殿與博物館照去，纜車照開。時間會多出來，提早下山改去日本平飯店露台酒廊喝下午茶，或回市區逛 Hobby Square 與一茶，晚上一樣是青葉橫丁。'},
- {n:3,date:'2/12',wd:'五',title:'租車一日：久能・清水',sub:'上午現採石垣草莓，中午河岸の市鮪魚丼，下午泡在小丸子的故鄉清水',stay:'靜岡站前飯店（續住）',
-  map:{pts:['shizuoka','ichigo','shimizu','maruko','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'shizuoka',mode:'car',curve:.22},{a:'shizuoka',b:'yunoki',mode:'rail',line:'JR 東海道本線'}],labels:{shizuoka:'l',ichigo:'b',shimizu:'l',maruko:'r',yunoki:'t'},minSpan:.1},
+ {n:3,date:'2/12',wd:'五',title:'租車一日：久能・清水',sub:'上午現採石垣草莓，中午河岸の市鮪魚丼，下午清水，傍晚三保松原看夕陽',stay:'靜岡站前飯店（續住）',
+  map:{pts:['shizuoka','ichigo','shimizu','maruko','miho','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'miho',mode:'car'},{a:'miho',b:'shizuoka',mode:'car',curve:.25},{a:'shizuoka',b:'yunoki',mode:'rail',line:'JR 東海道本線'}],labels:{shizuoka:'l',ichigo:'b',shimizu:'t',maruko:'r',miho:'r',yunoki:'t'},minSpan:.1},
   tl:[
    {t:'08:30',i:'🍳',h:'飯店早餐'},
    {t:'09:30',i:'🚗',h:'開車出發（2/11 起續租中）',move:1},
@@ -625,12 +625,16 @@ const DAYS=[
    {t:'12:00',i:'🍽',h:'まぐろ館 午餐　鮪魚丼（12 點前後進場幾乎不用排隊）'},
    {t:'13:20',i:'🎪',h:'小丸子樂園（エスパルスドリームプラザ 3F）　開車約 5 分',move:1},
    {t:'14:30',i:'🎡',h:'ドリームプラザ　摩天輪、海側平台看富士山、清水壽司橫丁'},
-   {t:'15:30',i:'🚗',h:'開車約 35 分回靜岡站還車',move:1},
-   {t:'16:20',i:'🚆',h:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190',move:1},
-   {t:'16:40',i:'♨',h:'柚木の郷　天然溫泉＋三溫暖，館內食事處吃晚餐'},
-   {t:'20:30',i:'🚆',h:'東靜岡 → 靜岡　回飯店',move:1}
-  ],cards:['ichigo','shimizu','maruko','yunoki'],
-  rain:'<b>雨備</b>　這天幾乎整天在室內，照跑就好：草莓園是溫室、河岸の市 與ドリームプラザ 都有屋頂、柚木の郷 更不用說。唯一會少掉的是從海側平台看富士山。不租車的話：JR 到清水站，走路 5 分到河岸の市，再搭東口的免費接駁巴士去ドリームプラザ（約 10 分）。'},
+   {t:'15:30',i:'🚗',h:'開車 → 三保松原　約 20 分',move:1},
+   {t:'15:50',i:'🌲',h:'三保松原・御穗神社・神の道　500 公尺松林參道散步'},
+   {t:'16:50',i:'🌅',h:'羽衣の松海岸等夕陽　<b>2/12 日沒約 17:25</b>，富士山會被夕照染色'},
+   {t:'17:45',i:'🚗',h:'開車約 40 分回靜岡站還車',move:1},
+   {t:'18:30',i:'🔑',h:'還車　<b>租車營業所多為 8:00–20:00，訂車時先確認還車時間</b>'},
+   {t:'18:45',i:'🚆',h:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190',move:1},
+   {t:'19:05',i:'♨',h:'柚木の郷　天然溫泉＋三溫暖，館內食事處吃晚餐（食事處 LO 21:30）'},
+   {t:'22:00',i:'🚆',h:'東靜岡 → 靜岡　回飯店',move:1}
+  ],cards:['ichigo','shimizu','maruko','miho','mihoshrine','yunoki'],
+  rain:'<b>雨備</b>　上午到下午幾乎都在室內，照跑：草莓園是溫室、河岸の市 與ドリームプラザ 都有屋頂。會泡湯的只有傍晚的三保夕陽 —— 看不到就跳過，提早還車去柚木の郷 多泡一小時。不租車的話：JR 到清水站，走路 5 分到河岸の市，再搭東口的免費接駁巴士去ドリームプラザ（約 10 分）。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 沼津 → 熱海',sub:'上午搭車去日本平動物園看小熊貓，中午移動，順路吃沼津港',stay:'LiVEMAX Resort 熱海 Ocean',
   map:{pts:['shizuoka','zoo','numazuStn','aquarium','atami','livemax'],legs:[{a:'shizuoka',b:'zoo',mode:'bus',line:'JR 草薙站轉靜鐵巴士'},{a:'zoo',b:'shizuoka',mode:'bus',line:'JR 草薙站轉靜鐵巴士',curve:.3},{a:'shizuoka',b:'numazuStn',mode:'rail',line:'JR 東海道本線',via:['shimizu','satta']},{a:'numazuStn',b:'aquarium',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45'},{a:'aquarium',b:'numazuStn',mode:'bus',line:'伊豆箱根バス 沼 13／東海バス N45',curve:.35},{a:'numazuStn',b:'atami',mode:'rail',line:'JR 東海道本線',via:['mishima']},{a:'atami',b:'livemax',mode:'taxi'}],labels:{shizuoka:'l',zoo:'b',numazuStn:'t',aquarium:'b',atami:'t',livemax:'b'},minSpan:.16},
   tl:[
