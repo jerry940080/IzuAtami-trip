@@ -150,7 +150,7 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
   讓地圖／時刻表／卡片變成 `.wrap` 的同層子元素，sticky 的範圍才涵蓋到卡片。
 - `.mapcard` 在 **≤640px** 改 `position:sticky;top:39px;z-index:6`（39px 是 `.strip` 的高度）；
   641–860px 維持原本的單欄＋靜態地圖（平板上地圖高達 632px，釘住反而佔掉大半畫面）。
-- 卡片在 **≤860px 一律兩欄**（`grid-template-columns:1fr 1fr`，不靠 auto-fill 推算），
+- （第二輪已改寫，見下節）卡片在 **≤860px 一律兩欄**（`grid-template-columns:1fr 1fr`，不靠 auto-fill 推算），
   ≤640px 再縮排版：標題 14px、說明 11.5px、圓標 20px。手機版隱藏 `.mapcard .mapbg`
   （圖中鐵道那排）省垂直空間。
 - `.mapcard` 最上方加 `.maphead`：**Day 編號圓標＋日期（星期）＋當天標題**，一行、過長
@@ -164,6 +164,30 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
 > `d.cards.map((k,i)=>cardHTML(k,i+1))`，並讓**每日地圖也帶編號**（`d.map.nums`），
 > 和當天卡片同一組號碼 —— 這正好解決「地圖對不到景點」的原始需求。
 > 注意：不在 `d.map.pts` 裡的卡片（例如 Day 3 的 `mihoshrine`）會有號碼但地圖上沒有標記。
+
+### 手機版重排（2026-10-03，第二輪）
+使用者（手機看）說整體版面不適合手機，「改得跟電腦版差很多也可以」。做法：**JS 偵測
+`const MOB=matchMedia('(max-width:640px)').matches`**，手機時換不同的地圖尺寸與區塊結構；
+CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:640px){…}`。
+
+量化結果（390×844）：總高 29,228 → **22,846 px**（35 → 27 個螢幕）；靜岡總覽 7.9 → 3.5 個螢幕。
+
+- **地圖**：手機時 `buildMap` 用 `W=380,H=280`（日圖）／`380×300／240／260`（總覽三張），
+  並傳 `big:true` 讓標籤字放大 —— 等比縮 760 寬的圖在手機上字只有 6px。
+- **時刻表**：時間欄 96px → **46px**，標題字 14.5px；`move` 列降為灰色小字當作過場。
+- **表格 → 卡片**：`table,tbody{display:block}`、`tr{display:flex;flex-wrap:wrap}`、
+  `td{display:inline}`、第一欄 `flex:0 0 100%` 粗體當標題。表頭 `<th>` 不在 `<thead>` 裡，
+  要用 `th{display:none}` 加 `tr:has(th){display:none}` 才藏得掉。
+- **靜岡總覽**：三組 `<details class="acc">` 手風琴（位置圖／官方觀光地圖／2 月活動與票券），
+  手機預設**收合**、桌機帶 `open` 且 `summary` 隱藏，所以桌機看起來完全沒變。導言手機用短版。
+  summary 用 `grid-template-columns:1fr auto`（不能用 flex，副標會把主標擠成直排）。
+- **地圖卡標題列可點收合**（`.mapcard.min` 隱藏 svg 與圖例），釘住時不想看地圖就收。
+- **Day 標題**壓扁：`Day 3` 同一列、h2 21px；行李清單改單欄；首頁 hero 地圖 220px。
+- **踩雷**：手機 `@media` 區塊一開始放在樣式表中段（`.maphead` 後），結果 `.tl li`、`.rain`、
+  `.areanote`、`.two ul` 這些**基礎規則寫在它後面**、同特異度後者勝，手機規則全沒生效，
+  截圖量 icon 位置才發現。**手機覆寫規則一定要放在 `</style>` 前**。
+  另外 `.money div` 原本會命中巢狀的 `.big`／`.lab` 造成雙框，改 `.money>div`（桌機也受益）。
+- 驗證腳本在 scratchpad：`audit.js`（各區高度、橫向溢出）、`probe.js`（三種寬度的版面指標）。
 
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。

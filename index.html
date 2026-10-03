@@ -68,7 +68,7 @@ th{font-weight:500;color:var(--ink3);font-size:12.5px}
 td b{font-weight:500}
 .mute{color:var(--ink3);font-size:12.5px}
 .money{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px}
-.money div{flex:1;min-width:150px;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
+.money>div{flex:1;min-width:150px;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
 .money .big{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ai)}
 .money .lab{font-size:12.5px;color:var(--ink3)}
 .tipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:16px;margin-top:12px}
@@ -138,6 +138,11 @@ td b{font-weight:500}
 .maphead .n{flex:none;font-family:var(--serif);font-weight:700;font-size:13px;width:21px;height:21px;border-radius:50%;background:var(--shu);color:#fff;display:inline-flex;align-items:center;justify-content:center}
 .maphead .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px;color:var(--ink2)}
 .maphead .t b{color:var(--ink);font-weight:600;margin-right:4px}
+.maphead .chev{display:none}
+details.acc>summary{display:none}
+details.acc>summary .s{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--ink3)}
+
+
 .mapfoot{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2);align-items:center}
 .mapfoot .lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .mk-a{cursor:pointer}
@@ -276,6 +281,71 @@ footer p{max-width:70ch}
 .modal-bd h3 a:focus-visible{outline:2px solid var(--ai);outline-offset:3px;border-radius:2px}
 .modal-bd h3 .ext{font-family:var(--sans);font-weight:400;font-size:.6em;color:var(--ink3);margin-left:.34em;vertical-align:.28em}
 .modal-bd h3 a:hover .ext,.modal-bd h3 a:focus-visible .ext{color:var(--ai)}
+
+/* ---------- 手機版（≤640px）：版面與桌機分道 ---------- */
+@media (max-width:640px){
+  .hero svg{height:220px}
+  section.block{padding:34px 0 12px}
+  section.block>.wrap>h2{font-size:24px;margin-bottom:12px}
+  .lead{font-size:14.5px;margin-bottom:16px}
+  .areanote{font-size:13.5px;padding:10px 13px}
+  /* 日期標題壓扁 */
+  .day-head{gap:8px 12px;margin-bottom:14px;align-items:center}
+  .day-head .num{font-size:38px;display:flex;align-items:baseline;gap:5px}
+  .day-head .num small{display:inline;margin:0;font-size:12px}
+  .day-head .t h2{font-size:21px;line-height:1.25}
+  .day-head .t .sub{font-size:13px;margin-top:3px}
+  .day-head .stay{padding:6px 11px;font-size:12.5px;line-height:1.4}
+  .day-head .stay .lab{display:inline;margin-right:6px}
+  /* 時刻表：時間欄縮到 46px，字拉大 */
+  .tl li{grid-template-columns:46px 24px 1fr;gap:0 8px;padding:8px 0}
+  .tl .t{font-size:12.5px;padding-top:3px}
+  .tl .i{font-size:16px}
+  .tl .h{font-size:14.5px;line-height:1.5}
+  .tl li.move{margin:0 -6px;padding-left:6px;padding-right:6px}
+  .tl li.move .h{font-size:13.5px;color:var(--ink2);font-weight:400}
+  .rain{font-size:13px;padding:9px 12px}
+  /* 地圖卡：標題列可點收合 */
+  .maphead .chev{display:block;margin-left:auto;flex:none;width:9px;height:9px;border-right:2px solid var(--ink3);border-bottom:2px solid var(--ink3);transform:rotate(-135deg);transition:transform .2s}
+  .mapcard.min svg,.mapcard.min .mapfoot,.mapcard.min .mapbg{display:none}
+  .mapcard.min .maphead{border-bottom:0}
+  .mapcard.min .maphead .chev{transform:rotate(45deg)}
+  /* 表格 → 一列一卡 */
+  table,tbody{display:block}
+  thead,th{display:none}
+  tr:has(th){display:none}
+  tr{display:flex;flex-wrap:wrap;gap:1px 10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+  td{display:inline;padding:0;border:0;font-size:13.5px;line-height:1.55}
+  td:first-child{flex:0 0 100%;font-weight:600;color:var(--ink);font-size:14px;margin-bottom:2px}
+  /* 清單單欄 */
+  .two ul{columns:1}
+  .todo li{font-size:13.5px}
+  .todo .d{width:84px}
+  /* 區塊一手風琴 */
+  details.acc{margin-top:14px;border:1px solid var(--rule);border-radius:12px;background:#fff;overflow:hidden}
+  details.acc>summary{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:10px;list-style:none;cursor:pointer;padding:12px 14px;font-family:var(--serif);font-weight:700;font-size:15.5px;color:var(--ink)}
+  details.acc>summary::-webkit-details-marker{display:none}
+  details.acc>summary::after{content:'';grid-column:2;grid-row:1;width:9px;height:9px;border-right:2px solid var(--ink3);border-bottom:2px solid var(--ink3);transform:rotate(45deg);transition:transform .2s}
+  details.acc[open]>summary::after{transform:rotate(-135deg)}
+  details.acc>summary .s{grid-column:1/-1;grid-row:2;margin-top:2px}
+  details.acc>.in{padding:0 10px 10px}
+  details.acc .sub-h{display:none}
+  details.acc .areamap{margin:8px 0 0}
+  details.acc .two{margin-top:8px!important}
+  /* 官方地圖縮圖兩欄 */
+  .offmaps{grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+  .offmap .thumb{aspect-ratio:1/1}
+  .offmap .bd{padding:8px 10px 10px}
+  .offmap h4{font-size:13.5px}
+  .offmap h4 span,.offmap p{display:none}
+  .offmap .thumb::after{font-size:10px;padding:2px 7px}
+  /* 交通總覽小卡 */
+  .tipgrid>div{padding:11px 13px 13px}
+  .tipgrid p{font-size:13px;line-height:1.7}
+  .money{gap:10px}
+  .money>div{min-width:120px;padding:9px 11px}
+  .money .big{font-size:20px}
+}
 </style>
 </head>
 <body>
@@ -774,6 +844,8 @@ const AREAMAPS=[
 
 /* ================= MAP ENGINE ================= */
 let W=600,H=440;
+const MOB=matchMedia('(max-width:640px)').matches;
+if(MOB){W=380;H=280;}
 function proj(bbox){ // bbox {la0,la1,lo0,lo1}
   const k=Math.cos((bbox.la0+bbox.la1)/2*Math.PI/180);
   const pad=34;
@@ -943,31 +1015,36 @@ function areaHTML(){
   const cards=['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','maruzen','issa','hobby','sengen','yunoki','shizuhotel'];
   const NUM={};cards.forEach((k,i)=>NUM[k]=i+1);
   cfg.nums=NUM;
-  const mp=buildMap(cfg,{aria:'靜岡・清水 景點位置圖',W:760,H:560});
+  const mp=buildMap(cfg,{aria:'靜岡・清水 景點位置圖',W:MOB?380:760,H:MOB?300:560,big:MOB});
   const bg1=bgRow(bgLines);
   const cfg2={pts:['shizuoka','shizuhotel','hobby','aoba','maruzen','sengen','yunoki'],legs:[],
     labels:{shizuoka:'r',shizuhotel:'l',hobby:'b',aoba:'l',maruzen:'r',sengen:'t',yunoki:'t'},minSpan:.016};
   cfg2.nums=NUM;
-  const mp2=buildMap(cfg2,{aria:'靜岡站周邊放大圖',W:760,H:420});
+  const mp2=buildMap(cfg2,{aria:'靜岡站周邊放大圖',W:MOB?380:760,H:MOB?240:420,big:MOB});
   const cfg3={pts:['shimizu','kinnoji','maruko','cruise','miho','mihoshrine'],legs:[],
     labels:{shimizu:'r',kinnoji:'l',maruko:'r',cruise:'b',miho:'r',mihoshrine:'r'},minSpan:.026,nums:NUM};
-  const mp3=buildMap(cfg3,{aria:'清水・三保 放大圖',W:760,H:470});
+  const mp3=buildMap(cfg3,{aria:'清水・三保 放大圖',W:MOB?380:760,H:MOB?260:470,big:MOB});
   return `<section class="block" id="shizuoka">
   <div class="wrap">
     <h2>靜岡・清水 有什麼</h2>
-    <p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</p>
+    ${MOB?'<p class="lead">這一帶所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點卡片看介紹，點地圖標記另開 Google 地圖。</p>':`<p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</p>`}
+    <details class="acc"${MOB?'':' open'}><summary>位置圖 <span class="s">全域＋靜岡站周邊＋清水・三保，共 3 張</span></summary><div class="in">
     <div class="areamap">${mp}${bg1}</div>
     <div class="areamap"><div class="mapcap">靜岡站周邊放大（上圖左下角那一帶）</div>${mp2}${bgRow(bgLines)}</div>
 
     <div class="areamap"><div class="mapcap">清水・三保放大（上圖右上角那一帶，金之字⑨、遊覽船⑩、御穗神社⑦ 只畫在這張）</div>${mp3}${bgRow(bgLines)}</div>
+    </div></details>
 
+    <details class="acc"${MOB?'':' open'}><summary>官方觀光地圖 <span class="s">靜岡市區・日本平・清水・三保，共 4 張</span></summary><div class="in">
     <h3 class="sub-h">官方觀光地圖</h3>
     <p class="mute" style="margin-top:8px">上面兩張是我們自己畫的位置圖，只標了候選點。下面四張是<b>靜岡市觀光局的官方手繪地圖</b>，巷弄、停車場、巴士站、洗手間、公車路線、單車道全都有，到了現場比我們的圖好用。點開可以放大到原尺寸。</p>
     <div class="offmaps">${AREAMAPS.map((m,i)=>`<button type="button" class="offmap" data-lb="${i}"><div class="thumb"><img src="${m.src}" alt="${m.name}" loading="lazy"></div><div class="bd"><h4>${m.name}<span>${m.en}</span></h4><p>${m.d}</p></div></button>`).join('')}</div>
     <p class="mute" style="margin-top:10px">圖片出自 公益財團法人 駿河企劃觀光局《靜岡探索之旅》觀光指南（2025 年 9 月版）與清水區市區觀光地圖（2025 年 11 月版），僅供本團同行者行程參考。</p>
+    </div></details>
     <div class="cards">${cards.map((k,i)=>cardHTML(k,i+1)).join('')}</div>
     <p class="mute" style="margin-top:14px">以上 18 個是候選清單，<b>不是全都要去</b>。其中靜岡淺間神社、Hobby Square、MARUZEN、一茶、日本平飯店、御穗神社、遊覽船、金之字都沒排進下面的推薦路線，想去的話得拿掉別的。另外還有駿府城公園與葵舟（護城河遊船）、登呂遺跡、芹澤銈介美術館、清水的 Verkehr 博物館與次郎長老家、用宗漁港溫泉＋漁港橫丁（靜岡站 JR 兩站）、丸子宿 丁子屋的山藥泥（方向相反，來回多 40 分鐘）、薩埵峠（在由比，清水再往東北 25 分）也沒收進來。</p>
 
+    <details class="acc"${MOB?'':' open'}><summary>2 月活動與票券 <span class="s">行事曆・不租車時的一日券</span></summary><div class="in">
     <div class="two" style="margin-top:26px">
       <div>
         <h3>2 月的靜岡有什麼</h3>
@@ -993,6 +1070,7 @@ function areaHTML(){
     </div>
 
     <p class="mute" style="margin-top:16px">在地洽詢：靜鐵 Justline 巴士客服 054-252-0505（7:30–20:00）／日本平纜車 054-334-2026／水上巴士 054-353-2222（9:00–17:00）／靜岡市綜合觀光案內所・靜岡站北口 054-253-1170（9:00–17:45）／清水站前觀光案內所・西口江尻口 054-367-9613（9:00–17:45，13:00–14:00 午休）。<br>本區資料整理自靜岡市觀光指南《靜岡探索之旅》（2025 年 9 月）、清水區市區觀光地圖（2025 年 11 月）與靜岡市街圖（2023 年 9 月）。</p>
+    </div></details>
     <div class="areanote">↓ 以下 <b>2/11（四）、2/12（五）</b> 兩天，是從上面這些點挑出來、排得進時間的<b>推薦路線</b>。不是全部都去。</div>
   </div>
 </section>`;
@@ -1018,7 +1096,7 @@ const dayBlocks=DAYS.map(d=>{
       <div class="stay"><div class="lab">今晚住</div>${d.stay}</div>
     </div>
     <div class="day-body">
-      <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span></div>${buildMap(d.map,{aria:'第'+d.n+'天路線圖'})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
+      <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(d.map,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
         <ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
@@ -1084,6 +1162,7 @@ function slide(d){
 document.addEventListener('click',e=>{
   if(e.target.closest('.modal .nav')){slide(e.target.closest('.nav').classList.contains('next')?1:-1);return;}
   const om=e.target.closest('.offmap[data-lb]');if(om){openLb(+om.dataset.lb);return;}
+  const mh=e.target.closest('.maphead');if(mh&&MOB){mh.closest('.mapcard').classList.toggle('min');return;}
   if(e.target.closest('#lbX')){closeLb();return;}
   if(e.target.closest('#lbZ')||e.target.closest('#lbScroll img')){toggleZoom();return;}
   const card=e.target.closest('.card[data-card]');if(card){openCard(card.dataset.card);return;}
