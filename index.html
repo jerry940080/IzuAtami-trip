@@ -917,8 +917,7 @@ function marker(key,pr,side,big,num){
   const anchor=sd==='l'?'end':sd==='r'?'start':'middle';
   const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
   const g=`<g class="mk" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
-  const u=gUrl(key);
-  return u?`<a class="mk-a" data-k="${key}" href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${name}，在 Google 地圖開啟">${g}</a>`:g;
+  return CARDS[key]?`<g class="mk-a" data-k="${key}" role="button" tabindex="0" aria-label="${name}，看完整介紹">${g}</g>`:g;
 }
 let bgLines=[];
 function railBg(pr,bbox){
@@ -1027,7 +1026,7 @@ function areaHTML(){
   return `<section class="block" id="shizuoka">
   <div class="wrap">
     <h2>靜岡・清水 有什麼</h2>
-    ${MOB?'<p class="lead">這一帶所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點卡片看介紹，點地圖標記另開 Google 地圖。</p>':`<p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；滑過任一個標記會顯示照片與簡介，點下去才會另開 Google 地圖。</p>`}
+    ${MOB?'<p class="lead">這一帶所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點卡片或地圖標記都會打開完整介紹，Google 地圖連結在介紹裡。</p>':`<p class="lead">靜岡市被一座 307 公尺的<b>有度山</b>切成兩半：西北是市中心，東邊是清水港，山頂那片台地就是<b>日本平</b>。日本平的南面直接斷崖落進駿河灣，久能山東照宮就蓋在那片崖上 —— 所以纜車不是上山，是從山頂橫跨谷地降到海側。下面是這一帶所有候選點的位置與介紹；下面兩張圖把候選點標上去了：第一張是全域，第二張把擠在靜岡站旁邊的幾個點放大。<b>地圖上的號碼就是下面卡片的號碼</b>；點任一個標記直接打開完整介紹，Google 地圖連結在介紹裡。</p>`}
     <details class="acc"${MOB?'':' open'}><summary>位置圖 <span class="s">全域＋靜岡站周邊＋清水・三保，共 3 張</span></summary><div class="in">
     <div class="areamap">${mp}${bg1}</div>
     <div class="areamap"><div class="mapcap">靜岡站周邊放大（上圖左下角那一帶）</div>${mp2}${bgRow(bgLines)}</div>
@@ -1127,7 +1126,7 @@ const modal=document.getElementById('modal');
 function openCard(id){
   const c=CARDS[id];if(!c)return;
   const card=document.querySelector(`.card[data-card="${id}"]`);
-  const srcs=Array.isArray(IMG[id])?IMG[id]:IMG[id]?[IMG[id]]:[...card.querySelectorAll('.ph img')].map(i=>i.currentSrc||i.src).filter(Boolean);
+  const srcs=Array.isArray(IMG[id])?IMG[id]:IMG[id]?[IMG[id]]:card?[...card.querySelectorAll('.ph img')].map(i=>i.currentSrc||i.src).filter(Boolean):[];
   const ph=document.getElementById('mPh');
   ph.innerHTML=srcs.length?`<div class="track">${srcs.map(u=>`<div class="sl"><img class="bg" src="${u}" alt="" aria-hidden="true"><img class="main" src="${u}" alt="${c.name}"></div>`).join('')}</div>`+(srcs.length>1?`<button type="button" class="nav prev" aria-label="上一張">‹</button><button type="button" class="nav next" aria-label="下一張">›</button><div class="dots">${srcs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>`:''):`<div class="fb">${c.name.slice(0,2)}</div>`;
   ph.dataset.i=0;ph.dataset.n=srcs.length;
@@ -1161,6 +1160,7 @@ function slide(d){
 }
 document.addEventListener('click',e=>{
   if(e.target.closest('.modal .nav')){slide(e.target.closest('.nav').classList.contains('next')?1:-1);return;}
+  const mk=e.target.closest('.mk-a[data-k]');if(mk){e.preventDefault();hideTip();openCard(mk.dataset.k);return;}
   const om=e.target.closest('.offmap[data-lb]');if(om){openLb(+om.dataset.lb);return;}
   const mh=e.target.closest('.maphead');if(mh&&MOB){mh.closest('.mapcard').classList.toggle('min');return;}
   if(e.target.closest('#lbX')){closeLb();return;}
@@ -1196,6 +1196,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!modal.hidden)closeModal();
   if(!modal.hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))slide(e.key==='ArrowRight'?1:-1);
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.card[data-card]')){e.preventDefault();openCard(e.target.dataset.card);}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('.mk-a[data-k]')){e.preventDefault();hideTip();openCard(e.target.dataset.k);}
 });
 
 /* ============ 地圖標記 hover 預覽 ============ */
@@ -1204,7 +1205,7 @@ mkTip.className='mktip';mkTip.hidden=true;document.body.appendChild(mkTip);
 let tipT=null;
 function tipHTML(k){
   const c=CARDS[k], nm=(NAMES[k]||[k])[0];
-  if(!c) return `<div class="tb"><h5>${nm}</h5><p class="tm">點擊在 Google 地圖開啟 ↗</p></div>`;
+  if(!c) return `<div class="tb"><h5>${nm}</h5></div>`;
   const im=document.querySelector(`.card[data-card="${k}"] .ph img.ok`);
   const src=im?(im.currentSrc||im.src):'';
   const ph=src?`<div class="tp"><img alt="" src="${src}"></div>`
@@ -1213,7 +1214,7 @@ function tipHTML(k){
   return ph+`<div class="tb"><div class="tk">${c.kind}</div><h5>${c.name}</h5>`
     +(c.jp?`<div class="tj">${c.jp}</div>`:'')
     +`<p>${c.short||''}</p><div class="tc">${chips}</div>`
-    +`<p class="tm">點擊在 Google 地圖開啟 ↗</p></div>`;
+    +`<p class="tm">點擊看完整介紹 ↗</p></div>`;
 }
 function showTip(a){
   if(!matchMedia('(hover:hover)').matches) return;

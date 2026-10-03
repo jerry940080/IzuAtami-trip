@@ -189,6 +189,18 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   另外 `.money div` 原本會命中巢狀的 `.big`／`.lab` 造成雙框，改 `.money>div`（桌機也受益）。
 - 驗證腳本在 scratchpad：`audit.js`（各區高度、橫向溢出）、`probe.js`（三種寬度的版面指標）。
 
+### 地圖標記改開字卡（2026-10-03）
+使用者要求：點地圖標記直接浮現**完整字卡**，不要外連 Google；Google 地圖連結只留在字卡裡。
+- `marker()` 不再包 `<a href=gUrl>`，改成 `<g class="mk-a" data-k role="button" tabindex="0">`，
+  而且**只有 `CARDS[key]` 存在才可點**（車站這類純座標點是普通 `<g>`）。
+- 全域 click／keydown（Enter、Space）攔 `.mk-a[data-k]` → `hideTip(); openCard(k)`。
+- hover 預覽尾句改「點擊看完整介紹 ↗」；沒卡片的點不顯示尾句。
+- `openCard` 的照片備援 `card.querySelectorAll` 加了 `card?…:[]` 保護（從地圖開啟時頁面上
+  未必有對應卡片）。
+- 字卡裡的「在 Google 地圖開啟 ↗」按鈕（`#mAct`）維持不變，這就是唯一的外連入口。
+- 驗證：`scratchpad/mkclick.js` —— 桌機日圖／總覽圖點擊、手機 tap 三種都開字卡、
+  不開新分頁、`shizuoka` 車站標記不可點。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
