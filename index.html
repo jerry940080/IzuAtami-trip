@@ -464,6 +464,14 @@ html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!importa
 /* 地圖 */
 .ma-map{flex:none;position:relative;height:min(400px,48vh);background:#d7e3ea;border-radius:0 0 36px 36px;overflow:hidden}
 .mm-svg,.mm-svg svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ma-map{touch-action:none}
+#maMap svg path,#maMap svg line,#maMap svg polyline{vector-effect:non-scaling-stroke}
+.mm-zoom{position:absolute;left:14px;bottom:14px;display:flex;flex-direction:column;border-radius:22px;background:var(--color-bg);box-shadow:var(--shadow-md);overflow:hidden}
+.mm-zoom button{width:44px;height:42px;display:grid;place-items:center;border:0;background:transparent;color:var(--color-text);cursor:pointer;padding:0}
+.mm-zoom button+button{border-top:1px solid var(--color-divider)}
+.mm-zoom button:active{background:var(--color-surface)}
+.mm-zoom .rs{display:none}
+.ma-map.zoomed .mm-zoom .rs{display:grid}
 .mm-pill{position:absolute;top:12px;left:16px;right:16px;height:56px;border-radius:999px;background:var(--color-bg);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:space-between;padding:0 6px;gap:4px}
 .mm-pill button{width:44px;height:44px;flex:none;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
 .mm-pill button:disabled{opacity:.35}
@@ -1681,6 +1689,11 @@ function stopFor(k){
 function fitLabels(cfg,box,aria){
   box.innerHTML=buildMap(cfg,{W:390,H:400,big:true,aria,padT:52});
   const svg=box.querySelector('svg');if(!svg)return;
+  svg._cfg=cfg;layoutLabels(svg);
+}
+function layoutLabels(svg){
+  const cfg=svg._cfg||{};
+  svg.querySelectorAll('.mk text').forEach(t=>t.style.display='');
   const sb=svg.getBoundingClientRect();if(!sb.width)return;
   const pl=document.querySelector('#maMap .mm-pill'),top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
@@ -1705,6 +1718,77 @@ function fitLabels(cfg,box,aria){
     put(t,best.sd,r);placed.push(best.b);
   });
 }
+/* ===== 手機地圖縮放：改 viewBox（向量放大不糊），標記／標籤／比例尺反向縮放維持原尺寸 =====
+   雙指縮放、放大後單指拖曳、雙擊放大、左下 ＋／－／還原（地圖固定在上方，只有下方路線列表會捲動）。
+   縮放停下 180ms 後重排標籤，原本擠在一起被藏起來的名稱放大後會出現。 */
+const MZ={svg:null,z:1,vb:[0,0,390,400],BW:390,BH:400,zmax:16};
+function mzInit(svg){
+  MZ.svg=svg;MZ.z=1;MZ.vb=[0,0,MZ.BW,MZ.BH];
+  svg.querySelectorAll('.mk').forEach(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(m){g.dataset.bx=m[1];g.dataset.by=m[2];}});
+  svg.querySelectorAll('circle.hit').forEach(c=>c.dataset.r=c.getAttribute('r'));
+  const sbar=svg.querySelector(':scope>g:last-of-type');
+  if(sbar&&sbar.querySelector('text')){const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(sbar.getAttribute('transform'));const ln=sbar.querySelector('line');
+    MZ.sbar={g:sbar,x:+m[1],y:+m[2],w:+ln.getAttribute('x2'),km:parseFloat(sbar.querySelector('text').textContent)};MZ.sbar.ppk=MZ.sbar.w/MZ.sbar.km;}else MZ.sbar=null;
+  mzApply();
+}
+function mzApply(){
+  const svg=MZ.svg;if(!svg)return;const [x,y,w,h]=MZ.vb,z=MZ.z,iz=1/z;
+  svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
+  svg.querySelectorAll('.mk[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
+  svg.querySelectorAll('circle.hit').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
+  const S=MZ.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
+    const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=MZ.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
+    ls[0].setAttribute('x2',L.toFixed(1));ls[2].setAttribute('x1',L.toFixed(1));ls[2].setAttribute('x2',L.toFixed(1));
+    tx.setAttribute('x',(L/2).toFixed(1));tx.textContent=km<1?Math.round(km*1000)+' m':km+' km';
+    S.g.setAttribute('transform',`translate(${(x+(MZ.BW-L-16)*iz).toFixed(2)},${(y+S.y*iz).toFixed(2)}) scale(${iz.toFixed(4)})`);}
+  const box=svg.closest('.ma-map');if(box)box.classList.toggle('zoomed',z>1.01);
+}
+function mzSet(z,px,py,fx,fy){ // 讓 viewBox 上的點 (px,py) 落在畫面比例位置 (fx,fy)
+  z=Math.max(1,Math.min(MZ.zmax,z));const w=MZ.BW/z,h=MZ.BH/z;
+  MZ.z=z;MZ.vb=[Math.max(0,Math.min(MZ.BW-w,px-fx*w)),Math.max(0,Math.min(MZ.BH-h,py-fy*h)),w,h];mzApply();
+}
+function mzMid(){const [x,y,w,h]=MZ.vb;return [x+w/2,y+h/2];}
+function mzCenter(px,py){mzAnim(MZ.z,px,py);}
+function mzAnim(z1,cx,cy){
+  z1=Math.max(1,Math.min(MZ.zmax,z1));const z0=MZ.z,[a0,b0]=mzMid(),t0=performance.now(),D=220;
+  const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;mzSet(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else mzRelayout();};
+  requestAnimationFrame(step);
+}
+let mzT=0;function mzRelayout(){clearTimeout(mzT);mzT=setTimeout(()=>{if(MZ.svg)layoutLabels(MZ.svg);},180);}
+function mzFrac(cx,cy){ // 螢幕座標 → 地圖可視範圍內的比例位置（考慮 meet 留白）
+  const r=MZ.svg.getBoundingClientRect(),s=Math.min(r.width/MZ.BW,r.height/MZ.BH),dw=MZ.BW*s,dh=MZ.BH*s;
+  return [(cx-r.left-(r.width-dw)/2)/dw,(cy-r.top-(r.height-dh)/2)/dh,dw,dh];
+}
+function mzBind(box){
+  let G=null,lastTap=0,lastXY=[0,0],eatClick=0;
+  const mid=T=>[(T[0].clientX+T[1].clientX)/2,(T[0].clientY+T[1].clientY)/2],dist=T=>Math.hypot(T[0].clientX-T[1].clientX,T[0].clientY-T[1].clientY);
+  box.addEventListener('touchstart',e=>{
+    if(!MZ.svg)return;const T=e.touches;
+    if(T.length>=2){const [mx,my]=mid(T),[fx,fy]=mzFrac(mx,my);G={pinch:1,d0:dist(T),z0:MZ.z,px:MZ.vb[0]+fx*MZ.vb[2],py:MZ.vb[1]+fy*MZ.vb[3],moved:1};}
+    else if(T.length===1)G={x0:T[0].clientX,y0:T[0].clientY,ly:T[0].clientY,vb0:MZ.vb.slice(),moved:0};
+  },{passive:true});
+  box.addEventListener('touchmove',e=>{
+    if(!G||!MZ.svg)return;const T=e.touches;e.preventDefault();
+    if(G.pinch&&T.length>=2){const [mx,my]=mid(T),[fx,fy]=mzFrac(mx,my);mzSet(G.z0*dist(T)/G.d0,G.px,G.py,fx,fy);return;}
+    if(G.pinch||T.length!==1)return;
+    const dx=T[0].clientX-G.x0,dy=T[0].clientY-G.y0;if(Math.abs(dx)+Math.abs(dy)>8)G.moved=1;
+    if(MZ.z>1.01){const [,, dw,dh]=mzFrac(0,0),[x0,y0,w,h]=G.vb0;MZ.vb=[Math.max(0,Math.min(MZ.BW-w,x0-dx/dw*w)),Math.max(0,Math.min(MZ.BH-h,y0-dy/dh*h)),w,h];mzApply();}
+  },{passive:false});
+  box.addEventListener('touchend',e=>{
+    if(!G)return;
+    if(e.touches.length===0){
+      if(G.moved){eatClick=Date.now();mzRelayout();}
+      else{const now=Date.now(),t=e.changedTouches[0],onMk=e.target.closest&&e.target.closest('.mk-a,.mm-zoom');
+        if(!onMk&&now-lastTap<320&&Math.hypot(t.clientX-lastXY[0],t.clientY-lastXY[1])<30){const [fx,fy]=mzFrac(t.clientX,t.clientY);
+          mzAnim(MZ.z>=MZ.zmax-.01?1:MZ.z*2,MZ.vb[0]+fx*MZ.vb[2],MZ.vb[1]+fy*MZ.vb[3]);lastTap=0;}
+        else{lastTap=now;lastXY=[t.clientX,t.clientY];}}
+      G=null;
+    }else if(e.touches.length===1&&G.pinch){G={x0:e.touches[0].clientX,y0:e.touches[0].clientY,ly:e.touches[0].clientY,vb0:MZ.vb.slice(),moved:1};}
+  });
+  box.addEventListener('click',e=>{if(Date.now()-eatClick<400){e.stopPropagation();e.preventDefault();}},true);
+  box.addEventListener('wheel',e=>{if(!MZ.svg)return;e.preventDefault();const [fx,fy]=mzFrac(e.clientX,e.clientY);
+    mzSet(MZ.z*Math.exp(-e.deltaY*.0025),MZ.vb[0]+fx*MZ.vb[2],MZ.vb[1]+fy*MZ.vb[3],fx,fy);mzRelayout();},{passive:false});
+}
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
@@ -1716,19 +1800,20 @@ function routeInfo(d){
 function renderMap(){
   const d=DAYS[APP.day],R=routeInfo(d),keys=Object.keys(R.nums);
   $a('maMap').innerHTML=`<div class="mm-svg"></div>
-  <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>`;
+  <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>
+  <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
   const labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
   const pts=d.map.pts.concat(keys.filter(k=>!d.map.pts.includes(k)));
   const cfg=Object.assign({},d.map,{pts,nums:R.nums,labels});
   fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
-  const svg=$a('maMap').querySelector('svg');if(svg)animateMap(svg);
-  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 點標記兩下看詳情</span></div>`+R.rows.map(({s,i,k})=>{
+  const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);}
+  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 雙指可縮放</span></div>`+R.rows.map(({s,i,k})=>{
     const opt=!/^\d/.test(s.t),sub=(opt?s.t:s.t+' · ')+(opt&&s.k==='選項'?'':s.k);
     return `<div class="mr-row${k&&APP.pin===k?' on':''}" data-pin="${k}" data-sidx="${i}"><span class="mr-n${k&&!opt?'':' off'}">${k?R.nums[k]:'–'}</span><div class="mr-tx"><b>${s.n}</b><span>${sub}${k?'':' · 地點未定'}</span></div><button class="mr-btn" data-detail="${i}">詳情</button></div>`;}).join('');
   if(APP.pin)focusPin(APP.pin,true);
 }
-function focusPin(k,quiet){
-  APP.pin=k;
+function focusPin(k,quiet,fromMap){
+  APP.pin=k;if(k&&!fromMap&&MZ.svg&&MZ.z>1.01){const g=MZ.svg.querySelector(`.mk[data-key="${k}"]`);if(g)mzCenter(+g.dataset.bx,+g.dataset.by);}
   document.querySelectorAll('#maMap .mk[data-key]').forEach(a=>a.classList.toggle('on',a.dataset.key===k));
   document.querySelectorAll('#maRoute .mr-row').forEach(r=>r.classList.toggle('on',!!k&&r.dataset.pin===k));
   if(!quiet&&k){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
@@ -1780,8 +1865,11 @@ function appClick(e){
   if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
   if(el=t.closest('.ma-row[data-stop]')){openSheet(DAYS[APP.day].stops[+el.dataset.stop]);return true;}
   if(el=t.closest('[data-rain]')){const r=el.nextElementSibling;r.hidden=!r.hidden;el.textContent=r.hidden?'☔ 雨備方案':'收起雨備方案';return true;}
+  if(el=t.closest('[data-mz]')){const a=el.dataset.mz;if(a==='reset')mzAnim(1,MZ.BW/2,MZ.BH/2);else{const c=mzMid();mzAnim(MZ.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(DAYS[APP.day].stops[+el.dataset.detail]);return true;}
-  if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){const k=el.dataset.k||el.dataset.key;if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k);return true;}
+  if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
+    if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
+      let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(DAYS[APP.day].stops[+el.dataset.sidx]);return true;}
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
@@ -1813,6 +1901,7 @@ function appInit(){
   const plan=$a('maPlan');let sx=null;
   plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
+  mzBind($a('maMap'));
   root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(DAYS[APP.day].stops[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
   root.addEventListener('scroll',()=>{if(pinEl)placeTip(pinEl);},{capture:true,passive:true});
