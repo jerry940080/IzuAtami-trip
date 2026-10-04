@@ -451,10 +451,12 @@ html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!importa
 .ma-tx .mt{display:flex;align-items:center;gap:6px;margin-top:4px;min-width:0}
 #mapp .kp,.ma-sheet .kp{flex:none;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;line-height:1.5}
 .ma-tx .jp{font-size:12px;color:var(--color-neutral-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ma-tx .nt{font-size:12px;line-height:1.5;color:var(--color-neutral-700);margin-top:6px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.ma-go{height:40px}
-.ma-go>div:last-child{display:flex;align-items:center;min-width:0}
-.gp{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);font-size:12px;font-weight:600;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ma-tx .nt{font-size:12px;line-height:1.5;color:var(--color-neutral-700);margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ma-go{min-height:40px}
+.ma-go>div:first-child{padding-top:11px;text-align:right}
+.ma-gt{font-size:11px;font-weight:600;color:var(--color-accent-2-700);font-variant-numeric:tabular-nums}
+.ma-go>div:last-child{display:flex;align-items:center;min-width:0;padding:5px 0}
+.gp{display:inline-block;padding:5px 12px;border-radius:16px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);font-size:12px;font-weight:500;line-height:1.45;max-width:100%}
 .ma-dash{display:block;margin:12px 0 0 82px;width:calc(100% - 82px);height:48px;border-radius:999px;border:2px dashed var(--color-neutral-400);background:transparent;color:var(--color-neutral-700)!important;font:600 14px var(--font-body)!important;cursor:pointer}
 .ma-rain{margin:10px 0 0 82px;background:var(--color-surface);border-radius:22px;padding:14px 16px;font-size:14px;line-height:1.65;color:var(--color-neutral-800)}
 .ma-rain b{color:var(--color-accent-700)}
@@ -470,7 +472,7 @@ html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!importa
 .mm-pill span{font-size:11px;color:var(--color-neutral-700)}
 html.app .mk-a:focus{outline:none}
 html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
-#maMap .mk-a.on .mk circle{fill:var(--color-accent-600);stroke:var(--color-accent-200);stroke-width:5}
+#maMap .mk.on>circle{fill:var(--color-accent-600);stroke:var(--color-accent-200);stroke-width:5}
 #maRoute{padding:18px 16px 24px}
 .mr-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 8px 8px}
 .mr-h b{font:700 17px var(--font-heading)}
@@ -1104,7 +1106,7 @@ function marker(key,pr,side,big,num){
   const K=KIND[kind];const [x,y]=pr.pt(P[key]);
   const r=num?9.5:(K.r)*(big?1.15:1);
   let dot;
-  if(num) dot=`<circle r="${r}" fill="${K.c}" stroke="#fff" stroke-width="2.4"/><text y="3.9" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${num}</text>`;
+  if(num) dot=`<circle r="${r}" fill="${kind==='station'?(K.s||'#26292e'):K.c}" stroke="#fff" stroke-width="2.4"/><text y="3.9" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${num}</text>`;
   else if(K.sq) dot=`<rect x="${-r}" y="${-r}" width="${2*r}" height="${2*r}" transform="rotate(45)" fill="${K.c}" stroke="#fff" stroke-width="2"/>`;
   else dot=`<circle r="${r}" fill="${K.c}" stroke="${K.s||'#fff'}" stroke-width="${K.s?2.2:2}"/>`;
   const sm=/^([tblr])(\d)?$/.exec(side||''), sd=sm?sm[1]:'', ex=sm&&sm[2]?(sm[2]-1)*17:0;
@@ -1483,84 +1485,87 @@ addEventListener('resize',()=>{pinEl?placeTip(pinEl):hideTip();});
   });
 })();
 
-/* ================= 手機 App：每日停留點（時間軸用；桌機仍讀 DAYS[].tl） ================= */
+/* ================= 手機 App：每日停留點（時間軸用；桌機仍讀 DAYS[].tl，改行程兩邊都要改） =================
+   每站 {t,n,k,d,card,at,dur,go:[{at,i,t}]}：at＝地圖位置（P 的 key，沒填就用 card 的座標），
+   go＝到下一站的交通（可多段，每段帶出發時間），內容與桌機時刻表的交通列一一對應。 */
 const STOPS={
 1:[
- {t:'13:30',n:'桃園 T1 → 成田 T2',k:'交通',d:'虎航 IT202・17:30 抵達成田',dur:'3 小時'},
- {t:'18:00',n:'領行李、入境',k:'交通',d:'Visit Japan Web 先填好',dur:'約 2 小時',go:{i:'🚆',t:'成田特快 19:53–21:00・¥3,330'}},
+ {t:'13:30',n:'桃園 T1 → 成田 T2',k:'交通',d:'虎航 IT202・17:30 抵達成田',dur:'4 小時'},
+ {t:'18:00',n:'領行李、入境',k:'交通',d:'Visit Japan Web 先填好',at:'nrt',go:[{at:'19:53',i:'🚆',t:'成田 T2 → 品川　JR 成田特快 19:53–21:00・¥3,330'}]},
  {t:'21:00',n:'品川王子大飯店 北塔',k:'住宿',d:'check-in，站內覓食',card:'prince'}
 ],
 2:[
  {t:'08:00',n:'飯店早餐',k:'美食'},
- {t:'09:00',n:'Check-out',k:'住宿',d:'品川王子大飯店',go:{i:'🚄',t:'ひかり 約 1 小時・¥6,470'}},
- {t:'11:20',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂'},
- {t:'11:40',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:{i:'🚗',t:'25 分・パークウェイ免費'}},
- {t:'13:10',n:'日本平夢テラス',k:'景點',d:'富士山與駿河灣展望迴廊，屋外迴廊 24 小時開放',card:'yume',dur:'45 分',go:{i:'🚡',t:'纜車 5 分・來回 ¥1,400'}},
- {t:'14:15',n:'久能山東照宮',k:'景點',d:'國寶社殿與博物館，冬季 16:00 截止拜觀',card:'toshogu',dur:'1 小時 10 分',go:{i:'🚡',t:'纜車回日本平 5 分'}},
- {t:'選項',n:'日本平飯店 露台酒廊下午茶',k:'選項',d:'14:00–17:00・30 公尺全景窗看富士山',card:'ndhotel',go:{i:'🚗',t:'25 分回靜岡站'}},
- {t:'16:10',n:'靜岡站前飯店 check-in',k:'住宿',d:'房間待訂',card:'shizuhotel'},
- {t:'提醒',n:'晚上要喝酒，車停好就別再動',k:'提醒',d:'日本酒駕零容忍，同車的人也會被追究',go:{i:'🚶',t:'步行 10 分'}},
+ {t:'09:00',n:'Check-out',k:'住宿',d:'品川王子大飯店',go:[{at:'10:00',i:'🚄',t:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
+ {t:'11:20',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
+ {t:'11:40',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
+ {t:'13:10',n:'日本平夢テラス',k:'景點',d:'富士山與駿河灣展望迴廊，屋外迴廊 24 小時開放',card:'yume',dur:'55 分',go:[{at:'14:05',i:'🚡',t:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
+ {t:'14:15',n:'久能山東照宮',k:'景點',d:'國寶社殿與博物館，冬季 16:00 截止拜觀',card:'toshogu',dur:'1 小時 10 分',go:[{at:'15:25',i:'🚡',t:'纜車回日本平'}]},
+ {t:'選項',n:'日本平飯店 露台酒廊下午茶',k:'選項',d:'14:00–17:00・30 公尺全景窗看富士山',card:'ndhotel',go:[{at:'15:40',i:'🚗',t:'開車回靜岡站・飯店　約 25 分'}]},
+ {t:'16:10',n:'停好車 check-in',k:'住宿',d:'靜岡站前飯店（房間待訂）',card:'shizuhotel'},
+ {t:'注意',n:'晚上要喝酒，車停好就別再動',k:'提醒',d:'日本酒駕零容忍，同車的人也會被追究',go:[{at:'18:50',i:'🚶',t:'走路去青葉橫丁　約 10 分'}]},
  {t:'19:00',n:'青葉橫丁',k:'美食',d:'靜岡おでん，黑高湯串燒關東煮',card:'aoba'}
 ],
 3:[
- {t:'08:30',n:'飯店早餐',k:'美食',go:{i:'🚗',t:'30 分'}},
- {t:'10:00',n:'石垣草莓 久能海岸',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',dur:'40 分',go:{i:'🚗',t:'25 分'}},
+ {t:'08:30',n:'飯店早餐',k:'美食',go:[{at:'09:30',i:'🚗',t:'開車出發（2/11 起續租中）　約 30 分'}]},
+ {t:'10:00',n:'石垣草莓 久能海岸',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',dur:'40 分',go:[{at:'10:40',i:'🚗',t:'開車 → 清水　約 25 分'}]},
  {t:'11:05',n:'清水 河岸の市',k:'景點',d:'先逛いちば館買干物與櫻花蝦',card:'shimizu',dur:'55 分'},
- {t:'12:00',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:{i:'🚗',t:'5 分'}},
- {t:'13:20',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時'},
- {t:'14:30',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',dur:'1 小時',go:{i:'🚗',t:'20 分'}},
+ {t:'12:00',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:[{at:'13:15',i:'🚗',t:'開車 → エスパルスドリームプラザ　約 5 分'}]},
+ {t:'13:20',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時 10 分'},
+ {t:'14:30',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',dur:'1 小時',go:[{at:'15:30',i:'🚗',t:'開車 → 三保松原　約 20 分'}]},
  {t:'15:50',n:'三保松原・御穗神社・神の道',k:'景點',d:'500 公尺松林參道散步',card:'mihoshrine',dur:'1 小時'},
- {t:'16:50',n:'羽衣の松海岸 等夕陽',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',dur:'55 分',go:{i:'🚗',t:'40 分回靜岡'}},
- {t:'18:30',n:'還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',go:{i:'🚆',t:'JR 1 站 3 分・¥190'}},
- {t:'19:05',n:'柚木の郷',k:'溫泉',d:'天然溫泉＋三溫暖，館內吃晚餐（LO 21:30）',card:'yunoki',dur:'3 小時',go:{i:'🚆',t:'22:00 回飯店'}}
+ {t:'16:50',n:'羽衣の松海岸 等夕陽',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',dur:'55 分',go:[{at:'17:45',i:'🚗',t:'開車約 40 分回靜岡站'}]},
+ {t:'18:30',n:'還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',at:'shizuoka',go:[{at:'18:45',i:'🚆',t:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190'}]},
+ {t:'19:05',n:'柚木の郷',k:'溫泉',d:'天然溫泉＋三溫暖，館內食事處吃晚餐（LO 21:30）',card:'yunoki',dur:'3 小時',go:[{at:'22:00',i:'🚆',t:'東靜岡 → 靜岡　回飯店'}]}
 ],
 4:[
  {t:'07:45',n:'飯店早餐',k:'美食'},
- {t:'08:30',n:'Check-out',k:'住宿',d:'行李寄靜岡站投幣櫃（大型櫃約 ¥700）',go:{i:'🚆',t:'JR 4 分到草薙＋巴士 10 分'}},
- {t:'09:30',n:'日本平動物園',k:'景點',d:'小熊貓、猛獸館 299、空中步道，一開門人最少',card:'zoo',dur:'1 小時 50 分'},
- {t:'提醒',n:'草薙往動物園的巴士班次不密',k:'提醒',d:'前一晚查好時刻；趕不上就搭計程車約 7 分',go:{i:'🚆',t:'25 分回靜岡站取行李'}},
- {t:'12:10',n:'靜岡 → 沼津',k:'交通',d:'JR 東海道本線・約 1 小時・¥990',go:{i:'🚌',t:'巴士 10 分・¥200'}},
- {t:'13:40',n:'沼津港午餐',k:'美食',d:'丸天かき揚げ丼／深海魚料理',card:'numazuport',dur:'1 小時'},
+ {t:'08:30',n:'Check-out，行李寄站內',k:'住宿',d:'靜岡站投幣置物櫃（大型櫃約 ¥700）',at:'shizuoka',go:[{at:'09:00',i:'🚆',t:'靜岡 → 草薙　JR 東海道本線・約 4 分・¥190'},{at:'09:15',i:'🚌',t:'草薙站 → 日本平動物園　靜鐵巴士約 10 分＋步行 5 分'}]},
+ {t:'09:30',n:'日本平動物園',k:'景點',d:'小熊貓、猛獸館 299、空中步道（9:00 開園，一開門人最少）',card:'zoo',dur:'1 小時 50 分'},
+ {t:'提醒',n:'草薙往動物園的巴士班次不密',k:'提醒',d:'前一晚查好時刻；趕不上就搭計程車（約 7 分）',go:[{at:'11:20',i:'🚆',t:'動物園 → 草薙 → 靜岡站取行李　約 25 分'}]},
+ {t:'12:10',n:'靜岡 → 沼津',k:'交通',d:'JR 東海道本線・約 1 小時・¥990',at:'shizuoka',go:[{at:'13:20',i:'🚌',t:'沼津站 → 沼津港　巴士約 10 分・¥200'}]},
+ {t:'13:40',n:'沼津港午餐',k:'美食',d:'丸天かき揚げ丼／深海魚料理',card:'numazuport',at:'aquarium',dur:'1 小時 10 分'},
  {t:'14:50',n:'沼津港深海水族館',k:'景點',d:'¥2,200',card:'aquarium',dur:'1 小時 30 分'},
- {t:'16:20',n:'沼津港逛吃・買干物',k:'購物',d:'みなと新鮮館；びゅうお 展望水門就在旁邊 ¥100',card:'numazuport',dur:'50 分',go:{i:'🚌',t:'巴士 10 分回沼津站'}},
- {t:'17:40',n:'沼津 → 熱海',k:'交通',d:'JR 東海道本線・約 25 分・¥420',go:{i:'🚕',t:'計程車 5 分'}},
- {t:'18:15',n:'LiVEMAX 熱海 Ocean',k:'住宿',d:'check-in，晚餐、泡溫泉',card:'livemax'}
+ {t:'16:20',n:'沼津港逛吃・買干物',k:'購物',d:'みなと新鮮館；びゅうお 展望水門就在旁邊，想上去 ¥100',card:'numazuport',at:'aquarium',dur:'50 分',go:[{at:'17:10',i:'🚌',t:'沼津港 → 沼津站　巴士約 10 分'}]},
+ {t:'17:40',n:'沼津 → 熱海',k:'交通',d:'JR 東海道本線・約 25 分・¥420',at:'numazuStn',go:[{at:'18:15',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
+ {t:'18:20',n:'LiVEMAX 熱海 Ocean',k:'住宿',d:'check-in',card:'livemax'},
+ {t:'19:30',n:'熱海晚餐、泡溫泉',k:'美食',d:'飯店溫泉或站前商店街覓食'}
 ],
 5:[
- {t:'08:00',n:'飯店早餐',k:'美食',go:{i:'🚕',t:'計程車 5 分到熱海站'}},
- {t:'09:30',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分・¥3,490・A 席靠海'},
+ {t:'08:00',n:'飯店早餐',k:'美食',go:[{at:'09:00',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
+ {t:'09:30',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分・¥3,490・A 席靠海',at:'atami'},
  {t:'11:00',n:'河津櫻並木',k:'景點',d:'從河津站沿河走到豐泉橋',card:'sakura',dur:'1 小時 30 分'},
- {t:'12:30',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛'},
+ {t:'12:30',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛',at:'kawazu'},
  {t:'選項',n:'南伊豆 櫻花與油菜花祭',k:'選項',d:'伊豆急 25 分＋巴士 25 分',card:'minami'},
  {t:'選項',n:'白濱神社',k:'選項',d:'伊豆急到下田 25 分＋東海巴士 10 分',card:'shirahama'},
  {t:'選項',n:'泰迪熊博物館（中途下車）',k:'選項',d:'可 DIY 龍貓玩偶；17:00 閉館，得放棄夜櫻',card:'teddy'},
- {t:'選項',n:'熱川香蕉鱷魚園（中途下車）',k:'選項',d:'二十幾隻小熊貓；17:00 閉館',card:'banana'},
- {t:'17:30',n:'河津川夜櫻點燈',k:'景點',d:'點燈至 21:00',card:'sakura',dur:'2 小時',go:{i:'🚃',t:'伊豆急＋JR 約 2 小時・約 ¥2,100'}},
+ {t:'選項',n:'熱川香蕉鱷魚園（中途下車）',k:'選項',d:'二十幾隻小熊貓；17:00 閉館，得放棄夜櫻',card:'banana'},
+ {t:'17:30',n:'河津川夜櫻點燈',k:'景點',d:'點燈至 21:00',card:'sakura',dur:'2 小時',go:[{at:'19:30',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 2 小時・約 ¥2,100'}]},
  {t:'21:40',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'}
 ],
 6:[
  {t:'08:00',n:'飯店早餐',k:'美食'},
- {t:'09:00',n:'Check-out',k:'住宿',d:'行李寄櫃台',go:{i:'🚕',t:'計程車 10 分'}},
- {t:'10:00',n:'熱海梅園',k:'景點',d:'2 月中正見頃・梅まつり ¥300',card:'baien',dur:'1 小時',go:{i:'🚶',t:'步行 15 分'}},
- {t:'11:20',n:'來宮神社',k:'景點',d:'繞大楠一圈',card:'kinomiya',dur:'40 分',go:{i:'🚶',t:'步行約 25 分'}},
+ {t:'09:00',n:'Check-out，行李寄櫃台',k:'住宿',at:'livemax',go:[{at:'09:30',i:'🚕',t:'飯店 → 熱海梅園　計程車約 10 分'}]},
+ {t:'10:00',n:'熱海梅園',k:'景點',d:'2 月中正見頃・梅まつり ¥300',card:'baien',dur:'1 小時',go:[{at:'11:00',i:'🚶',t:'梅園 → 來宮神社　步行約 15 分'}]},
+ {t:'11:20',n:'來宮神社',k:'景點',d:'繞大楠一圈',card:'kinomiya',dur:'40 分',go:[{at:'12:00',i:'🚶',t:'來宮 → 糸川遊步道 → 熱海站　步行約 25 分'}]},
  {t:'途中',n:'糸川遊步道',k:'景點',d:'あたみ桜 已近尾聲，邊走邊看',card:'itogawa'},
- {t:'12:40',n:'熱海站前午餐',k:'美食',d:'回飯店拿行李',go:{i:'🚄',t:'14:00 新幹線 約 30 分・¥4,070'}},
+ {t:'12:40',n:'熱海站前午餐',k:'美食',d:'吃完回飯店拿行李',at:'atami',go:[{at:'14:00',i:'🚄',t:'熱海 → 品川　東海道新幹線・約 30 分・¥4,070'}]},
  {t:'15:00',n:'品川王子大飯店',k:'住宿',d:'check-in',card:'prince'},
- {t:'17:00',n:'烤肉大餐',k:'美食',d:'品川或六本木，先訂位',card:'yakiniku',dur:'2 小時',go:{i:'🚇',t:'地鐵約 20 分'}},
- {t:'19:00',n:'六本木 live house',k:'景點',d:'自由行程',card:'roppongi'},
+ {t:'17:00',n:'烤肉大餐',k:'美食',d:'品川或六本木，先訂位',card:'yakiniku',dur:'2 小時',go:[{at:'19:00',i:'🚇',t:'地鐵約 20 分到六本木'}]},
+ {t:'19:20',n:'六本木 live house',k:'景點',d:'自由行程',card:'roppongi'},
  {t:'選項',n:'或去下北澤',k:'選項',d:'古著、小酒館、live house',card:'shimokita'}
 ],
 7:[
- {t:'09:00',n:'自由時間',k:'選項',d:'睡到自然醒，或去品川水族館',go:{i:'🚇',t:'淺草線→三田線 約 20 分'}},
- {t:'12:30',n:'神田勝本',k:'美食',d:'沾麵，排隊約 20 分',card:'katsumoto',dur:'1 小時',go:{i:'🚶',t:'步行 20 分穿過御茶之水'}},
- {t:'14:00',n:'秋葉原',k:'景點',d:'電器街、動漫店',card:'akiba',dur:'4 小時',go:{i:'🚇',t:'到橫丁，首推野毛 約 25 分'}},
+ {t:'09:00',n:'自由時間',k:'選項',d:'睡到自然醒，或去品川水族館',at:'prince',go:[{at:'12:00',i:'🚇',t:'品川 → 神保町　都營淺草線→三田線約 20 分'}]},
+ {t:'12:30',n:'神田勝本',k:'美食',d:'沾麵，排隊約 20 分',card:'katsumoto',at:'jimbocho',dur:'1 小時 10 分',go:[{at:'13:40',i:'🚶',t:'神保町 → 秋葉原　步行約 20 分穿過御茶之水'}]},
+ {t:'14:00',n:'秋葉原',k:'景點',d:'電器街、動漫店',card:'akiba',dur:'4 小時',go:[{at:'18:00',i:'🚇',t:'移動到橫丁　首推野毛（品川約 25 分）'}]},
  {t:'19:00',n:'居酒屋橫丁',k:'美食',d:'地點待定',card:'yokocho'}
 ],
 8:[
  {t:'07:00',n:'早餐',k:'美食'},
- {t:'08:00',n:'Check-out',k:'住宿',go:{i:'🚆',t:'成田特快 08:05–09:30・¥3,330'}},
- {t:'10:00',n:'機場逛逛、買伴手禮',k:'購物',d:'液體類出境後再買',card:'souvenir'},
- {t:'13:00',n:'成田 T2 → 桃園 T1',k:'交通',d:'虎航 IT201・16:25 抵達桃園'}
+ {t:'08:00',n:'Check-out',k:'住宿',at:'prince',go:[{at:'08:05',i:'🚆',t:'品川 → 成田機場 T2　JR 成田特快 08:05–09:30・¥3,330'}]},
+ {t:'10:00',n:'機場逛逛、買伴手禮',k:'購物',d:'液體類出境後再買',card:'souvenir',at:'nrt'},
+ {t:'13:00',n:'成田 T2 → 桃園 T1',k:'交通',d:'虎航 IT201・16:25 抵達桃園',at:'nrt'}
 ]};
 DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
 
@@ -1650,13 +1655,13 @@ function renderPlan(){
   <div class="ma-week">${DAYS.map((x,i)=>`<button data-day="${i}" class="${i===APP.day?'on':''}${i===ti?' today':''}" aria-label="Day ${x.n}"><span>${x.wd}</span><b>${x.date.split('/')[1]}</b></button>`).join('')}</div>`;
   const S=d.stops||[];
   const rows=S.map((s,i)=>{
-    const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,hasGo=!!s.go,isT=/^\d/.test(s.t);
+    const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,G=s.go||[],hasGo=G.length>0,isT=/^\d/.test(s.t);
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
     return `<div class="ma-row${isT?'':' opt'}" data-stop="${i}" role="button" tabindex="0">
       <div class="ma-r"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
       <div class="ma-tx"><div class="nm">${s.n}</div><div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div></div>
-      ${hasGo?`<div class="ma-go"><div></div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${s.go.i} ${s.go.t}</span></div></div>`:''}
+      ${G.map(g=>`<div class="ma-go"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${g.i} ${g.t}</span></div></div>`).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
   <div class="ma-area"><b>${d.title}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>
@@ -1665,7 +1670,8 @@ function renderPlan(){
   <div class="ma-hint">點任一站看詳情 · 左右滑動切換日期</div>`;
 }
 function stopFor(k){
-  const st=(DAYS[APP.day].stops||[]).find(s=>s.card===k);if(st)return st;
+  const S=DAYS[APP.day].stops||[],st=S.find(s=>locOf(s)===k)||S.find(s=>s.card===k);if(st)return st;
+  if(!CARDS[k])return {t:'',n:(NAMES[k]||[k])[0],k:'交通'};
   const c=CARDS[k];return {t:'',n:c.name,k:normK(c.kind),card:k};
 }
 /* 手機地圖窄，標籤常超出邊界、互相重疊或躲在上方浮動膠囊下：
@@ -1680,7 +1686,8 @@ function fitLabels(cfg,box,aria){
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
   const dots=[...svg.querySelectorAll('.mk>circle,.mk>rect')].map(c=>c.getBoundingClientRect());
   const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
-  const put=(t,sd,r)=>{const A={l:['end',-(r+6),4.5],r:['start',r+6,4.5],t:['middle',0,-(r+7)],b:['middle',0,r+14]}[sd];
+  const put=(t,sd,r)=>{const q=Math.round(r*.6),A={l:['end',-(r+6),4.5],r:['start',r+6,4.5],t:['middle',0,-(r+7)],b:['middle',0,r+14],
+    tr:['start',q,-(r+5)],tl:['end',-q,-(r+5)],br:['start',q,r+14],bl:['end',-q,r+14]}[sd];
     t.setAttribute('text-anchor',A[0]);t.setAttribute('x',A[1]);t.setAttribute('y',A[2]);};
   const lab=g=>{const ts=g.querySelectorAll('text'),t=ts[ts.length-1];return t&&!/^\d+$/.test(t.textContent)?t:null;};
   const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll('text').length>1?1:2;};
@@ -1688,7 +1695,7 @@ function fitLabels(cfg,box,aria){
     const t=lab(g),hotel=pri(g)===0;
     const dot=g.querySelector(':scope>circle,:scope>rect'),r=dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
     const cur=((cfg.labels||{})[g.dataset.key]||'b').charAt(0);
-    const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]));
+    const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]),['tr','tl','br','bl']);
     let best=null;
     for(const sd of cands){put(t,sd,r);const b=t.getBoundingClientRect();
       const out=Math.max(0,sb.left+2-b.left)+Math.max(0,b.right-sb.right+2)+Math.max(0,top-b.top)+Math.max(0,b.bottom-sb.bottom+2);
@@ -1698,27 +1705,33 @@ function fitLabels(cfg,box,aria){
     put(t,best.sd,r);placed.push(best.b);
   });
 }
-/* 路線順序依當天停留點時間排（桌機 DAYS[].cards 的順序是住宿排第一），地圖編號跟著重編 */
-function routeOrder(d){const st=d.stops||[],at=k=>{const i=st.findIndex(s=>s.card===k);return i<0?999:i;};
-  return d.cards.map((k,i)=>[k,at(k),i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(x=>x[0]);}
+/* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
+   同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
+const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
+function routeInfo(d){
+  const S=d.stops||[],nums={},rows=[];let n=0;
+  S.forEach((s,i)=>{const k=locOf(s);if(!k&&!s.card)return;if(k&&!nums[k])nums[k]=++n;rows.push({s,i,k});});
+  return {nums,rows};
+}
 function renderMap(){
-  const d=DAYS[APP.day];
-  const ord=routeOrder(d),nums={};ord.forEach((k,i)=>nums[k]=i+1);
+  const d=DAYS[APP.day],R=routeInfo(d),keys=Object.keys(R.nums);
   $a('maMap').innerHTML=`<div class="mm-svg"></div>
   <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>`;
-  const cfg=Object.assign({},d.map,{nums,labels:Object.assign({},d.map.labels)});
+  const labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
+  const pts=d.map.pts.concat(keys.filter(k=>!d.map.pts.includes(k)));
+  const cfg=Object.assign({},d.map,{pts,nums:R.nums,labels});
   fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
   const svg=$a('maMap').querySelector('svg');if(svg)animateMap(svg);
-  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${ord.length} 站 · 點標記兩下看詳情</span></div>`+ord.map((k,i)=>{
-    const c=CARDS[k],st=(d.stops||[]).find(s=>s.card===k),on=d.map.pts.includes(k);
-    return `<div class="mr-row${APP.pin===k?' on':''}" data-pin="${k}"><span class="mr-n${on?'':' off'}">${i+1}</span><div class="mr-tx"><b>${c.name}</b><span>${st&&/^\d/.test(st.t)?st.t+' · ':''}${c.kind}</span></div><button class="mr-btn" data-detail="${k}">詳情</button></div>`;}).join('');
+  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 點標記兩下看詳情</span></div>`+R.rows.map(({s,i,k})=>{
+    const opt=!/^\d/.test(s.t),sub=(opt?s.t:s.t+' · ')+(opt&&s.k==='選項'?'':s.k);
+    return `<div class="mr-row${k&&APP.pin===k?' on':''}" data-pin="${k}" data-sidx="${i}"><span class="mr-n${k&&!opt?'':' off'}">${k?R.nums[k]:'–'}</span><div class="mr-tx"><b>${s.n}</b><span>${sub}${k?'':' · 地點未定'}</span></div><button class="mr-btn" data-detail="${i}">詳情</button></div>`;}).join('');
   if(APP.pin)focusPin(APP.pin,true);
 }
 function focusPin(k,quiet){
   APP.pin=k;
-  document.querySelectorAll('#maMap .mk-a').forEach(a=>a.classList.toggle('on',a.dataset.k===k));
-  document.querySelectorAll('#maRoute .mr-row').forEach(r=>r.classList.toggle('on',r.dataset.pin===k));
-  if(!quiet){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  document.querySelectorAll('#maMap .mk[data-key]').forEach(a=>a.classList.toggle('on',a.dataset.key===k));
+  document.querySelectorAll('#maRoute .mr-row').forEach(r=>r.classList.toggle('on',!!k&&r.dataset.pin===k));
+  if(!quiet&&k){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
 }
 function openSheet(s){
   const c=s.card&&CARDS[s.card],d=DAYS[APP.day],img=c?cardImg(s.card):'',nm=c&&s.k!=='美食'&&s.k!=='選項'?c.name:s.n;
@@ -1729,7 +1742,7 @@ function openSheet(s){
   <div class="sh-ph">${img?`<img src="${img}" alt="">`:`<span>${nm.replace(/[（(].*$/,'').slice(0,2)}</span>`}</div></div>
   <div class="sh-rows">
    ${/^\d/.test(s.t)?`<div>${ico('clock',16)}<span>${s.t} 抵達${s.dur?' · 停留 '+s.dur:''}</span></div>`:''}
-   ${s.go?`<div>${ico('car',16)}<span>下一段 ${s.go.i} ${s.go.t}</span></div>`:''}
+   ${(s.go||[]).map(g=>`<div>${ico('car',16)}<span>${g.at?g.at+'　':''}${g.i} ${g.t}</span></div>`).join('')}
    ${addr?`<div>${ico('pin',16)}<span>${addr}</span></div>`:''}
   </div>
   ${s.d||(c&&c.short)?`<div class="sh-note">${s.d||c.short}</div>`:''}
@@ -1767,9 +1780,9 @@ function appClick(e){
   if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
   if(el=t.closest('.ma-row[data-stop]')){openSheet(DAYS[APP.day].stops[+el.dataset.stop]);return true;}
   if(el=t.closest('[data-rain]')){const r=el.nextElementSibling;r.hidden=!r.hidden;el.textContent=r.hidden?'☔ 雨備方案':'收起雨備方案';return true;}
-  if(el=t.closest('#maRoute [data-detail]')){openSheet(stopFor(el.dataset.detail));return true;}
-  if(el=t.closest('#maMap .mk-a[data-k]')){const k=el.dataset.k;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k);return true;}
-  if(el=t.closest('#maRoute .mr-row[data-pin]')){focusPin(el.dataset.pin);return true;}
+  if(el=t.closest('#maRoute [data-detail]')){openSheet(DAYS[APP.day].stops[+el.dataset.detail]);return true;}
+  if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){const k=el.dataset.k||el.dataset.key;if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k);return true;}
+  if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(DAYS[APP.day].stops[+el.dataset.sidx]);return true;}
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
