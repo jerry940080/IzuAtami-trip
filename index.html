@@ -1723,7 +1723,7 @@ function layoutLabels(svg){
    縮放停下 180ms 後重排標籤，原本擠在一起被藏起來的名稱放大後會出現。 */
 const MZ={svg:null,z:1,vb:[0,0,390,400],BW:390,BH:400,zmax:16};
 function mzInit(svg){
-  MZ.svg=svg;MZ.z=1;MZ.vb=[0,0,MZ.BW,MZ.BH];
+  MZ.svg=svg;MZ.z=1;MZ.vb=[0,0,MZ.BW,MZ.BH];MZ.done=0;
   svg.querySelectorAll('.mk').forEach(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(m){g.dataset.bx=m[1];g.dataset.by=m[2];}});
   svg.querySelectorAll('circle.hit').forEach(c=>c.dataset.r=c.getAttribute('r'));
   const sbar=svg.querySelector(':scope>g:last-of-type');
@@ -1733,6 +1733,10 @@ function mzInit(svg){
 }
 function mzApply(){
   const svg=MZ.svg;if(!svg)return;const [x,y,w,h]=MZ.vb,z=MZ.z,iz=1/z;
+  if(z>1.001&&!MZ.done){ // 一開始縮放就把畫線動畫收尾：動畫用 dasharray＝路線長度，配上 non-scaling-stroke 時
+    MZ.done=1;           // dasharray 會改用螢幕長度計算，放大後路線只剩一小段（使用者回報「縮放時路線會變」）
+    svg.querySelectorAll('.leg').forEach(l=>{l.style.transition='none';if(!l.getAttribute('stroke-dasharray')){l.style.strokeDasharray='none';l.style.strokeDashoffset='0';}l.style.opacity=1;});
+    svg.querySelectorAll('.mk').forEach(m=>{m.style.transition='none';m.style.opacity=1;});}
   svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
   svg.querySelectorAll('.mk[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
   svg.querySelectorAll('circle.hit').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
