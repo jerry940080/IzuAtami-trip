@@ -626,8 +626,8 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
    **`yume` 已於 2026-10-05 補上 4 張**（富士山展望迴廊當封面、茶園遠眺富士、櫻花外觀〔4 月景色，2 月沒有〕、館內木構樓梯）。
    **`aoba` 已於 2026-10-05 補上 3 張**（使用者提供：おでん街燈籠巷弄當封面、櫻花裝飾巷弄、おでん鍋）。
    `minami` 目前是低解析 2024 海報待換。**`miho` 已於 2026-10-03 補上 3 張。**
-   缺影片的卡片：`shizuhotel`、`yakiniku`、`roppongi`、`yokocho`、`souvenir`、`mihoshrine`、`ginza`、`yoichi`、`kinmedai`、`asaichi`、`moa`、`cruise`、`fruitking`、`ekimae`
-   （2026-10-05 已補：`prince` fReu3hI4R9I 從 4:11、`kiunkaku` 3FKCN8QfeCs、`livemax` IdDyEtAexHo 從 2:24、`kinnoji`、`ndhotel`）
+   缺影片的卡片：`shizuhotel`、`yakiniku`、`roppongi`、`yokocho`、`souvenir`、`mihoshrine`、`kinmedai`、`asaichi`、`moa`、`cruise`、`fruitking`、`ekimae`
+   （2026-10-05 已補：`ginza` ZKFLQpWv0Wk、`yoichi` tTb1MG5qnLc（熱海魚市場）、`prince` fReu3hI4R9I 從 4:11、`kiunkaku` 3FKCN8QfeCs、`livemax` IdDyEtAexHo 從 2:24、`kinnoji`、`ndhotel`）
    （`katsumoto`、`akiba` 使用者說去過不用放）。
 3. Day 7 居酒屋橫丁地點待定（已討論候選：野毛(最推,品川25分)、大井町東小路、上野アメ横、
    赤羽、北千住、蒲田、武藏小山；使用者喜歡大阪天滿的氛圍）。
