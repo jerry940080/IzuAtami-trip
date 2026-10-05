@@ -342,6 +342,23 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
     放不下一律先藏，放大後重排就會出現。
 - 抽屜標題改成一律用站名 `s.n`（原本景點用卡片名，雨天版會出現「（選項）」字樣）。
 
+### 2026-10-05 變更（六）：雨備改為**全域開關**（取代上一節的每天各自切換）
+使用者對 Safari 上下底板追不上顏色感到厭煩，改成「一顆按鈕換整個系統的色調，要有動畫，顏色由我選」。
+- **狀態**：`APP.rain` 改成布林（localStorage `izu-rain`＝`true/false`，舊的 `{天數:true}` 讀到會視為 false）。
+  `rainOn()` 一律回 `APP.rain`；`actStops(d)` 在雨備且該天有 `rainStops` 時才換行程，沒有的天照晴天版並顯示提示
+  「這天沒有另外的雨天版，照原行程走」。
+- **按鈕** `.rain-tg[data-rainbtn]`：首頁右上（`.mh-top`）與行程頁標題列（`.ph-act`，地圖鈕左邊）各一顆，
+  圓形圖示裡太陽／雨傘翻轉切換，文字顯示目前模式「晴天／雨備」。日標題 `.ma-area` 不再放按鈕，只在雨備且有雨天版時加「雨備版」標籤。
+- **色票**：從 `#mapp.rainy{}` 移到 **`html.rainy-ui{}`**（蓋過 `:root`），所以景點彈窗、燈箱、底部抽屜都一起換。
+  配色是「陰天淺灰藍」：底 #e4eaf1、面 #d5dde7、字 #1f2a36、強調 #3f6fa8、輔色 #4e7d8c；分頁列 #c4cfdb、
+  海 #c0cedd、陸 #e9edf2、狀態列色條 #2f578a。
+- **動畫**：`applyTheme(true)` 給 `#mapp` 掛 `.theming` 0.7 秒，規則
+  `#mapp.theming *{transition:background-color/color/border-color/fill/stroke .55s!important}` 讓所有顏色淡入淡出；
+  `go()`／`setDay()` 呼叫的 `applyTheme()` 不帶動畫。theme-color 的 `bump()` 改在 800ms 後再補一次（等過渡跑完）。
+- **踩雷**：用 `s.index("\n}",i)` 找 `applyTheme` 結尾時，舊函式結尾的 `}` 不在行首，結果切到下一個 `\n}`，
+  把 `saveApp／NOW_Q／tokyoNow` 一起刪掉（跑測試才發現 `tokyoNow is not defined`，從 git HEAD 撈回來補上）。
+  **切函式請用函式自己的結尾字串當 anchor**，別用 `\n}`。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。

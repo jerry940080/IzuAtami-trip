@@ -639,28 +639,41 @@ html.app .app-only{display:block}
 /* 雨備：標題列按鈕＋藍黑色調 */
 .ma-area{display:flex;align-items:center;gap:12px}
 .ma-area>div{flex:1;min-width:0}
-#mapp .rain-btn{flex:none;height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--color-text);color:var(--color-bg);font:700 13.5px var(--font-body);cursor:pointer;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.15))}
 .rn-tag{font-style:normal;font:700 11px var(--font-body);margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--color-accent-600);color:#fff;vertical-align:3px}
 .ma-rainnote{background:var(--color-surface);border-radius:18px;padding:11px 14px;margin:-4px 0 14px;font-size:13px;line-height:1.6;color:var(--color-neutral-800)}
 .ma-rainnote b{color:var(--color-accent-700)}
-#mapp.rainy{ /* 雨備：灰藍色調（使用者要求不要黑、不要太暗） */
-  --color-bg:#b7c6d6;--color-surface:#c9d5e2;--color-text:#1d2b3a;--color-accent:#3e6a9e;--color-accent-2:#44707f;
-  --color-divider:rgba(29,43,58,.16);
-  --color-neutral-100:#d8e1ea;--color-neutral-200:#cbd6e1;--color-neutral-300:#b4c3d2;--color-neutral-400:#97a9bc;--color-neutral-500:#7a8ca1;--color-neutral-600:#5f7187;--color-neutral-700:#4a5b70;--color-neutral-800:#34445a;--color-neutral-900:#1d2b3a;
-  --color-accent-100:#dbe6f3;--color-accent-200:#c3d5ea;--color-accent-300:#9dbbdc;--color-accent-400:#6f98c8;--color-accent-500:#4f7db3;--color-accent-600:#3e6a9e;--color-accent-700:#2e5381;--color-accent-800:#213e63;--color-accent-900:#142944;
-  --color-accent-2-100:#d6e4ea;--color-accent-2-200:#c0d5de;--color-accent-2-300:#9cbdcb;--color-accent-2-400:#74a0b3;--color-accent-2-500:#568499;--color-accent-2-600:#44707f;--color-accent-2-700:#355a67;--color-accent-2-800:#27434d;--color-accent-2-900:#192d34;
-  --paper:#b7c6d6;--paper2:#c9d5e2;--ink:#1d2b3a;--ink2:#34445a;--ink3:#4a5b70;--rule:rgba(29,43,58,.16);--ai:#2e5381;
-  background:var(--color-bg);color:var(--color-text)}
-#mapp.rainy .ma-map{background:#a9bacb}
-#mapp.rainy .ma-tabs{background:#9fb3c8;box-shadow:0 -1px 0 rgba(29,43,58,.18)}
-#mapp.rainy .ma-tabs .on .ic{background:#dbe6f3}
-#mapp.rainy .mm-svg rect[fill="#d7e3ea"]{fill:#c2d1df} /* 不用 CSS filter：iPhone Safari 對大張 SVG 套濾鏡會破圖 */
-#mapp.rainy .mm-svg path[fill="#ece6d8"]{fill:#e4e9ef;stroke:#a9b8c8}
-/* App 外圈（狀態列、Safari 工具列、捲動露出的底色）也一起換 */
-html.rainy-ui,html.rainy-ui body{background:#b7c6d6}
+/* 雨備模式（全域）：陰天的淺灰藍，字維持深色。寫在 html.rainy-ui 上，彈窗、燈箱、底部抽屜都一起換 */
+html.rainy-ui{
+  --color-bg:#e4eaf1;--color-surface:#d5dde7;--color-text:#1f2a36;--color-accent:#3f6fa8;--color-accent-2:#4e7d8c;
+  --color-divider:rgba(31,42,54,.15);
+  --color-neutral-100:#edf1f6;--color-neutral-200:#dfe5ec;--color-neutral-300:#c9d2dc;--color-neutral-400:#a9b5c3;--color-neutral-500:#8795a6;--color-neutral-600:#6a7889;--color-neutral-700:#525f6f;--color-neutral-800:#3a4553;--color-neutral-900:#1f2a36;
+  --color-accent-100:#e5eef8;--color-accent-200:#cfdff0;--color-accent-300:#a9c4e3;--color-accent-400:#7ea5d0;--color-accent-500:#5a89bd;--color-accent-600:#3f6fa8;--color-accent-700:#2f578a;--color-accent-800:#22416a;--color-accent-900:#162c49;
+  --color-accent-2-100:#e1edf0;--color-accent-2-200:#cadfe4;--color-accent-2-300:#a6c7cf;--color-accent-2-400:#7eaab5;--color-accent-2-500:#5f909d;--color-accent-2-600:#4e7d8c;--color-accent-2-700:#3d6370;--color-accent-2-800:#2e4a54;--color-accent-2-900:#1e323a;
+  --paper:#e4eaf1;--paper2:#d5dde7;--ink:#1f2a36;--ink2:#3a4553;--ink3:#525f6f;--rule:rgba(31,42,54,.15);--ai:#2f578a;--sakura:#3f6fa8;--sakura2:#cfdff0;--shu:#2f578a;--wakatake:#4e7d8c;
+  background:#e4eaf1}
+html.rainy-ui body{background:#e4eaf1}
+#mapp.rainy .ma-map{background:#c0cedd}
+#mapp.rainy .ma-tabs{background:#c4cfdb;box-shadow:0 -1px 0 rgba(31,42,54,.16)}
+#mapp.rainy .ma-tabs .on .ic{background:#e5eef8}
+#mapp.rainy .mm-svg rect[fill="#d7e3ea"]{fill:#c0cedd} /* 不用 CSS filter：iPhone Safari 對大張 SVG 套濾鏡會破圖 */
+#mapp.rainy .mm-svg path[fill="#ece6d8"]{fill:#e9edf2;stroke:#b3c0cf}
+/* 切換時的過渡：.theming 掛 0.7 秒，所有顏色屬性淡入淡出 */
+#mapp.theming,#mapp.theming *,#mapp.theming::before{transition:background-color .55s ease,color .55s ease,border-color .55s ease,fill .55s ease,stroke .55s ease,box-shadow .55s ease!important}
+/* 雨備開關：晴天顯示太陽、雨備顯示雨傘，按下時圖示翻轉 */
+.rain-tg{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 8px;border-radius:999px;border:0;background:var(--color-surface);color:var(--color-text);font:700 13px var(--font-body);cursor:pointer}
+.rain-tg .ic{position:relative;width:26px;height:26px;border-radius:50%;background:var(--color-accent-200);display:grid;place-items:center;overflow:hidden}
+.rain-tg .ic i{position:absolute;font-style:normal;font-size:15px;line-height:1;transition:transform .45s cubic-bezier(.4,1.4,.5,1),opacity .3s}
+.rain-tg .ic .rain{transform:translateY(130%) rotate(-40deg);opacity:0}
+.rain-tg.on .ic .sun{transform:translateY(-130%) rotate(40deg);opacity:0}
+.rain-tg.on .ic .rain{transform:none;opacity:1}
+.rain-tg.on{background:var(--color-accent-600);color:#fff}
+.rain-tg.on .ic{background:rgba(255,255,255,.22)}
+.rain-tg:active{transform:scale(.95)}
+.ph-act{display:flex;align-items:center;gap:8px}
+.mh-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 /* 從桌面圖示開啟時（black-translucent），網頁會畫到 iPhone 狀態列底下；這條色條墊在時間與電量後面，晴天咖啡色、雨備藍色 */
 #mapp::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:#8c491a;z-index:60;pointer-events:none}
-#mapp.rainy::before{background:#3e6a9e}
+#mapp.rainy::before{background:#2f578a}
 /* 畫到狀態列底下後，彈窗與燈箱要讓出狀態列高度，按鈕才不會被時間、電量蓋住 */
 html.app .modal-box{max-height:min(94vh,calc(100vh - env(safe-area-inset-top) - 12px))}
 html.app .lb-bar{padding-top:calc(10px + env(safe-area-inset-top))}
@@ -1834,16 +1847,18 @@ const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packe
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function rainOn(d){return !!(d&&d.rainStops&&APP.rain&&APP.rain[d.n]);}
-function actStops(d){return rainOn(d)?d.rainStops:(d.stops||[]);}
+/* 雨備是全域開關：整個 App 換色；有雨天版行程的天（RAIN_STOPS）才會換行程，其他天照晴天版走 */
+function rainOn(d){return !!APP.rain;}
+function actStops(d){return APP.rain&&d.rainStops?d.rainStops:(d.stops||[]);}
 /* 開啟雨備的那一天：行程頁與地圖頁換成藍黑色調 */
-function applyTheme(){const on=(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]);const r=$a('mapp');if(r)r.classList.toggle('rainy',on);
+function applyTheme(anim){const on=!!APP.rain;const r=$a('mapp');if(r){r.classList.toggle('rainy',on);
+    if(anim){r.classList.add('theming');clearTimeout(applyTheme._t);applyTheme._t=setTimeout(()=>r.classList.remove('theming'),700);}}
   document.documentElement.classList.toggle('rainy-ui',on);
-  const col=on?'#b7c6d6':'#f5ead8';document.documentElement.style.backgroundColor=col;document.body.style.backgroundColor=col;
-  // iOS Safari 的狀態列／工具列顏色：它是在「收到通知的那一瞬間」抓畫面顏色，網頁還沒重畫就會抓到舊色
-  // （使用者截圖：Safari 永遠慢一步顯示上一次的顏色）。所以先通知一次，等畫面畫好再通知兩次。
+  const col=on?'#e4eaf1':'#f5ead8';document.documentElement.style.backgroundColor=col;document.body.style.backgroundColor=col;
+  // iOS 26 Safari 是在收到通知的瞬間取樣畫面顏色，所以先通知一次，等過渡動畫跑完再通知
   const bump=()=>{document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);};
-  bump();requestAnimationFrame(()=>requestAnimationFrame(bump));setTimeout(bump,350);}
+  bump();requestAnimationFrame(()=>requestAnimationFrame(bump));setTimeout(bump,800);
+}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
@@ -1894,7 +1909,7 @@ function renderHome(){
   else{big='✓';l1='旅程結束';l2='see you again';kick='TRIP DONE · 已完成';}
   const spots=new Set(DAYS.flatMap(d=>d.cards)).size, [pd,pt]=packCount();
   $a('maHome').innerHTML=`
-  <div class="mh-kick">${kick}</div>
+  <div class="mh-top"><div class="mh-kick">${kick}</div><button class="rain-tg${APP.rain?' on':''}" data-rainbtn aria-pressed="${!!APP.rain}" aria-label="切換雨備模式"><span class="ic"><i class="sun">☀</i><i class="rain">☔</i></span><span class="tx">${APP.rain?'雨備':'晴天'}</span></button></div>
   <div class="mh-cd" data-go="plan"><span class="n">${big}</span><div><b>${l1}</b><span>${l2}</span></div></div>
   ${nowCard()}
   <div class="mh-ttl" data-go="plan">熱海・伊豆・靜岡</div>
@@ -1908,7 +1923,7 @@ function renderHome(){
 function renderPlan(){
   const d=DAYS[APP.day],ti=todayIdx(),[m,dd]=d.date.split('/');
   $a('maPhead').innerHTML=`
-  <div class="ph-top"><div><div class="ma-kick">熱海・伊豆・靜岡 · DAY ${d.n}/${DAYS.length}</div><div class="ph-date">${m}月${dd}日 週${d.wd}</div></div><button class="ma-ibtn" data-go="map" aria-label="看當天地圖">${ico('map')}</button></div>
+  <div class="ph-top"><div><div class="ma-kick">熱海・伊豆・靜岡 · DAY ${d.n}/${DAYS.length}</div><div class="ph-date">${m}月${dd}日 週${d.wd}</div></div><div class="ph-act"><button class="rain-tg${APP.rain?' on':''}" data-rainbtn aria-pressed="${!!APP.rain}" aria-label="切換雨備模式"><span class="ic"><i class="sun">☀</i><i class="rain">☔</i></span><span class="tx">${APP.rain?'雨備':'晴天'}</span></button><button class="ma-ibtn" data-go="map" aria-label="看當天地圖">${ico('map')}</button></div></div>
   <div class="ma-week">${DAYS.map((x,i)=>`<button data-day="${i}" class="${i===APP.day?'on':''}${i===ti?' today':''}" aria-label="Day ${x.n}"><span>${x.wd}</span><b>${x.date.split('/')[1]}</b></button>`).join('')}</div>`;
   const S=actStops(d),N=nowInfo(),NT=N&&N.ti===APP.day?N:null,RN=rainOn(d);
   const isCur=(i,gi)=>!!(NT&&NT.cur&&NT.cur.i===i&&(NT.cur.gi==null?gi==null:NT.cur.gi===gi));
@@ -1924,8 +1939,8 @@ function renderPlan(){
       ${G.map((g,gi)=>`<div class="ma-go${isCur(i,gi)?' now':''}"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}</span>${isNx(i,gi)?nxTag():''}</div></div>`).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
-  <div class="ma-area"><div><b>${d.title}${RN?'<em class="rn-tag">雨備</em>':''}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>${d.rainStops?`<button class="rain-btn" data-rainbtn aria-pressed="${RN}">${RN?'☀ 晴天':'☔ 雨備'}</button>`:''}</div>
-  ${RN&&d.rain?`<div class="ma-rainnote">${d.rain}</div>`:''}
+  <div class="ma-area"><div><b>${d.title}${RN&&d.rainStops?'<em class="rn-tag">雨備版</em>':''}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div></div>
+  ${RN?(d.rain?`<div class="ma-rainnote">${d.rain}</div>`:`<div class="ma-rainnote"><b>雨備</b>　這天沒有另外的雨天版，照原行程走。</div>`):''}
   ${rows}
   <div class="ma-hint">點任一站看詳情 · 左右滑動切換日期</div>`;
   if(NT&&APP.nowScrolled!==APP.day&&APP.tab==='plan'){const el=$a('maPlan').querySelector('.ma-row.now,.ma-go.now');if(el){APP.nowScrolled=APP.day;requestAnimationFrame(()=>el.scrollIntoView({block:'center'}));}}
@@ -2113,8 +2128,8 @@ function appClick(e){
   if(t.closest('[data-prev]')){setDay(APP.day-1);return true;}
   if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
   if(el=t.closest('.ma-row[data-stop]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.stop]);return true;}
-  if(el=t.closest('[data-rainbtn]')){const d=DAYS[APP.day];APP.rain[d.n]=!APP.rain[d.n];lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
-    renderPlan();if(APP.tab==='map')renderMap();applyTheme();const b=$a('maPlan');if(b)b.scrollTop=0;return true;}
+  if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
+    applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
   if(el=t.closest('[data-mz]')){const a=el.dataset.mz;if(a==='reset')mzAnim(1,MZ.BW/2,MZ.BH/2);else{const c=mzMid();mzAnim(MZ.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
@@ -2147,7 +2162,7 @@ function appInit(){
   APP.tab=['home','plan','map','pack','info'].includes(sv.tab)?sv.tab:'home';
   APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'cost';
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
-  APP.rain=lsGet('izu-rain',{})||{};
+  APP.rain=lsGet('izu-rain',false)===true;
   renderPlan();renderPack();renderSeg();go(APP.tab);
   setInterval(()=>{if(todayIdx()<0)return;if(APP.tab==='home')renderHome();else if(APP.tab==='plan'&&APP.day===todayIdx()&&!APP.sheet)renderPlan();},30000);
   const plan=$a('maPlan');let sx=null;
