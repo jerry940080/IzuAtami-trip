@@ -446,6 +446,10 @@ html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!importa
 .ma-row{border-radius:24px;cursor:pointer}
 .ma-row:active{background:var(--color-surface)}
 .ma-r,.ma-go{display:grid;grid-template-columns:54px 22px minmax(0,1fr);column-gap:9px}
+.ma-r.th{grid-template-columns:54px 22px minmax(0,1fr) 58px}
+.ma-th{width:58px;height:58px;margin-top:12px;border-radius:14px;overflow:hidden;background:repeating-linear-gradient(135deg,var(--color-neutral-200) 0 7px,var(--color-neutral-300) 7px 8px);display:grid;place-items:center;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.1))}
+.ma-th img{width:100%;height:100%;object-fit:cover;display:block}
+.ma-th span{font:600 15px var(--font-heading);color:var(--color-neutral-600)}
 .ma-tm{padding:14px 0 0;text-align:right}
 .ma-tm b{display:block;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
 .ma-tm b.tx{font-size:12px;color:var(--color-neutral-700);padding-top:2px}
@@ -1688,6 +1692,7 @@ addEventListener('resize',()=>{pinEl?placeTip(pinEl):hideTip();});
       batch.forEach(t=>{const key=alias[t]||t;if(byTitle[key])thumb[t]=byTitle[key];else if(byTitle[t])thumb[t]=byTitle[t];});
     }
   }catch(e){ /* offline or blocked: keep placeholders */ }
+  window.WIKI_THUMB=thumb;document.dispatchEvent(new Event('wikithumbs'));
   try{const urls=[...new Set(Object.values(thumb))];if(urls.length&&navigator.serviceWorker){navigator.serviceWorker.ready.then(r=>{if(r.active)r.active.postMessage({type:'warm',urls});});}}catch(e){}
   imgs.forEach(img=>{
     const t=img.dataset.wiki.split('|').find(x=>thumb[x]);
@@ -1761,7 +1766,11 @@ function nowCard(){const N=nowInfo();if(!N)return '';const {cur,nxt,n}=N;
 function todayIdx(){const d=dayDiff();return d>=0&&d<DAYS.length?d:-1;}
 function normK(kind){kind=kind||'';if(/餐|咖啡/.test(kind))return /選項/.test(kind)?'選項':'美食';if(/選項/.test(kind))return '選項';return KSTY[kind]?kind:'景點';}
 function kpill(k){const c=KSTY[k]||KSTY['景點'];return `<span class="kp" style="background:${c[0]};color:${c[1]}">${k}</span>`;}
-function cardImg(k){const v=IMG[k];if(v)return Array.isArray(v)?v[0]:v;const im=document.querySelector(`.card[data-card="${k}"] .ph img.ok`);return im?(im.currentSrc||im.src):'';}
+function cardImg(k){const v=IMG[k];if(v)return Array.isArray(v)?v[0]:v;const W=window.WIKI_THUMB||{},c=CARDS[k];const w=c&&(c.wiki||[]).map(t=>W[t]).find(Boolean);if(w)return w;const im=document.querySelector(`.card[data-card="${k}"] .ph img.ok`);return im?(im.currentSrc||im.src):'';}
+/* 時間軸右側的正方形小縮圖：有照片放照片，沒有就放地名前兩字 */
+function stopThumb(s){const c=s.card&&CARDS[s.card];if(!c)return '';const src=cardImg(s.card);
+  return `<div class="ma-th">${src?`<img src="${src}" alt="" loading="lazy">`:`<span>${c.name.replace(/[（(].*$/,'').slice(0,2)}</span>`}</div>`;}
+document.addEventListener('wikithumbs',()=>{if(MOB&&document.getElementById('maPlan'))renderPlan();});
 function packCount(){let d=0,t=0;PACK.concat(APP.pack.extra.length?[{items:APP.pack.extra}]:[]).forEach(g=>g.items.forEach(([id])=>{t++;if(APP.pack.packed[id])d++;}));return [d,t];}
 
 function renderTabs(){
@@ -1809,9 +1818,9 @@ function renderPlan(){
     const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,G=s.go||[],hasGo=G.length>0,isT=/^\d/.test(s.t);
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
     return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}" data-stop="${i}" role="button" tabindex="0">
-      <div class="ma-r"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
+      <div class="ma-r${s.card&&CARDS[s.card]?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div></div>
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div>${stopThumb(s)}</div>
       ${G.map((g,gi)=>`<div class="ma-go${isCur(i,gi)?' now':''}"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}</span>${isNx(i,gi)?nxTag():''}</div></div>`).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`

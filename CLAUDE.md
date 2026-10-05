@@ -304,6 +304,11 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   ＋ Playwright `setOffline(true)` 重新整理（`scratchpad/offline.js`）。照片預存因開發環境連不到維基而無法實測。
   加到主畫面：iPhone Safari 分享 →「加入主畫面」；Android Chrome 選單 →「安裝應用程式」。
 
+### 2026-10-05 變更（三）：手機時間軸右側小縮圖
+- 有 `card` 的站在 `.ma-r` 加 `.th`（多一欄 58px），右側 `.ma-th` 正方形縮圖（圓角 14px）；`stopThumb(s)` 產生。
+- 照片來源 `cardImg(k)`：`IMG` 內嵌優先，其次 `window.WIKI_THUMB`（PHOTOS 區塊抓完維基縮圖後公開，並發出
+  `wikithumbs` 事件，手機時間軸收到就重繪）；都沒有就顯示地名前兩字的斜紋方塊。點縮圖＝點整列（開抽屜）。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
