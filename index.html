@@ -677,7 +677,14 @@ html.rainy-ui body{background:#e4eaf1}
 #mapp::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:#8c491a;z-index:60;pointer-events:none}
 #mapp.rainy::before{background:#2f578a}
 /* 畫到狀態列底下後，彈窗與燈箱要讓出狀態列高度，按鈕才不會被時間、電量蓋住 */
-html.app .modal-box{max-height:min(94vh,calc(100vh - env(safe-area-inset-top) - 12px))}
+/* 手機彈窗：上方讓出狀態列＋12px，按鈕才點得到；卡片高度以容器為準，永遠不會頂到螢幕最上面 */
+html.app .modal{padding:calc(env(safe-area-inset-top) + 12px) 0 0;align-items:flex-end}
+html.app .modal-box{max-height:100%;padding-bottom:max(env(safe-area-inset-bottom),16px)}
+html.sa .modal,html.sa .lb{bottom:auto;height:100lvh}
+/* 頂端拖曳把手：往下滑就關掉 */
+html.app .modal-box::before{content:'';position:absolute;top:6px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:999px;background:rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:4;pointer-events:none}
+html.app .modal-box.dragging{transition:none!important}
+html.app .modal-box{transition:transform .25s ease}
 html.app .lb-bar{padding-top:calc(10px + env(safe-area-inset-top))}
 /* 桌面版：iOS 26 把 position:fixed 的底邊擋在收起的工具列上方（約 100pt），分頁列下面會露出一塊底色。
    第一層：App 高度改用 100lvh（最大視口）延伸到螢幕最底；第二層：就算延伸不了，整頁底色塗成分頁列的顏色，看起來也是貼底的。 */
@@ -1678,6 +1685,16 @@ function openCard(id,fromMap){
 }
 function ytId(u){if(!u)return'';const m=String(u).match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(u)?u:'');}
 function ytStart(u){const m=String(u).match(/[?&#](?:t|start)=(\d+)(?:s)?(?:&|$)|[?&#]t=(?:(\d+)m)?(\d+)s/);if(!m)return 0;if(m[1])return +m[1];return (+(m[2]||0))*60+(+(m[3]||0));}
+/* 手機：卡片捲到最上面時再往下拉，超過 110px 就關掉（像 iOS 的底部面板） */
+(function(){const box=document.querySelector('.modal-box');if(!box)return;let y0=0,dy=0,on=false;
+  box.addEventListener('touchstart',e=>{if(!MOB||e.touches.length!==1)return;y0=e.touches[0].clientY;dy=0;on=box.scrollTop<=0;},{passive:true});
+  box.addEventListener('touchmove',e=>{if(!on||!MOB)return;dy=e.touches[0].clientY-y0;
+    if(dy<=0){if(box.classList.contains('dragging')){box.classList.remove('dragging');box.style.transform='';}return;}
+    if(box.scrollTop>0&&!box.classList.contains('dragging')){on=false;return;}
+    e.preventDefault();box.classList.add('dragging');box.style.transform='translateY('+dy*0.85+'px)';},{passive:false});
+  const end=()=>{if(!on)return;on=false;box.classList.remove('dragging');
+    if(dy>110){box.style.transform='translateY(110%)';setTimeout(()=>{box.style.transform='';closeModal();},220);}else box.style.transform='';};
+  box.addEventListener('touchend',end);box.addEventListener('touchcancel',end);})();
 function closeModal(){document.getElementById('mVideo').innerHTML='';modal.hidden=true;document.body.style.overflow='';const f=document.querySelector(`.card[data-card="${modal.dataset.from}"]`);if(f)f.focus();}
 function slide(d){
   const ph=document.getElementById('mPh');const n=+ph.dataset.n;if(n<2)return;

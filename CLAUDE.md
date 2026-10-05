@@ -359,6 +359,20 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   把 `saveApp／NOW_Q／tokyoNow` 一起刪掉（跑測試才發現 `tokyoNow is not defined`，從 git HEAD 撈回來補上）。
   **切函式請用函式自己的結尾字串當 anchor**，別用 `\n}`。
 
+### 2026-10-05 變更（七）：桌面版（standalone）版面與卡片下滑關閉
+- 使用者在 iOS 26.6.2 的桌面版截圖：分頁列下方露出一截底色（iOS 26 給收起的工具列保留約 100pt，
+  `position:fixed` 的底邊被擋在它上方）；景點卡片頂到螢幕最上面，返回／關閉鈕被時間和瀏海壓住。
+- `navigator.standalone===true` 時 `<html>` 加 `.sa`：`#mapp`、`.modal`、`.lb` 改 `bottom:auto;height:100lvh`
+  延伸到螢幕底；分頁列與 `.ma-scr` 底部用 `max(env(safe-area-inset-bottom),22px)`；
+  保底：`html.sa` 整頁底色塗成分頁列顏色（晴天 #f9f4ed、雨備 #c4cfdb，`applyTheme` 的 inline 也照這個），
+  萬一 lvh 延伸不了，那截空隙看起來也像分頁列。**lvh 在 iOS 26 standalone 的行為沒驗證過**。
+- 手機彈窗：`html.app .modal{padding-top:calc(env(safe-area-inset-top)+12px)}`、`.modal-box{max-height:100%}`，
+  卡片永遠在狀態列下方；頂端 `::before` 畫一條白色拖曳把手。
+- **下滑關閉**：`.modal-box` 的 touch 事件（`MOB` 才啟用）：內容捲到最上面（`scrollTop<=0`）再往下拉，卡片跟著手指
+  （位移 ×0.85、`.dragging` 關掉 transition），放開超過 110px → 滑出後 `closeModal()`，否則彈回；
+  往上拉或內容已捲動時不攔截，照常捲動。驗證 `scratchpad/swipe.js`。
+- 狀態列色條（`#mapp::before`）與開啟時依存檔模式先換色（head script 讀 `izu-rain`）都已在截圖確認有效。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。
