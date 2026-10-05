@@ -7,7 +7,8 @@
 <title>熱海・伊豆・靜岡 8天7夜 旅のしおり｜2027.2.10–2.17</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下，並載入模板字型 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700&display=swap";document.head.appendChild(l);}</script>
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}</script>
 <style>
 :root{
   --paper:#f8f5ee; --paper2:#efe9dc; --ink:#26292e; --ink2:#4d5259; --ink3:#7d8188;
@@ -353,7 +354,7 @@ footer p{max-width:70ch}
 }
 
 /* ================= 手機 App（≤640px，html.app）：Claude Design「1b 時間軸」模板 + Organic 設計系統 ================= */
-html.app{
+:root{ /* Organic 設計系統：2026-10-05 起桌機與手機共用（原本只在 html.app） */
   --color-bg:#f5ead8;--color-surface:#ebddc5;--color-text:#201e1d;--color-accent:#c67139;--color-accent-2:#7a8a5e;
   --color-divider:color-mix(in srgb,#201e1d 16%,transparent);
   --color-neutral-100:#f9f4ed;--color-neutral-200:#eee7db;--color-neutral-300:#dcd3c4;--color-neutral-400:#c0b6a5;--color-neutral-500:#a19786;--color-neutral-600:#82796a;--color-neutral-700:#645c50;--color-neutral-800:#474238;--color-neutral-900:#2e2b25;
@@ -361,11 +362,11 @@ html.app{
   --color-accent-2-100:#f0fae1;--color-accent-2-200:#e1eecc;--color-accent-2-300:#ccdbb2;--color-accent-2-400:#aebf92;--color-accent-2-500:#8fa073;--color-accent-2-600:#728157;--color-accent-2-700:#56633f;--color-accent-2-800:#3d472b;--color-accent-2-900:#272e1b;
   --shadow-md:0 3px 10px color-mix(in srgb,#2e2b25 16%,transparent);--shadow-lg:0 12px 32px color-mix(in srgb,#2e2b25 22%,transparent);
   --font-heading:"Caprasimo","Noto Sans TC",system-ui,sans-serif;--font-body:"Figtree","Noto Sans TC",system-ui,sans-serif;
-  /* 舊色票對應到 Organic，搬進「資訊」分頁的區塊與字卡彈窗一起換色 */
+  /* 舊色票對應到 Organic，桌機版面與手機 App 一起換色 */
   --paper:#f5ead8;--paper2:#ebddc5;--ink:#201e1d;--ink2:#474238;--ink3:#645c50;--rule:color-mix(in srgb,#201e1d 16%,transparent);
   --ai:#8c491a;--sakura:#c67139;--sakura2:#ffe1d0;--shu:#b2622d;--wakatake:#728157;--serif:var(--font-heading);--sans:var(--font-body);
-  --tabh:66px;
 }
+html.app{--tabh:66px}
 html.app,html.app body{height:100%;overflow:hidden;background:var(--color-bg)}
 html.app body{font-family:var(--font-body)}
 html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!important}
@@ -623,22 +624,6 @@ html.app .app-only{display:block}
 <nav class="strip" aria-label="每日行程"><div class="wrap" id="strip"></div></nav>
 
 <!-- ============ PRE-TRIP ============ -->
-<section class="block" id="pre">
-  <div class="wrap">
-    <h2>行前一頁看懂</h2>
-    <p class="lead">一晚東京、兩晚靜岡、兩晚熱海、再回東京兩晚。靜岡段靠新幹線進出＋一天租車，熱海段用 JR 與踊子號，河津改成當天來回，行李只搬三次。</p>
-    <h3>住宿</h3>
-        <table>
-          <tr><th>日期</th><th>地區</th><th>飯店</th><th>備註</th></tr>
-          <tr><td>2/10（三）</td><td>品川</td><td><b>品川王子大飯店 北塔</b></td><td class="mute">約 NT 2,145／人晚・JR 品川站高輪口</td></tr>
-          <tr><td>2/11–12（四五）</td><td>靜岡</td><td><b>靜岡站前飯店　<span style="color:#c8452e">待訂</span></b></td><td class="mute">候選：ホテルアソシア静岡（站直結）、東橫INN 北口、静鉄プレジオ</td></tr>
-          <tr><td>2/13–14（六日）</td><td>熱海</td><td><b>LiVEMAX Resort 熱海 Ocean</b></td><td class="mute">約 NT 4,122／人晚・海景溫泉</td></tr>
-          <tr><td>2/15–16（一二）</td><td>品川</td><td><b>品川王子大飯店 北塔</b></td><td class="mute">約 NT 2,025／人晚</td></tr>
-        </table>
-        <p class="mute" style="margin-top:8px">已估住宿（品川 3 晚＋熱海 2 晚）約 NT 12,500／人；靜岡 2 晚尚未訂，訂好後回頭更新這張表與費用。待確認：哪幾間飯店有洗衣機。機票與住宿目前皆<b>尚未購買</b>。</p>
-  </div>
-</section>
-
 <!-- ============ DAYS (rendered by JS) ============ -->
 <div id="days"></div>
 
@@ -1132,6 +1117,19 @@ DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
 /* 桌機時刻表：一站一列（名稱＋說明），每段交通一列 move */
 function stopsToTl(S){const o=[];S.forEach(s=>{o.push({t:s.t,i:s.i||'📍',h:s.n+(s.d?'　'+s.d:'')});(s.go||[]).forEach(g=>o.push({t:g.at||'',i:g.i,h:g.t,move:1}));});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
+/* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
+const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
+function routeInfo(d){
+  const S=d.stops||[],nums={},rows=[];let n=0;
+  S.forEach((s,i)=>{const k=locOf(s);if(!k&&!s.card)return;if(k&&!nums[k])nums[k]=++n;rows.push({s,i,k});});
+  return {nums,rows};
+}
+/* 當天地圖設定：原本的點＋所有停留點的位置，編號用 routeInfo */
+function dayMapCfg(d){const R=routeInfo(d),keys=Object.keys(R.nums),labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
+  return Object.assign({},d.map,{pts:d.map.pts.concat(keys.filter(k=>!d.map.pts.includes(k))),nums:R.nums,labels});}
+/* 當天景點卡：依停留點時間排序，號碼＝地圖上該地點的號碼 */
+function dayCards(d){const R=routeInfo(d),first=k=>{const i=(d.stops||[]).findIndex(s=>s.card===k);return i<0?999:i;};
+  return d.cards.map((k,i)=>[k,first(k),i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(([k])=>{const st=(d.stops||[]).find(s=>s.card===k);const loc=st?locOf(st):'';return [k,loc?R.nums[loc]:0];});}
 
 /* ================= 花費：唯一資料來源（花費頁與交通頁總覽都由這裡算） =================
    每列 [名稱, 說明, 金額, 幣別, 旗標]；金額 null＝未知、0＝免費；
@@ -1227,7 +1225,7 @@ const AREAMAPS=[
 /* ================= MAP ENGINE ================= */
 let W=600,H=440;
 const MOB=matchMedia('(max-width:640px)').matches;
-if(MOB){KIND.spot.c='#201e1d';KIND.hotel.c='#56633f';KIND.station.s='#201e1d';}
+KIND.spot.c='#201e1d';KIND.hotel.c='#56633f';KIND.station.s='#201e1d'; // 與手機 App 同一套標記色
 if(MOB){W=380;H=280;}
 let PADT=0;
 function proj(bbox){ // bbox {la0,la1,lo0,lo1}
@@ -1378,7 +1376,7 @@ function animateMap(svg){
 
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML='<a href="#pre">行前</a>'+DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#food">美食・行李</a>';
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#food">美食・行李</a><a href="#cost">花費</a>';
 
 // days
 function imgsHTML(c,id){
@@ -1472,7 +1470,7 @@ const dayBlocks=DAYS.map(d=>{
     if(seen.has(k))return; seen.add(k); rows.push({m:l.mode,label});
   });
   const legend=rows.map(x=>`<span class="lg"><i style="border-color:${MODE[x.m].c};${MODE[x.m].d?'border-top-style:dashed':''}"></i>${x.label}</span>`).join('');
-  const dNum={};d.cards.forEach((k,i)=>dNum[k]=i+1);d.map.nums=dNum;
+  const mcfg=dayMapCfg(d);d._mcfg=mcfg;
   return `<section class="day" id="day${d.n}">
   <div class="wrap">
     <div class="day-head">
@@ -1481,18 +1479,19 @@ const dayBlocks=DAYS.map(d=>{
       <div class="stay"><div class="lab">今晚住</div>${d.stay}</div>
     </div>
     <div class="day-body">
-      <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(d.map,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
+      <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(mcfg,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
         <ul class="tl">${d.tl.map(r=>`<li${r.move?' class="move"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}</div></span></li>`).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
-    <div class="cards">${d.cards.map((k,i)=>cardHTML(k,i+1)).join('')}</div>
+    <div class="cards">${dayCards(d).map(([k,n])=>cardHTML(k,n)).join('')}</div>
   </div>
 </section>`;
 });
 daysEl.innerHTML=dayBlocks[0]+areaHTML()+dayBlocks.slice(1).join('');
 renderCost();
+if(!MOB)DAYS.forEach(d=>{const svg=document.querySelector(`#day${d.n} .mapcard svg`);if(svg){svg._cfg=d._mcfg;try{layoutLabels(svg);}catch(e){}}});
 
 // animate day maps on scroll + replay
 document.querySelectorAll('.mapcard').forEach(mc=>{
@@ -1711,7 +1710,7 @@ const PACK=[
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
 const INFO_PANES=[['cost','花費',['#cost','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
-const APP={tab:'home',day:0,pin:null,pane:'pre',sheet:false,pack:{packed:{},extra:[],filter:'all'}};
+const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -1893,20 +1892,12 @@ function mzBind(box){
 }
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
-const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
-function routeInfo(d){
-  const S=d.stops||[],nums={},rows=[];let n=0;
-  S.forEach((s,i)=>{const k=locOf(s);if(!k&&!s.card)return;if(k&&!nums[k])nums[k]=++n;rows.push({s,i,k});});
-  return {nums,rows};
-}
 function renderMap(){
   const d=DAYS[APP.day],R=routeInfo(d),keys=Object.keys(R.nums);
   $a('maMap').innerHTML=`<div class="mm-svg"></div>
   <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>
   <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
-  const labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
-  const pts=d.map.pts.concat(keys.filter(k=>!d.map.pts.includes(k)));
-  const cfg=Object.assign({},d.map,{pts,nums:R.nums,labels});
+  const cfg=dayMapCfg(d);
   fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
   const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);}
   $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 雙指可縮放</span></div>`+R.rows.map(({s,i,k})=>{
