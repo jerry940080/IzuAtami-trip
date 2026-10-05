@@ -17,6 +17,7 @@
 <meta name="apple-mobile-web-app-title" content="熱海伊豆">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}
+/* 從桌面圖示開啟（standalone）時加 sa：iOS 26 會在底部留一塊收起的工具列區，分頁列要另外處理 */if(navigator.standalone===true){document.documentElement.classList.add("sa");}
 /* 上次是雨備模式就在第一次畫面前換好顏色：iOS 從桌面圖示啟動時只在這一刻讀 theme-color 當狀態列底色 */try{if(localStorage.getItem("izu-rain")==="true"){document.documentElement.classList.add("rainy-ui");var tm=document.querySelector('meta[name="theme-color"]');if(tm)tm.content="#e4eaf1";}}catch(e){}</script>
 <style>
 :root{
@@ -678,6 +679,13 @@ html.rainy-ui body{background:#e4eaf1}
 /* 畫到狀態列底下後，彈窗與燈箱要讓出狀態列高度，按鈕才不會被時間、電量蓋住 */
 html.app .modal-box{max-height:min(94vh,calc(100vh - env(safe-area-inset-top) - 12px))}
 html.app .lb-bar{padding-top:calc(10px + env(safe-area-inset-top))}
+/* 桌面版：iOS 26 把 position:fixed 的底邊擋在收起的工具列上方（約 100pt），分頁列下面會露出一塊底色。
+   第一層：App 高度改用 100lvh（最大視口）延伸到螢幕最底；第二層：就算延伸不了，整頁底色塗成分頁列的顏色，看起來也是貼底的。 */
+html.sa #mapp{bottom:auto;height:100lvh}
+html.sa .ma-tabs{height:calc(var(--tabh) + max(env(safe-area-inset-bottom),22px))}
+html.sa .ma-scr{bottom:calc(var(--tabh) + max(env(safe-area-inset-bottom),22px))}
+html.sa,html.sa body{background:var(--color-neutral-100)}
+html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 </style>
 </head>
 <body>
@@ -1855,7 +1863,8 @@ function actStops(d){return APP.rain&&d.rainStops?d.rainStops:(d.stops||[]);}
 function applyTheme(anim){const on=!!APP.rain;const r=$a('mapp');if(r){r.classList.toggle('rainy',on);
     if(anim){r.classList.add('theming');clearTimeout(applyTheme._t);applyTheme._t=setTimeout(()=>r.classList.remove('theming'),700);}}
   document.documentElement.classList.toggle('rainy-ui',on);
-  const col=on?'#e4eaf1':'#f5ead8';document.documentElement.style.backgroundColor=col;document.body.style.backgroundColor=col;
+  const col=on?'#e4eaf1':'#f5ead8',sa=document.documentElement.classList.contains('sa'),bgc=sa?(on?'#c4cfdb':'#f9f4ed'):col;
+  document.documentElement.style.backgroundColor=bgc;document.body.style.backgroundColor=bgc;
   // iOS 26 Safari 是在收到通知的瞬間取樣畫面顏色，所以先通知一次，等過渡動畫跑完再通知
   const bump=()=>{document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);};
   bump();requestAnimationFrame(()=>requestAnimationFrame(bump));setTimeout(bump,800);
