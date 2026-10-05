@@ -602,6 +602,22 @@ html.app .app-only{display:block}
 .cs-t{display:flex;justify-content:space-between;padding:10px 0 0;font-size:13px;color:var(--color-neutral-700,#645c50)}
 .cs-t em{color:var(--color-accent-700,#8c491a)}
 .cs-note{margin-top:16px;font-size:12px;line-height:1.6}
+
+/* 「現在」模式 */
+.mh-now{margin:14px 0 4px;background:var(--color-accent-100);border:2px solid var(--color-accent-300);border-radius:24px;padding:12px 16px;display:grid;gap:8px;cursor:pointer}
+.mh-now .r{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.mh-now .tg{flex:none;font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 9px;border-radius:999px;background:var(--color-accent-600);color:#fff}
+.mh-now .tg.nx{background:var(--color-accent-2-600)}
+.mh-now b{font-size:15px;font-weight:600}
+.mh-now em{font-style:normal;font-size:13px;font-weight:700;color:var(--color-accent-700);margin-left:auto}
+.ma-row.now>.ma-r{background:var(--color-accent-100);box-shadow:0 0 0 2px var(--color-accent-300);border-radius:20px}
+.ma-go.now .gp{background:var(--color-accent-600);color:#fff}
+.nowtag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--color-accent-600);color:#fff;margin-right:6px;vertical-align:2px}
+.ma-go.now .nowtag{background:#fff;color:var(--color-accent-700)}
+.nxc{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--color-accent-2-700);background:var(--color-accent-2-100);padding:1px 9px;border-radius:999px}
+.ma-go>div:last-child{flex-wrap:wrap;gap:4px}
+.ma-go .nxc{margin:0;white-space:nowrap}
+.nxc{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1715,7 +1731,24 @@ const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
-function dayDiff(){const t=new Date();t.setHours(0,0,0,0);return Math.round((t-new Date(2027,1,10))/864e5);}
+/* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
+const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
+function tokyoNow(){
+  if(NOW_Q){const m=/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(NOW_Q);if(m)return {y:+m[1],mo:+m[2],d:+m[3],min:(+m[4]||0)*60+(+m[5]||0)};}
+  const p={};new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value);
+  return {y:+p.year,mo:+p.month,d:+p.day,min:(+p.hour%24)*60+(+p.minute)};
+}
+function dayDiff(){const n=tokyoNow();return Math.round((Date.UTC(n.y,n.mo-1,n.d)-Date.UTC(2027,1,10))/864e5);}
+const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[2]):null;};
+const hhmm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const leftTxt=x=>x<60?`還有 ${x} 分`:`還有 ${Math.floor(x/60)} 小時${x%60?' '+x%60+' 分':''}`;
+/* 今天的事件（有時間的站與交通段）依序排開，找出「現在」與「下一個」 */
+function nowInfo(){const ti=todayIdx();if(ti<0)return null;const S=DAYS[ti].stops||[],n=tokyoNow().min,ev=[];
+  S.forEach((s,i)=>{const m=tmin(s.t);if(m!=null)ev.push({m,i,lab:s.n,ic:s.i||'📍'});(s.go||[]).forEach((g,gi)=>{const gm=tmin(g.at);if(gm!=null)ev.push({m:gm,i,gi,lab:g.t.split('　')[0],ic:g.i});});});
+  let cur=null,nxt=null;ev.forEach(e=>{if(e.m<=n)cur=e;else if(!nxt)nxt=e;});return {ti,cur,nxt,n};}
+function nowCard(){const N=nowInfo();if(!N)return '';const {cur,nxt,n}=N;
+  return `<div class="mh-now" data-go="plan"><div class="r"><span class="tg">現在</span><b>${cur?cur.ic+' '+cur.lab:'今天的行程還沒開始'}</b></div>
+  <div class="r"><span class="tg nx">下一個</span>${nxt?`<b>${hhmm(nxt.m)}　${nxt.ic} ${nxt.lab}</b><em>${leftTxt(nxt.m-n)}</em>`:'<b>今天的行程都走完了，好好休息</b>'}</div></div>`;}
 function todayIdx(){const d=dayDiff();return d>=0&&d<DAYS.length?d:-1;}
 function normK(kind){kind=kind||'';if(/餐|咖啡/.test(kind))return /選項/.test(kind)?'選項':'美食';if(/選項/.test(kind))return '選項';return KSTY[kind]?kind:'景點';}
 function kpill(k){const c=KSTY[k]||KSTY['景點'];return `<span class="kp" style="background:${c[0]};color:${c[1]}">${k}</span>`;}
@@ -1728,7 +1761,7 @@ function renderTabs(){
 }
 function go(tab){
   APP.tab=tab;document.querySelectorAll('#mapp .ma-scr').forEach(s=>s.classList.toggle('on',s.dataset.tab===tab));
-  renderTabs();if(tab==='map')renderMap();if(tab==='home')renderHome();saveApp();
+  renderTabs();if(tab==='map')renderMap();if(tab==='home')renderHome();if(tab==='plan'&&APP.day===todayIdx()&&APP.nowScrolled!==APP.day)renderPlan();saveApp();
 }
 function setDay(i){
   i=Math.max(0,Math.min(DAYS.length-1,i));if(i===APP.day)return;APP.day=i;APP.pin=null;
@@ -1745,6 +1778,7 @@ function renderHome(){
   $a('maHome').innerHTML=`
   <div class="mh-kick">${kick}</div>
   <div class="mh-cd" data-go="plan"><span class="n">${big}</span><div><b>${l1}</b><span>${l2}</span></div></div>
+  ${nowCard()}
   <div class="mh-ttl" data-go="plan">熱海・伊豆・靜岡</div>
   <div class="mh-en">Atami · Izu · Shizuoka · 2.10 – 2.17</div>
   <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${pd}/${pt}</b><span>行李</span></div></div>
@@ -1758,21 +1792,25 @@ function renderPlan(){
   $a('maPhead').innerHTML=`
   <div class="ph-top"><div><div class="ma-kick">熱海・伊豆・靜岡 · DAY ${d.n}/${DAYS.length}</div><div class="ph-date">${m}月${dd}日 週${d.wd}</div></div><button class="ma-ibtn" data-go="map" aria-label="看當天地圖">${ico('map')}</button></div>
   <div class="ma-week">${DAYS.map((x,i)=>`<button data-day="${i}" class="${i===APP.day?'on':''}${i===ti?' today':''}" aria-label="Day ${x.n}"><span>${x.wd}</span><b>${x.date.split('/')[1]}</b></button>`).join('')}</div>`;
-  const S=d.stops||[];
+  const S=d.stops||[],N=nowInfo(),NT=N&&N.ti===APP.day?N:null;
+  const isCur=(i,gi)=>!!(NT&&NT.cur&&NT.cur.i===i&&(NT.cur.gi==null?gi==null:NT.cur.gi===gi));
+  const isNx=(i,gi)=>!!(NT&&NT.nxt&&NT.nxt.i===i&&(NT.nxt.gi==null?gi==null:NT.nxt.gi===gi));
+  const nxTag=()=>`<span class="nxc">下一個・${leftTxt(NT.nxt.m-NT.n)}</span>`;
   const rows=S.map((s,i)=>{
     const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,G=s.go||[],hasGo=G.length>0,isT=/^\d/.test(s.t);
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
-    return `<div class="ma-row${isT?'':' opt'}" data-stop="${i}" role="button" tabindex="0">
+    return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}" data-stop="${i}" role="button" tabindex="0">
       <div class="ma-r"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${s.n}</div><div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div></div>
-      ${G.map(g=>`<div class="ma-go"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${g.i} ${g.t}</span></div></div>`).join('')}
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${s.d?`<div class="nt">${s.d}</div>`:''}</div></div>
+      ${G.map((g,gi)=>`<div class="ma-go${isCur(i,gi)?' now':''}"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}</span>${isNx(i,gi)?nxTag():''}</div></div>`).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
   <div class="ma-area"><b>${d.title}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>
   ${rows}
   ${d.rain?`<button class="ma-dash" data-rain>☔ 雨備方案</button><div class="ma-rain" hidden>${d.rain}</div>`:''}
   <div class="ma-hint">點任一站看詳情 · 左右滑動切換日期</div>`;
+  if(NT&&APP.nowScrolled!==APP.day&&APP.tab==='plan'){const el=$a('maPlan').querySelector('.ma-row.now,.ma-go.now');if(el){APP.nowScrolled=APP.day;requestAnimationFrame(()=>el.scrollIntoView({block:'center'}));}}
 }
 function stopFor(k){
   const S=DAYS[APP.day].stops||[],st=S.find(s=>locOf(s)===k)||S.find(s=>s.card===k);if(st)return st;
@@ -1991,6 +2029,7 @@ function appInit(){
   APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'cost';
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
   renderPlan();renderPack();renderSeg();go(APP.tab);
+  setInterval(()=>{if(todayIdx()<0)return;if(APP.tab==='home')renderHome();else if(APP.tab==='plan'&&APP.day===todayIdx()&&!APP.sheet)renderPlan();},30000);
   const plan=$a('maPlan');let sx=null;
   plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
