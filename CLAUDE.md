@@ -598,10 +598,11 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
-2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`toshogu`、
+2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、
    `ndhotel`、`kinnoji`、`cruise`、`issa`、`mihoshrine`、`hobby`、`sengen`、
    `ichigo`、`shimizu`、`maruko`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
    2026-10-05 起新增的熱海／美食卡片也都沒照片：`kiunkaku`、`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   **`toshogu` 已於 2026-10-05 補上 2 張**（境內手繪導覽圖當封面、纜車〔裁掉底部 FUN! JAPAN 浮水印〕）；使用者另給的「紅色社殿＋櫻花＋富士山」那張看起來是**富士山本宮浅間大社**（富士宮）而不是久能山，沒有放，待使用者確認。
    **`yume` 已於 2026-10-05 補上 4 張**（富士山展望迴廊當封面、茶園遠眺富士、櫻花外觀〔4 月景色，2 月沒有〕、館內木構樓梯）。
    **`aoba` 已於 2026-10-05 補上 3 張**（使用者提供：おでん街燈籠巷弄當封面、櫻花裝飾巷弄、おでん鍋）。
    `minami` 目前是低解析 2024 海報待換。**`miho` 已於 2026-10-03 補上 3 張。**
