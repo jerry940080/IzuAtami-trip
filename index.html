@@ -571,6 +571,20 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 #maInfo .card,#maInfo .tipgrid>div,#maInfo details.acc,#maInfo .money>div,#maInfo .areamap,#maInfo .offmap{border-radius:22px}
 
 
+/* 資訊 › 景點 */
+.sp-reg{margin-top:26px;padding-top:18px;border-top:2px solid var(--color-divider,#ddd)}
+.sp-reg:first-of-type{margin-top:10px;border-top:0;padding-top:0}
+.sp-rh b{display:block;font:400 24px var(--font-heading,var(--serif));line-height:1.2}
+.sp-rh span{font-size:12.5px;color:var(--color-neutral-700,#645c50)}
+.sp-h{display:flex;align-items:baseline;gap:8px;margin:16px 0 0}
+.sp-h b{font-size:13px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;background:var(--color-accent-2-700,#56633f);color:#fff}
+.sp-h.cand b{background:var(--color-neutral-300,#dcd3c4);color:var(--color-neutral-800,#474238)}
+.sp-h span{font-size:12px;color:var(--color-neutral-700,#645c50)}
+.sp-cards{margin-top:10px}
+.spw{position:relative}
+.sp-anc{position:absolute;left:0;top:0;width:100%;aspect-ratio:16/10;pointer-events:none;z-index:2}
+.sp-tag{position:absolute;left:8px;bottom:8px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--color-accent-2-700,#56633f);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sp-tag.cand{background:rgba(255,255,255,.92);color:var(--color-neutral-800,#474238)}
 /* 美食卡片（桌機＋手機） */
 .foodgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:10px}
 .fd{margin:0;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
@@ -1869,7 +1883,30 @@ const PACK=[
  {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
-const INFO_PANES=[['cost','花費',['#cost','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
+const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['tix','交通',['#tickets']],['food','美食',['#food']]];
+/* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
+   已排入＝晴天版行程裡有時間的站；其餘（只有「選項」、只在雨天版、或完全沒排）＝候選。 */
+const SPOT_REGIONS=[
+ ['靜岡','含清水・三保・日本平・沼津',['shizuhotel','yume','toshogu','ndhotel','aoba','ichigo','shimizu','maruko','mihoshrine','miho','yunoki','zoo','numazuport','aquarium','kinnoji','cruise','maruzen','issa','hobby','sengen']],
+ ['熱海・河津','含南伊豆・伊豆高原・熱川',['livemax','sakura','minami','shirahama','teddy','banana','baien','kinomiya','itogawa']],
+ ['東京','含品川・神田・秋葉原・成田',['prince','yakiniku','roppongi','shimokita','katsumoto','akiba','yokocho','souvenir']]
+];
+function spotStatus(k){let sched=null,opt=null,rain=null;
+  DAYS.forEach(d=>{(d.stops||[]).forEach(s=>{if(s.card!==k)return;if(/^\d|^途中/.test(s.t)){if(!sched)sched={d,s};}else if(s.k==='選項'&&!opt)opt={d,s};});
+    (d.rainStops||[]).forEach(s=>{if(s.card===k&&!rain)rain={d,s};});});
+  if(sched)return {in:true,tag:`Day ${sched.d.n}${/^\d/.test(sched.s.t)?' · '+sched.s.t:''}`};
+  if(opt)return {in:false,tag:`Day ${opt.d.n} 選項`};
+  if(rain)return {in:false,tag:`Day ${rain.d.n} 雨天版`};
+  return {in:false,tag:'未排入'};}
+function spotsHTML(){
+  const NUMS={};document.querySelectorAll('#shizuoka .card').forEach(c=>{const n=c.querySelector('.num');if(n)NUMS[c.dataset.card]=+n.textContent;});
+  const card=k=>{const st=spotStatus(k);return `<div class="spw">${cardHTML(k,NUMS[k]||0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
+  return `<section class="block" id="spots"><div class="wrap"><h2>景點</h2><p class="lead">三個區域，各自分成已排進行程的，和還在候選名單裡的。點卡片看完整介紹。</p>`+
+   SPOT_REGIONS.map(([name,sub,keys],i)=>{const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
+    return `<div class="sp-reg"><div class="sp-rh"><b>${name}</b><span>${sub}</span></div>
+     <div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
+     <div class="sp-h cand"><b>候選名單</b><span>${cand.length?cand.length+' 個':'目前沒有'}</span></div>${cand.length?`<div class="cards sp-cards">${cand.map(card).join('')}</div>`:''}
+     ${i===0?'<div id="spExtra"></div>':''}</div>`;}).join('')+`</div></section>`;}
 const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -2193,7 +2230,9 @@ function appInit(){
   <div class="ma-back" id="maBack"></div><div class="ma-sheet" id="maSheet" role="dialog" aria-modal="true" aria-label="景點詳情"></div>`;
   document.body.appendChild(root);
   const info=$a('maInfo');
-  INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});info.appendChild(p);});
+  INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});
+    if(k==='spots'){p.innerHTML=spotsHTML();const ex=p.querySelector('#spExtra');document.querySelectorAll('#shizuoka details.acc').forEach(a=>ex.appendChild(a));} // 靜岡的位置圖／官方地圖／2 月活動搬進靜岡區塊
+    info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
   APP.tab=['home','plan','map','pack','info'].includes(sv.tab)?sv.tab:'home';

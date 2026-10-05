@@ -374,6 +374,18 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 狀態列色條（`#mapp::before`）與開啟時依存檔模式先換色（head script 讀 `izu-rain`）都已在截圖確認有效。
 - 底部抽屜 `#maSheet` 也加了同樣的下滑關閉（`sheetSwipe()`，`appInit` 裡綁；門檻 90px、位移 ×0.9、`.dragging` 關 transition）。
 
+### 2026-10-05 變更（八）：資訊 › 「靜岡」改成「景點」（三區 × 已排入／候選）
+- `INFO_PANES` 第二項由 `['shz','靜岡',['#shizuoka']]` 改為 `['spots','景點',[]]`，內容由 `spotsHTML()` 產生
+  （`appInit` 建 pane 時填入），**桌機版的 `#shizuoka` 靜岡總覽不動**。
+- `SPOT_REGIONS`＝`[[區名,副標,[cardKey…]],…]`：靜岡（含清水・三保・日本平・沼津，20 張）、熱海・河津（9 張）、
+  東京（含成田，8 張），37 張卡全部涵蓋。新增卡片要記得放進對應區，否則景點頁不會出現。
+- `spotStatus(k)`：晴天版 `STOPS` 裡有「時間或『途中』」的站 → **已排入**（標籤 `Day n · hh:mm`）；
+  只有 `選項` 站 → 候選（`Day n 選項`）；只在 `RAIN_STOPS` → 候選（`Day n 雨天版`）；都沒有 → 候選（`未排入`）。
+- 卡片沿用 `cardHTML(k,num)`，外包 `.spw`＋`.sp-anc`（16/10 透明層）把 `.sp-tag` 釘在照片左下；
+  靜岡卡片的號碼從桌機 `#shizuoka .card .num` 讀來，和位置圖一致。
+- 靜岡區塊最下面 `#spExtra` 收納從 `#shizuoka` 搬來的三組 `details.acc`（位置圖／官方觀光地圖／2 月活動與票券）。
+- localStorage 存的舊 pane `shz` 找不到會 fallback 到 `cost`。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。
