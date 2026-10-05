@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="熱海伊豆">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}</script>
 <style>
 :root{
@@ -650,11 +650,20 @@ html.app .app-only{display:block}
   --color-accent-100:#dbe6f3;--color-accent-200:#c3d5ea;--color-accent-300:#9dbbdc;--color-accent-400:#6f98c8;--color-accent-500:#4f7db3;--color-accent-600:#3e6a9e;--color-accent-700:#2e5381;--color-accent-800:#213e63;--color-accent-900:#142944;
   --color-accent-2-100:#d6e4ea;--color-accent-2-200:#c0d5de;--color-accent-2-300:#9cbdcb;--color-accent-2-400:#74a0b3;--color-accent-2-500:#568499;--color-accent-2-600:#44707f;--color-accent-2-700:#355a67;--color-accent-2-800:#27434d;--color-accent-2-900:#192d34;
   --paper:#b7c6d6;--paper2:#c9d5e2;--ink:#1d2b3a;--ink2:#34445a;--ink3:#4a5b70;--rule:rgba(29,43,58,.16);--ai:#2e5381;
-  background:var(--color-bg);color:var(--color-text);transition:background .35s,color .35s}
+  background:var(--color-bg);color:var(--color-text)}
 #mapp.rainy .ma-map{background:#a9bacb}
-#mapp.rainy .mm-svg svg{filter:saturate(.5) brightness(.97)}
+#mapp.rainy .ma-tabs{background:#9fb3c8;box-shadow:0 -1px 0 rgba(29,43,58,.18)}
+#mapp.rainy .ma-tabs .on .ic{background:#dbe6f3}
+#mapp.rainy .mm-svg rect[fill="#d7e3ea"]{fill:#c2d1df} /* 不用 CSS filter：iPhone Safari 對大張 SVG 套濾鏡會破圖 */
+#mapp.rainy .mm-svg path[fill="#ece6d8"]{fill:#e4e9ef;stroke:#a9b8c8}
 /* App 外圈（狀態列、Safari 工具列、捲動露出的底色）也一起換 */
 html.rainy-ui,html.rainy-ui body{background:#b7c6d6}
+/* 從桌面圖示開啟時（black-translucent），網頁會畫到 iPhone 狀態列底下；這條色條墊在時間與電量後面，晴天咖啡色、雨備藍色 */
+#mapp::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:#8c491a;z-index:60;pointer-events:none}
+#mapp.rainy::before{background:#3e6a9e}
+/* 畫到狀態列底下後，彈窗與燈箱要讓出狀態列高度，按鈕才不會被時間、電量蓋住 */
+html.app .modal-box{max-height:min(94vh,calc(100vh - env(safe-area-inset-top) - 12px))}
+html.app .lb-bar{padding-top:calc(10px + env(safe-area-inset-top))}
 </style>
 </head>
 <body>

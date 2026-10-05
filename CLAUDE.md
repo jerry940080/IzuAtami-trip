@@ -320,8 +320,15 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   舊的底部「雨備方案」展開鈕已移除。**桌機版不變**（仍是時刻表下方的雨備說明）。
 - **色調**：`applyTheme()` 在「行程／地圖」分頁且當天開雨備時給 `#mapp` 加 `.rainy`，整組 token 換成**灰藍色**
   （底 #b7c6d6、面 #c9d5e2、字 #1d2b3a、強調 #3e6a9e；最初做成藍黑，使用者說不要黑、不要太暗，改成這組）。
-  地圖 SVG `saturate(.5)`。同時給 `<html>` 加 `.rainy-ui`（整頁背景）並改 `meta[name=theme-color]`，
-  讓 iPhone 狀態列、Safari 工具列、捲動露出的底色一起換（使用者要求「上下底板也要切換」）。回首頁或換到沒開雨備的天就恢復。
+  同時給 `<html>` 加 `.rainy-ui`（整頁背景）並改 `meta[name=theme-color]`（Safari 工具列）。回首頁或換到沒開雨備的天就恢復。
+  **踩雷（使用者回報地圖破圖、底板沒變）**：
+  - 地圖**不要用 CSS `filter`**（iPhone Safari 對大張 SVG 套濾鏡會模糊、缺塊），改用屬性選擇器直接換色：
+    `rect[fill="#d7e3ea"]`（海）、`path[fill="#ece6d8"]`（陸地）。`#mapp` 的背景 transition 也拿掉了。
+  - 桌面圖示開啟時 iPhone 狀態列顏色只在啟動時讀一次，動態改 theme-color 沒用 → `apple-mobile-web-app-status-bar-style`
+    改 `black-translucent`（網頁畫到狀態列底下），`#mapp::before` 墊一條高 `env(safe-area-inset-top)` 的色條：
+    晴天 #8c491a、雨備 #3e6a9e（狀態列字是白的，色條要夠深）。**改這個 meta 後要刪掉桌面圖示重新加入才生效**。
+    彈窗 `.modal-box` 最大高度與燈箱 `.lb-bar` 頂部都扣掉 `env(safe-area-inset-top)`，避免按鈕被時間、電量蓋住。
+  - 雨備分頁列 `.ma-tabs` 改明顯的 #9fb3c8（原本 #d8e1ea 和晴天米白差太少，看不出切換）。
 - 抽屜標題改成一律用站名 `s.n`（原本景點用卡片名，雨天版會出現「（選項）」字樣）。
 
 ### 2026-10-05 變更（五）：影片載入動畫
