@@ -630,6 +630,27 @@ html.app .app-only{display:block}
 .ma-go>div:last-child{flex-wrap:wrap;gap:4px}
 .ma-go .nxc{margin:0;white-space:nowrap}
 .nxc{white-space:nowrap}
+
+/* 雨備：標題列按鈕＋藍黑色調 */
+.ma-area{display:flex;align-items:center;gap:12px}
+.ma-area>div{flex:1;min-width:0}
+#mapp .rain-btn{flex:none;height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--color-text);color:var(--color-bg);font:700 13.5px var(--font-body);cursor:pointer;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.15))}
+.rn-tag{font-style:normal;font:700 11px var(--font-body);margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--color-accent-600);color:#fff;vertical-align:3px}
+.ma-rainnote{background:var(--color-surface);border-radius:18px;padding:11px 14px;margin:-4px 0 14px;font-size:13px;line-height:1.6;color:var(--color-neutral-800)}
+.ma-rainnote b{color:var(--color-accent-700)}
+#mapp.rainy{
+  --color-bg:#0e1622;--color-surface:#18243a;--color-text:#e6edf7;--color-accent:#4f8fdc;--color-accent-2:#6fa8c8;
+  --color-divider:rgba(230,237,247,.14);
+  --color-neutral-100:#141e2e;--color-neutral-200:#1f2b40;--color-neutral-300:#2b3a52;--color-neutral-400:#3f5170;--color-neutral-500:#5a6e8e;--color-neutral-600:#7d90ae;--color-neutral-700:#a3b2c9;--color-neutral-800:#c7d2e2;--color-neutral-900:#e6edf7;
+  --color-accent-100:#152a45;--color-accent-200:#1c3a60;--color-accent-300:#27548a;--color-accent-400:#3a70b4;--color-accent-500:#4f8fdc;--color-accent-600:#3b7fd4;--color-accent-700:#8dbbf2;--color-accent-800:#b5d3f7;--color-accent-900:#dbeafc;
+  --color-accent-2-100:#13293a;--color-accent-2-200:#1a364c;--color-accent-2-300:#25506b;--color-accent-2-400:#36708f;--color-accent-2-500:#4f8fb0;--color-accent-2-600:#6fa8c8;--color-accent-2-700:#2e5d7c;--color-accent-2-800:#a9d2e8;--color-accent-2-900:#d3eaf6;
+  --paper:#0e1622;--paper2:#18243a;--ink:#e6edf7;--ink2:#c7d2e2;--ink3:#a3b2c9;--rule:rgba(230,237,247,.14);--ai:#8dbbf2;
+  background:var(--color-bg);color:var(--color-text);transition:background .35s,color .35s}
+#mapp.rainy .rain-btn{background:#e6edf7;color:#0e1622}
+#mapp .rain-btn:active{transform:scale(.96)}
+#mapp.rainy .ma-map{background:#0b1320}
+#mapp.rainy .mm-svg svg{filter:invert(.92) hue-rotate(180deg) saturate(.85) brightness(.95)}
+#mapp.rainy .ma-th img,#mapp.rainy .sh-ph img{filter:brightness(.85)}
 </style>
 </head>
 <body>
@@ -1142,18 +1163,72 @@ const STOPS={
  {t:'13:00',i:'✈',n:'成田 T2 → 桃園 T1',k:'交通',d:'虎航 IT201・16:25 抵達桃園',at:'nrt'}
 ]};
 DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
+/* ================= 雨備版停留點（手機行程頁按「☔ 雨備」切換） =================
+   依各天 rain 說明寫成完整行程；格式同 STOPS。沒有列在這裡的天就沒有雨備按鈕。 */
+const RAIN_STOPS={
+2:[
+ {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
+ {t:'09:00',i:'🧳',n:'Check-out',k:'住宿',d:'品川王子大飯店',go:[{at:'10:00',i:'🚄',t:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
+ {t:'11:20',i:'🚗',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
+ {t:'11:40',i:'🍽',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
+ {t:'13:10',i:'🗻',n:'日本平夢テラス（館內）',k:'景點',d:'富士山看不到，只進館內展示室與咖啡座；戶外迴廊撐傘不好逛',card:'yume',dur:'30 分',go:[{at:'13:40',i:'🚡',t:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
+ {t:'13:50',i:'⛩',n:'久能山東照宮',k:'景點',d:'社殿與博物館照去，纜車照開',card:'toshogu',dur:'1 小時 10 分',go:[{at:'15:00',i:'🚡',t:'纜車回日本平'}]},
+ {t:'15:15',i:'🍰',n:'日本平飯店 露台酒廊下午茶',k:'美食',d:'提早下山前坐下來喝茶，14:00–17:00',card:'ndhotel',dur:'1 小時',go:[{at:'16:15',i:'🚗',t:'開車回靜岡站・飯店　約 25 分'}]},
+ {t:'選項',i:'🛍',n:'回市區逛 Hobby Square 與茶店一茶',k:'選項',d:'不喝下午茶的話，下山直接回市區',card:'hobby'},
+ {t:'16:40',i:'🛏',n:'停好車 check-in',k:'住宿',d:'靜岡站前飯店（房間待訂）',card:'shizuhotel'},
+ {t:'注意',i:'⚠',n:'晚上要喝酒，車停好就別再動',k:'提醒',d:'日本酒駕零容忍，同車的人也會被追究',go:[{at:'18:50',i:'🚶',t:'走路去青葉橫丁　約 10 分'}]},
+ {t:'19:00',i:'🍢',n:'青葉橫丁',k:'美食',d:'靜岡おでん，黑高湯串燒關東煮',card:'aoba'}
+],
+3:[
+ {t:'08:30',i:'🍳',n:'飯店早餐',k:'美食',go:[{at:'09:30',i:'🚗',t:'開車出發（2/11 起續租中）　約 30 分'}]},
+ {t:'10:00',i:'🍓',n:'石垣草莓 久能海岸',k:'體驗',d:'溫室採果，下雨照跑・預約 10:00 場',card:'ichigo',dur:'40 分',go:[{at:'10:40',i:'🚗',t:'開車 → 清水　約 25 分'}]},
+ {t:'11:05',i:'🦐',n:'清水 河岸の市',k:'景點',d:'有屋頂，先逛いちば館買干物與櫻花蝦',card:'shimizu',dur:'55 分'},
+ {t:'12:00',i:'🍽',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:[{at:'13:15',i:'🚗',t:'開車 → エスパルスドリームプラザ　約 5 分'}]},
+ {t:'13:20',i:'🎪',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時 10 分'},
+ {t:'14:30',i:'🎡',n:'ドリームプラザ',k:'景點',d:'室內逛街、清水壽司橫丁、摩天輪，雨天多待一會',card:'maruko',dur:'2 小時 30 分',go:[{at:'17:00',i:'🚗',t:'開車回靜岡站　約 30 分'}]},
+ {t:'選項',i:'🌲',n:'三保松原（雨停再去）',k:'選項',d:'看不到夕陽就跳過',card:'miho'},
+ {t:'17:30',i:'🔑',n:'提早還車',k:'交通',d:'租車營業所多為 8:00–20:00，訂車時先確認還車時間',at:'shizuoka',go:[{at:'17:45',i:'🚆',t:'靜岡 → 東靜岡　JR 東海道本線 1 站・約 3 分・¥190'}]},
+ {t:'18:05',i:'♨',n:'柚木の郷',k:'溫泉',d:'比晴天早一小時到，多泡一小時；館內食事處吃晚餐（LO 21:30）',card:'yunoki',dur:'4 小時',go:[{at:'22:00',i:'🚆',t:'東靜岡 → 靜岡　回飯店'}]}
+],
+4:[
+ {t:'07:45',i:'🍳',n:'飯店早餐',k:'美食'},
+ {t:'08:30',i:'🧳',n:'Check-out，行李寄站內',k:'住宿',d:'靜岡站投幣置物櫃（大型櫃約 ¥700）',at:'shizuoka',go:[{at:'09:00',i:'🚆',t:'靜岡 → 草薙　JR 東海道本線・約 4 分・¥190'},{at:'09:15',i:'🚌',t:'草薙站 → 日本平動物園　靜鐵巴士約 10 分＋步行 5 分'}]},
+ {t:'09:30',i:'🐼',n:'日本平動物園',k:'景點',d:'猛獸館 299、夜行性動物館與室內展示照看；戶外的小熊貓運動場碰運氣',card:'zoo',dur:'1 小時 50 分'},
+ {t:'提醒',i:'⚠',n:'草薙往動物園的巴士班次不密',k:'提醒',d:'前一晚查好時刻；下雨更建議直接搭計程車（約 7 分）',go:[{at:'11:20',i:'🚆',t:'動物園 → 草薙 → 靜岡站取行李　約 25 分'}]},
+ {t:'12:10',i:'🚆',n:'靜岡 → 沼津',k:'交通',d:'JR 東海道本線・約 1 小時・¥990',at:'shizuoka',go:[{at:'13:20',i:'🚌',t:'沼津站 → 沼津港　巴士約 10 分・¥200'}]},
+ {t:'13:40',i:'🍽',n:'沼津港午餐',k:'美食',d:'丸天かき揚げ丼／深海魚料理',card:'numazuport',at:'aquarium',dur:'1 小時 10 分'},
+ {t:'14:50',i:'🐟',n:'沼津港深海水族館',k:'景點',d:'¥2,200，雨天逛久一點',card:'aquarium',dur:'1 小時 50 分'},
+ {t:'16:40',i:'🦐',n:'みなと新鮮館 買干物',k:'購物',d:'室內；びゅうお 展望水門雨天就不上去了',card:'numazuport',at:'aquarium',dur:'30 分',go:[{at:'17:10',i:'🚌',t:'沼津港 → 沼津站　巴士約 10 分'}]},
+ {t:'選項',i:'🛍',n:'ららぽーと沼津',k:'選項',d:'想避雨就改來這裡：沼津站巴士約 20 分，逛完再搭 JR 進熱海',at:'lalaport'},
+ {t:'17:40',i:'🚆',n:'沼津 → 熱海',k:'交通',d:'JR 東海道本線・約 25 分・¥420',at:'numazuStn',go:[{at:'18:15',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
+ {t:'18:20',i:'🛏',n:'LiVEMAX 熱海 Ocean',k:'住宿',d:'check-in',card:'livemax'},
+ {t:'19:30',i:'🍽',n:'熱海晚餐、泡溫泉',k:'美食',d:'飯店溫泉或站前商店街覓食'}
+],
+5:[
+ {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
+ {t:'09:00',i:'♨',n:'飯店泡湯，慢慢出門',k:'溫泉',d:'雨天整趟縮成半日來回',card:'livemax',dur:'1 小時 30 分',go:[{at:'10:30',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
+ {t:'10:50',i:'🚆',n:'熱海 → 伊豆高原',k:'交通',d:'JR 伊東線＋伊豆急 約 50 分；已訂踊子的話要改班次',at:'atami'},
+ {t:'11:45',i:'🍽',n:'伊豆高原午餐',k:'美食',at:'izukogen',dur:'1 小時'},
+ {t:'12:45',i:'🧸',n:'伊豆泰迪熊博物館',k:'景點',d:'室內，可 DIY 龍貓玩偶',card:'teddy',dur:'2 小時 30 分'},
+ {t:'選項',i:'🐊',n:'熱川香蕉鱷魚園',k:'選項',d:'溫室為主，和泰迪熊二選一',card:'banana'},
+ {t:'選項',i:'♨',n:'整天留在 LiVEMAX 泡湯',k:'選項',d:'不出門的話，傍晚再決定要不要去看夜櫻',card:'livemax',go:[{at:'15:15',i:'🚃',t:'伊豆高原 → 河津　伊豆急 約 30 分'}]},
+ {t:'15:50',i:'☕',n:'河津站周邊 咖啡・晚餐',k:'美食',d:'等傍晚點燈，雨天戶外時間盡量壓短',at:'kawazu',dur:'1 小時 40 分'},
+ {t:'17:30',i:'🌙',n:'河津川夜櫻點燈',k:'景點',d:'雨中人少、另有味道，點燈至 21:00',card:'sakura',dur:'2 小時',go:[{at:'19:30',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 2 小時・約 ¥2,100'}]},
+ {t:'21:40',i:'♨',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'}
+]};
+DAYS.forEach(d=>{if(RAIN_STOPS[d.n])d.rainStops=RAIN_STOPS[d.n];});
 /* 桌機時刻表：一站一列（名稱＋說明），每段交通一列 move */
 function stopsToTl(S){const o=[];S.forEach(s=>{o.push({t:s.t,i:s.i||'📍',h:s.n+(s.d?'　'+s.d:'')});(s.go||[]).forEach(g=>o.push({t:g.at||'',i:g.i,h:g.t,move:1}));});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
 /* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
-function routeInfo(d){
-  const S=d.stops||[],nums={},rows=[];let n=0;
+function routeInfo(d,S0){
+  const S=S0||d.stops||[],nums={},rows=[];let n=0;
   S.forEach((s,i)=>{const k=locOf(s);if(!k&&!s.card)return;if(k&&!nums[k])nums[k]=++n;rows.push({s,i,k});});
   return {nums,rows};
 }
 /* 當天地圖設定：原本的點＋所有停留點的位置，編號用 routeInfo */
-function dayMapCfg(d){const R=routeInfo(d),keys=Object.keys(R.nums),labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
+function dayMapCfg(d,S0){const R=routeInfo(d,S0),keys=Object.keys(R.nums),labels=Object.assign({},d.map.labels);keys.forEach(k=>{if(!labels[k])labels[k]='b';});
   return Object.assign({},d.map,{pts:d.map.pts.concat(keys.filter(k=>!d.map.pts.includes(k))),nums:R.nums,labels});}
 /* 當天景點卡：依停留點時間排序，號碼＝地圖上該地點的號碼 */
 function dayCards(d){const R=routeInfo(d),first=k=>{const i=(d.stops||[]).findIndex(s=>s.card===k);return i<0?999:i;};
@@ -1740,10 +1815,14 @@ const PACK=[
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
 const INFO_PANES=[['cost','花費',['#cost','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
-const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,pack:{packed:{},extra:[],filter:'all'}};
+const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function rainOn(d){return !!(d&&d.rainStops&&APP.rain&&APP.rain[d.n]);}
+function actStops(d){return rainOn(d)?d.rainStops:(d.stops||[]);}
+/* 開啟雨備的那一天：行程頁與地圖頁換成藍黑色調 */
+function applyTheme(){const r=$a('mapp');if(r)r.classList.toggle('rainy',(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]));}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
@@ -1757,7 +1836,7 @@ const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[
 const hhmm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
 const leftTxt=x=>x<60?`還有 ${x} 分`:`還有 ${Math.floor(x/60)} 小時${x%60?' '+x%60+' 分':''}`;
 /* 今天的事件（有時間的站與交通段）依序排開，找出「現在」與「下一個」 */
-function nowInfo(){const ti=todayIdx();if(ti<0)return null;const S=DAYS[ti].stops||[],n=tokyoNow().min,ev=[];
+function nowInfo(){const ti=todayIdx();if(ti<0)return null;const S=actStops(DAYS[ti]),n=tokyoNow().min,ev=[];
   S.forEach((s,i)=>{const m=tmin(s.t);if(m!=null)ev.push({m,i,lab:s.n,ic:s.i||'📍'});(s.go||[]).forEach((g,gi)=>{const gm=tmin(g.at);if(gm!=null)ev.push({m:gm,i,gi,lab:g.t.split('　')[0],ic:g.i});});});
   let cur=null,nxt=null;ev.forEach(e=>{if(e.m<=n)cur=e;else if(!nxt)nxt=e;});return {ti,cur,nxt,n};}
 function nowCard(){const N=nowInfo();if(!N)return '';const {cur,nxt,n}=N;
@@ -1779,11 +1858,11 @@ function renderTabs(){
 }
 function go(tab){
   APP.tab=tab;document.querySelectorAll('#mapp .ma-scr').forEach(s=>s.classList.toggle('on',s.dataset.tab===tab));
-  renderTabs();if(tab==='map')renderMap();if(tab==='home')renderHome();if(tab==='plan'&&APP.day===todayIdx()&&APP.nowScrolled!==APP.day)renderPlan();saveApp();
+  renderTabs();if(tab==='map')renderMap();if(tab==='home')renderHome();if(tab==='plan'&&APP.day===todayIdx()&&APP.nowScrolled!==APP.day)renderPlan();saveApp();applyTheme();
 }
 function setDay(i){
   i=Math.max(0,Math.min(DAYS.length-1,i));if(i===APP.day)return;APP.day=i;APP.pin=null;
-  renderPlan();if(APP.tab==='map')renderMap();saveApp();
+  renderPlan();if(APP.tab==='map')renderMap();saveApp();applyTheme();
   const b=$a('maPlan');if(b)b.scrollTop=0;
 }
 function renderHome(){
@@ -1810,7 +1889,7 @@ function renderPlan(){
   $a('maPhead').innerHTML=`
   <div class="ph-top"><div><div class="ma-kick">熱海・伊豆・靜岡 · DAY ${d.n}/${DAYS.length}</div><div class="ph-date">${m}月${dd}日 週${d.wd}</div></div><button class="ma-ibtn" data-go="map" aria-label="看當天地圖">${ico('map')}</button></div>
   <div class="ma-week">${DAYS.map((x,i)=>`<button data-day="${i}" class="${i===APP.day?'on':''}${i===ti?' today':''}" aria-label="Day ${x.n}"><span>${x.wd}</span><b>${x.date.split('/')[1]}</b></button>`).join('')}</div>`;
-  const S=d.stops||[],N=nowInfo(),NT=N&&N.ti===APP.day?N:null;
+  const S=actStops(d),N=nowInfo(),NT=N&&N.ti===APP.day?N:null,RN=rainOn(d);
   const isCur=(i,gi)=>!!(NT&&NT.cur&&NT.cur.i===i&&(NT.cur.gi==null?gi==null:NT.cur.gi===gi));
   const isNx=(i,gi)=>!!(NT&&NT.nxt&&NT.nxt.i===i&&(NT.nxt.gi==null?gi==null:NT.nxt.gi===gi));
   const nxTag=()=>`<span class="nxc">下一個・${leftTxt(NT.nxt.m-NT.n)}</span>`;
@@ -1824,14 +1903,14 @@ function renderPlan(){
       ${G.map((g,gi)=>`<div class="ma-go${isCur(i,gi)?' now':''}"><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}</span>${isNx(i,gi)?nxTag():''}</div></div>`).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
-  <div class="ma-area"><b>${d.title}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>
+  <div class="ma-area"><div><b>${d.title}${RN?'<em class="rn-tag">雨備</em>':''}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div>${d.rainStops?`<button class="rain-btn" data-rainbtn aria-pressed="${RN}">${RN?'☀ 晴天':'☔ 雨備'}</button>`:''}</div>
+  ${RN&&d.rain?`<div class="ma-rainnote">${d.rain}</div>`:''}
   ${rows}
-  ${d.rain?`<button class="ma-dash" data-rain>☔ 雨備方案</button><div class="ma-rain" hidden>${d.rain}</div>`:''}
   <div class="ma-hint">點任一站看詳情 · 左右滑動切換日期</div>`;
   if(NT&&APP.nowScrolled!==APP.day&&APP.tab==='plan'){const el=$a('maPlan').querySelector('.ma-row.now,.ma-go.now');if(el){APP.nowScrolled=APP.day;requestAnimationFrame(()=>el.scrollIntoView({block:'center'}));}}
 }
 function stopFor(k){
-  const S=DAYS[APP.day].stops||[],st=S.find(s=>locOf(s)===k)||S.find(s=>s.card===k);if(st)return st;
+  const S=actStops(DAYS[APP.day]),st=S.find(s=>locOf(s)===k)||S.find(s=>s.card===k);if(st)return st;
   if(!CARDS[k])return {t:'',n:(NAMES[k]||[k])[0],k:'交通'};
   const c=CARDS[k];return {t:'',n:c.name,k:normK(c.kind),card:k};
 }
@@ -1949,11 +2028,11 @@ function mzBind(box){
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
 function renderMap(){
-  const d=DAYS[APP.day],R=routeInfo(d),keys=Object.keys(R.nums);
+  const d=DAYS[APP.day],AS=actStops(d),R=routeInfo(d,AS),keys=Object.keys(R.nums);
   $a('maMap').innerHTML=`<div class="mm-svg"></div>
   <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>
   <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
-  const cfg=dayMapCfg(d);
+  const cfg=dayMapCfg(d,AS);
   fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
   const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);}
   $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 雙指可縮放</span></div>`+R.rows.map(({s,i,k})=>{
@@ -1968,7 +2047,7 @@ function focusPin(k,quiet,fromMap){
   if(!quiet&&k){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
 }
 function openSheet(s){
-  const c=s.card&&CARDS[s.card],d=DAYS[APP.day],img=c?cardImg(s.card):'',nm=c&&s.k!=='美食'&&s.k!=='選項'?c.name:s.n;
+  const c=s.card&&CARDS[s.card],d=DAYS[APP.day],img=c?cardImg(s.card):'',nm=s.n||(c&&c.name)||'';
   const addr=c&&c.info?((c.info.find(r=>r[0]==='地址')||[])[1]||''):'';
   const gu=s.card?gUrl(s.card):'';
   $a('maSheet').innerHTML=`<div class="grab" data-close role="button" aria-label="關閉"></div>
@@ -2012,14 +2091,15 @@ function appClick(e){
   if(el=t.closest('[data-go]')){go(el.dataset.go);return true;}
   if(t.closest('[data-prev]')){setDay(APP.day-1);return true;}
   if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
-  if(el=t.closest('.ma-row[data-stop]')){openSheet(DAYS[APP.day].stops[+el.dataset.stop]);return true;}
-  if(el=t.closest('[data-rain]')){const r=el.nextElementSibling;r.hidden=!r.hidden;el.textContent=r.hidden?'☔ 雨備方案':'收起雨備方案';return true;}
+  if(el=t.closest('.ma-row[data-stop]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.stop]);return true;}
+  if(el=t.closest('[data-rainbtn]')){const d=DAYS[APP.day];APP.rain[d.n]=!APP.rain[d.n];lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
+    renderPlan();if(APP.tab==='map')renderMap();applyTheme();const b=$a('maPlan');if(b)b.scrollTop=0;return true;}
   if(el=t.closest('[data-mz]')){const a=el.dataset.mz;if(a==='reset')mzAnim(1,MZ.BW/2,MZ.BH/2);else{const c=mzMid();mzAnim(MZ.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
-  if(el=t.closest('#maRoute [data-detail]')){openSheet(DAYS[APP.day].stops[+el.dataset.detail]);return true;}
+  if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
-  if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(DAYS[APP.day].stops[+el.dataset.sidx]);return true;}
+  if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
@@ -2046,13 +2126,14 @@ function appInit(){
   APP.tab=['home','plan','map','pack','info'].includes(sv.tab)?sv.tab:'home';
   APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'cost';
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
+  APP.rain=lsGet('izu-rain',{})||{};
   renderPlan();renderPack();renderSeg();go(APP.tab);
   setInterval(()=>{if(todayIdx()<0)return;if(APP.tab==='home')renderHome();else if(APP.tab==='plan'&&APP.day===todayIdx()&&!APP.sheet)renderPlan();},30000);
   const plan=$a('maPlan');let sx=null;
   plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
   mzBind($a('maMap'));
-  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(DAYS[APP.day].stops[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(actStops(DAYS[APP.day])[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
   root.addEventListener('scroll',()=>{if(pinEl)placeTip(pinEl);},{capture:true,passive:true});
 }
