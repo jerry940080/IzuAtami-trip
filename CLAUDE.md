@@ -569,6 +569,24 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **Day 5 晚餐選項**（使用者挑的）：「熱海銀座～中央町一帶」（掛 `card:'ginza'`）、「平和通り・仲見世周邊」（`at:'atami'`，
   **不掛卡片**，`nakamise` 卡片仍不加回）。晴天與雨天版都有。熱海沒有成條的居酒屋橫丁，店家資訊是一般印象、**未查證**。
 
+### 2026-10-05 變更（二十）：資訊 › 美食改成和景點一樣的地圖頁
+使用者要求「美食也跟景點一樣的方式」。手機資訊分頁的「美食」現在是：地區色塊總覽 → 點色塊放大進子區 → 葉節點詳細圖（編號標記）＋已排入／候選名單。
+- **共用化**：景點頁的函式改成吃一個設定物件 `ctx`。`MPN('spots'|'food')` 延遲建立兩組設定
+  `{id,tree,Z,path,h,lead,ex,exShow}`（延遲是因為 `SZ／FZ` 定義在後面，直接寫在常數裡會 TDZ 報錯）；`mpOf(el)` 依元素在 `#foods` 或 `#spots` 裡回傳對應設定。
+  `spotNode(path,tree)`、`spotsHTML(ctx)`、`spotSwap(ctx,…)`、`showSpot(path,anim,ctx)` 都帶 ctx；`APP.spot` 改存在 `ctx.path`。
+  新增縮放實例 `FZ=makeZoom(390,340)`；`[data-mz]` 依 `#foods／#spots` 選 `FZ／SZ／MZ`；地圖標記點擊選擇器改 `.spp .sp-map .mk-a`。
+  兩個 section 都加 class `spp`，CSS 的 `#spots.sub` 全部改成 `.spp.sub`。
+- **`FOOD_TREE`**（緊接在 `SPOT_TREE` 後）：靜岡〔靜岡市區 aoba／maruzen／issa、日本平・久能 ichigo／ndhotel、清水 shimizu／kinnoji〕、
+  熱海・河津〔熱海 yoichi／asaichi／ginza／fruitking／ekimae、河津 kinmedai〕、東京〔katsumoto／yakiniku／yokocho〕。新增美食卡片要放進對應葉節點。
+- **新卡片 4 張**：`fruitking` 熱海フルーツキング（渚町 1-2，35.0958,139.0730）、`ekimae` 站前甜點三家（方塊泡芙・草莓串・熱海プリン本店，35.1028,139.0773；
+  `nakamise` 購物卡片仍不加回）、`kinmedai` 河津午餐・金目鯛（34.7560,138.9895；Day 5 晴雨兩版午餐列掛 `card:'kinmedai'`、`DAYS[4].cards` 加入）、
+  `yakiniku` 烤肉大餐（店家待定，無座標）——**這張卡片之前行程與 `SPOT_TREE` 都有引用，但 `CARDS` 裡一直沒有**，這次補上。
+  另外 `katsumoto` 補了自己的 `P` 座標（35.6962,139.7590），景點頁與美食頁的地圖才點得開；Day 7 行程列仍用 `at:'jimbocho'`，日圖不受影響。座標都過了 LAND 檢查。
+- **總覽下方** `#fdExtra`（只在總覽顯示）收納桌機版 `#food` 整段：加一個「必吃料理一覽」標題，藏掉原本的 h2 與右欄行李清單（清單分頁已有）。
+  `INFO_PANES` 美食改 `['food','美食',[]]`，`appInit` 建 pane 時把 `#food` 搬進 `#fdExtra`。**桌機版 `#food` 不動**。
+- 驗證：`scratchpad/food.js`（美食頁三區進出、各葉節點名單與標籤、點標記開卡、之後景點頁照常）、`foodshot.js`（截圖）；
+  `pick5.js` 的 `[data-regback]` 改成限定 `#spots`（兩頁各有一顆返回鈕）。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。

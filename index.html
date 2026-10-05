@@ -573,7 +573,7 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 
 /* 資訊 › 景點：先選地區（只有地圖），點色塊放大進該區 */
 .sp-map{position:relative;margin-top:12px;border-radius:22px;overflow:hidden;background:#d7e3ea;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.1));touch-action:none;aspect-ratio:390/340;transition:aspect-ratio .3s}
-#spots.sub .sp-map{aspect-ratio:390/400}
+.spp.sub .sp-map{aspect-ratio:390/400}
 .sp-svg{position:absolute;inset:0}
 .sp-svg svg{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .35s ease}
 .sp-svg svg.in{opacity:0}
@@ -587,16 +587,21 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .sp-rg .nm{font:700 17px var(--font-body);fill:#1d2226;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
 .sp-rg .ct{font:600 10.5px var(--font-body);fill:#3a4553;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
 .sp-map .mm-zoom{display:none}
-#spots.sub .sp-map .mm-zoom{display:flex}
+.spp.sub .sp-map .mm-zoom{display:flex}
 .sp-map.zoomed .mm-zoom .rs{display:grid}
 .sp-hint{font-size:12px;color:var(--color-neutral-700,#645c50);margin:8px 2px 0;min-height:0}
 .sp-hint:empty{display:none}
 .sp-sub{display:none}
-#spots.sub .sp-sub{display:block}
-#spots.sub .sp-pick{display:none}
+.spp.sub .sp-sub{display:block}
+.spp.sub .sp-pick{display:none}
 .sp-reg{display:none;margin-top:6px}
 .sp-reg.on{display:block}
-#spExtra{margin-top:18px}
+#spExtra,#fdExtra{margin-top:18px}
+#fdExtra #food{padding-top:0}
+#fdExtra #food .two>div:last-child{display:none} /* 行李清單在「清單」分頁，這裡不重複 */
+#fdExtra #food .wrap{padding:0}
+#fdExtra #food h2{display:none}
+.fd-xh{font-size:22px;margin:0}
 .sp-back{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:0;background:var(--color-surface);color:inherit;font:600 13.5px var(--font-body);cursor:pointer;margin-bottom:12px}
 .sp-rh{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
 .sp-rh i{width:14px;height:14px;border-radius:50%}
@@ -953,7 +958,7 @@ const P={ // [lat,lng]
  shizuoka:[34.9718,138.3886], shizuhotel:[34.9732,138.3872], hobby:[34.9702,138.3891], sengen:[34.9836,138.3750], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ndhotel:[34.9752,138.4713], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818], maruzen:[34.9748,138.3845], yunoki:[34.9780,138.4110],
  ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], mihoshrine:[35.0040,138.5235], shimizu:[35.0158,138.4900], kinnoji:[35.0180,138.4878], maruko:[35.0138,138.5050], cruise:[35.0121,138.5076], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590],
- atami:[35.1036,139.0780], livemax:[35.0946,139.0738], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], ginza:[35.0957,139.0716], kiunkaku:[35.0931,139.0690], yoichi:[35.0937,139.0702], asaichi:[35.0929,139.0722], moa:[35.1063,139.0738],
+ atami:[35.1036,139.0780], livemax:[35.0946,139.0738], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], ginza:[35.0957,139.0716], kiunkaku:[35.0931,139.0690], yoichi:[35.0937,139.0702], kinmedai:[34.7560,138.9895], katsumoto:[35.6962,139.7590], fruitking:[35.0958,139.0730], ekimae:[35.1028,139.0773], asaichi:[35.0929,139.0722], moa:[35.1063,139.0738],
  ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], atagawa:[34.8151,139.0714], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], shimoda:[34.6764,138.9447], shirahama:[34.6978,138.9750], minami:[34.6472,138.8764],
  jimbocho:[35.6958,139.7580], shimokita:[35.6613,139.6681], akiba:[35.6984,139.7731], roppongi:[35.6627,139.7314], yokocho:[35.6749,139.7628]
 };
@@ -974,7 +979,7 @@ const NAMES={
  shizuoka:['靜岡站','station'], shizuhotel:['靜岡站前飯店（待訂）','hotel'], hobby:['Hobby Square','spot'], sengen:['靜岡淺間神社','spot'], zoo:['日本平動物園','spot'], yume:['日本平夢テラス','spot'], ndhotel:['日本平飯店','spot'], toshogu:['久能山東照宮','spot'], aoba:['青葉橫丁','spot'], maruzen:['MARUZEN Tea','spot'], yunoki:['柚木の郷','spot'],
  ichigo:['石垣草莓','spot'], miho:['三保松原','spot'], mihoshrine:['御穗神社','spot'], shimizu:['清水 河岸の市','spot'], kinnoji:['金之字 本店','spot'], maruko:['小丸子樂園','spot'], cruise:['清水港遊覽船','spot'], satta:['薩埵峠','spot'],
  mishima:['三島站','station'], numazuStn:['沼津站','station'],
- atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], ginza:['熱海銀座商店街','spot'], kiunkaku:['起雲閣','spot'], yoichi:['土曜夜市（熱海魚市場）','spot'], asaichi:['日曜朝市（渚小公園）','spot'], moa:['MOA美術館','spot'],
+ atami:['熱海站','station'], livemax:['LiVEMAX 熱海 Ocean','hotel'], baien:['熱海梅園','spot'], kinomiya:['來宮神社','spot'], itogawa:['糸川遊步道','spot'], ginza:['熱海銀座商店街','spot'], kiunkaku:['起雲閣','spot'], yoichi:['土曜夜市（熱海魚市場）','spot'], kinmedai:['河津午餐（金目鯛）','spot'], katsumoto:['神田勝本','spot'], fruitking:['熱海フルーツキング','spot'], ekimae:['站前甜點','spot'], asaichi:['日曜朝市（渚小公園）','spot'], moa:['MOA美術館','spot'],
  ito:['伊東','station'], izukogen:['伊豆高原','station'], teddy:['泰迪熊博物館（選項）','spot'], atagawa:['伊豆熱川','station'], inatori:['伊豆稻取','station'], kawazu:['河津站','station'], sakura:['河津櫻並木','spot'], shimoda:['伊豆急下田','station'], shirahama:['白濱神社','spot'], minami:['南伊豆 櫻花・油菜花祭','spot'],
  jimbocho:['神保町・神田勝本','spot'], shimokita:['下北澤（選項）','spot'], akiba:['秋葉原','spot'], roppongi:['六本木','spot'], yokocho:['居酒屋橫丁（待定）','spot'], odawara:['小田原','station']
 };
@@ -988,7 +993,7 @@ const GQ={
  shimizu:'清水魚市場 河岸の市', maruko:'ちびまる子ちゃんランド', yunoki:'東静岡天然温泉 柚木の郷',
  mishima:'三島駅', numazuStn:'沼津駅',
  atami:'熱海駅', livemax:'リブマックスリゾート熱海Ocean', baien:'熱海梅園', kinomiya:'来宮神社 熱海',
- itogawa:'糸川遊歩道 熱海', ginza:'熱海銀座商店街', kiunkaku:'起雲閣', yoichi:'熱海魚市場', asaichi:'渚小公園 熱海', moa:'MOA美術館',
+ itogawa:'糸川遊歩道 熱海', ginza:'熱海銀座商店街', kiunkaku:'起雲閣', yoichi:'熱海魚市場', kinmedai:'河津駅 金目鯛', fruitking:'熱海フルーツキング', ekimae:'熱海駅 平和通り', asaichi:'渚小公園 熱海', moa:'MOA美術館',
  ito:'伊東駅', izukogen:'伊豆高原駅', teddy:'伊豆テディベア・ミュージアム',
  atagawa:'伊豆熱川駅', inatori:'伊豆稲取駅', kawazu:'河津駅', sakura:'河津桜並木',
  shimoda:'ペリーロード 下田', shirahama:'白濱神社 下田', minami:'下賀茂 みなみの桜と菜の花まつり',
@@ -1100,6 +1105,18 @@ const CARDS={
  kinomiya:{url:'https://kinomiya.or.jp/',name:'來宮神社',jp:'来宮神社',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=h14NT9uq99U&t=7s',l:'白天'},{u:'https://www.youtube.com/watch?v=b6p2K-GQIRg',l:'夜晚'}],short:'樹齡 2,000 年的大楠',wiki:['来宮神社'],
   text:'熱海的地主神，社傳創建於 710 年，也是全日本 44 座來宮神社的總本社。本殿後方的「大楠」樹齡超過 2,000 年、幹圍約 24 公尺，是國家天然紀念物，傳說繞一圈能延壽一年。境內有露天咖啡座與麥こがし甜點。晚上神木大楠有點燈（<b>17:00–23:00</b>），木靈主題的燈光讓整片林子很有氣氛，2/13 晚上從糸川走上來看。熱海站搭 JR 伊東線 2 分到來宮站，再走 5 分。（來源：熱海市《Atami Insight vol.04》2026/3）',
   chips:['24 小時','免費','大楠點燈 17:00–23:00','來宮站步行 5 分']},
+ fruitking:{url:'https://ataminews.gr.jp/',name:'熱海フルーツキング',jp:'熱海フルーツキング',kind:'甜點',short:'五顏六色的水果三明治與果凍，飯店走路幾分鐘',wiki:['フルーツサンド'],
+  text:'渚町的水果甜點店，櫃子裡擺滿五顏六色的水果三明治和水果果凍，切面好看、拍照很上鏡。離 LiVEMAX 走路只要幾分鐘，熱門口味常常賣完，想吃的話早點去。（來源：熱海市《Atami Insight vol.04》2026/3）',
+  chips:['渚町 1-2','飯店走路約 3 分','水果三明治','常賣完，早點去']},
+ ekimae:{url:'https://ataminews.gr.jp/',name:'站前甜點：方塊泡芙・草莓串・熱海プリン',jp:'熱海駅前 平和通り スイーツ',kind:'甜點',short:'熱海站前平和通り的三家人氣甜點',wiki:['シュークリーム','プリン'],
+  text:'熱海站一出來的平和通り一帶，三家甜點走路一分鐘內就到：「熱海スクエアシュークリーム」的四方形泡芙（田原本町 3-6），造型方正適合當伴手禮；草莓專賣「いちご BonBon BERRY ATAMI HOUSE.」的溫泉饅頭草莓串（田原本町 3-16），熱海才有；還有排隊名物熱海プリン本店。2/15 回東京前在站前吃早午餐、買伴手禮時順路。（來源：熱海市《Atami Insight vol.04》2026/3）',
+  chips:['熱海站前','四方形泡芙','溫泉饅頭草莓串','熱海プリン本店']},
+ kinmedai:{url:'https://kawazuzakura.jp/',name:'河津午餐：櫻花祭攤位・金目鯛',jp:'河津桜まつり 屋台・金目鯛',kind:'午餐',short:'祭典攤位小吃，或坐下來吃伊豆名物金目鯛',wiki:['キンメダイ','河津桜'],
+  text:'河津櫻まつり期間，河津站到豐泉橋一帶都是攤位，烤魚、櫻花口味甜點、鯛魚燒邊走邊吃。想坐下來吃的話，伊豆的代表魚金目鯛做成煮付或丼飯是首選，河津、稻取、下田的食堂都有。祭典期間週日中午人很多，攤位比較好解決。',
+  chips:['2/14 中午','祭典攤位','金目鯛煮付','週日中午人多']},
+ yakiniku:{url:'',name:'烤肉大餐（店家待定）',jp:'焼肉',kind:'晚餐',short:'回東京第一晚，品川或六本木，先訂位',wiki:['焼肉'],
+  text:'2/15 開車回東京、品川還車之後的晚餐。品川站周邊或六本木都有不少燒肉店，吃完可以直接去六本木 live house 或下北澤。店家還沒決定，訂位前先確認營業時間與是否接受線上預約。',
+  chips:['2/15 17:00','品川或六本木','先訂位','店家待定']},
  itogawa:{url:'https://www.city.atami.lg.jp/hana/1003681/1003682/1003683.html',name:'糸川遊步道',jp:'糸川遊歩道',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=xJZpA_ozxL4&t=97s',l:''}],short:'あたみ桜，2/15 已近尾聲',wiki:['熱海サンビーチ','熱海市'],
   text:'沿市區小河糸川鋪設的散步道，種的是「あたみ桜」，日本最早開的櫻花之一，花期約 1 月中到 2 月中。<b>2/15 大約是尾聲、剩葉櫻與零星殘花</b>，就當作從來宮神社走回車站途中的順路散步，別抱太大期待。入夜有點燈。',
   chips:['24 小時','免費','2/13 傍晚點燈','2/15 花期尾聲']},
@@ -1163,7 +1180,7 @@ const DAYS=[
   rain:'<b>雨備</b>　動物園有猛獸館 299、夜行性動物館與室內展示，下雨照去，只是戶外的小熊貓運動場要碰運氣。雨天開長途車多留點時間。到熱海先去起雲閣（室內為主），check-in 後先泡溫泉，熱海銀座雨小再逛，土曜夜市在魚市場室內，糸川夜櫻看雨勢；來宮神社點燈到 23:00，回飯店後雨停再去。'},
  {n:5,date:'2/14',wd:'日',title:'河津半日遊',sub:'上午搭踊子到河津賞櫻，吃完午餐搭普通車回熱海，16:00 前回飯店休息',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
   map:{pts:['livemax','atami','teddy','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車，午餐後）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
-  cards:['sakura','minami','shirahama','teddy'],
+  cards:['sakura','kinmedai','minami','shirahama','teddy'],
   rain:'<b>雨備</b>　河津櫻在雨中人少、拍起來另有味道，踊子票已訂就照去，只撐傘走站前一段；午餐後改去伊豆高原的泰迪熊博物館（室內、可 DIY 龍貓玩偶），約 16:15 回到熱海。雨太大就整天留在 LiVEMAX 泡湯。'},
  {n:6,date:'2/15',wd:'一',title:'熱海 → 品川',sub:'睡飽再出門，想去就逛梅園（可不去），中午開車回東京，品川還車後吃烤肉',stay:'品川王子大飯店 北塔',
   map:{pts:['livemax','baien','atami','shinagawa','prince','roppongi','shimokita'],legs:[{a:'livemax',b:'baien',mode:'car',line:'租車'},{a:'baien',b:'atami',mode:'car',line:'租車'},{a:'atami',b:'shinagawa',mode:'car',line:'租車',via:['odawara','shinyoko']},{a:'shinagawa',b:'prince',mode:'walk'},{a:'prince',b:'roppongi',mode:'subway',line:'都營淺草線→都營大江戶線'}],labels:{atami:'b',shinagawa:'r',prince:'r',roppongi:'t',shimokita:'l'},minSpan:.3},
@@ -1228,7 +1245,7 @@ const STOPS={
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',d:'車停在飯店，這天照搭踊子：河津櫻まつり期間 135 號國道大塞車、停車場一位難求',go:[{at:'09:00',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
  {t:'09:30',i:'🚆',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分・¥3,490・A 席靠海',at:'atami'},
  {t:'11:00',i:'🌸',n:'河津櫻並木',k:'景點',d:'從河津站沿河走到豐泉橋，攤位集中在站前到豐泉橋一帶',card:'sakura',dur:'1 小時 30 分'},
- {t:'12:30',i:'🍽',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛',at:'kawazu',dur:'1 小時',go:[{at:'13:40',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 1 小時 50 分・約 ¥2,100（想快一點可搭踊子，要另外訂）'}]},
+ {t:'12:30',i:'🍽',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛',card:'kinmedai',at:'kawazu',dur:'1 小時',go:[{at:'13:40',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 1 小時 50 分・約 ¥2,100（想快一點可搭踊子，要另外訂）'}]},
  {t:'選項',i:'🌼',n:'南伊豆 櫻花與油菜花祭',k:'選項',d:'伊豆急 25 分＋巴士 25 分；去的話回到熱海約 18:00',card:'minami'},
  {t:'選項',i:'⛩',n:'白濱神社',k:'選項',d:'伊豆急到下田 25 分＋東海巴士 10 分；去的話回到熱海約 17:30',card:'shirahama'},
  {t:'選項',i:'🧸',n:'泰迪熊博物館（中途下車）',k:'選項',d:'回程在伊豆高原下車，可 DIY 龍貓玩偶，17:00 閉館；去的話回到熱海約 17:00',card:'teddy'},
@@ -1307,7 +1324,7 @@ const RAIN_STOPS={
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',go:[{at:'09:00',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
  {t:'09:30',i:'🚆',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分；票已經訂了就照搭',at:'atami'},
  {t:'11:00',i:'🌸',n:'河津櫻並木（縮短）',k:'景點',d:'雨中人少、拍起來另有味道；撐傘走站前到豐泉橋一段就好',card:'sakura',dur:'45 分'},
- {t:'11:45',i:'🍽',n:'河津午餐',k:'美食',d:'找有屋簷的店，金目鯛煮付',at:'kawazu',dur:'1 小時',go:[{at:'13:00',i:'🚃',t:'河津 → 伊豆高原　伊豆急 約 30 分'}]},
+ {t:'11:45',i:'🍽',n:'河津午餐',k:'美食',d:'找有屋簷的店，金目鯛煮付',card:'kinmedai',at:'kawazu',dur:'1 小時',go:[{at:'13:00',i:'🚃',t:'河津 → 伊豆高原　伊豆急 約 30 分'}]},
  {t:'13:40',i:'🧸',n:'伊豆泰迪熊博物館',k:'景點',d:'室內，可 DIY 龍貓玩偶',card:'teddy',dur:'1 小時 40 分',go:[{at:'15:20',i:'🚃',t:'伊豆高原 → 熱海　伊豆急＋JR 伊東線 約 50 分'}]},
  {t:'選項',i:'♨',n:'整天留在 LiVEMAX 泡湯',k:'選項',d:'雨太大就不出門，踊子票改班次或退票',card:'livemax'},
  {t:'16:15',i:'🚉',n:'回到熱海站',k:'交通',at:'atami',go:[{at:'16:20',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
@@ -1933,7 +1950,7 @@ const PACK=[
  {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
-const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['tix','交通',['#tickets']],['food','美食',['#food']]];
+const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['tix','交通',['#tickets']],['food','美食',[]]];
 /* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
    已排入＝晴天版行程裡有時間的站；其餘（只有「選項」、只在雨天版、或完全沒排）＝候選。 */
 function spotStatus(k){let sched=null,opt=null,rain=null;
@@ -1961,11 +1978,24 @@ const SPOT_TREE=[
  ]},
  {name:'東京',sub:'含品川・神田・秋葉原・成田',col:'#2b4c7e',keys:['prince','yakiniku','roppongi','shimokita','katsumoto','akiba','yokocho','souvenir']}
 ];
+/* 資訊 › 美食：同一套地圖頁，換一棵樹。新增美食卡片要放進對應葉節點 */
+const FOOD_TREE=[
+ {name:'靜岡',sub:'おでん・鮪魚丼・草莓・靜岡茶',col:'#56633f',kids:[
+   {name:'靜岡市區',sub:'青葉橫丁おでん・靜岡茶',col:'#56633f',lab:'t',keys:['aoba','maruzen','issa']},
+   {name:'日本平・久能',sub:'石垣草莓・飯店下午茶',col:'#3f7a6a',lab:'b',keys:['ichigo','ndhotel']},
+   {name:'清水',sub:'河岸の市鮪魚丼・もつカレー',col:'#2f6f8f',lab:'t',keys:['shimizu','kinnoji']}
+ ]},
+ {name:'熱海・河津',sub:'夜市・甜點・金目鯛',col:'#b2622d',lab:'r',kids:[
+   {name:'熱海',sub:'土曜夜市・朝市・甜點',col:'#b2622d',lab:'r',keys:['yoichi','asaichi','ginza','fruitking','ekimae']},
+   {name:'河津',sub:'櫻花祭攤位・金目鯛',col:'#c9923e',lab:'r',keys:['kinmedai']}
+ ]},
+ {name:'東京',sub:'沾麵・燒肉・居酒屋橫丁',col:'#2b4c7e',keys:['katsumoto','yakiniku','yokocho']}
+];
 const SPOT_OV={W:390,H:340},SPOT_RG={W:390,H:400};
 function cardLoc(k){if(P[k])return k;for(const d of DAYS){for(const S of [d.stops||[],d.rainStops||[]]){const st=S.find(s=>s.card===k);if(st){const l=locOf(st);if(l)return l;}}}return '';}
 /* 依路徑取節點：{name,sub,col,lab,skip,kids,keys,locs,path,parent}；keys／locs 含所有子區 */
-function spotNode(path){
-  path=path||[];let n={name:'',sub:'',kids:SPOT_TREE,path:[],parent:null,root:true};
+function spotNode(path,tree){
+  path=path||[];let n={name:'',sub:'',kids:tree||SPOT_TREE,path:[],parent:null,root:true};
   for(const i of path){const k=n.kids[i];n={...k,path:n.path.concat(i),parent:n};}
   const allKeys=x=>x.keys||x.kids.flatMap(allKeys);n.keys=allKeys(n);
   n.locs=[...new Set(n.keys.map(cardLoc).filter(Boolean))];
@@ -2007,45 +2037,53 @@ function spotLeafMap(node){
     const xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]),sx=Math.max(...xs)-Math.min(...xs),sy=Math.max(...ys)-Math.min(...ys);
     focus={cx:(Math.min(...xs)+Math.max(...xs))/2,cy:(Math.min(...ys)+Math.max(...ys))/2,z:Math.max(1,Math.min(4,Math.min(SPOT_RG.W/(sx+90),SPOT_RG.H/(sy+90))))};}
   return {svg,cfg,nums,focus};}
+let _MP=null;
+function MPN(k){ // 兩個地圖頁：景點、美食；共用 spotGroupMap／spotLeafMap／showSpot
+  if(!_MP)_MP={
+    spots:{id:'spots',tree:SPOT_TREE,Z:SZ,path:null,h:'景點',lead:'要看哪一個地區？點地圖上的色塊。',ex:'spExtra',exShow:p=>p[0]===0},
+    food:{id:'foods',tree:FOOD_TREE,Z:FZ,path:null,h:'美食',lead:'要吃哪一區？點地圖上的色塊。',ex:'fdExtra',exShow:p=>p.length===0}};
+  return _MP[k];}
+function mpOf(el){return MPN(el&&el.closest&&el.closest('#foods')?'food':'spots');}
 const ZOOMBTN=`<div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
-function spotsHTML(){
-  const ov=spotGroupMap(spotNode([]));SZ._ell=ov.ell;
-  return `<section class="block" id="spots"><div class="wrap">
-   <div class="sp-head"><div class="sp-pick"><h2>景點</h2><p class="lead">要看哪一個地區？點地圖上的色塊。</p></div>
+function spotsHTML(ctx){
+  ctx=ctx||MPN('spots');const ov=spotGroupMap(spotNode([],ctx.tree));ctx.Z._ell=ov.ell;
+  return `<section class="block spp" id="${ctx.id}"><div class="wrap">
+   <div class="sp-head"><div class="sp-pick"><h2>${ctx.h}</h2><p class="lead">${ctx.lead}</p></div>
    <div class="sp-sub"><button class="sp-back" data-regback>${ico('left',18)}<span>回地區選擇</span></button><div class="sp-rh"><i></i><b></b><span></span></div></div></div>
    <div class="sp-map"><div class="sp-svg">${ov.svg}</div>${ZOOMBTN}</div>
-   <p class="sp-hint"></p><div class="sp-reg"></div><div id="spExtra"></div></div></section>`;}
+   <p class="sp-hint"></p><div class="sp-reg"></div><div id="${ctx.ex}"></div></div></section>`;}
 function spotLists(node){
   const keys=node.keys,rm=spotLeafMap(node);
   const card=k=>{const st=spotStatus(k),l=cardLoc(k);return `<div class="spw">${cardHTML(k,l?rm.nums[l]:0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
   const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
   return `<div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
      <div class="sp-h cand"><b>候選名單</b><span>${cand.length?cand.length+' 個':'目前沒有'}</span></div>${cand.length?`<div class="cards sp-cards">${cand.map(card).join('')}</div>`:''}`;}
-function spotSwap(html,W,H,cfg){ // 淡入換圖：新圖疊在舊圖上淡入，結束後移除舊圖
-  const box=$a('spots').querySelector('.sp-svg'),old=box.querySelector('svg');
+function spotSwap(ctx,html,W,H,cfg){ // 淡入換圖：新圖疊在舊圖上淡入，結束後移除舊圖
+  const box=$a(ctx.id).querySelector('.sp-svg'),old=box.querySelector('svg');
   box.insertAdjacentHTML('beforeend',html);const nu=box.querySelector('svg:last-of-type');nu.classList.add('in');
-  if(cfg){nu._cfg=cfg;}SZ.init(nu,W,H);if(cfg)layoutLabels(nu);
+  if(cfg){nu._cfg=cfg;}ctx.Z.init(nu,W,H);if(cfg)layoutLabels(nu);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{nu.classList.remove('in');if(old)old.classList.add('out');}));
   setTimeout(()=>{if(old)old.remove();},420);}
 /* 顯示某一層：path＝[] 總覽、[0] 靜岡色塊圖、[0,1] 日本平詳細圖…；anim＝先把目前的圖放大到該色塊再換圖 */
-function showSpot(path,anim){
-  const root=$a('spots');if(!root)return;const b=$a('maInfo');path=path||[];
-  const cur=APP.spot||[],same=cur.length===path.length&&cur.every((v,i)=>v===path[i]);
+function showSpot(path,anim,ctx){
+  ctx=ctx||MPN('spots');const Z=ctx.Z;
+  const root=$a(ctx.id);if(!root)return;const b=$a('maInfo');path=path||[];
+  const cur=ctx.path||[],same=cur.length===path.length&&cur.every((v,i)=>v===path[i]);
   if(same&&(path.length||!root.classList.contains('sub'))){if(b)b.scrollTop=0;return;} // 已經在這層就不重畫（否則會疊出兩張圖）
-  const node=spotNode(path),{W:W0,H:H0}=spotDims(node);
-  const enter=()=>{APP.spot=path;root.classList.toggle('sub',path.length>0);
+  const node=spotNode(path,ctx.tree),{W:W0,H:H0}=spotDims(node);
+  const enter=()=>{ctx.path=path;root.classList.toggle('sub',path.length>0);
     const rh=root.querySelector('.sp-sub .sp-rh');rh.querySelector('i').style.background=node.col||'';rh.querySelector('b').textContent=node.name;
     rh.querySelector('span').textContent=(node.parent&&!node.parent.root?node.parent.name+' · ':'')+node.sub;
     root.querySelector('.sp-back span').textContent=node.parent&&!node.parent.root?'回'+node.parent.name:'回地區選擇';
     let focus=null;const reg=root.querySelector('.sp-reg');
-    if(node.kids){const gm=spotGroupMap(node);SZ._ell=gm.ell;spotSwap(gm.svg,W0,H0,null);focus=gm.focus;
+    if(node.kids){const gm=spotGroupMap(node);Z._ell=gm.ell;spotSwap(ctx,gm.svg,W0,H0,null);focus=gm.focus;
       root.querySelector('.sp-hint').textContent=path.length?'點色塊進入該區；縮小可以看到更遠的地方。':'';reg.classList.remove('on');reg.innerHTML='';}
-    else{const rm=spotLeafMap(node);SZ._ell=null;spotSwap(rm.svg,W0,H0,rm.cfg);focus=rm.focus;
+    else{const rm=spotLeafMap(node);Z._ell=null;spotSwap(ctx,rm.svg,W0,H0,rm.cfg);focus=rm.focus;
       root.querySelector('.sp-hint').textContent='地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';reg.classList.add('on');reg.innerHTML=spotLists(node);}
-    if(focus&&focus.z>1.05)setTimeout(()=>{if(APP.spot===path)SZ.anim(focus.z,focus.cx,focus.cy,null,420);},380);
-    root.querySelector('#spExtra').hidden=path[0]!==0;if(b)b.scrollTop=0;};
-  const e=anim&&SZ._ell&&SZ._ell[path[path.length-1]];
-  if(e&&SZ.svg){const z=Math.max(SZ.z*1.6,Math.min(8,Math.min(SZ.BW/(2*e.rx+30),SZ.BH/(2*e.ry+30))));SZ.anim(z,e.cx,e.cy,enter,480);}else enter();}
+    if(focus&&focus.z>1.05)setTimeout(()=>{if(ctx.path===path)Z.anim(focus.z,focus.cx,focus.cy,null,420);},380);
+    root.querySelector('#'+ctx.ex).hidden=!ctx.exShow(path);if(b)b.scrollTop=0;};
+  const e=anim&&Z._ell&&Z._ell[path[path.length-1]];
+  if(e&&Z.svg){const z=Math.max(Z.z*1.6,Math.min(8,Math.min(Z.BW/(2*e.rx+30),Z.BH/(2*e.ry+30))));Z.anim(z,e.cx,e.cy,enter,480);}else enter();}
 
 const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
@@ -2270,7 +2308,7 @@ Z.bind=function(box){
     Z.set(Z.z*Math.exp(-e.deltaY*.0025),Z.vb[0]+fx*Z.vb[2],Z.vb[1]+fy*Z.vb[3],fx,fy);Z.relayout();},{passive:false});
 };
 return Z;}
-const MZ=makeZoom(390,400),SZ=makeZoom(390,340);
+const MZ=makeZoom(390,400),SZ=makeZoom(390,340),FZ=makeZoom(390,340);
 function mzInit(svg){MZ.init(svg);}function mzAnim(a,b,c){MZ.anim(a,b,c);}function mzMid(){return MZ.mid();}function mzCenter(a,b){MZ.center(a,b);}function mzBind(b){MZ.bind(b);}
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
@@ -2350,17 +2388,17 @@ function appClick(e){
   if(el=t.closest('.ma-row[data-stop]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.stop]);return true;}
   if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
-  if(el=t.closest('[data-mz]')){const Z=el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
+  if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
-  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([]);return true;}
-  if(el=t.closest('[data-reg]')){showSpot((APP.spot||[]).concat(+el.dataset.reg),true);return true;}
-  if(el=t.closest('[data-regback]')){showSpot((APP.spot||[]).slice(0,-1));return true;}
-  if(el=t.closest('#spots .sp-map .mk-a[data-k]')){let k=el.dataset.k;
-    if(t.classList.contains('hit')){let best=1e9;document.querySelectorAll('#spots .sp-map .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}
+  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([],false,MPN('spots'));if(APP.pane==='food')showSpot([],false,MPN('food'));return true;}
+  if(el=t.closest('[data-reg]')){const c=mpOf(el);showSpot((c.path||[]).concat(+el.dataset.reg),true,c);return true;}
+  if(el=t.closest('[data-regback]')){const c=mpOf(el);showSpot((c.path||[]).slice(0,-1),false,c);return true;}
+  if(el=t.closest('.spp .sp-map .mk-a[data-k]')){let k=el.dataset.k;const sc=el.closest('.spp').id;
+    if(t.classList.contains('hit')){let best=1e9;document.querySelectorAll('#'+sc+' .sp-map .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}
     openCard(k);return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
@@ -2382,7 +2420,8 @@ function appInit(){
   document.body.appendChild(root);
   const info=$a('maInfo');
   INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});
-    if(k==='spots'){p.innerHTML=spotsHTML();const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
+    if(k==='food'){p.innerHTML=spotsHTML(MPN('food'));const ex=p.querySelector('#fdExtra');const f=document.querySelector('#food');ex.insertAdjacentHTML('beforeend','<h2 class="fd-xh">必吃料理一覽</h2><p class="sp-hint">不分地點的特色料理與伴手禮；上面的地圖是有固定店家的美食。</p>');if(f)ex.appendChild(f);}
+    if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
     info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
@@ -2397,6 +2436,7 @@ function appInit(){
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
   mzBind($a('maMap'));sheetSwipe();
   {const sb=document.querySelector('#spots .sp-map');if(sb){SZ.bind(sb);const sv=sb.querySelector('svg');if(sv)SZ.init(sv,SPOT_OV.W,SPOT_OV.H);}}
+  {const fb=document.querySelector('#foods .sp-map');if(fb){FZ.bind(fb);const fv=fb.querySelector('svg');if(fv)FZ.init(fv,SPOT_OV.W,SPOT_OV.H);}}
   root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(actStops(DAYS[APP.day])[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
   root.addEventListener('scroll',()=>{if(pinEl)placeTip(pinEl);},{capture:true,passive:true});
