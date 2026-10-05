@@ -637,6 +637,25 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 驗證：`scratchpad/zones.js`（Day 4–7 色塊數、點色塊後倍率與色塊淡出、放大後點標記可聚焦、路線列數不變、Day 7 縮圖）；
   `twostep.js` 逐字相同，`zoom.js`／`pick5.js`／`food.js`／`complete.js` 無錯誤。
 
+### 2026-10-05 變更（二十六）：交通頁改版（線路圖＋訂票清單＋每日交通＋自駕須知）
+使用者同意的方向：原本「車票表／訂票時程／線路圖／訂票網站／要訣卡」五區同一件事講四遍、到了當天不好查，改成依行程順序。
+`#tickets` 新結構（桌機與手機資訊›交通共用同一份 DOM）：
+1. 導言 `.tx-lead`（要劃位的只有成田特快來回、2/11 新幹線、2/14 踊子）＋費用總覽 `#moneyBox`（仍由 `renderCost()` 填）。
+2. **線路圖**：SVG 不動，圖例 `.rlegend` 只留日期與區間（車資移到每日卡）。
+3. **訂票清單** `#bookList`：資料 `BOOK=[[id,截止日ISO|null,顯示時間,標題,說明,'網址|名稱'],…]`（在 `renderCost` 後面），`renderBook()` 依「未完成優先＋截止日」排序，
+   用日本時間算「還有 N 天」（≤14 天變紅）；打勾存 localStorage **`izu-book`**（`{id:1}`），用 `change` 事件。
+   截止日推算：JR 乘車日前一個月 10:00 JST 開賣 → 2/10 N'EX 1/10、2/11 smart-EX 1/11、2/14 踊子 1/14、2/17 N'EX 1/17；
+   駕照譯本訂「1 月底前」、VJW／烤肉訂位／開花情報「出發前一週」都是我定的建議日。
+4. **每日交通** `.ldays`：8 張 `<details class="lday" data-mc>`，`summary` 內是日期標題＋各段 `.lg`（圖示、區間、時間車資、標籤
+   `.bg-need` 要先訂／`.bg-day` 當天買／`.bg-car` 開車／`.bg-walk` 步行），`summary` 後是要訣 `.ld-tip` 與訂票連結 `.ld-lk`。
+   內容全部取自 `STOPS` 的 `go` 與舊要訣卡；**改行程時這裡是手寫 HTML，要跟著改**。
+5. **自駕須知** `<details class="tacc" data-mc>`：六張 `.tipgrid` 卡（駕照、異地還車與還油、ETC 與高速費、導航、熱海停車、開車習慣）＋停車場一覽 `.parktbl`，
+   沒查證的標「待確認」（灰字 `.tbd`）。ETC 租借費、品川還車營業所、各停車場費用都**沒查證**。
+- 手機：`details[data-mc]` 開頁時移除 `open`（每日卡只露出標題與各段，要訣收合；自駕須知整段收合）；桌機一律展開，點 `summary` 被 `preventDefault` 不會收起。
+- 刪除：舊車票表、`.todo` 訂票時程、`.linkgrid` 訂票網站、「當天買票就好」「其他要先預約的」兩張卡（內容併進訂票清單與每日卡）。CSS 舊規則保留沒刪。
+- 高度：手機 4724 → 5283 px（收合後；全部展開約 7400）、桌機 2542 → 4033 px。
+- 驗證：`scratchpad/tix.js`／`tix2.js`（清單排序與打勾存檔、8 張卡、手機收合與點開、桌機點標題不收合、截圖）；`pick5`／`food`／`twostep`／`complete`／`zones` 無錯誤。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

@@ -641,6 +641,45 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .rlegend i.bus{background:repeating-linear-gradient(90deg,#d9a21b 0 7px,transparent 7px 12px)}
 .rlegend b{display:block}
 .rlegend span{color:var(--ink2)}
+.tx-lead{font-size:15px;line-height:1.75;margin:4px 0 10px}.tx-lead b{color:var(--shu)}
+.tx-note{margin-top:6px;font-size:12.5px}.tx-h4{margin:18px 0 6px;font-size:15px}
+.bklist{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:8px}
+.bklist li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--rule);border-radius:12px;padding:11px 14px}
+.bklist li.done{opacity:.55}.bklist li.done .bk-t b{text-decoration:line-through}
+.bklist input{flex:none;width:20px;height:20px;margin-top:2px;accent-color:var(--shu)}
+.bk-t{flex:1;min-width:0}.bk-t b{display:block;font-size:14.5px}.bk-t span{display:block;font-size:12.5px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.bk-t a{font-size:12.5px;color:var(--ai);margin-right:10px}
+.bk-d{flex:none;text-align:right;font-size:12px;color:var(--ink3);line-height:1.4}.bk-d b{display:block;font-size:13.5px;color:var(--shu)}
+.bk-d.soon b{color:#c8452e}
+.ldays{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-top:12px}
+.lday{background:#fff;border:1px solid var(--rule);border-radius:12px;padding:13px 15px 14px}
+.ld-h{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;margin-bottom:8px}.ld-h .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--shu);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.ld-h b{font-size:14.5px;white-space:nowrap}.ld-h span:last-child{font-size:13px;color:var(--ink2)}
+.lg{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--rule)}
+.lg i{flex:none;font-style:normal;width:22px;text-align:center}.lg>div{flex:1;min-width:0}.lg b{display:block;font-size:13.5px;font-weight:600}.lg span{display:block;font-size:12.5px;color:var(--ink2);line-height:1.5}
+.lg em{flex:none;font-style:normal;font-size:11px;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.bg-need{background:#c8452e;color:#fff}.bg-day{background:#e3ecd9;color:#47602e}.bg-car{background:#f3dfd6;color:#9b3d22}.bg-walk{background:#ece6d8;color:#6b6457}
+.ld-tip{font-size:13px;line-height:1.75;color:var(--ink2);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)}.ld-tip b{color:var(--shu);font-weight:600}
+.ld-lk{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.ld-lk a{font-size:12.5px;padding:4px 11px;border:1px solid var(--rule);border-radius:99px;text-decoration:none;color:var(--ai)}
+.parktbl td.tbd{color:var(--ink3)}
+@media (max-width:640px){.ldays{grid-template-columns:1fr}.bklist{grid-template-columns:1fr}.bklist li{padding:10px 12px}.ld-h span:last-child{flex-basis:100%;padding-left:34px}}
+details.lday>summary{list-style:none;cursor:default}details.lday>summary::-webkit-details-marker{display:none}
+.ld-more{display:none}
+details.tacc>summary{display:none}
+@media (max-width:640px){
+  details.lday>summary{cursor:pointer}
+  .ld-more{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;color:var(--ai);font-weight:600}
+  .ld-more::after{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+  details.lday[open] .ld-more::after{transform:rotate(-135deg)}
+  details.tacc{margin-top:10px;border:1px solid var(--rule);border-radius:22px;background:#fff;overflow:hidden}
+  details.tacc>summary{display:flex;justify-content:space-between;align-items:center;list-style:none;cursor:pointer;padding:13px 16px;font-weight:700;font-size:14.5px}
+  details.tacc>summary::-webkit-details-marker{display:none}
+  details.tacc>summary span{font-size:12px;color:var(--ink3);font-weight:400}
+  details.tacc[open]>summary span{display:none}
+  details.tacc>.tipgrid,details.tacc>.tx-h4,details.tacc>table,details.tacc>.tx-note{margin-left:10px;margin-right:10px}
+  details.tacc>.tx-note{margin-bottom:12px}
+}
+
 .linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:10px}
 .lk{display:flex;flex-direction:column;gap:3px;padding:12px 14px;background:#fff;border:1px solid var(--rule);border-radius:12px;text-decoration:none;color:var(--ink)}
 .lk b{font-size:15px;color:var(--ai)}
@@ -772,36 +811,8 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 <section class="block" id="tickets">
   <div class="wrap">
     <h2>交通總覽：車票、費用與訂位</h2>
-    <div class="pre">
-      <div>
-        <h3>車票與費用</h3>
-        <table>
-          <tr><th>區間</th><th>車種</th><th>時間</th><th>車資</th><th>訂票</th></tr>
-          <tr><td>成田 T2 → 品川</td><td>JR 成田特快</td><td>19:53–21:00</td><td>¥3,330</td><td class="mute">えきねっと</td></tr>
-          <tr><td>品川 → 靜岡</td><td>東海道新幹線 ひかり</td><td>約 1 小時</td><td>¥6,470</td><td class="mute">smart-EX，選可放行李箱座位</td></tr>
-          <tr><td>靜岡 → 熱海 → 品川 自駕</td><td>租車（tabirai，異地還車）</td><td>2/11 中午–2/15 下午</td><td class="mute">概算 ¥30,000<br>＋異地還車費、高速費、停車費</td><td class="mute">tabirai 靜岡站前取車、品川還車</td></tr>
-          <tr><td>熱海 → 河津</td><td>JR 踊子</td><td>約 1 小時 10 分</td><td>¥3,490</td><td class="mute">えきねっと・1／9 號車廂・A 席</td></tr>
-          <tr><td>河津 → 熱海（午餐後）</td><td>伊豆急＋JR 普通車</td><td>約 1 小時 50 分</td><td>約 ¥2,100</td><td class="mute">當日購票</td></tr>
-          <tr><td>品川 → 成田 T2</td><td>JR 成田特快</td><td>08:05–09:30</td><td>¥3,330</td><td class="mute">えきねっと</td></tr>
-        </table>
-        <div class="money" id="moneyBox"></div>
-      </div>
-      <div>
-        <h3>訂票時程</h3>
-        <ul class="todo">
-          <li><span class="d">越早越好</span><span>訂靜岡站前飯店 2/11–12 兩晚</span></li>
-          <li><span class="d">隨時</span><span>tabirai 預約租車　<b>2/11 中午靜岡站前取車 – 2/15 下午品川還車（5 天，異地還車）</b>；順便確認 LiVEMAX 停車場</span></li>
-          <li><span class="d">隨時</span><span>預約 2/12 上午場石垣草莓採果</span></li>
-          <li><span class="d">1/11 前後</span><span>smart-EX 訂新幹線指定席：2/11 品川→靜岡</span></li>
-          <li><span class="d">1/14 09:00</span><span>えきねっと開賣 2/14 踊子（熱海→河津）A 席・1／9 號車廂</span></li>
-          <li><span class="d">出發前</span><span>監理站申請<b>駕照日文譯本</b>（NT 100，可線上辦郵寄）—— 台灣的國際駕照在日本無效</span></li>
-          <li><span class="d">出發前</span><span>成田特快來回兩段（えきねっと）、Visit Japan Web、SIM 卡各自處理</span></li>
-          <li><span class="d">日期公布後</span><span>查 2027 年 2 月的<b>熱海海上花火大会</b>日期；若落在 2/13 或 2/14 晚上，飯店前的親水公園就是觀賞點，當晚 20:20 前回到海邊</span></li>
-          <li><span class="d">出發前一週</span><span>看河津町開花情報，決定 2/14 要不要往南伊豆或下田跑</span></li>
-        </ul>
-        <p class="mute" style="margin-top:8px">JR 東日本車票於乘車日前一個月的日本時間 10:00 開賣，即台灣 09:00。</p>
-      </div>
-    </div>
+    <p class="tx-lead">要事先劃位的只有三段：<b>成田特快來回</b>、<b>2/11 東海道新幹線</b>、<b>2/14 踊子</b>。2/11–2/15 租車自駕，其餘當天買票或嗶 Suica。</p>
+    <div class="money" id="moneyBox"></div>
 
     <h3 class="sub-h">線路圖</h3>
     <div class="railmap">
@@ -828,59 +839,55 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 <text x="16" y="548" class="rs">示意圖，非實際比例與位置</text>
 </svg>
         <ul class="rlegend">
-          <li><i style="background:#8a3f5c"></i><div><b>JR 成田特快 N'EX</b><span>成田機場 T2 ⇄ 品川・2/10 去、2/17 回・每趟 ¥3,330・全車指定席</span></div></li>
-          <li><i style="background:#2b4c7e"></i><div><b>東海道新幹線</b><span>2/11 品川 → 靜岡（ひかり）¥6,470</span></div></li>
-          <li><i style="background:#c8452e"></i><div><b>租車（紅虛線）</b><span>2/11 靜岡站前取車 → 2/13 開到熱海 → 2/15 開回品川還車；2/14 車停飯店</span></div></li>
-          <li><i style="background:#3c9a72"></i><div><b>JR 踊子・伊豆急行</b><span>2/14 熱海 → 河津 踊子 ¥3,490（A 席靠海）；午餐後伊豆急＋JR 普通車回熱海 約 ¥2,100</span></div></li>
+          <li><i style="background:#8a3f5c"></i><div><b>JR 成田特快 N'EX</b><span>2/10 成田 → 品川・2/17 品川 → 成田</span></div></li>
+          <li><i style="background:#2b4c7e"></i><div><b>東海道新幹線</b><span>2/11 品川 → 靜岡</span></div></li>
+          <li><i style="background:#c8452e"></i><div><b>租車（紅虛線）</b><span>2/11 靜岡取車 → 2/13 開到熱海 → 2/15 品川還車</span></div></li>
+          <li><i style="background:#3c9a72"></i><div><b>JR 踊子・伊豆急行</b><span>2/14 熱海 ⇄ 河津</span></div></li>
         </ul>
     </div>
 
-    <h3 class="sub-h">訂票網站</h3>
-    <div class="linkgrid">
-          <a class="lk" href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer"><b>えきねっと</b><span>JR 東日本：成田特快來回、2/14 踊子 A 席（台灣時間 1/14 09:00 開賣）</span><i>eki-net.com ↗</i></a>
-          <a class="lk" href="https://smart-ex.jp/" target="_blank" rel="noopener noreferrer"><b>smart-EX</b><span>東海道新幹線：2/11 品川→靜岡</span><i>smart-ex.jp ↗</i></a>
-          <a class="lk" href="https://www.tabirai.net/car/" target="_blank" rel="noopener noreferrer"><b>tabirai 租車</b><span>2/11 靜岡站前取車、2/15 品川還車（異地還車）比價</span><i>tabirai.net ↗</i></a>
-          <a class="lk" href="https://www.tigerairtw.com/" target="_blank" rel="noopener noreferrer"><b>台灣虎航</b><span>IT202 桃園→成田、IT201 成田→桃園</span><i>tigerairtw.com ↗</i></a>
-          <a class="lk" href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener noreferrer"><b>Visit Japan Web</b><span>入境審查與海關申報 QR，出發前填好</span><i>vjw.digital.go.jp ↗</i></a>
-          <a class="lk" href="https://www.mvdis.gov.tw/" target="_blank" rel="noopener noreferrer"><b>監理服務網</b><span>駕照日文譯本線上申請（租車必備）</span><i>mvdis.gov.tw ↗</i></a>
-          <a class="lk" href="https://www.izukyu.co.jp/" target="_blank" rel="noopener noreferrer"><b>伊豆急行</b><span>河津 → 熱海回程時刻（不用訂，當天買票）</span><i>izukyu.co.jp ↗</i></a>
-          <a class="lk" href="https://www.kawazuzakura.net/" target="_blank" rel="noopener noreferrer"><b>河津櫻まつり</b><span>開花情報，出發前一週看</span><i>kawazuzakura.net ↗</i></a>
-        </div>
+    <h3 class="sub-h">訂票清單</h3>
+    <p class="mute tx-note">依截止日排序，打勾會記在這支手機／這台電腦上。JR 車票在乘車日前一個月的日本時間 10:00 開賣（台灣 09:00）。</p>
+    <ul class="bklist" id="bookList"></ul>
 
-    <h3 class="sub-h">訂位・搭車要訣</h3>
-    <p class="mute" style="margin-top:8px">這趟要事先劃位的只有：成田特快來回、2/11 東海道新幹線、2/14 的踊子。其餘區間當天買票或嗶 Suica 就好。</p>
-    <div class="tipgrid">
-      <div>
-        <h4>成田特快 N'EX</h4>
-        <div class="when">2/10 成田→品川 ・ 2/17 品川→成田 ・ ¥3,330</div>
-        <p><b>全車指定席</b>，沒劃位不能上車，えきねっと 線上訂即可，這條不難買，出發前訂就行。車廂<b>兩端有大型行李放置區</b>（附號碼鎖），29 吋行李箱放得下。去程班機 17:30 落地，通關＋領行李抓 2 小時，搭 19:53、21:00 到品川；回程 13:00 的飛機，坐 08:05 發、09:30 到第二航廈，留 3 小時很充裕。</p>
-      </div>
-      <div>
-        <h4>東海道新幹線</h4>
-        <div class="when">2/11 品川→靜岡 ¥6,470 ・ 1/11 前後訂</div>
-        <p>用 <b>smart-EX</b> 線上訂，台灣發行的信用卡可以刷，進站直接嗶手機 QR。品川→靜岡務必挑<b>ひかり</b>（約 1 小時）；こだま 班次多但要 1 小時 25 分，差 25 分鐘。行李箱三邊合計超過 160 cm 要訂<b>「特大行李放置處附帶席」</b>，沒訂被查到要補 ¥1,000；或是訂該車廂<b>最後一排</b>，座位後方的空間可以放。想看富士山坐 <b>E 席</b>（山側），這點跟踊子相反，別記混了。</p>
-      </div>
-      <div>
-        <h4>JR 特急 踊子</h4>
-        <div class="when">2/14 熱海→河津 ¥3,490 ・ <b>台灣時間 1/14 09:00 開賣</b></div>
-        <p>河津櫻まつり期間最難搶的一段，<b>えきねっと 一開賣就要下手</b>（日本 1/14 10:00＝台灣 09:00），晚一小時就只剩站票。座位挑 <b>A 席</b>，往下田方向的左側＝<b>靠海</b>，相模灣與伊豆大島一路看到底。行李箱放 <b>1 號或 9 號車廂</b>的置物區。回程午餐後搭伊豆急＋JR 普通車回熱海，約 1 小時 50 分、約 ¥2,100，<b>不用訂票</b>；想快一點也可以另訂回程踊子。</p>
-      </div>
-      <div>
-        <h4>租車：靜岡 → 熱海 → 品川</h4>
-        <div class="when">2/11 中午 – 2/15 下午 ・ 概算 ¥30,000 ＋ 異地還車費、高速費、停車費</div>
-        <p>用 <b>tabirai</b> 比價，訂靜岡站前營業所。<b>台灣的國際駕照在日本無效</b>，一定要帶<b>台灣駕照正本＋監理站核發的日文譯本</b>（NT 100，可線上申請郵寄），兩份缺一不可，現場少一樣就租不到車。<b>靜岡取、品川還是異地還車（乗り捨て）</b>，要選有這項服務的公司，會另收一筆費用。日本平、久能山下、三保松原、清水河岸の市、動物園都有停車場，不難停；<b>熱海市區坡陡路窄、停車場少</b>，到了就把車停飯店，市區走路或搭計程車。2/14 河津櫻まつり期間 135 號國道大塞車，這天照搭踊子。日本是<b>方向盤在右、靠左行駛</b>，加油站多為自助式（セルフ）。</p>
-      </div>
-      <div>
-        <h4>當天買票就好</h4>
-        <div class="when">不用預約的區間</div>
-        <p>河津→熱海普通車約 ¥2,100 與各地巴士，全部<b>當天買票或嗶 Suica／PASMO</b>。手機的 Apple Pay／Google Pay 可以直接加 Suica，省去買實體卡。特急券與新幹線不能用 Suica 進站，記得走人工或 QR 閘門。</p>
-      </div>
-      <div>
-        <h4>其他要先預約的</h4>
-        <div class="when">非交通，但一樣會額滿</div>
-        <p><b>石垣草莓採果</b>（2/12 上午場）要先打電話或線上預約，2 月是旺季，週末常滿。<b>靜岡站前飯店 2/11–12 兩晚</b>目前還沒訂，越早越好。<b>Visit Japan Web</b> 出發前填好入境與海關 QR。2/15 的燒肉若想吃好一點的店，建議出發前一週訂位。</p>
-      </div>
+    <h3 class="sub-h">每日交通</h3>
+    <div class="ldays">
+      <details class="lday" open data-mc><summary><div class="ld-h"><span class="n">1</span><b>2/10（三）</b><span>成田 → 品川</span></div>
+      <div class="lg"><i>🚆</i><div><b>成田 T2 → 品川　JR 成田特快 N'EX</b><span>19:53–21:00・¥3,330・全車指定席</span></div><em class="bg-need">要先訂</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip"><b>全車指定席</b>，沒劃位不能上車；えきねっと線上訂，這條不難買。車廂<b>兩端有大型行李放置區</b>（附號碼鎖），29 吋行李箱放得下。班機 17:30 落地，通關＋領行李抓 2 小時。</p><div class="ld-lk"><a href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer">えきねっと ↗</a></div></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">2</span><b>2/11（四・假日）</b><span>品川 → 靜岡，取車上日本平</span></div>
+      <div class="lg"><i>🚄</i><div><b>品川 → 靜岡　東海道新幹線 ひかり</b><span>10:00 發・約 1 小時・¥6,470</span></div><em class="bg-need">要先訂</em></div><div class="lg"><i>🚗</i><div><b>靜岡站前取車</b><span>11:20・tabirai 預約，行李直接放後車廂</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚡</i><div><b>日本平纜車 ⇄ 久能山東照宮</b><span>約 5 分・來回 ¥1,400</span></div><em class="bg-day">當天買</em></div><div class="lg"><i>🚶</i><div><b>飯店 → 青葉橫丁</b><span>晚上走路約 10 分，車停好就別再動</span></div><em class="bg-walk">步行</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">新幹線用 <b>smart-EX</b> 訂（台灣信用卡可刷，進站嗶手機 QR）。務必挑<b>ひかり</b>，こだま 要 1 小時 25 分。行李箱三邊合計超過 160 cm 要訂<b>「特大行李放置處附帶席」</b>，或訂車廂<b>最後一排</b>；想看富士山坐 <b>E 席</b>（山側），跟踊子相反。取車要帶<b>台灣駕照正本＋日文譯本</b>。</p><div class="ld-lk"><a href="https://smart-ex.jp/" target="_blank" rel="noopener noreferrer">smart-EX ↗</a><a href="https://www.tabirai.net/car/" target="_blank" rel="noopener noreferrer">tabirai 租車 ↗</a></div></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">3</span><b>2/12（五）</b><span>全天開車：久能・清水・三保</span></div>
+      <div class="lg"><i>🚗</i><div><b>飯店 → 石垣草莓</b><span>09:30・約 30 分</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>草莓 → 清水 河岸の市 → ドリームプラザ</b><span>約 25 分＋5 分</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>ドリームプラザ → 三保松原</b><span>15:30・約 20 分</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>三保 → 柚木の郷 → 飯店</b><span>17:45・約 35 分；21:20 回飯店約 10 分</span></div><em class="bg-car">開車</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">這天不還車，車續租到 2/15。柚木の郷晚餐時<b>開車的人別喝酒</b>（日本酒駕零容忍，同車的人也會被追究）。</p></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">4</span><b>2/13（六）</b><span>靜岡 → 熱海</span></div>
+      <div class="lg"><i>🚗</i><div><b>飯店 → 日本平動物園 → 靜岡市區</b><span>09:00 約 25 分・11:20 約 20 分</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>靜岡 → 熱海　起雲閣</b><span>12:45・約 1 小時 40 分（東名／新東名 → 沼津 → 熱函道路）</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>起雲閣 → LiVEMAX</b><span>15:15・約 5 分，停好車就不再動</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚶</i><div><b>熱海銀座 → 糸川 → 魚市場 → 飯店</b><span>傍晚全程走路，各約 5–10 分</span></div><em class="bg-walk">步行</em></div><div class="lg"><i>🚕</i><div><b>飯店 ⇄ 來宮神社（夜晚選項）</b><span>計程車約 10 分</span></div><em class="bg-day">當天買</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">高速費出發前查。<b>熱海市區坡陡路窄、停車場少</b>，到了就把車停飯店，晚上走路或搭計程車。</p></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">5</span><b>2/14（日）</b><span>河津半日遊（車停飯店）</span></div>
+      <div class="lg"><i>🚕</i><div><b>飯店 → 熱海站</b><span>09:00・計程車約 5 分</span></div><em class="bg-day">當天買</em></div><div class="lg"><i>🚆</i><div><b>熱海 → 河津　JR 特急 踊子</b><span>09:30・約 1 小時 10 分・¥3,490・A 席</span></div><em class="bg-need">要先訂</em></div><div class="lg"><i>🚃</i><div><b>河津 → 熱海　伊豆急＋JR 普通車</b><span>13:40・約 1 小時 50 分・約 ¥2,100・嗶 Suica</span></div><em class="bg-day">當天買</em></div><div class="lg"><i>🚕</i><div><b>熱海站 → 飯店</b><span>15:35・計程車約 5 分</span></div><em class="bg-day">當天買</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">踊子是<b>最難搶的一段</b>：えきねっと 台灣時間 <b>1/14 09:00</b> 一開賣就下手，晚一小時就只剩站票。座位挑 <b>A 席</b>（往下田方向左側＝靠海），行李放 <b>1 號或 9 號車廂</b>。河津櫻まつり期間 135 號國道大塞車，所以這天不開車。回程時刻出發前查伊豆急；想快一點可另訂回程踊子。</p><div class="ld-lk"><a href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer">えきねっと ↗</a><a href="https://www.izukyu.co.jp/" target="_blank" rel="noopener noreferrer">伊豆急行時刻 ↗</a><a href="https://www.kawazuzakura.net/" target="_blank" rel="noopener noreferrer">河津櫻開花情報 ↗</a></div></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">6</span><b>2/15（一）</b><span>熱海 → 品川還車</span></div>
+      <div class="lg"><i>🚗</i><div><b>飯店 → 熱海梅園 → 熱海站前</b><span>09:20・各約 10 分（梅園臨時停車場、站前投幣停車場）</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚗</i><div><b>熱海 → 品川</b><span>12:10・約 2 小時（真鶴道路 → 西湘バイパス → 小田原厚木道路 → 東名 → 首都高）</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🔑</i><div><b>品川還車</b><span>14:15・還車前加滿油</span></div><em class="bg-car">開車</em></div><div class="lg"><i>🚇</i><div><b>品川 → 六本木</b><span>19:00・地鐵約 20 分・嗶 Suica</span></div><em class="bg-day">當天買</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">週一下午進東京可能塞車，路上多抓時間。還車規則多半是<b>加滿油再還（満タン返し）</b>，加油收據留著；品川營業所附近的加油站先查好。</p></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">7</span><b>2/16（二）</b><span>東京自由日</span></div>
+      <div class="lg"><i>🚇</i><div><b>品川 → 神保町</b><span>12:00・都營淺草線 → 三田線約 20 分</span></div><em class="bg-day">當天買</em></div><div class="lg"><i>🚶</i><div><b>神保町 → 秋葉原</b><span>13:40・走路約 20 分，穿過御茶之水</span></div><em class="bg-walk">步行</em></div><div class="lg"><i>🚇</i><div><b>秋葉原 → 居酒屋橫丁</b><span>18:00・地點待定（首推野毛，品川出發約 25 分）</span></div><em class="bg-day">當天買</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">東京市區全程嗶 <b>Suica／PASMO</b>，手機 Apple Pay／Google Pay 可直接加 Suica，不用買實體卡。</p></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">8</span><b>2/17（三）</b><span>品川 → 成田</span></div>
+      <div class="lg"><i>🚆</i><div><b>品川 → 成田 T2　JR 成田特快 N'EX</b><span>08:05–09:30・¥3,330・全車指定席</span></div><em class="bg-need">要先訂</em></div><span class="ld-more">要訣與訂票連結</span></summary>
+      <p class="ld-tip">13:00 的飛機，09:30 到第二航廈，留 3 小時很充裕。液體類伴手禮出境後再買。</p><div class="ld-lk"><a href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer">えきねっと ↗</a></div></details>
     </div>
+
+    <h3 class="sub-h">自駕須知</h3>
+    <details class="tacc" open data-mc><summary>駕照、還車加油、ETC、導航、停車 <span>點開看</span></summary>
+    <div class="tipgrid">
+      <div><h4>駕照</h4><p>台灣的<b>國際駕照在日本無效</b>。要帶<b>台灣駕照正本＋監理站核發的日文譯本</b>（NT 100，可線上申請郵寄），兩份缺一不可，少一樣就租不到車。開車的人每位都要。</p></div>
+      <div><h4>異地還車與還油</h4><p>靜岡取、品川還是<b>異地還車（乗り捨て）</b>，要選有這項服務的公司，會另收費。品川還車營業所位置訂車時確認。還車前<b>加滿油（満タン返し）</b>，收據留著。</p></div>
+      <div><h4>ETC 與高速費</h4><p>租車時可加租 <b>ETC 卡</b>，過收費站不用停車找零，費用還車時一起結（租借費待確認）。主要高速路段：Day 4 東名／新東名、Day 6 小田原厚木道路＋首都高，費用出發前查。</p></div>
+      <div><h4>導航</h4><p>日本車機可輸入<b>電話號碼</b>或 MAPCODE 設目的地，比輸入日文地址快。各景點的電話寫在景點卡片的「電話」欄。</p></div>
+      <div><h4>熱海停車</h4><p><b>熱海市區坡陡路窄、停車場少</b>。2/13 到了就把車停飯店，晚上走路或搭計程車；2/14 去河津也不開車，車留在飯店。</p></div>
+      <div><h4>開車習慣</h4><p><b>方向盤在右、靠左行駛</b>；加油站多為自助式（セルフ），一般汽油選「レギュラー」。<b>酒駕零容忍</b>，喝了就不開，同車的人也會被追究。</p></div>
+    </div>
+    <h4 class="tx-h4">停車場一覽</h4>
+    <table class="parktbl">
+      <tr><th>地點</th><th>哪天</th><th>停車</th></tr>
+      <tr><td>日本平山頂（夢テラス）</td><td>Day 2</td><td>免費停車</td></tr><tr><td>靜岡站前飯店</td><td>Day 2–3</td><td class="tbd">飯店還沒訂，訂房時確認</td></tr><tr><td>石垣草莓園</td><td>Day 3</td><td class="tbd">農園多有停車場，預約時確認</td></tr><tr><td>清水 河岸の市</td><td>Day 3</td><td class="tbd">有停車場，費用待確認</td></tr><tr><td>エスパルスドリームプラザ</td><td>Day 3</td><td class="tbd">有停車場，費用待確認</td></tr><tr><td>三保松原</td><td>Day 3</td><td class="tbd">有停車場，費用待確認</td></tr><tr><td>柚木の郷</td><td>Day 3</td><td>館方停車場</td></tr><tr><td>日本平動物園</td><td>Day 4</td><td>有停車場（收費）</td></tr><tr><td>起雲閣</td><td>Day 4</td><td class="tbd">收費，待確認</td></tr><tr><td>LiVEMAX 熱海 Ocean</td><td>Day 4–6</td><td class="tbd">有無與費用待確認</td></tr><tr><td>熱海梅園</td><td>Day 6</td><td>梅まつり期間臨時停車場（收費）</td></tr><tr><td>熱海站前</td><td>Day 6</td><td>投幣式停車場</td></tr>
+    </table>
+    <p class="mute tx-note">標「待確認」的是還沒查證的資訊，訂車、訂房時一併確認。</p>
+    </details>
   </div>
 </section>
 
@@ -1457,6 +1464,38 @@ function renderCost(){
   const mb=document.getElementById('moneyBox');
   if(mb)mb.innerHTML=`<div><div class="big">${fmtC(A.t.NT,'NT')}</div><div class="lab">每人・機票＋已知住宿</div></div><div><div class="big">${fmtC(B.t['¥'],'¥')}</div><div class="lab">每人・已知車資＋門票${PPL?'（租車 '+PPL+' 人分攤）':'（不含租車）'}</div></div><div><div class="big">${all.u} 項未知</div><div class="lab">含靜岡 2 晚住宿、餐費，詳見花費頁</div></div>`;
 }
+/* 交通頁「訂票清單」：依截止日排序，打勾存 localStorage izu-book；截止日用日本時間算剩幾天 */
+const BOOK=[
+ ['hotel',null,'越早越好','訂靜岡站前飯店 2/11–12 兩晚','候選：ホテルアソシア靜岡、東橫INN；確認有沒有停車場',''],
+ ['car',null,'越早越好','tabirai 預約租車','2/11 中午靜岡站前取車 → 2/15 下午品川還車（5 天，異地還車）；順便問 ETC 卡、品川營業所位置','https://www.tabirai.net/car/|tabirai'],
+ ['ichigo',null,'越早越好','預約石垣草莓 2/12 上午 10:00 場','2 月是旺季，週末常滿',''],
+ ['lic','2027-01-29','1 月底前','監理站申請駕照日文譯本','NT 100，可線上申請郵寄；開車的人每位都要','https://www.mvdis.gov.tw/|監理服務網'],
+ ['nex1','2027-01-10','1/10 起','えきねっと 訂 2/10 成田特快（成田 → 品川）','乘車日前一個月開賣，不難買','https://www.eki-net.com/|えきねっと'],
+ ['sx','2027-01-11','1/11 開賣','smart-EX 訂 2/11 新幹線 品川 → 靜岡','挑ひかり；大行李箱訂特大行李座或最後一排','https://smart-ex.jp/|smart-EX'],
+ ['odo','2027-01-14','1/14 09:00','えきねっと 搶 2/14 踊子 熱海 → 河津','A 席・1／9 號車廂；最難搶，一開賣就下手','https://www.eki-net.com/|えきねっと'],
+ ['nex2','2027-01-17','1/17 起','えきねっと 訂 2/17 成田特快（品川 → 成田）','08:05 發','https://www.eki-net.com/|えきねっと'],
+ ['vjw','2027-02-03','出發前一週','填 Visit Japan Web','入境審查與海關申報 QR','https://www.vjw.digital.go.jp/|Visit Japan Web'],
+ ['bbq','2027-02-08','出發前一週','訂 2/15 烤肉大餐','品川或六本木，店家待定',''],
+ ['sakura','2027-02-07','出發前一週','看河津町開花情報','決定 2/14 要不要往南伊豆或下田跑','https://www.kawazuzakura.net/|河津櫻まつり'],
+ ['hanabi',null,'日期公布後','查 2027 年 2 月熱海海上花火大会日期','若在 2/13 或 2/14 晚上，飯店前的親水公園就是觀賞點，20:20 前回到海邊',''],
+];
+let BK={};try{BK=JSON.parse(localStorage.getItem('izu-book')||'{}')||{};}catch(e){}
+function renderBook(){
+  const ul=document.getElementById('bookList');if(!ul)return;
+  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));now.setHours(0,0,0,0);
+  const left=d=>Math.round((new Date(d+'T00:00:00')-now)/864e5);
+  const rank=b=>b[1]?left(b[1]):(b[2]==='越早越好'?-1e6:1e6);
+  ul.innerHTML=BOOK.slice().sort((a,b)=>(!!BK[a[0]]-!!BK[b[0]])||rank(a)-rank(b)).map(b=>{
+    const [id,dl,when,t,sub,link]=b,done=!!BK[id],n=dl?left(dl):null;
+    const cd=done?'已完成':n==null?'':n>0?`還有 ${n} 天`:n===0?'就是今天':'已過';
+    const lnk=link?link.split('|'):null;
+    return `<li class="${done?'done':''}"><input type="checkbox" data-bk="${id}" ${done?'checked':''} aria-label="${t}"><div class="bk-t"><b>${t}</b><span>${sub}</span>${lnk?`<a href="${lnk[0]}" target="_blank" rel="noopener noreferrer">${lnk[1]} ↗</a>`:''}</div><div class="bk-d${!done&&n!=null&&n<=14?' soon':''}"><b>${when}</b>${cd}</div></li>`;}).join('');
+}
+document.addEventListener('change',e=>{const c=e.target.closest&&e.target.closest('[data-bk]');if(!c)return;
+  if(c.checked)BK[c.dataset.bk]=1;else delete BK[c.dataset.bk];try{localStorage.setItem('izu-book',JSON.stringify(BK));}catch(err){}renderBook();});
+document.addEventListener('click',e=>{const su=e.target.closest&&e.target.closest('#tickets details[data-mc]>summary');if(su&&!matchMedia('(max-width:640px)').matches)e.preventDefault();}); // 桌機一律展開，點標題不收合
+if(matchMedia('(max-width:640px)').matches)document.querySelectorAll('#tickets details[data-mc]').forEach(d=>d.removeAttribute('open')); // 手機：每日交通的要訣、自駕須知預設收合
+renderBook();
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ppl]');if(!b)return;
   PPL=Math.max(0,Math.min(12,PPL+(+b.dataset.ppl)));try{localStorage.setItem('izu-ppl',PPL);}catch(err){}renderCost();});
 
