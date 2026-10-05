@@ -2220,12 +2220,14 @@ function fitLabels(cfg,box,aria){
   const svg=box.querySelector('svg');if(!svg)return;
   svg._cfg=cfg;layoutLabels(svg);
 }
-/* ===== 地圖標記縮圖：點分得開時（通常是放大後），號碼圓標換成圓形小照片＋右下角號碼 =====
-   每次排標籤（畫完、縮放停下）時逐一判斷：和最近的標記距離夠放下一張縮圖才換。內嵌照片先用 canvas 縮成 96px 方圖快取，
+/* ===== 地圖標記縮圖：有照片的編號標記一律換成圓形照片（直徑 51px）＋右下角號碼 =====
+   切換地區、換天時直接顯示（使用者要求，不等放大）；照片在開頁後就先在背景縮好，換圖時不用等。內嵌照片先用 canvas 縮成 96px 方圖快取，
    避免把 100 KB 的 base64 重複塞進每張地圖；維基圖直接用網址。原本的圓標只設透明（不隱藏），字卡定位與點擊判斷照舊用它。 */
 var THB,THN,thT; // 用 var：桌機日圖在這段之前就排標籤了，const 會 TDZ 報錯
 function thumbReady(){clearTimeout(thT);thT=setTimeout(()=>document.querySelectorAll('svg').forEach(v=>{if(v._cfg&&v.querySelector('.mk[data-key]'))try{layoutLabels(v);}catch(e){}}),80);}
 addEventListener('wikithumbs',thumbReady);
+// 開頁後在背景把所有內嵌照片先縮好（一張接一張，不卡畫面），之後切地區、換天時縮圖馬上就有
+setTimeout(()=>{const ks=Object.keys(IMG);let i=0;const nx=()=>{if(i>=ks.length)return;const k=ks[i++];if(CARDS[k])thumbSrc(k);setTimeout(nx,40);};nx();},600);
 function thumbSrc(k){
   THB=THB||{};if(THB[k]!==undefined)return THB[k];
   const v=IMG[k],src=v?(Array.isArray(v)?v[0]:v):cardImg(k);if(!src)return null;
@@ -2236,17 +2238,15 @@ function thumbSrc(k){
   im.onerror=()=>{THB[k]=null;};im.src=src;return 0;
 }
 function applyThumbs(svg){
-  const R=17,mks=[...svg.querySelectorAll('.mk[data-key]')];
-  const pos=mks.map(g=>{const m=g.getScreenCTM&&g.getScreenCTM();return m&&m.a>0?[m.e,m.f,m.a]:null;});
+  const R=25.5,mks=[...svg.querySelectorAll('.mk[data-key]')];
   mks.forEach((g,i)=>{
-    const k=g.dataset.key,nt=g.querySelector(':scope>text'),p=pos[i];let on=false;
-    if(p&&nt&&/^\d+$/.test(nt.textContent)&&CARDS[k]){
-      let md=1e9;pos.forEach((q,j)=>{if(q&&j!==i)md=Math.min(md,Math.hypot(q[0]-p[0],q[1]-p[1]));});
-      if(md>=2*R*p[2]+4){const src=thumbSrc(k);if(src){
-        if(!svg._thc){THN=(THN||0)+1;svg._thc='thc'+THN;svg.insertAdjacentHTML('afterbegin',`<defs><clipPath id="${svg._thc}"><circle r="15"/></clipPath></defs>`);}
+    const k=g.dataset.key,nt=g.querySelector(':scope>text');let on=false;
+    if(nt&&/^\d+$/.test(nt.textContent)&&CARDS[k]){
+      {const src=thumbSrc(k);if(src){
+        if(!svg._thc){THN=(THN||0)+1;svg._thc='thc'+THN;svg.insertAdjacentHTML('afterbegin',`<defs><clipPath id="${svg._thc}"><circle r="22.5"/></clipPath></defs>`);}
         let t=g.querySelector('.mth');
         if(!t){const col=(g.querySelector(':scope>circle')||{getAttribute:()=>'#c67139'}).getAttribute('fill');
-          nt.insertAdjacentHTML('afterend',`<g class="mth"><circle r="${R}" fill="#fff"/><image x="-15" y="-15" width="30" height="30" preserveAspectRatio="xMidYMid slice" clip-path="url(#${svg._thc})"/><circle class="rg" r="15" fill="none" stroke="${col}" stroke-width="2"/><g transform="translate(12,12)"><circle r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"/><text y="3.2" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">${nt.textContent}</text></g></g>`);
+          nt.insertAdjacentHTML('afterend',`<g class="mth"><circle r="${R}" fill="#fff"/><image x="-22.5" y="-22.5" width="45" height="45" preserveAspectRatio="xMidYMid slice" clip-path="url(#${svg._thc})"/><circle class="rg" r="22.5" fill="none" stroke="${col}" stroke-width="2.5"/><g transform="translate(18,18)"><circle r="10" fill="${col}" stroke="#fff" stroke-width="2"/><text y="4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${nt.textContent}</text></g></g>`);
           t=g.querySelector('.mth');}
         const im=t.querySelector('image');if(im.getAttribute('href')!==src)im.setAttribute('href',src);on=true;}}
     }
@@ -2269,7 +2269,7 @@ function layoutLabels(svg){
   const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll(':scope>text').length>1?1:2;};
   [...svg.querySelectorAll('.mk[data-key]')].filter(lab).sort((a,b)=>pri(a)-pri(b)).forEach(g=>{
     const t=lab(g),hotel=pri(g)===0;
-    const dot=g.querySelector(':scope>circle,:scope>rect'),r=g.classList.contains('th-on')?18:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
+    const dot=g.querySelector(':scope>circle,:scope>rect'),r=g.classList.contains('th-on')?27:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
     const cur=((cfg.labels||{})[g.dataset.key]||'b').charAt(0);
     const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]),['tr','tl','br','bl']);
     let best=null;
