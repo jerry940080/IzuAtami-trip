@@ -385,6 +385,12 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   靜岡卡片的號碼從桌機 `#shizuoka .card .num` 讀來，和位置圖一致。
 - 靜岡區塊最下面 `#spExtra` 收納從 `#shizuoka` 搬來的三組 `details.acc`（位置圖／官方觀光地圖／2 月活動與票券）。
 - localStorage 存的舊 pane `shz` 找不到會 fallback 到 `cost`。
+- **地區選擇頁**（使用者追加）：進「景點」先顯示 `.sp-pick`：`spotPickHTML()` 用 `buildMap` 畫靜岡到成田的海岸線圖
+  （390×340，標記與比例尺用 CSS 藏掉），再疊三個可點的 `<g class="sp-rg" data-reg>`：橢圓＝該區景點的外接範圍
+  （`GEO_SKIP` 把沼津排除在靜岡橢圓外，否則和熱海疊到）、小圓點＝各景點位置、字＝區名＋已排入／候選數
+  （熱海・河津的字放橢圓右側海面，`i===1` 特判）。顏色 `SPOT_COL`＝靜岡綠 #56633f、熱海橘 #b2622d、東京藍 #2b4c7e。
+  地圖下方三顆 `.sp-btn[data-reg]` 同功能。`showSpot(i)`：`#spots.sub` 藏選擇頁、`.sp-reg.on` 顯示該區；
+  子頁頂端 `[data-regback]`「回地區選擇」；重新點「景點」分段會回到選擇頁（`APP.spot` 不存檔）。
 
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。

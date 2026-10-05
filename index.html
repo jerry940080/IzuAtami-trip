@@ -571,9 +571,28 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 #maInfo .card,#maInfo .tipgrid>div,#maInfo details.acc,#maInfo .money>div,#maInfo .areamap,#maInfo .offmap{border-radius:22px}
 
 
-/* 資訊 › 景點 */
-.sp-reg{margin-top:26px;padding-top:18px;border-top:2px solid var(--color-divider,#ddd)}
-.sp-reg:first-of-type{margin-top:10px;border-top:0;padding-top:0}
+/* 資訊 › 景點：先選地區，再看該區 */
+.sp-map{margin-top:12px;border-radius:22px;overflow:hidden;background:#d7e3ea;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.1))}
+.sp-map svg{display:block;width:100%;height:auto}
+.sp-map .mks,.sp-map>svg>g:last-of-type:not(.sp-rg){display:none} /* 不畫原本的標記與比例尺 */
+.sp-rg{cursor:pointer}
+.sp-rg ellipse{fill-opacity:.2;stroke-width:2.5;stroke-opacity:.9;transition:fill-opacity .2s}
+.sp-rg:active ellipse,.sp-rg:focus-visible ellipse{fill-opacity:.38}
+.sp-rg circle{stroke:#fff;stroke-width:1.2}
+.sp-rg .nm{font:700 17px var(--font-body);fill:#1d2226;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.sp-rg .ct{font:600 10.5px var(--font-body);fill:#3a4553;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.sp-btns{display:grid;gap:10px;margin-top:14px}
+.sp-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;border:0;background:var(--color-surface);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.sp-btn i,.sp-rh i{flex:none;width:14px;height:14px;border-radius:50%}
+.sp-btn>div{flex:1;min-width:0}
+.sp-btn b{display:block;font-size:16px}
+.sp-btn span{font-size:12px;color:var(--color-neutral-700,#645c50)}
+.sp-reg{display:none;margin-top:10px}
+.sp-reg.on{display:block}
+#spots.sub .sp-pick{display:none}
+.sp-back{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:0;background:var(--color-surface);color:inherit;font:600 13.5px var(--font-body);cursor:pointer;margin-bottom:14px}
+.sp-rh{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
+.sp-rh span{grid-column:2}
 .sp-rh b{display:block;font:400 24px var(--font-heading,var(--serif));line-height:1.2}
 .sp-rh span{font-size:12.5px;color:var(--color-neutral-700,#645c50)}
 .sp-h{display:flex;align-items:baseline;gap:8px;margin:16px 0 0}
@@ -672,7 +691,8 @@ html.rainy-ui body{background:#e4eaf1}
 #mapp.rainy .ma-map{background:#c0cedd}
 #mapp.rainy .ma-tabs{background:#c4cfdb;box-shadow:0 -1px 0 rgba(31,42,54,.16)}
 #mapp.rainy .ma-tabs .on .ic{background:#e5eef8}
-#mapp.rainy .mm-svg rect[fill="#d7e3ea"]{fill:#c0cedd} /* 不用 CSS filter：iPhone Safari 對大張 SVG 套濾鏡會破圖 */
+#mapp.rainy .mm-svg rect[fill="#d7e3ea"],#mapp.rainy .sp-map rect[fill="#d7e3ea"]{fill:#c0cedd}
+#mapp.rainy .sp-map path[fill="#ece6d8"]{fill:#e9edf2;stroke:#b3c0cf} /* 不用 CSS filter：iPhone Safari 對大張 SVG 套濾鏡會破圖 */
 #mapp.rainy .mm-svg path[fill="#ece6d8"]{fill:#e9edf2;stroke:#b3c0cf}
 /* 切換時的過渡：.theming 掛 0.7 秒，所有顏色屬性淡入淡出 */
 #mapp.theming,#mapp.theming *,#mapp.theming::before{transition:background-color .55s ease,color .55s ease,border-color .55s ease,fill .55s ease,stroke .55s ease,box-shadow .55s ease!important}
@@ -1898,12 +1918,32 @@ function spotStatus(k){let sched=null,opt=null,rain=null;
   if(opt)return {in:false,tag:`Day ${opt.d.n} 選項`};
   if(rain)return {in:false,tag:`Day ${rain.d.n} 雨天版`};
   return {in:false,tag:'未排入'};}
+/* 景點頁的「要看哪一個地區」：用海岸線地圖畫靜岡到成田，三個地區各一個可點的色塊（橢圓＝該區所有景點的範圍） */
+const SPOT_COL=['#56633f','#b2622d','#2b4c7e'];
+function cardLoc(k){if(P[k])return k;for(const d of DAYS){for(const S of [d.stops||[],d.rainStops||[]]){const st=S.find(s=>s.card===k);if(st){const l=locOf(st);if(l)return l;}}}return '';}
+function spotPickHTML(){
+  const W0=390,H0=340,regs=SPOT_REGIONS.map(([name,sub,keys])=>({name,sub,keys,locs:[...new Set(keys.map(cardLoc).filter(Boolean))]}));
+  const all=[...new Set(regs.flatMap(r=>r.locs))];
+  const svg=buildMap({pts:all,legs:[],labels:{},minSpan:.05},{W:W0,H:H0,big:true,aria:'靜岡到東京的地區分布圖'});
+  const oW=W,oH=H;W=W0;H=H0;const pr=proj(bboxOf(all,.05));W=oW;H=oH;
+  const GEO_SKIP={aquarium:1,numazuStn:1}; // 沼津離熱海太近，不納入靜岡橢圓的範圍（點照畫），色塊才不會互相疊到
+  const over=regs.map((r,i)=>{const xy=r.locs.map(k=>pr.pt(P[k])),gxy=r.locs.filter(k=>!GEO_SKIP[k]).map(k=>pr.pt(P[k]));const xs=gxy.map(p=>p[0]),ys=gxy.map(p=>p[1]);
+    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(40,(Math.max(...xs)-Math.min(...xs))/2+16),ry=Math.max(36,(Math.max(...ys)-Math.min(...ys))/2+16);
+    const sch=r.keys.filter(k=>spotStatus(k).in).length,c=SPOT_COL[i];
+    const right=i===1,lx=right?cx+rx+8:cx,anc=right?'start':'middle'; // 熱海・河津的字放到橢圓右邊的海上，才不會壓到靜岡
+    return `<g class="sp-rg" data-reg="${i}" role="button" tabindex="0" aria-label="${r.name}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" stroke="${c}"/>
+      ${xy.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${c}"/>`).join('')}
+      <text x="${lx.toFixed(1)}" y="${(cy-4).toFixed(1)}" text-anchor="${anc}" class="nm">${r.name}</text><text x="${lx.toFixed(1)}" y="${(cy+16).toFixed(1)}" text-anchor="${anc}" class="ct">已排入 ${sch} · 候選 ${r.keys.length-sch}</text></g>`;}).join('');
+  return `<div class="sp-pick"><h2>景點</h2><p class="lead">要看哪一個地區？點地圖上的色塊，或下面的按鈕。</p>
+   <div class="sp-map">${svg.replace('</svg>',over+'</svg>')}</div>
+   <div class="sp-btns">${regs.map((r,i)=>{const sch=r.keys.filter(k=>spotStatus(k).in).length;return `<button class="sp-btn" data-reg="${i}"><i style="background:${SPOT_COL[i]}"></i><div><b>${r.name}</b><span>${r.sub} · 已排入 ${sch}、候選 ${r.keys.length-sch}</span></div>${ico('right',18)}</button>`;}).join('')}</div></div>`;}
+function showSpot(i){APP.spot=i;const root=$a('spots');if(!root)return;root.classList.toggle('sub',i!=null);root.querySelectorAll('.sp-reg').forEach((r,j)=>r.classList.toggle('on',j===i));const b=$a('maInfo');if(b)b.scrollTop=0;}
 function spotsHTML(){
   const NUMS={};document.querySelectorAll('#shizuoka .card').forEach(c=>{const n=c.querySelector('.num');if(n)NUMS[c.dataset.card]=+n.textContent;});
   const card=k=>{const st=spotStatus(k);return `<div class="spw">${cardHTML(k,NUMS[k]||0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
-  return `<section class="block" id="spots"><div class="wrap"><h2>景點</h2><p class="lead">三個區域，各自分成已排進行程的，和還在候選名單裡的。點卡片看完整介紹。</p>`+
+  return `<section class="block" id="spots"><div class="wrap">${spotPickHTML()}`+
    SPOT_REGIONS.map(([name,sub,keys],i)=>{const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
-    return `<div class="sp-reg"><div class="sp-rh"><b>${name}</b><span>${sub}</span></div>
+    return `<div class="sp-reg"><button class="sp-back" data-regback>${ico('left',18)}回地區選擇</button><div class="sp-rh"><i style="background:${SPOT_COL[i]}"></i><b>${name}</b><span>${sub}</span></div>
      <div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
      <div class="sp-h cand"><b>候選名單</b><span>${cand.length?cand.length+' 個':'目前沒有'}</span></div>${cand.length?`<div class="cards sp-cards">${cand.map(card).join('')}</div>`:''}
      ${i===0?'<div id="spExtra"></div>':''}</div>`;}).join('')+`</div></section>`;}
@@ -2210,7 +2250,9 @@ function appClick(e){
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
-  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();return true;}
+  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot(null);return true;}
+  if(el=t.closest('[data-reg]')){showSpot(+el.dataset.reg);return true;}
+  if(el=t.closest('[data-regback]')){showSpot(null);return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
   if(t.closest('#pkAdd')){addPack();return true;}
