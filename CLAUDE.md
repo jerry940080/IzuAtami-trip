@@ -598,6 +598,23 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 順手把已排入 Day 3 的御穗神社從「沒排進路線」名單拿掉）。美食頁靜岡市區只剩青葉橫丁，子區副標改「青葉橫丁おでん」、
 靜岡大區副標改「おでん・鮪魚丼・草莓・もつカレー」。
 
+### 2026-10-05 變更（二十三）：地圖標記縮圖（點分得開時，號碼圓標換成照片）
+使用者問地圖上的景點能否附小縮圖，選了「放大後才換成照片」，套用在手機景點頁／美食頁、手機地圖分頁、桌機每日地圖。
+- **規則**：`applyThumbs(svg)`（在 `layoutLabels` 開頭呼叫，所以畫完、縮放停下 180ms 後都會重算）逐一檢查有號碼且有 `CARDS` 的 `.mk`：
+  和最近的其他標記（螢幕距離，用 `getScreenCTM()`）≥ 縮圖直徑 + 4px 才換。所以點本來就分得開的（Day 3 草莓、柚木の郷）不用放大就有照片，
+  擠在一起的（熱海銀座、起雲閣、夜市…）要放大才出現。
+- **畫法**：`.mk` 裡在號碼字後面插 `<g class="mth">`：白底圓 r17＋`<image>`（`clip-path` 共用每張 SVG 一個 `<clipPath>` r15）＋外框環 `.rg`（顏色＝原圓標色）
+  ＋右下角 (12,12) 的號碼小圓。`.mk.th-on` 時原圓標與號碼字只設 `opacity:0`（**不能 display:none**，桌機字卡 `placeTip` 與手機點擊選最近標記都靠它的 bbox）。
+  `.mk` 本來就有 `scale(1/z)`，縮圖跟著維持螢幕固定大小。地圖分頁聚焦中的標記 `#maMap .mk.on .mth .rg` 換強調色加粗。
+- **照片來源**：`thumbSrc(k)`：`IMG` 內嵌的第一張先用 canvas 中央裁成 96px 方圖、轉 JPEG 快取在 `THB`（避免把 100 KB base64 重複塞進每張地圖），
+  非同步完成後 `thumbReady()` 重跑所有有 `_cfg` 的 SVG 的 `layoutLabels`；沒有內嵌照片時用 `cardImg` 的維基網址（收到 `wikithumbs` 事件也會重跑）。
+  都沒有照片的卡片維持號碼圓標。
+- `layoutLabels` 改動：`lab()`／`pri()` 只看 `:scope>text`（不然會抓到縮圖裡的號碼字）；`th-on` 時標籤偏移半徑用 18、避讓用縮圖圓的 bbox。
+- **踩雷**：`THB／THN／thT` 一開始用 `const`，但桌機日圖在這段程式碼之前就呼叫 `layoutLabels`（TDZ 報錯被 try/catch 吞掉，桌機完全沒縮圖）。改成 `var` 並在用到時初始化。
+- 驗證：`scratchpad/thumbs.js`（清水／熱海景點頁 z=1 與放大、點縮圖開卡、地圖分頁 Day 3／4、桌機 Day 2–4）、`thd2.js`（桌機釘住字卡位置）；
+  `twostep.js` 輸出與改版前逐字相同，`pick5.js`／`food.js`／`zoom.js`／`complete.js` 無錯誤。
+- 注意：測試腳本 `twostep.js` 沒帶 scratchpad 參數時會在 repo 裡建 `undefined/` 資料夾放截圖，**不要提交**。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。

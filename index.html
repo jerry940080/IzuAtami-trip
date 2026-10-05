@@ -158,6 +158,7 @@ details.acc>summary .s{font-family:var(--sans);font-weight:400;font-size:12px;co
 .mapfoot{display:flex;flex-wrap:wrap;gap:6px 14px;padding:9px 14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2);align-items:center}
 .mapfoot .lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .mk-a{cursor:pointer}
+.mk .mth{display:none}.mk.th-on .mth{display:inline}.mk.th-on>circle,.mk.th-on>text:first-of-type{opacity:0}
 .mktip{position:fixed;z-index:60;width:268px;background:#fff;border:1px solid var(--rule);border-radius:12px;box-shadow:0 12px 34px rgba(38,41,46,.20);overflow:hidden;pointer-events:none;font-size:13px}
 .mktip .tp{aspect-ratio:16/10;background:var(--paper2)}
 .mktip .tp img{width:100%;height:100%;object-fit:cover;display:block}
@@ -501,6 +502,7 @@ html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!importa
 html.app .mk-a:focus{outline:none}
 html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
 #maMap .mk.on>circle{fill:var(--color-accent-600);stroke:var(--color-accent-200);stroke-width:5}
+#maMap .mk.on .mth .rg{stroke:var(--color-accent-600);stroke-width:3.5}
 #maRoute{padding:18px 16px 24px}
 .mr-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 8px 8px}
 .mr-h b{font:700 17px var(--font-heading)}
@@ -2218,22 +2220,56 @@ function fitLabels(cfg,box,aria){
   const svg=box.querySelector('svg');if(!svg)return;
   svg._cfg=cfg;layoutLabels(svg);
 }
+/* ===== 地圖標記縮圖：點分得開時（通常是放大後），號碼圓標換成圓形小照片＋右下角號碼 =====
+   每次排標籤（畫完、縮放停下）時逐一判斷：和最近的標記距離夠放下一張縮圖才換。內嵌照片先用 canvas 縮成 96px 方圖快取，
+   避免把 100 KB 的 base64 重複塞進每張地圖；維基圖直接用網址。原本的圓標只設透明（不隱藏），字卡定位與點擊判斷照舊用它。 */
+var THB,THN,thT; // 用 var：桌機日圖在這段之前就排標籤了，const 會 TDZ 報錯
+function thumbReady(){clearTimeout(thT);thT=setTimeout(()=>document.querySelectorAll('svg').forEach(v=>{if(v._cfg&&v.querySelector('.mk[data-key]'))try{layoutLabels(v);}catch(e){}}),80);}
+addEventListener('wikithumbs',thumbReady);
+function thumbSrc(k){
+  THB=THB||{};if(THB[k]!==undefined)return THB[k];
+  const v=IMG[k],src=v?(Array.isArray(v)?v[0]:v):cardImg(k);if(!src)return null;
+  if(!/^data:/.test(src)){THB[k]=src;return src;}
+  THB[k]=0;const im=new Image();
+  im.onload=()=>{const S=96,c=document.createElement('canvas'),m=Math.min(im.width,im.height);c.width=c.height=S;
+    c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);THB[k]=c.toDataURL('image/jpeg',.82);thumbReady();};
+  im.onerror=()=>{THB[k]=null;};im.src=src;return 0;
+}
+function applyThumbs(svg){
+  const R=17,mks=[...svg.querySelectorAll('.mk[data-key]')];
+  const pos=mks.map(g=>{const m=g.getScreenCTM&&g.getScreenCTM();return m&&m.a>0?[m.e,m.f,m.a]:null;});
+  mks.forEach((g,i)=>{
+    const k=g.dataset.key,nt=g.querySelector(':scope>text'),p=pos[i];let on=false;
+    if(p&&nt&&/^\d+$/.test(nt.textContent)&&CARDS[k]){
+      let md=1e9;pos.forEach((q,j)=>{if(q&&j!==i)md=Math.min(md,Math.hypot(q[0]-p[0],q[1]-p[1]));});
+      if(md>=2*R*p[2]+4){const src=thumbSrc(k);if(src){
+        if(!svg._thc){THN=(THN||0)+1;svg._thc='thc'+THN;svg.insertAdjacentHTML('afterbegin',`<defs><clipPath id="${svg._thc}"><circle r="15"/></clipPath></defs>`);}
+        let t=g.querySelector('.mth');
+        if(!t){const col=(g.querySelector(':scope>circle')||{getAttribute:()=>'#c67139'}).getAttribute('fill');
+          nt.insertAdjacentHTML('afterend',`<g class="mth"><circle r="${R}" fill="#fff"/><image x="-15" y="-15" width="30" height="30" preserveAspectRatio="xMidYMid slice" clip-path="url(#${svg._thc})"/><circle class="rg" r="15" fill="none" stroke="${col}" stroke-width="2"/><g transform="translate(12,12)"><circle r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"/><text y="3.2" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">${nt.textContent}</text></g></g>`);
+          t=g.querySelector('.mth');}
+        const im=t.querySelector('image');if(im.getAttribute('href')!==src)im.setAttribute('href',src);on=true;}}
+    }
+    g.classList.toggle('th-on',on);
+  });
+}
 function layoutLabels(svg){
   const cfg=svg._cfg||{};
   svg.querySelectorAll('.mk text').forEach(t=>t.style.display='');
   const sb=svg.getBoundingClientRect();if(!sb.width)return;
+  try{applyThumbs(svg);}catch(e){}
   const bx=svg.closest('.ma-map,.sp-map'),pl=bx?bx.querySelector('.mm-pill'):null,top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
-  const dots=[...svg.querySelectorAll('.mk>circle,.mk>rect')].map(c=>c.getBoundingClientRect());
+  const dots=[...svg.querySelectorAll('.mk')].map(g=>g.querySelector(g.classList.contains('th-on')?'.mth>circle':':scope>circle,:scope>rect')).filter(Boolean).map(c=>c.getBoundingClientRect());
   const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
   const put=(t,sd,r)=>{const q=Math.round(r*.6),A={l:['end',-(r+6),4.5],r:['start',r+6,4.5],t:['middle',0,-(r+7)],b:['middle',0,r+14],
     tr:['start',q,-(r+5)],tl:['end',-q,-(r+5)],br:['start',q,r+14],bl:['end',-q,r+14]}[sd];
     t.setAttribute('text-anchor',A[0]);t.setAttribute('x',A[1]);t.setAttribute('y',A[2]);};
-  const lab=g=>{const ts=g.querySelectorAll('text'),t=ts[ts.length-1];return t&&!/^\d+$/.test(t.textContent)?t:null;};
-  const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll('text').length>1?1:2;};
+  const lab=g=>{const ts=g.querySelectorAll(':scope>text'),t=ts[ts.length-1];return t&&!/^\d+$/.test(t.textContent)?t:null;};
+  const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll(':scope>text').length>1?1:2;};
   [...svg.querySelectorAll('.mk[data-key]')].filter(lab).sort((a,b)=>pri(a)-pri(b)).forEach(g=>{
     const t=lab(g),hotel=pri(g)===0;
-    const dot=g.querySelector(':scope>circle,:scope>rect'),r=dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
+    const dot=g.querySelector(':scope>circle,:scope>rect'),r=g.classList.contains('th-on')?18:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
     const cur=((cfg.labels||{})[g.dataset.key]||'b').charAt(0);
     const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]),['tr','tl','br','bl']);
     let best=null;
