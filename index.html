@@ -549,6 +549,54 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 #maInfo footer{margin-top:10px;padding:20px 0 30px}
 #maInfo .card,#maInfo .tipgrid>div,#maInfo details.acc,#maInfo .money>div,#maInfo .areamap,#maInfo .offmap{border-radius:22px}
 
+
+/* 美食卡片（桌機＋手機） */
+.foodgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:10px}
+.fd{margin:0;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.fph{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#efe6d4,#e6d9c0);display:grid;place-items:center}
+.fph span{font:600 15px var(--serif);color:#9a8b72;padding:0 8px;text-align:center}
+.fph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.fph img.ok{opacity:1}
+.fd figcaption{padding:8px 10px 10px}
+.fd figcaption b{display:block;font-size:14px}
+.fd figcaption p{margin:3px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink2)}
+.fdnote{margin-top:8px;font-size:12px}
+/* 交通：線路圖＋訂票網站 */
+.railmap{display:flex;gap:24px;align-items:flex-start;margin-top:10px}
+.rmap{flex:0 0 auto;width:min(100%,400px);height:auto;background:#fff;border:1px solid var(--rule);border-radius:12px}
+.rmap .rn{font-size:13px;font-weight:700;fill:#26292e}
+.rmap .rs{font-size:10.5px;fill:#6b6355}
+.rlegend{list-style:none;margin:0;padding:0;flex:1;display:grid;gap:10px}
+.rlegend li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.55}
+.rlegend i{flex:none;width:26px;height:6px;border-radius:3px;margin-top:8px}
+.rlegend i.bus{background:repeating-linear-gradient(90deg,#d9a21b 0 7px,transparent 7px 12px)}
+.rlegend b{display:block}
+.rlegend span{color:var(--ink2)}
+.linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:10px}
+.lk{display:flex;flex-direction:column;gap:3px;padding:12px 14px;background:#fff;border:1px solid var(--rule);border-radius:12px;text-decoration:none;color:var(--ink)}
+.lk b{font-size:15px;color:var(--ai)}
+.lk span{font-size:12.5px;line-height:1.5;color:var(--ink2)}
+.lk i{font-style:normal;font-size:11.5px;color:var(--ink3)}
+.lk:active,.lk:hover{border-color:var(--ai)}
+@media (max-width:640px){.railmap{flex-direction:column}.rmap{width:100%}.foodgrid{grid-template-columns:1fr 1fr;gap:10px}.linkgrid{grid-template-columns:1fr}}
+/* 花費頁：只在手機 App 顯示 */
+.app-only{display:none}
+html.app .app-only{display:block}
+.cs-sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 6px}
+.cs-sum div{background:var(--color-surface,#efe6d4);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column}
+.cs-sum b{font:400 24px var(--font-heading,var(--serif));color:var(--color-accent-700,#8c491a)}
+.cs-sum span{font-size:13px;font-weight:600;margin-top:2px}
+.cs-sum small{font-size:11.5px;color:var(--color-neutral-700,#645c50);margin-top:2px}
+.cs-g{margin-top:18px}
+.cs-g h3{margin:0 0 4px;font-size:17px}
+.cs-r{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--color-divider,#ddd)}
+.cs-r b{display:block;font-size:14px;font-weight:600}
+.cs-r span{display:block;font-size:12px;line-height:1.5;color:var(--color-neutral-700,#645c50);margin-top:2px}
+.cs-r em,.cs-t em{flex:none;font-style:normal;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cs-r em.unk{font-weight:600;color:var(--color-neutral-600,#82796a);background:var(--color-neutral-200,#eee7db);padding:1px 9px;border-radius:999px;font-size:12px}
+.cs-t{display:flex;justify-content:space-between;padding:10px 0 0;font-size:13px;color:var(--color-neutral-700,#645c50)}
+.cs-t em{color:var(--color-accent-700,#8c491a)}
+.cs-note{margin-top:16px;font-size:12px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -631,6 +679,52 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
       </div>
     </div>
 
+    <h3 class="sub-h">線路圖</h3>
+    <div class="railmap">
+        <svg class="rmap" viewBox="0 0 400 560" role="img" aria-label="這趟會搭的鐵路線示意圖">
+<line x1="200" y1="36" x2="200" y2="120" stroke="#8a3f5c" stroke-width="5" stroke-linecap="round"/>
+<line x1="200" y1="120" x2="200" y2="440" stroke="#2b4c7e" stroke-width="7"/>
+<line x1="110" y1="260" x2="110" y2="440" stroke="#e07b00" stroke-width="5"/>
+<line x1="290" y1="260" x2="290" y2="510" stroke="#3c9a72" stroke-width="5" stroke-linecap="round"/>
+<circle cx="200" cy="36" r="6" fill="#fff" stroke="#8a3f5c" stroke-width="3"/><text x="214" y="41" text-anchor="start" class="rn">成田機場 T2</text>
+<circle cx="200" cy="120" r="6" fill="#fff" stroke="#2b4c7e" stroke-width="3"/><text x="214" y="125" text-anchor="start" class="rn">品川</text>
+<text x="186" y="78" text-anchor="end" class="rn">成田特快 N'EX</text><text x="186" y="92" text-anchor="end" class="rs">2/10 去・2/17 回</text>
+<text x="186" y="186" text-anchor="end" class="rn">東海道新幹線</text><text x="186" y="200" text-anchor="end" class="rs">2/11 去・2/15 回</text>
+<text x="124" y="345" text-anchor="start" class="rn">東海道本線</text><text x="124" y="359" text-anchor="start" class="rs">2/12・2/13</text>
+<text x="280" y="332" text-anchor="end" class="rn">踊子</text><text x="280" y="346" text-anchor="end" class="rs">伊豆急・2/14</text>
+<rect x="96" y="250" width="208" height="20" rx="10" fill="#fff" stroke="#26292e" stroke-width="2.5"/><text x="316" y="265" text-anchor="start" class="rn">熱海</text><text x="316" y="279" text-anchor="start" class="rs">轉乘站</text>
+<circle cx="110" cy="310" r="6" fill="#fff" stroke="#e07b00" stroke-width="3"/><text x="94" y="315" text-anchor="end" class="rn">沼津</text><text x="94" y="329" text-anchor="end" class="rs">巴士⇄沼津港</text>
+<circle cx="110" cy="385" r="6" fill="#fff" stroke="#e07b00" stroke-width="3"/><text x="94" y="384" text-anchor="end" class="rn">草薙</text><text x="94" y="398" text-anchor="end" class="rs">巴士→動物園</text>
+<circle cx="110" cy="413" r="6" fill="#fff" stroke="#e07b00" stroke-width="3"/><text x="94" y="417" text-anchor="end" class="rn">東靜岡</text><text x="94" y="431" text-anchor="end" class="rs">柚木の郷</text>
+<rect x="96" y="430" width="118" height="20" rx="10" fill="#fff" stroke="#26292e" stroke-width="2.5"/><text x="90" y="445" text-anchor="end" class="rn">靜岡</text><text x="90" y="459" text-anchor="end" class="rs">站前租車兩天</text>
+<circle cx="290" cy="305" r="6" fill="#fff" stroke="#3c9a72" stroke-width="3"/><text x="304" y="310" text-anchor="start" class="rn">伊東</text>
+<circle cx="290" cy="350" r="6" fill="#fff" stroke="#3c9a72" stroke-width="3"/><text x="304" y="355" text-anchor="start" class="rn">伊豆高原</text><text x="304" y="369" text-anchor="start" class="rs">泰迪熊博物館</text>
+<circle cx="290" cy="395" r="6" fill="#fff" stroke="#3c9a72" stroke-width="3"/><text x="304" y="400" text-anchor="start" class="rn">伊豆熱川</text><text x="304" y="414" text-anchor="start" class="rs">香蕉鱷魚園</text>
+<circle cx="290" cy="445" r="6" fill="#fff" stroke="#3c9a72" stroke-width="3"/><text x="304" y="450" text-anchor="start" class="rn">河津</text><text x="304" y="464" text-anchor="start" class="rs">河津櫻並木</text>
+<circle cx="290" cy="510" r="6" fill="#fff" stroke="#3c9a72" stroke-width="3"/><text x="304" y="515" text-anchor="start" class="rn">伊豆急下田</text><text x="304" y="529" text-anchor="start" class="rs">白濱・南伊豆</text>
+<text x="16" y="548" class="rs">示意圖，非實際比例與位置</text>
+</svg>
+        <ul class="rlegend">
+          <li><i style="background:#8a3f5c"></i><div><b>JR 成田特快 N'EX</b><span>成田機場 T2 ⇄ 品川・2/10 去、2/17 回・每趟 ¥3,330・全車指定席</span></div></li>
+          <li><i style="background:#2b4c7e"></i><div><b>東海道新幹線</b><span>2/11 品川 → 靜岡（ひかり）¥6,470；2/15 熱海 → 品川 ¥4,070</span></div></li>
+          <li><i style="background:#e07b00"></i><div><b>JR 東海道本線</b><span>2/12 靜岡 ⇄ 東靜岡 ¥190；2/13 靜岡 ⇄ 草薙 ¥190、靜岡 → 沼津 ¥990、沼津 → 熱海 ¥420</span></div></li>
+          <li><i style="background:#3c9a72"></i><div><b>JR 踊子・伊豆急行</b><span>2/14 熱海 → 河津 踊子 ¥3,490（A 席靠海）；夜櫻後伊豆急＋JR 普通車回熱海 約 ¥2,100</span></div></li>
+          <li><i class="bus"></i><div><b>巴士</b><span>2/13 草薙站 ⇄ 日本平動物園（靜鐵巴士 約 10 分）、沼津站 ⇄ 沼津港 ¥200</span></div></li>
+        </ul>
+    </div>
+
+    <h3 class="sub-h">訂票網站</h3>
+    <div class="linkgrid">
+          <a class="lk" href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer"><b>えきねっと</b><span>JR 東日本：成田特快來回、2/14 踊子 A 席（台灣時間 1/14 09:00 開賣）</span><i>eki-net.com ↗</i></a>
+          <a class="lk" href="https://smart-ex.jp/" target="_blank" rel="noopener noreferrer"><b>smart-EX</b><span>東海道新幹線兩段：2/11 品川→靜岡、2/15 熱海→品川</span><i>smart-ex.jp ↗</i></a>
+          <a class="lk" href="https://www.tabirai.net/car/" target="_blank" rel="noopener noreferrer"><b>tabirai 租車</b><span>靜岡站前 2/11 中午–2/12 傍晚租車比價</span><i>tabirai.net ↗</i></a>
+          <a class="lk" href="https://www.tigerairtw.com/" target="_blank" rel="noopener noreferrer"><b>台灣虎航</b><span>IT202 桃園→成田、IT201 成田→桃園</span><i>tigerairtw.com ↗</i></a>
+          <a class="lk" href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener noreferrer"><b>Visit Japan Web</b><span>入境審查與海關申報 QR，出發前填好</span><i>vjw.digital.go.jp ↗</i></a>
+          <a class="lk" href="https://www.mvdis.gov.tw/" target="_blank" rel="noopener noreferrer"><b>監理服務網</b><span>駕照日文譯本線上申請（租車必備）</span><i>mvdis.gov.tw ↗</i></a>
+          <a class="lk" href="https://www.izukyu.co.jp/" target="_blank" rel="noopener noreferrer"><b>伊豆急行</b><span>河津 → 熱海回程時刻（不用訂，當天買票）</span><i>izukyu.co.jp ↗</i></a>
+          <a class="lk" href="https://www.kawazuzakura.net/" target="_blank" rel="noopener noreferrer"><b>河津櫻まつり</b><span>開花情報，出發前一週看</span><i>kawazuzakura.net ↗</i></a>
+        </div>
+
     <h3 class="sub-h">訂位・搭車要訣</h3>
     <p class="mute" style="margin-top:8px">這趟要事先劃位的只有三段：成田特快來回、兩段東海道新幹線、2/14 的踊子。其餘區間當天買票或嗶 Suica 就好。</p>
     <div class="tipgrid">
@@ -675,17 +769,18 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
     <div class="two">
       <div>
         <h3>靜岡・伊豆特色美食</h3>
-        <ul class="one">
-          <li><b>靜岡おでん</b>　牛筋黑高湯、全部串成串，撒だし粉；黑はんぺん 是靜岡限定。2/11 晚青葉橫丁。</li>
-          <li><b>石垣草莓（紅ほっぺ）</b>　久能海岸石牆梯田種的，2 月正甜，30 分吃到飽。</li>
-          <li><b>清水鮪魚丼</b>　清水港是日本冷凍鮪魚卸貨量第一，河岸の市まぐろ館一整排食堂。</li>
-          <li><b>櫻花蝦・靜岡茶</b>　由比的櫻花蝦（2 月是冷凍的）、掛川與本山的綠茶，伴手禮首選。</li>
-          <li><b>丸天かき揚げ丼</b>　沼津港名物，15 公分高的酥炸海鮮塔，兩人分一份剛好。</li>
-          <li><b>金目鯛</b>　伊豆代表魚，煮付け或刺身，河津、下田、稻取都有。</li>
-          <li><b>熱海布丁</b>　熱海站前排隊名物，也有布丁伴手禮。</li>
-          <li><b>靜岡蜜柑</b>　2 月正是產季，路邊攤跟道の駅便宜又甜。</li>
-          <li><b>神田勝本 沾麵</b>　2/16 中午，之前吃過的口袋名單。</li>
-        </ul>
+        <div class="foodgrid">
+          <figure class="fd"><div class="fph"><span>靜岡おでん</span><img data-wiki="静岡おでん|おでん" alt="靜岡おでん" loading="lazy"></div><figcaption><b>靜岡おでん</b><p>牛筋黑高湯、全部串成串，撒だし粉；黑はんぺん 是靜岡限定。2/11 晚青葉橫丁。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>石垣草莓</span><img data-wiki="石垣イチゴ|紅ほっぺ|イチゴ" alt="石垣草莓（紅ほっぺ）" loading="lazy"></div><figcaption><b>石垣草莓（紅ほっぺ）</b><p>久能海岸石牆梯田種的，2 月正甜，30 分吃到飽。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>清水鮪魚丼</span><img data-wiki="鉄火丼|マグロ丼|清水港" alt="清水鮪魚丼" loading="lazy"></div><figcaption><b>清水鮪魚丼</b><p>清水港是日本冷凍鮪魚卸貨量第一，河岸の市まぐろ館一整排食堂。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>櫻花蝦・靜岡茶</span><img data-wiki="サクラエビ|静岡茶|日本茶" alt="櫻花蝦・靜岡茶" loading="lazy"></div><figcaption><b>櫻花蝦・靜岡茶</b><p>由比的櫻花蝦（2 月是冷凍的）、掛川與本山的綠茶，伴手禮首選。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>丸天かき揚げ丼</span><img data-wiki="かき揚げ|天丼" alt="丸天かき揚げ丼" loading="lazy"></div><figcaption><b>丸天かき揚げ丼</b><p>沼津港名物，15 公分高的酥炸海鮮塔，兩人分一份剛好。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>金目鯛</span><img data-wiki="キンメダイ" alt="金目鯛" loading="lazy"></div><figcaption><b>金目鯛</b><p>伊豆代表魚，煮付け或刺身，河津、下田、稻取都有。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>熱海布丁</span><img data-wiki="プリン" alt="熱海布丁" loading="lazy"></div><figcaption><b>熱海布丁</b><p>熱海站前排隊名物，也有布丁伴手禮。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>靜岡蜜柑</span><img data-wiki="温州みかん|ウンシュウミカン|ミカン" alt="靜岡蜜柑" loading="lazy"></div><figcaption><b>靜岡蜜柑</b><p>2 月正是產季，路邊攤跟道の駅便宜又甜。</p></figcaption></figure>
+          <figure class="fd"><div class="fph"><span>神田勝本 沾麵</span><img data-wiki="つけ麺" alt="神田勝本 沾麵" loading="lazy"></div><figcaption><b>神田勝本 沾麵</b><p>2/16 中午，之前吃過的口袋名單。</p></figcaption></figure>
+        </div>
+        <p class="mute fdnote">照片由維基百科即時載入，僅示意，需連網。</p>
         <p class="mute" style="margin-top:10px">東京想吃的清單：燒肉（2/15 晚）、鰻魚飯、烤飯糰、炸牛排、拉麵、壽司。<br>注意：2 月駿河灣禁捕しらす，生しらす丼吃不到。</p>
       </div>
       <div>
@@ -710,6 +805,24 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 
 <div class="lb" id="lb" hidden><div class="lb-bar"><span class="t" id="lbT"></span><span class="s" id="lbS"></span><span class="sp"></span><button type="button" id="lbZ">放大原尺寸</button><button type="button" id="lbX">關閉 ×</button></div><div class="lb-scroll" id="lbScroll"></div></div>
 <div class="modal" id="modal" hidden><div class="modal-bg"></div><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><button type="button" class="modal-back" id="mBack">← 返回</button><button type="button" class="modal-x" aria-label="關閉">×</button><div class="modal-ph" id="mPh"></div><div class="modal-bd"><div class="kind" id="mKind"></div><h3 id="mTitle"></h3><div class="jp" id="mJp"></div><p id="mText"></p><div class="chips" id="mChips"></div><dl class="minfo" id="mInfo" hidden></dl><div class="mact" id="mAct"></div></div><div class="modal-video" id="mVideo"></div></div></div>
+<section class="block app-only" id="cost">
+  <div class="wrap">
+    <h2>花費</h2>
+    <p class="lead">全部以<b>每人</b>計。機票與住宿都還沒買，標「未知」的等訂好或查到再補。</p>
+    <div class="cs-sum">
+      <div><b>NT 29,797</b><span>機票＋已知住宿</span><small>靜岡 2 晚未知</small></div>
+      <div><b>¥35,080</b><span>車資＋門票（已知）</span><small>不含租車、計程車、餐費</small></div>
+    </div>
+    <div class="cs-g"><h3>機票</h3><div class="cs-r"><div><b>虎航 桃園 ⇄ 成田 來回</b><span>IT202 2/10 去・IT201 2/17 回・尚未購買</span></div><em>NT 15,358</em></div><div class="cs-t"><span>小計</span><em>NT 15,358</em></div></div>
+    <div class="cs-g"><h3>住宿</h3><div class="cs-r"><div><b>2/10 品川王子大飯店 北塔</b><span>1 晚・NT 2,145／晚</span></div><em>NT 2,145</em></div><div class="cs-r"><div><b>2/11–12 靜岡站前飯店</b><span>2 晚・待訂（候選：ホテルアソシア静岡、東橫INN 北口、静鉄プレジオ）</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/13–14 LiVEMAX Resort 熱海 Ocean</b><span>2 晚・NT 4,122／晚</span></div><em>NT 8,244</em></div><div class="cs-r"><div><b>2/15–16 品川王子大飯店 北塔</b><span>2 晚・NT 2,025／晚</span></div><em>NT 4,050</em></div><div class="cs-t"><span>小計</span><em>NT 14,439 ＋ 未知</em></div></div>
+    <div class="cs-g"><h3>交通</h3><div class="cs-r"><div><b>2/10 成田特快 成田 T2 → 品川</b><span>えきねっと</span></div><em>¥3,330</em></div><div class="cs-r"><div><b>2/11 新幹線 品川 → 靜岡</b><span>ひかり・smart-EX</span></div><em>¥6,470</em></div><div class="cs-r"><div><b>2/11 日本平纜車 來回</b><span>日本平 ⇄ 久能山東照宮</span></div><em>¥1,400</em></div><div class="cs-r"><div><b>2/11–12 租車兩天</b><span>每台約 ¥12,000＋停車約 ¥3,500，每人分攤看人數</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/11–12 油費</b></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/12 JR 靜岡 ⇄ 東靜岡 來回</b><span>¥190 × 2</span></div><em>¥380</em></div><div class="cs-r"><div><b>2/13 JR 靜岡 ⇄ 草薙 來回</b><span>¥190 × 2</span></div><em>¥380</em></div><div class="cs-r"><div><b>2/13 靜鐵巴士 草薙 ⇄ 日本平動物園</b><span>來回</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/13 JR 靜岡 → 沼津</b></div><em>¥990</em></div><div class="cs-r"><div><b>2/13 巴士 沼津站 ⇄ 沼津港</b><span>¥200 × 2</span></div><em>¥400</em></div><div class="cs-r"><div><b>2/13 JR 沼津 → 熱海</b></div><em>¥420</em></div><div class="cs-r"><div><b>計程車（熱海站 ⇄ 飯店、飯店 → 梅園）</b><span>2/13、2/14、2/15 共 3 趟，每台計</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/14 踊子 熱海 → 河津</b><span>A 席・えきねっと</span></div><em>¥3,490</em></div><div class="cs-r"><div><b>2/14 伊豆急＋JR 普通車 河津 → 熱海</b><span>夜櫻後</span></div><em>約 ¥2,100</em></div><div class="cs-r"><div><b>2/14 南伊豆／下田選項交通</b><span>伊豆急＋巴士，看當天決定</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/15 新幹線 熱海 → 品川</b><span>smart-EX</span></div><em>¥4,070</em></div><div class="cs-r"><div><b>2/15–16 東京地鐵</b><span>六本木、神保町、秋葉原、橫丁</span></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/17 成田特快 品川 → 成田 T2</b><span>えきねっと</span></div><em>¥3,330</em></div><div class="cs-t"><span>小計</span><em>¥26,760 ＋ 未知</em></div></div>
+    <div class="cs-g"><h3>門票・體驗</h3><div class="cs-r"><div><b>2/11 久能山東照宮</b><span>拜觀</span></div><em>¥800</em></div><div class="cs-r"><div><b>2/11 日本平夢テラス</b></div><em>免費</em></div><div class="cs-r"><div><b>2/12 石垣草莓</b><span>30 分吃到飽</span></div><em>約 ¥2,000</em></div><div class="cs-r"><div><b>2/12 小丸子樂園</b><span>國中以上</span></div><em>¥1,200</em></div><div class="cs-r"><div><b>2/12 ドリームプラザ 摩天輪</b></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/12 三保松原・御穗神社</b></div><em>免費</em></div><div class="cs-r"><div><b>2/12 柚木の郷</b><span>平日價</span></div><em>¥1,200</em></div><div class="cs-r"><div><b>2/13 日本平動物園</b><span>大人</span></div><em>¥620</em></div><div class="cs-r"><div><b>2/13 沼津港深海水族館</b></div><em>¥2,200</em></div><div class="cs-r"><div><b>2/14 河津櫻並木・夜櫻</b></div><em>免費</em></div><div class="cs-r"><div><b>2/15 熱海梅園</b><span>梅まつり</span></div><em>¥300</em></div><div class="cs-r"><div><b>2/15 來宮神社</b></div><em>免費</em></div><div class="cs-t"><span>小計</span><em>¥8,320 ＋ 未知</em></div></div>
+    <div class="cs-g"><h3>選項（去了才算）</h3><div class="cs-r"><div><b>2/11 日本平飯店 露台酒廊下午茶</b></div><em class="unk">未知</em></div><div class="cs-r"><div><b>2/14 伊豆泰迪熊博物館</b><span>大人・龍貓 DIY 另計</span></div><em>¥1,800</em></div><div class="cs-r"><div><b>2/14 熱川香蕉鱷魚園</b></div><em>約 ¥2,000</em></div><div class="cs-r"><div><b>2/14 南伊豆櫻花與油菜花祭・白濱神社</b></div><em>免費</em></div></div>
+    <div class="cs-g"><h3>餐飲</h3><div class="cs-r"><div><b>8 天三餐</b><span>含青葉橫丁、まぐろ館、沼津港、燒肉、神田勝本、居酒屋橫丁</span></div><em class="unk">未知</em></div><div class="cs-t"><span>小計</span><em>未知</em></div></div>
+    <div class="cs-g"><h3>其他</h3><div class="cs-r"><div><b>駕照日文譯本</b><span>開車的人才需要</span></div><em>NT 100</em></div><div class="cs-r"><div><b>2/13 靜岡站投幣置物櫃</b><span>大型櫃，一櫃計</span></div><em>約 ¥700</em></div><div class="cs-r"><div><b>網路（SIM／eSIM）</b></div><em class="unk">未知</em></div><div class="cs-r"><div><b>旅遊保險</b></div><em class="unk">未知</em></div><div class="cs-r"><div><b>伴手禮</b></div><em class="unk">未知</em></div></div>
+    <p class="mute cs-note">交通與門票金額來自本頁的車票表和各景點卡片；匯率未換算。住宿每晚單價加總為 NT 14,439，與交通頁總覽寫的「已估住宿約 NT 12,500」不一致，訂房時再確認。</p>
+  </div>
+</section>
 <footer><div class="wrap">
   <p>行程為 2026-09-01 定案的 v3 版（原始資料「熱海伊豆行.xlsx」的品川→熱海→河津住兩晚版本已過時，僅供參考）；巴士、步行與開車時間為估算，班次時刻與祭典日期以 2027 年官方公告為準。景點照片部分為現場照，其餘透過 Wikipedia／Wikimedia Commons 載入，需連網才會顯示；海岸線資料來自國土数値情報（dataofjapan/land）；鐵道線形為「国土数値情報（鉄道データ）」（国土交通省）加工製作，CC BY 4.0。</p>
 </div></footer>
@@ -1612,7 +1725,7 @@ const PACK=[
  {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
-const INFO_PANES=[['pre','行前',['#pre','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
+const INFO_PANES=[['cost','花費',['#cost','footer']],['shz','靜岡',['#shizuoka']],['tix','交通',['#tickets']],['food','美食',['#food']]];
 const APP={tab:'home',day:0,pin:null,pane:'pre',sheet:false,pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -1899,7 +2012,7 @@ function appInit(){
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
   APP.tab=['home','plan','map','pack','info'].includes(sv.tab)?sv.tab:'home';
-  APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'pre';
+  APP.pane=INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'cost';
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
   renderPlan();renderPack();renderSeg();go(APP.tab);
   const plan=$a('maPlan');let sx=null;
