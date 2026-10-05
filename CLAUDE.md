@@ -372,6 +372,7 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   （位移 ×0.85、`.dragging` 關掉 transition），放開超過 110px → 滑出後 `closeModal()`，否則彈回；
   往上拉或內容已捲動時不攔截，照常捲動。驗證 `scratchpad/swipe.js`。
 - 狀態列色條（`#mapp::before`）與開啟時依存檔模式先換色（head script 讀 `izu-rain`）都已在截圖確認有效。
+- 底部抽屜 `#maSheet` 也加了同樣的下滑關閉（`sheetSwipe()`，`appInit` 裡綁；門檻 90px、位移 ×0.9、`.dragging` 關 transition）。
 
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
