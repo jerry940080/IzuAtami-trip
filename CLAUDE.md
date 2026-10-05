@@ -615,6 +615,14 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   `twostep.js` 輸出與改版前逐字相同，`pick5.js`／`food.js`／`zoom.js`／`complete.js` 無錯誤。
 - 注意：測試腳本 `twostep.js` 沒帶 scratchpad 參數時會在 repo 裡建 `undefined/` 資料夾放截圖，**不要提交**。
 
+### GitHub Pages 發布卡住（2026-10-05 踩雷）
+- 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
+- 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
+  連 build 都沒開始，而且 **Cancel workflow 按鈕不能按**。之前同一小時內 20 次發布都正常，判斷是 GitHub 端的排隊問題，不是推太多次。
+- 處理方式：再 push 一次新的 commit，會產生新的發布並取代卡住的那筆（Pages 同時只跑一個發布）。這個環境的 `gh api` 不能呼叫
+  `repos/…/pages*`（403），沒辦法直接要求重建；查狀態用 `gh api "repos/jerry940080/IzuAtami-trip/actions/runs?per_page=3"`。
+- GitHub 對分支發布有「每小時約 10 次」的軟性上限，小修改（補照片、影片）盡量集中再推。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。
