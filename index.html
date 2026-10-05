@@ -503,6 +503,7 @@ html.app .mk-a:focus{outline:none}
 html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
 #maMap .mk.on>circle{fill:var(--color-accent-600);stroke:var(--color-accent-200);stroke-width:5}
 #maMap .mk.on .mth .rg{stroke:var(--color-accent-600);stroke-width:3.5}
+#maMap .mz-zone{cursor:pointer;transition:opacity .3s}#maMap .ma-map.zoomed .mz-zone,.ma-map.zoomed .mz-zone{opacity:0;pointer-events:none}
 #maRoute{padding:18px 16px 24px}
 .mr-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 8px 8px}
 .mr-h b{font:700 17px var(--font-heading)}
@@ -1205,7 +1206,7 @@ const DAYS=[
   cards:['baien','moa','yakiniku','roppongi','shimokita'],
   rain:'<b>雨備</b>　這天梅園和 MOA 都<b>可不去</b>，想睡晚一點就直接到站前吃飯再開車。梅園是戶外，下雨就改去 <b>MOA美術館</b>（室內，9:30 開館，飯店開車約 10 分，館方有停車場）：國寶級東洋美術，大廳能看整片相模灣。雨小的話梅園還是可以撐傘走一圈，看完再去 MOA。'},
  {n:7,date:'2/16',wd:'二',title:'東京自由日',sub:'神保町沾麵、秋葉原，晚上找一條橫丁喝一杯',stay:'品川王子大飯店 北塔（續住）',
-  map:{pts:['prince','jimbocho','akiba','yokocho'],legs:[{a:'prince',b:'jimbocho',mode:'subway',line:'都營淺草線→都營三田線'},{a:'jimbocho',b:'akiba',mode:'walk'},{a:'akiba',b:'yokocho',mode:'subway',line:'地鐵（視橫丁地點而定）'},{a:'yokocho',b:'prince',mode:'subway',line:'地鐵（視橫丁地點而定）',curve:.2}],labels:{prince:'l',jimbocho:'l',akiba:'r',yokocho:'r'},minSpan:.1},
+  map:{pts:['prince','katsumoto','akiba','yokocho'],legs:[{a:'prince',b:'katsumoto',mode:'subway',line:'都營淺草線→都營三田線'},{a:'katsumoto',b:'akiba',mode:'walk'},{a:'akiba',b:'yokocho',mode:'subway',line:'地鐵（視橫丁地點而定）'},{a:'yokocho',b:'prince',mode:'subway',line:'地鐵（視橫丁地點而定）',curve:.2}],labels:{prince:'l',katsumoto:'l',akiba:'r',yokocho:'r'},minSpan:.1},
   cards:['katsumoto','akiba','yokocho']},
  {n:8,date:'2/17',wd:'三',title:'品川 → 成田 → 桃園',sub:'一早搭成田特快，機場慢慢買伴手禮',stay:'回家',
   map:{pts:['prince','shinagawa','nrt'],legs:[{a:'prince',b:'shinagawa',mode:'walk'},{a:'shinagawa',b:'nrt',mode:'rail',line:"JR 成田特快 N'EX",via:['tokyo','kinshicho','funabashi','chiba']}],labels:{nrt:'r',prince:'l'},minSpan:.3},
@@ -1287,7 +1288,7 @@ const STOPS={
 ],
 7:[
  {t:'09:00',i:'☕',n:'自由時間',k:'選項',d:'睡到自然醒，或去品川水族館',at:'prince',go:[{at:'12:00',i:'🚇',t:'品川 → 神保町　都營淺草線→三田線約 20 分'}]},
- {t:'12:30',i:'🍜',n:'神田勝本',k:'美食',d:'沾麵，排隊約 20 分',card:'katsumoto',at:'jimbocho',dur:'1 小時 10 分',go:[{at:'13:40',i:'🚶',t:'神保町 → 秋葉原　步行約 20 分穿過御茶之水'}]},
+ {t:'12:30',i:'🍜',n:'神田勝本',k:'美食',d:'沾麵，排隊約 20 分',card:'katsumoto',dur:'1 小時 10 分',go:[{at:'13:40',i:'🚶',t:'神保町 → 秋葉原　步行約 20 分穿過御茶之水'}]},
  {t:'14:00',i:'🎮',n:'秋葉原',k:'景點',d:'電器街、動漫店',card:'akiba',dur:'4 小時',go:[{at:'18:00',i:'🚇',t:'移動到橫丁　首推野毛（品川約 25 分）'}]},
  {t:'19:00',i:'🍶',n:'居酒屋橫丁',k:'美食',d:'地點待定',card:'yokocho'}
 ],
@@ -2261,6 +2262,7 @@ function layoutLabels(svg){
   const bx=svg.closest('.ma-map,.sp-map'),pl=bx?bx.querySelector('.mm-pill'):null,top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
   const dots=[...svg.querySelectorAll('.mk')].map(g=>g.querySelector(g.classList.contains('th-on')?'.mth>circle':':scope>circle,:scope>rect')).filter(Boolean).map(c=>c.getBoundingClientRect());
+  if(!svg.closest('.zoomed'))svg.querySelectorAll('.mz-zone rect').forEach(r=>dots.push(r.getBoundingClientRect())); // 地圖分頁的區域色塊標籤也要避開
   const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
   const put=(t,sd,r)=>{const q=Math.round(r*.6),A={l:['end',-(r+6),4.5],r:['start',r+6,4.5],t:['middle',0,-(r+7)],b:['middle',0,r+14],
     tr:['start',q,-(r+5)],tl:['end',-q,-(r+5)],br:['start',q,r+14],bl:['end',-q,r+14]}[sd];
@@ -2361,9 +2363,30 @@ Z.bind=function(box){
 };
 return Z;}
 const MZ=makeZoom(390,400),SZ=makeZoom(390,340),FZ=makeZoom(390,340);
+MZ.zmax=80; // 地圖分頁：熱海飯店周邊的點只差一兩百公尺，縮圖 51px，要放到幾十倍才分得開
 function mzInit(svg){MZ.init(svg);}function mzAnim(a,b,c){MZ.anim(a,b,c);}function mzMid(){return MZ.mid();}function mzCenter(a,b){MZ.center(a,b);}function mzBind(b){MZ.bind(b);}
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
+/* 地圖分頁的「區域色塊」：Day 4–6 跨兩個地區、點擠成一團，畫一個可點的橢圓，點了就放大到該區（下方路線列表不動）。
+   範圍用經緯度框判斷哪些標記屬於該區；地圖一放大（.zoomed）色塊就淡出、不擋標記，按還原回到全圖時再出現。 */
+const MAP_ZONES={熱海:{la:[35.04,35.14],lo:[139.02,139.12],c:'#b2622d'},河津:{la:[34.6,34.9],lo:[138.85,139.12],c:'#b4507a'},
+  東京:{la:[35.5,35.85],lo:[139.55,139.95],c:'#2b4c7e'}};
+const ZONE_DAYS={4:['熱海'],5:['河津','熱海'],6:['熱海','東京']};
+function addZones(svg,d){
+  const names=ZONE_DAYS[d.n];if(!names||!svg)return;let out='';
+  names.forEach(nm=>{const Zn=MAP_ZONES[nm];
+    const ps=[...svg.querySelectorAll('.mk[data-key]')].filter(g=>{const p=P[g.dataset.key];return p&&p[0]>=Zn.la[0]&&p[0]<=Zn.la[1]&&p[1]>=Zn.lo[0]&&p[1]<=Zn.lo[1];}).map(g=>[+g.dataset.bx,+g.dataset.by]);
+    if(ps.length<2)return;
+    const xs=ps.map(p=>p[0]),ys=ps.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const cx=(x0+x1)/2,cy=(y0+y1)/2,rx=Math.max(38,(x1-x0)/2+32),ry=Math.max(34,(y1-y0)/2+32);
+    // 標籤先放橢圓上方；會被頂端日期膠囊擋住（y<84）就改放右側，右側超出畫面再放左側，都不行才放下方
+    const lab=nm+'・點我放大',lw=lab.length*12.5+22,BW=MZ.BW||390;let lx=cx,ly=cy-ry-16;
+    if(ly<84){ly=cy;lx=cx+rx+8+lw/2;if(lx+lw/2>BW-4){lx=cx-rx-8-lw/2;if(lx-lw/2<4){lx=cx;ly=cy+ry+16;}}}
+    out+=`<g class="mz-zone" data-zone="${nm}" data-cx="${cx.toFixed(1)}" data-cy="${cy.toFixed(1)}" data-w="${(x1-x0).toFixed(1)}" data-h="${(y1-y0).toFixed(1)}" role="button" aria-label="放大${nm}區域">
+      <ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${Zn.c}" fill-opacity=".16" stroke="${Zn.c}" stroke-width="2.2" stroke-dasharray="6 4"/>
+      <g transform="translate(${lx.toFixed(1)},${ly.toFixed(1)})"><rect x="${(-lw/2).toFixed(1)}" y="-12" width="${lw.toFixed(1)}" height="24" rx="12" fill="${Zn.c}"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">${lab}</text></g></g>`;});
+  if(out){svg.insertAdjacentHTML('beforeend',out);layoutLabels(svg);} // 重排一次，讓地名避開色塊標籤
+}
 function renderMap(){
   const d=DAYS[APP.day],AS=actStops(d),R=routeInfo(d,AS),keys=Object.keys(R.nums);
   $a('maMap').innerHTML=`<div class="mm-svg"></div>
@@ -2371,7 +2394,7 @@ function renderMap(){
   <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
   const cfg=dayMapCfg(d,AS);
   fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
-  const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);}
+  const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);addZones(svg,d);}
   $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 雙指可縮放</span></div>`+R.rows.map(({s,i,k})=>{
     const opt=!/^\d/.test(s.t),sub=(opt?s.t:s.t+' · ')+(opt&&s.k==='選項'?'':s.k);
     return `<div class="mr-row${k&&APP.pin===k?' on':''}" data-pin="${k}" data-sidx="${i}"><span class="mr-n${k&&!opt?'':' off'}">${k?R.nums[k]:'–'}</span><div class="mr-tx"><b>${s.n}</b><span>${sub}${k?'':' · 地點未定'}</span></div><button class="mr-btn" data-detail="${i}">詳情</button></div>`;}).join('');
@@ -2442,6 +2465,8 @@ function appClick(e){
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
   if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
+  if(el=t.closest('#maMap .mz-zone')){ // 放大到讓區內的點攤在畫面中間（左右留縮圖寬、上方留日期膠囊）
+    const w=Math.max(1,+el.dataset.w),h=Math.max(1,+el.dataset.h);MZ.anim(Math.min(MZ.zmax,(MZ.BW-110)/w,(MZ.BH-190)/h),+el.dataset.cx,+el.dataset.cy,null,450);return true;}
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}

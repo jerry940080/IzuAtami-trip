@@ -240,7 +240,7 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   比對每個 `tl` 列的時間都出現在某站的 `t` 或某段 `go.at`、每張 `cards` 都有對應的站、每個地點都在地圖畫面內。
 - **地圖**：App 地圖畫的點＝`DAYS[].map.pts` ∪ 當天所有停留點的位置（`routeInfo`），同一地點一個號碼，
   依第一次出現的時間編；路線列表一站一列（沒有座標的如烤肉顯示「–／地點未定」）。
-  沒有座標的卡片借用鄰近點：`numazuport`→`aquarium`、`katsumoto`→`jimbocho`、`souvenir`→`nrt`。
+  沒有座標的卡片借用鄰近點：`souvenir`→`nrt`（`katsumoto` 已有自己的座標）。
   **出發地不要標 `at`**（Day 2 早上在品川退房若標了，bbox 會撐到 50 km，靜岡的點全擠在一起）。
   有號碼的車站改用深色底（白底車站加白字號碼會看不見；桌機車站不帶號碼所以不受影響）。
   桌機版地圖編號仍依 `DAYS[].cards` 順序（住宿排第一）。`fitLabels()` 畫完後逐一挪標籤：住宿 → 有編號景點 → 車站，找不出界、
@@ -624,6 +624,18 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **代價**：點擠在一起的地方（熱海飯店周邊、清水）縮圖會互相疊住，後畫的蓋在上面，要放大才分得開；桌機 Day 4 熱海那團只看得到最上面一張。
   使用者選了直接顯示，已告知。
 - 驗證：`thumbs.js`、`thtime.js`（預先縮圖耗時與切換後數量）；`twostep.js` 與改版前逐字相同，`pick5.js`／`food.js`／`complete.js` 無錯誤。
+
+### 2026-10-05 變更（二十五）：地圖分頁加「區域色塊」（Day 4–6），Day 7 神田勝本縮圖修正
+- **區域色塊**：`MAP_ZONES`（熱海／河津／東京的經緯度框＋顏色）、`ZONE_DAYS={4:['熱海'],5:['河津','熱海'],6:['熱海','東京']}`。
+  `renderMap` 畫完後 `addZones(svg,d)`：取框內的 `.mk`（用 `data-bx/by`），畫虛線橢圓＋「○○・點我放大」膠囊（`<g class="mz-zone">`）。
+  膠囊先放橢圓上方，被日期膠囊擋住（y<84）就改放右側、再不行放左側。點色塊 → `MZ.anim` 放大到框內點攤開
+  （倍率＝min(zmax,(390−110)/寬,(400−190)/高)）。地圖 `.zoomed` 時色塊淡出且不吃點擊，按還原回全圖再出現。**下方路線列表不動**。
+  `layoutLabels` 在未放大時把色塊膠囊加進避讓清單，地名不會壓在上面。
+- `MZ.zmax` 16 → **80**（地圖分頁限定）：熱海飯店周邊的點只差一兩百公尺，51px 縮圖要放到 40–70 倍才分得開。景點／美食頁的 `SZ／FZ` 仍是 16。
+- **Day 7 神田勝本沒縮圖**：行程列用 `at:'jimbocho'`（車站點，沒有卡片照片）。改成拿掉 `at`（用 `katsumoto` 自己的座標），
+  `DAYS[6].map` 的 pts／legs／labels 也由 `jimbocho` 換成 `katsumoto`。`jimbocho` 座標保留在 `P`。
+- 驗證：`scratchpad/zones.js`（Day 4–7 色塊數、點色塊後倍率與色塊淡出、放大後點標記可聚焦、路線列數不變、Day 7 縮圖）；
+  `twostep.js` 逐字相同，`zoom.js`／`pick5.js`／`food.js`／`complete.js` 無錯誤。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
