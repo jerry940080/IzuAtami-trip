@@ -571,30 +571,37 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 #maInfo .card,#maInfo .tipgrid>div,#maInfo details.acc,#maInfo .money>div,#maInfo .areamap,#maInfo .offmap{border-radius:22px}
 
 
-/* 資訊 › 景點：先選地區，再看該區 */
-.sp-map{margin-top:12px;border-radius:22px;overflow:hidden;background:#d7e3ea;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.1))}
-.sp-map svg{display:block;width:100%;height:auto}
-.sp-map .mks,.sp-map>svg>g:last-of-type:not(.sp-rg){display:none} /* 不畫原本的標記與比例尺 */
-.sp-rg{cursor:pointer}
+/* 資訊 › 景點：先選地區（只有地圖），點色塊放大進該區 */
+.sp-map{position:relative;margin-top:12px;border-radius:22px;overflow:hidden;background:#d7e3ea;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.1));touch-action:none;aspect-ratio:390/340;transition:aspect-ratio .3s}
+#spots.sub .sp-map{aspect-ratio:390/400}
+.sp-svg{position:absolute;inset:0}
+.sp-svg svg{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .35s ease}
+.sp-svg svg.in{opacity:0}
+.sp-svg svg.out{opacity:0;pointer-events:none}
+.sp-svg svg.ov .mks{display:none} /* 總覽圖不畫原本的標記，只畫色塊 */
+.sp-rg{cursor:pointer;outline:none}
+.sp-rg:focus{outline:none}
 .sp-rg ellipse{fill-opacity:.2;stroke-width:2.5;stroke-opacity:.9;transition:fill-opacity .2s}
 .sp-rg:active ellipse,.sp-rg:focus-visible ellipse{fill-opacity:.38}
 .sp-rg circle{stroke:#fff;stroke-width:1.2}
 .sp-rg .nm{font:700 17px var(--font-body);fill:#1d2226;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
 .sp-rg .ct{font:600 10.5px var(--font-body);fill:#3a4553;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
-.sp-btns{display:grid;gap:10px;margin-top:14px}
-.sp-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;border:0;background:var(--color-surface);color:inherit;font:inherit;text-align:left;cursor:pointer}
-.sp-btn i,.sp-rh i{flex:none;width:14px;height:14px;border-radius:50%}
-.sp-btn>div{flex:1;min-width:0}
-.sp-btn b{display:block;font-size:16px}
-.sp-btn span{font-size:12px;color:var(--color-neutral-700,#645c50)}
-.sp-reg{display:none;margin-top:10px}
-.sp-reg.on{display:block}
+.sp-map .mm-zoom{display:none}
+#spots.sub .sp-map .mm-zoom{display:flex}
+.sp-map.zoomed .mm-zoom .rs{display:grid}
+.sp-hint{font-size:12px;color:var(--color-neutral-700,#645c50);margin:8px 2px 0;min-height:0}
+.sp-hint:empty{display:none}
+.sp-sub{display:none}
+#spots.sub .sp-sub{display:block}
 #spots.sub .sp-pick{display:none}
-.sp-back{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:0;background:var(--color-surface);color:inherit;font:600 13.5px var(--font-body);cursor:pointer;margin-bottom:14px}
+.sp-reg{display:none;margin-top:6px}
+.sp-reg.on{display:block}
+#spExtra{margin-top:18px}
+.sp-back{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:0;background:var(--color-surface);color:inherit;font:600 13.5px var(--font-body);cursor:pointer;margin-bottom:12px}
 .sp-rh{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
-.sp-rh span{grid-column:2}
+.sp-rh i{width:14px;height:14px;border-radius:50%}
 .sp-rh b{display:block;font:400 24px var(--font-heading,var(--serif));line-height:1.2}
-.sp-rh span{font-size:12.5px;color:var(--color-neutral-700,#645c50)}
+.sp-rh span{grid-column:2;font-size:12.5px;color:var(--color-neutral-700,#645c50)}
 .sp-h{display:flex;align-items:baseline;gap:8px;margin:16px 0 0}
 .sp-h b{font-size:13px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;background:var(--color-accent-2-700,#56633f);color:#fff}
 .sp-h.cand b{background:var(--color-neutral-300,#dcd3c4);color:var(--color-neutral-800,#474238)}
@@ -1918,35 +1925,80 @@ function spotStatus(k){let sched=null,opt=null,rain=null;
   if(opt)return {in:false,tag:`Day ${opt.d.n} 選項`};
   if(rain)return {in:false,tag:`Day ${rain.d.n} 雨天版`};
   return {in:false,tag:'未排入'};}
-/* 景點頁的「要看哪一個地區」：用海岸線地圖畫靜岡到成田，三個地區各一個可點的色塊（橢圓＝該區所有景點的範圍） */
+/* ===== 資訊 › 景點 =====
+   選擇頁只有一張地圖（靜岡到成田的海岸線），三個地區各一個可點的橢圓色塊。
+   點色塊：SZ 先把總覽圖動畫放大到該區，放大完成後淡入該區的詳細地圖（buildMap：編號標記＋地名，可雙指縮放、拖曳，
+   點標記開完整介紹），下方列出該區的已排入／候選名單，編號與地圖一致。「回地區選擇」換回總覽圖。 */
 const SPOT_COL=['#56633f','#b2622d','#2b4c7e'];
+const SPOT_OV={W:390,H:340},SPOT_RG={W:390,H:400};
 function cardLoc(k){if(P[k])return k;for(const d of DAYS){for(const S of [d.stops||[],d.rainStops||[]]){const st=S.find(s=>s.card===k);if(st){const l=locOf(st);if(l)return l;}}}return '';}
-function spotPickHTML(){
-  const W0=390,H0=340,regs=SPOT_REGIONS.map(([name,sub,keys])=>({name,sub,keys,locs:[...new Set(keys.map(cardLoc).filter(Boolean))]}));
-  const all=[...new Set(regs.flatMap(r=>r.locs))];
+function spotRegs(){return SPOT_REGIONS.map(([name,sub,keys])=>({name,sub,keys,locs:[...new Set(keys.map(cardLoc).filter(Boolean))]}));}
+/* 總覽圖：回傳 {svg, ell:[{cx,cy,rx,ry}]}（橢圓中心用來做放大動畫） */
+function spotOverview(){
+  const regs=spotRegs(),all=[...new Set(regs.flatMap(r=>r.locs))],{W:W0,H:H0}=SPOT_OV;
   const svg=buildMap({pts:all,legs:[],labels:{},minSpan:.05},{W:W0,H:H0,big:true,aria:'靜岡到東京的地區分布圖'});
-  const oW=W,oH=H;W=W0;H=H0;const pr=proj(bboxOf(all,.05));W=oW;H=oH;
-  const GEO_SKIP={aquarium:1,numazuStn:1}; // 沼津離熱海太近，不納入靜岡橢圓的範圍（點照畫），色塊才不會互相疊到
-  const over=regs.map((r,i)=>{const xy=r.locs.map(k=>pr.pt(P[k])),gxy=r.locs.filter(k=>!GEO_SKIP[k]).map(k=>pr.pt(P[k]));const xs=gxy.map(p=>p[0]),ys=gxy.map(p=>p[1]);
-    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(40,(Math.max(...xs)-Math.min(...xs))/2+16),ry=Math.max(36,(Math.max(...ys)-Math.min(...ys))/2+16);
-    const sch=r.keys.filter(k=>spotStatus(k).in).length,c=SPOT_COL[i];
-    const right=i===1,lx=right?cx+rx+8:cx,anc=right?'start':'middle'; // 熱海・河津的字放到橢圓右邊的海上，才不會壓到靜岡
+  const oW=W,oH=H;W=W0;H=H0;const pr=proj(bboxOf(all,.05));
+  const PT={};all.forEach(k=>PT[k]=pr.pt(P[k]));W=oW;H=oH; // pr.pt 是呼叫時才讀全域 W/H，座標算完才能還原
+  const GEO_SKIP={aquarium:1,numazuStn:1},ell=[]; // 沼津離熱海太近，不納入靜岡橢圓的範圍（點照畫），色塊才不會互相疊到
+  const over=regs.map((r,i)=>{const xy=r.locs.map(k=>PT[k]),gxy=r.locs.filter(k=>!GEO_SKIP[k]).map(k=>PT[k]);const xs=gxy.map(p=>p[0]),ys=gxy.map(p=>p[1]);
+    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(32,(Math.max(...xs)-Math.min(...xs))/2+11),ry=Math.max(30,(Math.max(...ys)-Math.min(...ys))/2+11);
+    ell.push({cx,cy,rx,ry});const sch=r.keys.filter(k=>spotStatus(k).in).length,c=SPOT_COL[i];
+    const right=i===1,lx=right?cx+rx+8:cx,anc=right?'start':'middle';
     return `<g class="sp-rg" data-reg="${i}" role="button" tabindex="0" aria-label="${r.name}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" stroke="${c}"/>
       ${xy.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${c}"/>`).join('')}
       <text x="${lx.toFixed(1)}" y="${(cy-4).toFixed(1)}" text-anchor="${anc}" class="nm">${r.name}</text><text x="${lx.toFixed(1)}" y="${(cy+16).toFixed(1)}" text-anchor="${anc}" class="ct">已排入 ${sch} · 候選 ${r.keys.length-sch}</text></g>`;}).join('');
-  return `<div class="sp-pick"><h2>景點</h2><p class="lead">要看哪一個地區？點地圖上的色塊，或下面的按鈕。</p>
-   <div class="sp-map">${svg.replace('</svg>',over+'</svg>')}</div>
-   <div class="sp-btns">${regs.map((r,i)=>{const sch=r.keys.filter(k=>spotStatus(k).in).length;return `<button class="sp-btn" data-reg="${i}"><i style="background:${SPOT_COL[i]}"></i><div><b>${r.name}</b><span>${r.sub} · 已排入 ${sch}、候選 ${r.keys.length-sch}</span></div>${ico('right',18)}</button>`;}).join('')}</div></div>`;}
-function showSpot(i){APP.spot=i;const root=$a('spots');if(!root)return;root.classList.toggle('sub',i!=null);root.querySelectorAll('.sp-reg').forEach((r,j)=>r.classList.toggle('on',j===i));const b=$a('maInfo');if(b)b.scrollTop=0;}
+  return {svg:svg.replace('<svg ','<svg class="ov" ').replace('</svg>',over+'</svg>'),ell};}
+/* 該區詳細圖：所有地點都畫、依名單順序編號；同一地點共用一個號碼 */
+function spotRegionMap(i){
+  const r=spotRegs()[i],nums={};let n=0;const order=r.keys.filter(k=>spotStatus(k).in).concat(r.keys.filter(k=>!spotStatus(k).in));
+  order.forEach(k=>{const l=cardLoc(k);if(l&&!nums[l])nums[l]=++n;});
+  const labels={};r.locs.forEach(k=>labels[k]='b');
+  const cfg={pts:r.locs,legs:[],labels,nums,minSpan:.03};
+  const svg=buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:r.name+'的景點分布圖'});
+  // 主要景點群的範圍（排除離群的沼津、成田），進區後先自動放大到這裡
+  const FOCUS_SKIP={aquarium:1,numazuStn:1,nrt:1},fk=r.locs.filter(k=>!FOCUS_SKIP[k]);let focus=null;
+  if(fk.length&&fk.length<r.locs.length){const oW=W,oH=H;W=SPOT_RG.W;H=SPOT_RG.H;const pr=proj(bboxOf(r.locs,.03));
+    const xy=fk.map(k=>pr.pt(P[k]));W=oW;H=oH; // pr.pt 是呼叫時才讀全域 W/H，座標算完才能還原
+    const xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]),sx=Math.max(...xs)-Math.min(...xs),sy=Math.max(...ys)-Math.min(...ys);
+    focus={cx:(Math.min(...xs)+Math.max(...xs))/2,cy:(Math.min(...ys)+Math.max(...ys))/2,z:Math.max(1,Math.min(4,Math.min(SPOT_RG.W/(sx+90),SPOT_RG.H/(sy+90))))};}
+  return {svg,cfg,nums,focus};}
+const ZOOMBTN=`<div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
 function spotsHTML(){
-  const NUMS={};document.querySelectorAll('#shizuoka .card').forEach(c=>{const n=c.querySelector('.num');if(n)NUMS[c.dataset.card]=+n.textContent;});
-  const card=k=>{const st=spotStatus(k);return `<div class="spw">${cardHTML(k,NUMS[k]||0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
-  return `<section class="block" id="spots"><div class="wrap">${spotPickHTML()}`+
-   SPOT_REGIONS.map(([name,sub,keys],i)=>{const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
-    return `<div class="sp-reg"><button class="sp-back" data-regback>${ico('left',18)}回地區選擇</button><div class="sp-rh"><i style="background:${SPOT_COL[i]}"></i><b>${name}</b><span>${sub}</span></div>
-     <div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
-     <div class="sp-h cand"><b>候選名單</b><span>${cand.length?cand.length+' 個':'目前沒有'}</span></div>${cand.length?`<div class="cards sp-cards">${cand.map(card).join('')}</div>`:''}
-     ${i===0?'<div id="spExtra"></div>':''}</div>`;}).join('')+`</div></section>`;}
+  const ov=spotOverview();SZ._ell=ov.ell;
+  return `<section class="block" id="spots"><div class="wrap">
+   <div class="sp-head"><div class="sp-pick"><h2>景點</h2><p class="lead">要看哪一個地區？點地圖上的色塊。</p></div>
+   <div class="sp-sub"><button class="sp-back" data-regback>${ico('left',18)}回地區選擇</button><div class="sp-rh"><i></i><b></b><span></span></div></div></div>
+   <div class="sp-map"><div class="sp-svg">${ov.svg}</div>${ZOOMBTN}</div>
+   <p class="sp-hint"></p>`+
+   SPOT_REGIONS.map(([name,sub,keys],i)=>`<div class="sp-reg" data-i="${i}"></div>`).join('')+`<div id="spExtra"></div></div></section>`;}
+function spotLists(i){
+  const [name,sub,keys]=SPOT_REGIONS[i],rm=spotRegionMap(i);
+  const card=k=>{const st=spotStatus(k),l=cardLoc(k);return `<div class="spw">${cardHTML(k,l?rm.nums[l]:0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
+  const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
+  return `<div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
+     <div class="sp-h cand"><b>候選名單</b><span>${cand.length?cand.length+' 個':'目前沒有'}</span></div>${cand.length?`<div class="cards sp-cards">${cand.map(card).join('')}</div>`:''}`;}
+function spotSwap(html,W,H,cfg){ // 淡入換圖：新圖疊在舊圖上淡入，結束後移除舊圖
+  const box=$a('spots').querySelector('.sp-svg'),old=box.querySelector('svg');
+  box.insertAdjacentHTML('beforeend',html);const nu=box.querySelector('svg:last-of-type');nu.classList.add('in');
+  if(cfg){nu._cfg=cfg;}SZ.init(nu,W,H);if(cfg)layoutLabels(nu);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{nu.classList.remove('in');if(old)old.classList.add('out');}));
+  setTimeout(()=>{if(old)old.remove();},420);}
+function showSpot(i,anim){
+  const root=$a('spots');if(!root)return;const b=$a('maInfo');
+  if(i==null){ // 回總覽（已經在總覽就不重畫）
+    if(!root.classList.contains('sub')){APP.spot=null;if(b)b.scrollTop=0;return;}
+    APP.spot=null;root.classList.remove('sub');root.querySelectorAll('.sp-reg').forEach(r=>{r.classList.remove('on');r.innerHTML='';});
+    root.querySelector('#spExtra').hidden=true;root.querySelector('.sp-hint').textContent='';
+    const ov=spotOverview();SZ._ell=ov.ell;spotSwap(ov.svg,SPOT_OV.W,SPOT_OV.H,null);if(b)b.scrollTop=0;return;}
+  const [name,sub]=SPOT_REGIONS[i],e=SZ._ell&&SZ._ell[i];
+  const enter=()=>{APP.spot=i;root.classList.add('sub');const rh=root.querySelector('.sp-sub .sp-rh');rh.querySelector('i').style.background=SPOT_COL[i];rh.querySelector('b').textContent=name;rh.querySelector('span').textContent=sub;
+    const rm=spotRegionMap(i);spotSwap(rm.svg,SPOT_RG.W,SPOT_RG.H,rm.cfg);
+    if(rm.focus&&rm.focus.z>1.05)setTimeout(()=>{if(APP.spot===i)SZ.anim(rm.focus.z,rm.focus.cx,rm.focus.cy,null,420);},380);
+    root.querySelector('.sp-hint').textContent='地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';
+    root.querySelectorAll('.sp-reg').forEach((r,j)=>{r.classList.toggle('on',j===i);r.innerHTML=j===i?spotLists(i):'';});
+    root.querySelector('#spExtra').hidden=i!==0;if(b)b.scrollTop=0;};
+  if(anim&&e&&SZ.svg){const z=Math.max(1.6,Math.min(6,Math.min(SZ.BW/(2*e.rx+30),SZ.BH/(2*e.ry+30))));SZ.anim(z,e.cx,e.cy,enter,480);}else enter();}
+
 const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -2068,7 +2120,7 @@ function layoutLabels(svg){
   const cfg=svg._cfg||{};
   svg.querySelectorAll('.mk text').forEach(t=>t.style.display='');
   const sb=svg.getBoundingClientRect();if(!sb.width)return;
-  const pl=document.querySelector('#maMap .mm-pill'),top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
+  const bx=svg.closest('.ma-map,.sp-map'),pl=bx?bx.querySelector('.mm-pill'):null,top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
   const dots=[...svg.querySelectorAll('.mk>circle,.mk>rect')].map(c=>c.getBoundingClientRect());
   const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
@@ -2094,78 +2146,83 @@ function layoutLabels(svg){
 /* ===== 手機地圖縮放：改 viewBox（向量放大不糊），標記／標籤／比例尺反向縮放維持原尺寸 =====
    雙指縮放、放大後單指拖曳、雙擊放大、左下 ＋／－／還原（地圖固定在上方，只有下方路線列表會捲動）。
    縮放停下 180ms 後重排標籤，原本擠在一起被藏起來的名稱放大後會出現。 */
-const MZ={svg:null,z:1,vb:[0,0,390,400],BW:390,BH:400,zmax:16};
-function mzInit(svg){
-  MZ.svg=svg;MZ.z=1;MZ.vb=[0,0,MZ.BW,MZ.BH];MZ.done=0;
+/* makeZoom(BW,BH)：一張 SVG 一個實例。MZ＝地圖分頁、SZ＝資訊›景點的地圖。舊的 mzXxx() 名稱保留給 MZ 用 */
+function makeZoom(BW,BH){
+const Z={svg:null,z:1,vb:[0,0,BW,BH],BW,BH,zmax:16,done:0,sbar:null,_t:0};
+Z.init=function(svg,W,H){
+  if(W){Z.BW=W;Z.BH=H;}Z.svg=svg;Z.z=1;Z.vb=[0,0,Z.BW,Z.BH];Z.done=0;
   svg.querySelectorAll('.mk').forEach(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(m){g.dataset.bx=m[1];g.dataset.by=m[2];}});
   svg.querySelectorAll('circle.hit').forEach(c=>c.dataset.r=c.getAttribute('r'));
-  const sbar=svg.querySelector(':scope>g:last-of-type');
-  if(sbar&&sbar.querySelector('text')){const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(sbar.getAttribute('transform'));const ln=sbar.querySelector('line');
-    MZ.sbar={g:sbar,x:+m[1],y:+m[2],w:+ln.getAttribute('x2'),km:parseFloat(sbar.querySelector('text').textContent)};MZ.sbar.ppk=MZ.sbar.w/MZ.sbar.km;}else MZ.sbar=null;
-  mzApply();
-}
-function mzApply(){
-  const svg=MZ.svg;if(!svg)return;const [x,y,w,h]=MZ.vb,z=MZ.z,iz=1/z;
-  if(z>1.001&&!MZ.done){ // 一開始縮放就把畫線動畫收尾：動畫用 dasharray＝路線長度，配上 non-scaling-stroke 時
-    MZ.done=1;           // dasharray 會改用螢幕長度計算，放大後路線只剩一小段（使用者回報「縮放時路線會變」）
+  const sbar=[...svg.querySelectorAll(':scope>g')].find(g=>g.querySelector('text')&&g.querySelectorAll('line').length===3&&/km|m$/.test(g.querySelector('text').textContent));
+  if(sbar){const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(sbar.getAttribute('transform'));const ln=sbar.querySelector('line');
+    Z.sbar={g:sbar,x:+m[1],y:+m[2],w:+ln.getAttribute('x2'),km:parseFloat(sbar.querySelector('text').textContent)};if(/ m$/.test(sbar.querySelector('text').textContent))Z.sbar.km/=1000;Z.sbar.ppk=Z.sbar.w/Z.sbar.km;}else Z.sbar=null;
+  Z.apply();
+};
+Z.apply=function(){
+  const svg=Z.svg;if(!svg)return;const [x,y,w,h]=Z.vb,z=Z.z,iz=1/z;
+  if(z>1.001&&!Z.done){ // 一開始縮放就把畫線動畫收尾：動畫用 dasharray＝路線長度，配上 non-scaling-stroke 時
+    Z.done=1;            // dasharray 會改用螢幕長度計算，放大後路線只剩一小段（使用者回報「縮放時路線會變」）
     svg.querySelectorAll('.leg').forEach(l=>{l.style.transition='none';if(!l.getAttribute('stroke-dasharray')){l.style.strokeDasharray='none';l.style.strokeDashoffset='0';}l.style.opacity=1;});
     svg.querySelectorAll('.mk').forEach(m=>{m.style.transition='none';m.style.opacity=1;});}
   svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
   svg.querySelectorAll('.mk[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
   svg.querySelectorAll('circle.hit').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
-  const S=MZ.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
-    const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=MZ.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
+  const S=Z.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
+    const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=Z.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
     ls[0].setAttribute('x2',L.toFixed(1));ls[2].setAttribute('x1',L.toFixed(1));ls[2].setAttribute('x2',L.toFixed(1));
     tx.setAttribute('x',(L/2).toFixed(1));tx.textContent=km<1?Math.round(km*1000)+' m':km+' km';
-    S.g.setAttribute('transform',`translate(${(x+(MZ.BW-L-16)*iz).toFixed(2)},${(y+S.y*iz).toFixed(2)}) scale(${iz.toFixed(4)})`);}
-  const box=svg.closest('.ma-map');if(box)box.classList.toggle('zoomed',z>1.01);
-}
-function mzSet(z,px,py,fx,fy){ // 讓 viewBox 上的點 (px,py) 落在畫面比例位置 (fx,fy)
-  z=Math.max(1,Math.min(MZ.zmax,z));const w=MZ.BW/z,h=MZ.BH/z;
-  MZ.z=z;MZ.vb=[Math.max(0,Math.min(MZ.BW-w,px-fx*w)),Math.max(0,Math.min(MZ.BH-h,py-fy*h)),w,h];mzApply();
-}
-function mzMid(){const [x,y,w,h]=MZ.vb;return [x+w/2,y+h/2];}
-function mzCenter(px,py){mzAnim(MZ.z,px,py);}
-function mzAnim(z1,cx,cy){
-  z1=Math.max(1,Math.min(MZ.zmax,z1));const z0=MZ.z,[a0,b0]=mzMid(),t0=performance.now(),D=220;
-  const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;mzSet(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else mzRelayout();};
+    S.g.setAttribute('transform',`translate(${(x+(Z.BW-L-16)*iz).toFixed(2)},${(y+S.y*iz).toFixed(2)}) scale(${iz.toFixed(4)})`);}
+  const box=svg.closest('.ma-map,.sp-map');if(box)box.classList.toggle('zoomed',z>1.01);
+};
+Z.set=function(z,px,py,fx,fy){ // 讓 viewBox 上的點 (px,py) 落在畫面比例位置 (fx,fy)
+  z=Math.max(1,Math.min(Z.zmax,z));const w=Z.BW/z,h=Z.BH/z;
+  Z.z=z;Z.vb=[Math.max(0,Math.min(Z.BW-w,px-fx*w)),Math.max(0,Math.min(Z.BH-h,py-fy*h)),w,h];Z.apply();
+};
+Z.mid=function(){const [x,y,w,h]=Z.vb;return [x+w/2,y+h/2];};
+Z.center=function(px,py){Z.anim(Z.z,px,py);};
+Z.anim=function(z1,cx,cy,done,D){
+  z1=Math.max(1,Math.min(Z.zmax,z1));const z0=Z.z,[a0,b0]=Z.mid(),t0=performance.now();D=D||220;
+  const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;Z.set(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else{Z.relayout();if(done)done();}};
   requestAnimationFrame(step);
-}
-let mzT=0;function mzRelayout(){clearTimeout(mzT);mzT=setTimeout(()=>{if(MZ.svg)layoutLabels(MZ.svg);},180);}
-function mzFrac(cx,cy){ // 螢幕座標 → 地圖可視範圍內的比例位置（考慮 meet 留白）
-  const r=MZ.svg.getBoundingClientRect(),s=Math.min(r.width/MZ.BW,r.height/MZ.BH),dw=MZ.BW*s,dh=MZ.BH*s;
+};
+Z.relayout=function(){clearTimeout(Z._t);Z._t=setTimeout(()=>{if(Z.svg&&Z.svg._cfg)layoutLabels(Z.svg);},180);};
+Z.frac=function(cx,cy){ // 螢幕座標 → 地圖可視範圍內的比例位置（考慮 meet 留白）
+  const r=Z.svg.getBoundingClientRect(),s=Math.min(r.width/Z.BW,r.height/Z.BH),dw=Z.BW*s,dh=Z.BH*s;
   return [(cx-r.left-(r.width-dw)/2)/dw,(cy-r.top-(r.height-dh)/2)/dh,dw,dh];
-}
-function mzBind(box){
+};
+Z.bind=function(box){
   let G=null,lastTap=0,lastXY=[0,0],eatClick=0;
   const mid=T=>[(T[0].clientX+T[1].clientX)/2,(T[0].clientY+T[1].clientY)/2],dist=T=>Math.hypot(T[0].clientX-T[1].clientX,T[0].clientY-T[1].clientY);
   box.addEventListener('touchstart',e=>{
-    if(!MZ.svg)return;const T=e.touches;
-    if(T.length>=2){const [mx,my]=mid(T),[fx,fy]=mzFrac(mx,my);G={pinch:1,d0:dist(T),z0:MZ.z,px:MZ.vb[0]+fx*MZ.vb[2],py:MZ.vb[1]+fy*MZ.vb[3],moved:1};}
-    else if(T.length===1)G={x0:T[0].clientX,y0:T[0].clientY,ly:T[0].clientY,vb0:MZ.vb.slice(),moved:0};
+    if(!Z.svg)return;const T=e.touches;
+    if(T.length>=2){const [mx,my]=mid(T),[fx,fy]=Z.frac(mx,my);G={pinch:1,d0:dist(T),z0:Z.z,px:Z.vb[0]+fx*Z.vb[2],py:Z.vb[1]+fy*Z.vb[3],moved:1};}
+    else if(T.length===1)G={x0:T[0].clientX,y0:T[0].clientY,ly:T[0].clientY,vb0:Z.vb.slice(),moved:0};
   },{passive:true});
   box.addEventListener('touchmove',e=>{
-    if(!G||!MZ.svg)return;const T=e.touches;e.preventDefault();
-    if(G.pinch&&T.length>=2){const [mx,my]=mid(T),[fx,fy]=mzFrac(mx,my);mzSet(G.z0*dist(T)/G.d0,G.px,G.py,fx,fy);return;}
+    if(!G||!Z.svg)return;const T=e.touches;e.preventDefault();
+    if(G.pinch&&T.length>=2){const [mx,my]=mid(T),[fx,fy]=Z.frac(mx,my);Z.set(G.z0*dist(T)/G.d0,G.px,G.py,fx,fy);return;}
     if(G.pinch||T.length!==1)return;
     const dx=T[0].clientX-G.x0,dy=T[0].clientY-G.y0;if(Math.abs(dx)+Math.abs(dy)>8)G.moved=1;
-    if(MZ.z>1.01){const [,, dw,dh]=mzFrac(0,0),[x0,y0,w,h]=G.vb0;MZ.vb=[Math.max(0,Math.min(MZ.BW-w,x0-dx/dw*w)),Math.max(0,Math.min(MZ.BH-h,y0-dy/dh*h)),w,h];mzApply();}
+    if(Z.z>1.01){const [,, dw,dh]=Z.frac(0,0),[x0,y0,w,h]=G.vb0;Z.vb=[Math.max(0,Math.min(Z.BW-w,x0-dx/dw*w)),Math.max(0,Math.min(Z.BH-h,y0-dy/dh*h)),w,h];Z.apply();}
   },{passive:false});
   box.addEventListener('touchend',e=>{
     if(!G)return;
     if(e.touches.length===0){
-      if(G.moved){eatClick=Date.now();mzRelayout();}
-      else{const now=Date.now(),t=e.changedTouches[0],onMk=e.target.closest&&e.target.closest('.mk-a,.mm-zoom');
-        if(!onMk&&now-lastTap<320&&Math.hypot(t.clientX-lastXY[0],t.clientY-lastXY[1])<30){const [fx,fy]=mzFrac(t.clientX,t.clientY);
-          mzAnim(MZ.z>=MZ.zmax-.01?1:MZ.z*2,MZ.vb[0]+fx*MZ.vb[2],MZ.vb[1]+fy*MZ.vb[3]);lastTap=0;}
+      if(G.moved){eatClick=Date.now();Z.relayout();}
+      else{const now=Date.now(),t=e.changedTouches[0],onMk=e.target.closest&&e.target.closest('.mk-a,.mm-zoom,.sp-rg');
+        if(!onMk&&now-lastTap<320&&Math.hypot(t.clientX-lastXY[0],t.clientY-lastXY[1])<30){const [fx,fy]=Z.frac(t.clientX,t.clientY);
+          Z.anim(Z.z>=Z.zmax-.01?1:Z.z*2,Z.vb[0]+fx*Z.vb[2],Z.vb[1]+fy*Z.vb[3]);lastTap=0;}
         else{lastTap=now;lastXY=[t.clientX,t.clientY];}}
       G=null;
-    }else if(e.touches.length===1&&G.pinch){G={x0:e.touches[0].clientX,y0:e.touches[0].clientY,ly:e.touches[0].clientY,vb0:MZ.vb.slice(),moved:1};}
+    }else if(e.touches.length===1&&G.pinch){G={x0:e.touches[0].clientX,y0:e.touches[0].clientY,ly:e.touches[0].clientY,vb0:Z.vb.slice(),moved:1};}
   });
   box.addEventListener('click',e=>{if(Date.now()-eatClick<400){e.stopPropagation();e.preventDefault();}},true);
-  box.addEventListener('wheel',e=>{if(!MZ.svg)return;e.preventDefault();const [fx,fy]=mzFrac(e.clientX,e.clientY);
-    mzSet(MZ.z*Math.exp(-e.deltaY*.0025),MZ.vb[0]+fx*MZ.vb[2],MZ.vb[1]+fy*MZ.vb[3],fx,fy);mzRelayout();},{passive:false});
-}
+  box.addEventListener('wheel',e=>{if(!Z.svg)return;e.preventDefault();const [fx,fy]=Z.frac(e.clientX,e.clientY);
+    Z.set(Z.z*Math.exp(-e.deltaY*.0025),Z.vb[0]+fx*Z.vb[2],Z.vb[1]+fy*Z.vb[3],fx,fy);Z.relayout();},{passive:false});
+};
+return Z;}
+const MZ=makeZoom(390,400),SZ=makeZoom(390,340);
+function mzInit(svg){MZ.init(svg);}function mzAnim(a,b,c){MZ.anim(a,b,c);}function mzMid(){return MZ.mid();}function mzCenter(a,b){MZ.center(a,b);}function mzBind(b){MZ.bind(b);}
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
    同一地點只編一個號（依第一次出現的時間順序），桌機的 DAYS[].map.pts 之外的點也會補畫上去 */
 function renderMap(){
@@ -2244,15 +2301,18 @@ function appClick(e){
   if(el=t.closest('.ma-row[data-stop]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.stop]);return true;}
   if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
-  if(el=t.closest('[data-mz]')){const a=el.dataset.mz;if(a==='reset')mzAnim(1,MZ.BW/2,MZ.BH/2);else{const c=mzMid();mzAnim(MZ.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
+  if(el=t.closest('[data-mz]')){const Z=el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot(null);return true;}
-  if(el=t.closest('[data-reg]')){showSpot(+el.dataset.reg);return true;}
+  if(el=t.closest('[data-reg]')){showSpot(+el.dataset.reg,true);return true;}
   if(el=t.closest('[data-regback]')){showSpot(null);return true;}
+  if(el=t.closest('#spots .sp-map .mk-a[data-k]')){let k=el.dataset.k;
+    if(t.classList.contains('hit')){let best=1e9;document.querySelectorAll('#spots .sp-map .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}
+    openCard(k);return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
   if(t.closest('#pkAdd')){addPack();return true;}
@@ -2273,7 +2333,7 @@ function appInit(){
   document.body.appendChild(root);
   const info=$a('maInfo');
   INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});
-    if(k==='spots'){p.innerHTML=spotsHTML();const ex=p.querySelector('#spExtra');document.querySelectorAll('#shizuoka details.acc').forEach(a=>ex.appendChild(a));} // 靜岡的位置圖／官方地圖／2 月活動搬進靜岡區塊
+    if(k==='spots'){p.innerHTML=spotsHTML();const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
     info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
@@ -2287,6 +2347,7 @@ function appInit(){
   plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
   mzBind($a('maMap'));sheetSwipe();
+  {const sb=document.querySelector('#spots .sp-map');if(sb){SZ.bind(sb);const sv=sb.querySelector('svg');if(sv)SZ.init(sv,SPOT_OV.W,SPOT_OV.H);}}
   root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(actStops(DAYS[APP.day])[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
   root.addEventListener('scroll',()=>{if(pinEl)placeTip(pinEl);},{capture:true,passive:true});

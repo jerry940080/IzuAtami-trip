@@ -392,6 +392,24 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   地圖下方三顆 `.sp-btn[data-reg]` 同功能。`showSpot(i)`：`#spots.sub` 藏選擇頁、`.sp-reg.on` 顯示該區；
   子頁頂端 `[data-regback]`「回地區選擇」；重新點「景點」分段會回到選擇頁（`APP.spot` 不存檔）。
 
+### 2026-10-05 變更（九）：景點頁只留地圖（點色塊放大進該區，區域圖可縮放）
+取代（八）的「地區選擇頁＋三顆按鈕」：景點頁**只有一張地圖**，三個色塊（橢圓）可點，
+下方三顆 `.sp-btn` 已移除。
+- **縮放引擎改成工廠** `makeZoom(BW,BH)`：`MZ=makeZoom(390,400)`（地圖分頁）、`SZ=makeZoom(390,340)`（景點頁），
+  舊的 `mzInit／mzAnim／mzMid／mzCenter／mzBind` 保留為 `MZ` 的包裝。`Z.anim(z1,cx,cy,done,D)` 動畫結束呼叫 `done`；
+  `Z.apply` 會對 `svg.closest('.ma-map,.sp-map')` 切 `.zoomed`；`[data-mz]` 按鈕用 `el.closest('#spots')?SZ:MZ` 決定實例。
+- **流程**：`spotOverview()` 畫總覽（`buildMap` 靜岡→成田，標記藏掉，疊 `.sp-rg` 橢圓＋小圓點＋區名／已排入數）。
+  點橢圓 → `showSpot(i,true)`：先 `SZ.anim` 把總覽放大到該橢圓（480ms），結束後 `spotSwap()` 淡入
+  `spotRegionMap(i)` 的區域圖（390×400，`buildMap` 編號圓標＋標籤，`layoutLabels`），再依 `rm.focus` 自動
+  對焦主群（`FOCUS_SKIP={aquarium,numazuStn,nrt}` 排除離群點：沼津、成田，否則靜岡圖被沼津拉得太寬）。
+  列表（已排入／候選）號碼＝地圖號碼；點標記（透明命中圈取最近者）開完整卡片；`[data-regback]` 回總覽。
+  已在總覽時再點「景點」分段只捲到頂，不重畫（否則會疊出兩張 `svg.ov`）。
+- **踩雷：`proj()` 回傳的 `pt` 是呼叫時才讀全域 `W／H` 的 closure**。`spotRegionMap`／`spotOverview` 借 `proj` 算座標時
+  要「算完所有點再還原 `W=oW;H=oH`」；先還原再呼叫 `pr.pt` 會用手機日圖的 380×280 算，對焦中心整個偏掉
+  （靜岡群跑到左下）。總覽橢圓也是同一個問題，修正後才真正對準地圖上的點。
+- 橢圓最小半徑 32×30、外距 11px（原 40×36／16 會讓靜岡與熱海色塊疊到）；`GEO_SKIP` 仍把沼津排除在靜岡橢圓外。
+- 驗證：`scratchpad/pick4.js`（三區進出、點標記開卡、雙指縮放）、`pick2.js`（橢圓間距）。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。
