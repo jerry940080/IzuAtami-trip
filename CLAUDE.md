@@ -139,7 +139,7 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
 - 橫式縮到寬 1000、直式縮到高 1000，**WebP q78**（不是 JPEG；實測這批照片 WebP
   約是 JPEG 的 72%，而官方地圖那種平塗圖只有 43%）。
 - 第一張是卡片封面，所以**橫式照片要排前面**，直式放後面（封面是 16:10 裁切）。
-- 會擋重複：該 key 已有 IMG 就中止，要換圖得先手動移除。
+- 會擋重複：該 key 已有 IMG 就中止，要換圖得先手動移除。（2026-10-05 修正：舊的判斷會誤把 `P` 裡的 `\n ichigo:[` 座標當成照片而擋下，改成只比對 `key:'data:image` 或 `key:['data:image`。）
 - 卡片顯示才 250–400px、彈窗 700px，1000px 綽綽有餘。實測三保松原 3 張共 159 KB，
   比舊的 base64 JPEG（平均 112 KB/張）省很多。
 
@@ -600,8 +600,9 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、
    `kinnoji`、`cruise`、`issa`、`mihoshrine`、`sengen`、
-   `ichigo`、`shimizu`、`maruko`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
+   `shimizu`、`maruko`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
    2026-10-05 起新增的熱海／美食卡片也都沒照片：`kiunkaku`、`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   **`ichigo` 已於 2026-10-05 補上 3 張**（石牆上的草莓當封面、溫室外望駿河灣、久能フルーツセンター かどや 店面〔裁掉底部網址浮水印〕）。
    **`hobby` 已於 2026-10-05 補上 3 張**（展場全景〔BANDAI／TAMIYA／Hasegawa 展櫃〕當封面、Hasegawa 飛機模型櫃、木製彥根城模型）。
    **`ndhotel` 已於 2026-10-05 補上 2 張**（挑高玻璃窗全景當封面、自助餐檯），影片 XVK5_v8u1Lw 也已加入。
    **`toshogu` 已於 2026-10-05 補上 2 張**（境內手繪導覽圖當封面、纜車〔裁掉底部 FUN! JAPAN 浮水印〕）；使用者另給的「紅色社殿＋櫻花＋富士山」那張看起來是**富士山本宮浅間大社**（富士宮）而不是久能山，沒有放，待使用者確認。

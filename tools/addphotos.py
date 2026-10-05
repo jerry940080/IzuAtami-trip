@@ -2,7 +2,7 @@
 """把照片轉成 WebP 並嵌進 index.html 的 IMG。
 用法：addphotos.py <cardKey> <圖檔1> [圖檔2 ...]
 規則：橫式縮到寬 1000、直式縮到高 1000，q78 WebP；第一張是卡片封面。"""
-import sys, base64, io, os
+import sys, base64, io, os, re
 from PIL import Image
 
 HTML='/home/user/IzuAtami-trip/index.html'
@@ -24,7 +24,7 @@ for f in files:
 s=open(HTML,encoding='utf-8').read()
 anchor='const IMG={'
 assert s.count(anchor)==1
-assert ('\n '+key+':[') not in s and (anchor+key+':') not in s, key+' 已經有照片了，先手動移除'
+assert not re.search(r"(?:\{|\n )"+key+r":\[?'data:image",s), key+' 已經有照片了，先手動移除'
 val='['+','.join("'%s'"%u for u in uris)+']' if len(uris)>1 else "'%s'"%uris[0]
 s=s.replace(anchor, anchor+key+':'+val+',\n ',1)
 open(HTML,'w',encoding='utf-8').write(s)
