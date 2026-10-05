@@ -600,8 +600,9 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、
    `kinnoji`、`cruise`、`issa`、`mihoshrine`、`sengen`、
-   `shimizu`、`maruko`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
+   `shimizu`、`yunoki`、`yakiniku`、`roppongi`、`akiba`、`souvenir`；
    2026-10-05 起新增的熱海／美食卡片也都沒照片：`kiunkaku`、`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   **`maruko` 已於 2026-10-05 補上 3 張**（小丸子與小玉坐長椅當封面〔裁掉頂部「旅行圖中 Journey.tw」浮水印〕、富士山投影展區、ドリームプラザ外觀與摩天輪）。
    **`ichigo` 已於 2026-10-05 補上 3 張**（石牆上的草莓當封面、溫室外望駿河灣、久能フルーツセンター かどや 店面〔裁掉底部網址浮水印〕）。
    **`hobby` 已於 2026-10-05 補上 3 張**（展場全景〔BANDAI／TAMIYA／Hasegawa 展櫃〕當封面、Hasegawa 飛機模型櫃、木製彥根城模型）。
    **`ndhotel` 已於 2026-10-05 補上 2 張**（挑高玻璃窗全景當封面、自助餐檯），影片 XVK5_v8u1Lw 也已加入。
