@@ -576,7 +576,7 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   `spotNode(path,tree)`、`spotsHTML(ctx)`、`spotSwap(ctx,…)`、`showSpot(path,anim,ctx)` 都帶 ctx；`APP.spot` 改存在 `ctx.path`。
   新增縮放實例 `FZ=makeZoom(390,340)`；`[data-mz]` 依 `#foods／#spots` 選 `FZ／SZ／MZ`；地圖標記點擊選擇器改 `.spp .sp-map .mk-a`。
   兩個 section 都加 class `spp`，CSS 的 `#spots.sub` 全部改成 `.spp.sub`。
-- **`FOOD_TREE`**（緊接在 `SPOT_TREE` 後）：靜岡〔靜岡市區 aoba／maruzen／issa、日本平・久能 ichigo／ndhotel、清水 shimizu／kinnoji〕、
+- **`FOOD_TREE`**（緊接在 `SPOT_TREE` 後）：靜岡〔靜岡市區 aoba／maruzen／issa（後兩者已刪）、日本平・久能 ichigo／ndhotel、清水 shimizu／kinnoji〕、
   熱海・河津〔熱海 yoichi／asaichi／ginza／fruitking／ekimae、河津 kinmedai〕、東京〔katsumoto／yakiniku／yokocho〕。新增美食卡片要放進對應葉節點。
 - **新卡片 4 張**：`fruitking` 熱海フルーツキング（渚町 1-2，35.0958,139.0730）、`ekimae` 站前甜點三家（方塊泡芙・草莓串・熱海プリン本店，35.1028,139.0773；
   `nakamise` 購物卡片仍不加回）、`kinmedai` 河津午餐・金目鯛（34.7560,138.9895；Day 5 晴雨兩版午餐列掛 `card:'kinmedai'`、`DAYS[4].cards` 加入）、
@@ -592,6 +592,12 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 `SPOT_TREE` 與 `FOOD_TREE` 的靜岡市區、官方地圖說明文字一併拿掉，**勿再加回**。桌機靜岡總覽卡片 18 → **17 張**（號碼自動重排 1–17，
 說明文字改「以上 17 個」）。它本來就沒有照片也沒排進行程。
 
+### 2026-10-05 變更（二十二）：刪除茶店 一茶
+使用者要求刪除 `issa`（茶店 一茶）。卡片、`GQ`、桌機靜岡總覽 `cards`、`SPOT_TREE` 與 `FOOD_TREE` 的靜岡市區、Day 2 晴天選項列與 `rain` 文字、
+官方地圖說明文字一併拿掉，**勿再加回**（它本來就沒有 `P` 座標）。桌機靜岡總覽卡片 17 → **16 張**（說明文字改「以上 16 個」，
+順手把已排入 Day 3 的御穗神社從「沒排進路線」名單拿掉）。美食頁靜岡市區只剩青葉橫丁，子區副標改「青葉橫丁おでん」、
+靜岡大區副標改「おでん・鮪魚丼・草莓・もつカレー」。
+
 ### 2026-10-05 變更（五）：影片載入動畫
 - 景點彈窗的每個 `.yt` 影片框先放 `.yt-ld`（轉圈＋「影片載入中…」），iframe `onload` 時給 `.yt` 加 `.ok` 淡出。
   15 秒還沒 `.ok` 就把文字換成「影片載入較慢，請確認網路連線…」。iframe 是 `loading="lazy"`，捲到才開始載。
@@ -599,9 +605,10 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、
-   `kinnoji`、`cruise`、`issa`、`sengen`、
+   `cruise`、`sengen`、
    `yakiniku`、`roppongi`、`akiba`、`souvenir`；
    2026-10-05 起新增的熱海／美食卡片也都沒照片：`kiunkaku`、`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   **`kinnoji` 已於 2026-10-05 補上 4 張**（醬汁もつカレー串當封面、烤もつ串、豬排、雞皮串）。
    **`shimizu` 已於 2026-10-05 補上 4 張**（市場走道當封面、海鮮丼、船盛〔裁掉右上「本鮪 天然」印章〕、生魚片定食）。
    **`zoo` 已於 2026-10-05 補上 4 張**（小熊貓當封面、水豚、北極熊水中隧道、企鵝）；內文「這天沒有車，走 JR 到草薙站轉巴士」改成開車（變更十六後的狀態），info 交通欄也改成開車優先。
    **`yunoki` 已於 2026-10-05 補上 4 張**（露天岩風呂當封面、庭園內湯、ロウリュウ三溫暖、岩盤浴）；內文「還車後最順的收尾」改成 Day 3 開車過來（變更十六後不還車）。
