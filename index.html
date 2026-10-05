@@ -581,9 +581,9 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .sp-svg svg.ov .mks{display:none} /* 總覽圖不畫原本的標記，只畫色塊 */
 .sp-rg{cursor:pointer;outline:none}
 .sp-rg:focus{outline:none}
-.sp-rg ellipse{fill-opacity:.2;stroke-width:2.5;stroke-opacity:.9;transition:fill-opacity .2s}
+.sp-rg ellipse{fill-opacity:.2;stroke-width:2.5;stroke-opacity:.9;transition:fill-opacity .2s;vector-effect:non-scaling-stroke}
 .sp-rg:active ellipse,.sp-rg:focus-visible ellipse{fill-opacity:.38}
-.sp-rg circle{stroke:#fff;stroke-width:1.2}
+.sp-rg circle{stroke:#fff;stroke-width:1.2;vector-effect:non-scaling-stroke}
 .sp-rg .nm{font:700 17px var(--font-body);fill:#1d2226;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
 .sp-rg .ct{font:600 10.5px var(--font-body);fill:#3a4553;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
 .sp-map .mm-zoom{display:none}
@@ -1913,11 +1913,6 @@ const PACK=[
 const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['tix','交通',['#tickets']],['food','美食',['#food']]];
 /* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
    已排入＝晴天版行程裡有時間的站；其餘（只有「選項」、只在雨天版、或完全沒排）＝候選。 */
-const SPOT_REGIONS=[
- ['靜岡','含清水・三保・日本平・沼津',['shizuhotel','yume','toshogu','ndhotel','aoba','ichigo','shimizu','maruko','mihoshrine','miho','yunoki','zoo','numazuport','aquarium','kinnoji','cruise','maruzen','issa','hobby','sengen']],
- ['熱海・河津','含南伊豆・伊豆高原・熱川',['livemax','sakura','minami','shirahama','teddy','banana','baien','kinomiya','itogawa']],
- ['東京','含品川・神田・秋葉原・成田',['prince','yakiniku','roppongi','shimokita','katsumoto','akiba','yokocho','souvenir']]
-];
 function spotStatus(k){let sched=null,opt=null,rain=null;
   DAYS.forEach(d=>{(d.stops||[]).forEach(s=>{if(s.card!==k)return;if(/^\d|^途中/.test(s.t)){if(!sched)sched={d,s};}else if(s.k==='選項'&&!opt)opt={d,s};});
     (d.rainStops||[]).forEach(s=>{if(s.card===k&&!rain)rain={d,s};});});
@@ -1926,37 +1921,65 @@ function spotStatus(k){let sched=null,opt=null,rain=null;
   if(rain)return {in:false,tag:`Day ${rain.d.n} 雨天版`};
   return {in:false,tag:'未排入'};}
 /* ===== 資訊 › 景點 =====
-   選擇頁只有一張地圖（靜岡到成田的海岸線），三個地區各一個可點的橢圓色塊。
-   點色塊：SZ 先把總覽圖動畫放大到該區，放大完成後淡入該區的詳細地圖（buildMap：編號標記＋地名，可雙指縮放、拖曳，
-   點標記開完整介紹），下方列出該區的已排入／候選名單，編號與地圖一致。「回地區選擇」換回總覽圖。 */
-const SPOT_COL=['#56633f','#b2622d','#2b4c7e'];
+   兩層地區樹 SPOT_TREE：第一層靜岡／熱海・河津／東京，靜岡再分市區／日本平／清水・三保／沼津，熱海・河津再分熱海／河津。
+   每一層都只有一張地圖：有 kids 的節點畫「色塊圖」（每個子區一個可點的橢圓＋小圓點，不畫標記），
+   點色塊：SZ 先把目前的圖動畫放大到該橢圓，放大完成後淡入下一層的圖；沒有 kids 的葉節點畫「詳細圖」
+   （buildMap：編號標記＋地名，可雙指縮放、拖曳，點標記開完整介紹），下方列出已排入／候選名單，編號與地圖一致。
+   skip:true 的子區（沼津）不納入父層的對焦範圍與橢圓避讓，進父層時先對焦到其他子區，縮小才看得到它。 */
+const SPOT_TREE=[
+ {name:'靜岡',sub:'含清水・三保・日本平・沼津',col:'#56633f',kids:[
+   {name:'靜岡市區',sub:'靜岡站周邊・青葉橫丁・淺間神社',col:'#56633f',lab:'t',keys:['shizuhotel','aoba','maruzen','sengen','hobby','issa','yunoki']},
+   {name:'日本平',sub:'夢テラス・久能山・草莓園・動物園',col:'#3f7a6a',lab:'b',keys:['zoo','yume','ndhotel','toshogu','ichigo']},
+   {name:'清水・三保',sub:'河岸の市・小丸子・三保松原',col:'#2f6f8f',lab:'t',keys:['shimizu','kinnoji','maruko','cruise','mihoshrine','miho']},
+   {name:'沼津',sub:'沼津港・深海水族館',col:'#8a6d3b',lab:'b',skip:true,keys:['numazuport','aquarium']}
+ ]},
+ {name:'熱海・河津',sub:'含南伊豆・伊豆高原・熱川',col:'#b2622d',lab:'r',kids:[
+   {name:'熱海',sub:'梅園・來宮神社・糸川',col:'#b2622d',lab:'r',keys:['livemax','baien','kinomiya','itogawa']},
+   {name:'河津',sub:'含南伊豆・下田・熱川・伊豆高原',col:'#c9923e',lab:'r',keys:['sakura','minami','shirahama','teddy','banana']}
+ ]},
+ {name:'東京',sub:'含品川・神田・秋葉原・成田',col:'#2b4c7e',keys:['prince','yakiniku','roppongi','shimokita','katsumoto','akiba','yokocho','souvenir']}
+];
 const SPOT_OV={W:390,H:340},SPOT_RG={W:390,H:400};
 function cardLoc(k){if(P[k])return k;for(const d of DAYS){for(const S of [d.stops||[],d.rainStops||[]]){const st=S.find(s=>s.card===k);if(st){const l=locOf(st);if(l)return l;}}}return '';}
-function spotRegs(){return SPOT_REGIONS.map(([name,sub,keys])=>({name,sub,keys,locs:[...new Set(keys.map(cardLoc).filter(Boolean))]}));}
-/* 總覽圖：回傳 {svg, ell:[{cx,cy,rx,ry}]}（橢圓中心用來做放大動畫） */
-function spotOverview(){
-  const regs=spotRegs(),all=[...new Set(regs.flatMap(r=>r.locs))],{W:W0,H:H0}=SPOT_OV;
-  const svg=buildMap({pts:all,legs:[],labels:{},minSpan:.05},{W:W0,H:H0,big:true,aria:'靜岡到東京的地區分布圖'});
-  const oW=W,oH=H;W=W0;H=H0;const pr=proj(bboxOf(all,.05));
+/* 依路徑取節點：{name,sub,col,lab,skip,kids,keys,locs,path,parent}；keys／locs 含所有子區 */
+function spotNode(path){
+  path=path||[];let n={name:'',sub:'',kids:SPOT_TREE,path:[],parent:null,root:true};
+  for(const i of path){const k=n.kids[i];n={...k,path:n.path.concat(i),parent:n};}
+  const allKeys=x=>x.keys||x.kids.flatMap(allKeys);n.keys=allKeys(n);
+  n.locs=[...new Set(n.keys.map(cardLoc).filter(Boolean))];
+  if(n.kids)n.kids=n.kids.map(k=>({...k,keys:allKeys(k),locs:[...new Set(allKeys(k).map(cardLoc).filter(Boolean))]}));
+  return n;}
+function spotDims(node){return node.path.length?SPOT_RG:SPOT_OV;}
+/* 色塊圖（有 kids 的節點）：回傳 {svg, ell:[{cx,cy,rx,ry}], focus}；橢圓中心用來做放大動畫 */
+function spotGroupMap(node){
+  const kids=node.kids,all=node.locs,{W:W0,H:H0}=spotDims(node),ms=node.path.length?.03:.05;
+  const svg=buildMap({pts:all,legs:[],labels:{},minSpan:ms},{W:W0,H:H0,big:true,aria:(node.name||'靜岡到東京')+'的地區分布圖'});
+  const oW=W,oH=H;W=W0;H=H0;const pr=proj(bboxOf(all,ms));
   const PT={};all.forEach(k=>PT[k]=pr.pt(P[k]));W=oW;H=oH; // pr.pt 是呼叫時才讀全域 W/H，座標算完才能還原
-  const GEO_SKIP={aquarium:1,numazuStn:1},ell=[]; // 沼津離熱海太近，不納入靜岡橢圓的範圍（點照畫），色塊才不會互相疊到
-  const over=regs.map((r,i)=>{const xy=r.locs.map(k=>PT[k]),gxy=r.locs.filter(k=>!GEO_SKIP[k]).map(k=>PT[k]);const xs=gxy.map(p=>p[0]),ys=gxy.map(p=>p[1]);
-    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(32,(Math.max(...xs)-Math.min(...xs))/2+11),ry=Math.max(30,(Math.max(...ys)-Math.min(...ys))/2+11);
-    ell.push({cx,cy,rx,ry});const sch=r.keys.filter(k=>spotStatus(k).in).length,c=SPOT_COL[i];
-    const right=i===1,lx=right?cx+rx+8:cx,anc=right?'start':'middle';
+  // 進這層後要對焦到哪裡：非 skip 子區的範圍；zf 是對焦倍率，橢圓最小尺寸、外距、字的位移都除以它，螢幕上才是固定大小
+  const fkeys=kids.filter(k=>!k.skip).flatMap(k=>k.locs),fx=fkeys.map(k=>PT[k][0]),fy=fkeys.map(k=>PT[k][1]);
+  let zf=1,focus=null;
+  if(fkeys.length<all.length){const sx=Math.max(...fx)-Math.min(...fx),sy=Math.max(...fy)-Math.min(...fy);zf=Math.max(1,Math.min(4,Math.min(W0/(sx+120),H0/(sy+120))));
+    focus={cx:(Math.min(...fx)+Math.max(...fx))/2,cy:(Math.min(...fy)+Math.max(...fy))/2,z:zf};}
+  const GEO_SKIP={aquarium:1,numazuStn:1},ell=[]; // 第一層：沼津離熱海太近，不納入靜岡橢圓的範圍（點照畫），色塊才不會互相疊到
+  const over=kids.map((r,i)=>{const xy=r.locs.map(k=>PT[k]),gxy=(node.root?r.locs.filter(k=>!GEO_SKIP[k]):r.locs).map(k=>PT[k]);const xs=gxy.map(p=>p[0]),ys=gxy.map(p=>p[1]);
+    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(28/zf,(Math.max(...xs)-Math.min(...xs))/2+6/zf),ry=Math.max(26/zf,(Math.max(...ys)-Math.min(...ys))/2+6/zf);
+    ell.push({cx,cy,rx,ry});const sch=r.keys.filter(k=>spotStatus(k).in).length,c=r.col;
+    const lab=r.lab||'c';let lx=cx,ly=cy,anc='middle';
+    if(lab==='r'){lx=cx+rx+8/zf;anc='start';}else if(lab==='l'){lx=cx-rx-8/zf;anc='end';}else if(lab==='t')ly=cy-ry-22/zf;else if(lab==='b')ly=cy+ry+22/zf;
     return `<g class="sp-rg" data-reg="${i}" role="button" tabindex="0" aria-label="${r.name}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" stroke="${c}"/>
       ${xy.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${c}"/>`).join('')}
-      <text x="${lx.toFixed(1)}" y="${(cy-4).toFixed(1)}" text-anchor="${anc}" class="nm">${r.name}</text><text x="${lx.toFixed(1)}" y="${(cy+16).toFixed(1)}" text-anchor="${anc}" class="ct">已排入 ${sch} · 候選 ${r.keys.length-sch}</text></g>`;}).join('');
-  return {svg:svg.replace('<svg ','<svg class="ov" ').replace('</svg>',over+'</svg>'),ell};}
-/* 該區詳細圖：所有地點都畫、依名單順序編號；同一地點共用一個號碼 */
-function spotRegionMap(i){
-  const r=spotRegs()[i],nums={};let n=0;const order=r.keys.filter(k=>spotStatus(k).in).concat(r.keys.filter(k=>!spotStatus(k).in));
+      <g class="zs" transform="translate(${lx.toFixed(1)},${ly.toFixed(1)})"><text y="-4" text-anchor="${anc}" class="nm">${r.name}</text><text y="16" text-anchor="${anc}" class="ct">已排入 ${sch} · 候選 ${r.keys.length-sch}</text></g></g>`;}).join('');
+  return {svg:svg.replace('<svg ','<svg class="ov" ').replace('</svg>',over+'</svg>'),ell,focus};}
+/* 葉節點詳細圖：所有地點都畫、依名單順序編號；同一地點共用一個號碼 */
+function spotLeafMap(node){
+  const r=node,nums={};let n=0;const order=r.keys.filter(k=>spotStatus(k).in).concat(r.keys.filter(k=>!spotStatus(k).in));
   order.forEach(k=>{const l=cardLoc(k);if(l&&!nums[l])nums[l]=++n;});
   const labels={};r.locs.forEach(k=>labels[k]='b');
   const cfg={pts:r.locs,legs:[],labels,nums,minSpan:.03};
   const svg=buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:r.name+'的景點分布圖'});
-  // 主要景點群的範圍（排除離群的沼津、成田），進區後先自動放大到這裡
-  const FOCUS_SKIP={aquarium:1,numazuStn:1,nrt:1},fk=r.locs.filter(k=>!FOCUS_SKIP[k]);let focus=null;
+  // 主要景點群的範圍（排除離群的成田），進區後先自動放大到這裡
+  const FOCUS_SKIP={nrt:1},fk=r.locs.filter(k=>!FOCUS_SKIP[k]);let focus=null;
   if(fk.length&&fk.length<r.locs.length){const oW=W,oH=H;W=SPOT_RG.W;H=SPOT_RG.H;const pr=proj(bboxOf(r.locs,.03));
     const xy=fk.map(k=>pr.pt(P[k]));W=oW;H=oH; // pr.pt 是呼叫時才讀全域 W/H，座標算完才能還原
     const xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]),sx=Math.max(...xs)-Math.min(...xs),sy=Math.max(...ys)-Math.min(...ys);
@@ -1964,15 +1987,14 @@ function spotRegionMap(i){
   return {svg,cfg,nums,focus};}
 const ZOOMBTN=`<div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
 function spotsHTML(){
-  const ov=spotOverview();SZ._ell=ov.ell;
+  const ov=spotGroupMap(spotNode([]));SZ._ell=ov.ell;
   return `<section class="block" id="spots"><div class="wrap">
    <div class="sp-head"><div class="sp-pick"><h2>景點</h2><p class="lead">要看哪一個地區？點地圖上的色塊。</p></div>
-   <div class="sp-sub"><button class="sp-back" data-regback>${ico('left',18)}回地區選擇</button><div class="sp-rh"><i></i><b></b><span></span></div></div></div>
+   <div class="sp-sub"><button class="sp-back" data-regback>${ico('left',18)}<span>回地區選擇</span></button><div class="sp-rh"><i></i><b></b><span></span></div></div></div>
    <div class="sp-map"><div class="sp-svg">${ov.svg}</div>${ZOOMBTN}</div>
-   <p class="sp-hint"></p>`+
-   SPOT_REGIONS.map(([name,sub,keys],i)=>`<div class="sp-reg" data-i="${i}"></div>`).join('')+`<div id="spExtra"></div></div></section>`;}
-function spotLists(i){
-  const [name,sub,keys]=SPOT_REGIONS[i],rm=spotRegionMap(i);
+   <p class="sp-hint"></p><div class="sp-reg"></div><div id="spExtra"></div></div></section>`;}
+function spotLists(node){
+  const keys=node.keys,rm=spotLeafMap(node);
   const card=k=>{const st=spotStatus(k),l=cardLoc(k);return `<div class="spw">${cardHTML(k,l?rm.nums[l]:0)}<div class="sp-anc"><span class="sp-tag${st.in?'':' cand'}">${st.tag}</span></div></div>`;};
   const sch=keys.filter(k=>CARDS[k]&&spotStatus(k).in),cand=keys.filter(k=>CARDS[k]&&!spotStatus(k).in);
   return `<div class="sp-h"><b>已排入</b><span>${sch.length} 個</span></div><div class="cards sp-cards">${sch.map(card).join('')}</div>
@@ -1983,21 +2005,25 @@ function spotSwap(html,W,H,cfg){ // 淡入換圖：新圖疊在舊圖上淡入�
   if(cfg){nu._cfg=cfg;}SZ.init(nu,W,H);if(cfg)layoutLabels(nu);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{nu.classList.remove('in');if(old)old.classList.add('out');}));
   setTimeout(()=>{if(old)old.remove();},420);}
-function showSpot(i,anim){
-  const root=$a('spots');if(!root)return;const b=$a('maInfo');
-  if(i==null){ // 回總覽（已經在總覽就不重畫）
-    if(!root.classList.contains('sub')){APP.spot=null;if(b)b.scrollTop=0;return;}
-    APP.spot=null;root.classList.remove('sub');root.querySelectorAll('.sp-reg').forEach(r=>{r.classList.remove('on');r.innerHTML='';});
-    root.querySelector('#spExtra').hidden=true;root.querySelector('.sp-hint').textContent='';
-    const ov=spotOverview();SZ._ell=ov.ell;spotSwap(ov.svg,SPOT_OV.W,SPOT_OV.H,null);if(b)b.scrollTop=0;return;}
-  const [name,sub]=SPOT_REGIONS[i],e=SZ._ell&&SZ._ell[i];
-  const enter=()=>{APP.spot=i;root.classList.add('sub');const rh=root.querySelector('.sp-sub .sp-rh');rh.querySelector('i').style.background=SPOT_COL[i];rh.querySelector('b').textContent=name;rh.querySelector('span').textContent=sub;
-    const rm=spotRegionMap(i);spotSwap(rm.svg,SPOT_RG.W,SPOT_RG.H,rm.cfg);
-    if(rm.focus&&rm.focus.z>1.05)setTimeout(()=>{if(APP.spot===i)SZ.anim(rm.focus.z,rm.focus.cx,rm.focus.cy,null,420);},380);
-    root.querySelector('.sp-hint').textContent='地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';
-    root.querySelectorAll('.sp-reg').forEach((r,j)=>{r.classList.toggle('on',j===i);r.innerHTML=j===i?spotLists(i):'';});
-    root.querySelector('#spExtra').hidden=i!==0;if(b)b.scrollTop=0;};
-  if(anim&&e&&SZ.svg){const z=Math.max(1.6,Math.min(6,Math.min(SZ.BW/(2*e.rx+30),SZ.BH/(2*e.ry+30))));SZ.anim(z,e.cx,e.cy,enter,480);}else enter();}
+/* 顯示某一層：path＝[] 總覽、[0] 靜岡色塊圖、[0,1] 日本平詳細圖…；anim＝先把目前的圖放大到該色塊再換圖 */
+function showSpot(path,anim){
+  const root=$a('spots');if(!root)return;const b=$a('maInfo');path=path||[];
+  const cur=APP.spot||[],same=cur.length===path.length&&cur.every((v,i)=>v===path[i]);
+  if(same&&(path.length||!root.classList.contains('sub'))){if(b)b.scrollTop=0;return;} // 已經在這層就不重畫（否則會疊出兩張圖）
+  const node=spotNode(path),{W:W0,H:H0}=spotDims(node);
+  const enter=()=>{APP.spot=path;root.classList.toggle('sub',path.length>0);
+    const rh=root.querySelector('.sp-sub .sp-rh');rh.querySelector('i').style.background=node.col||'';rh.querySelector('b').textContent=node.name;
+    rh.querySelector('span').textContent=(node.parent&&!node.parent.root?node.parent.name+' · ':'')+node.sub;
+    root.querySelector('.sp-back span').textContent=node.parent&&!node.parent.root?'回'+node.parent.name:'回地區選擇';
+    let focus=null;const reg=root.querySelector('.sp-reg');
+    if(node.kids){const gm=spotGroupMap(node);SZ._ell=gm.ell;spotSwap(gm.svg,W0,H0,null);focus=gm.focus;
+      root.querySelector('.sp-hint').textContent=path.length?'點色塊進入該區；縮小可以看到更遠的地方。':'';reg.classList.remove('on');reg.innerHTML='';}
+    else{const rm=spotLeafMap(node);SZ._ell=null;spotSwap(rm.svg,W0,H0,rm.cfg);focus=rm.focus;
+      root.querySelector('.sp-hint').textContent='地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';reg.classList.add('on');reg.innerHTML=spotLists(node);}
+    if(focus&&focus.z>1.05)setTimeout(()=>{if(APP.spot===path)SZ.anim(focus.z,focus.cx,focus.cy,null,420);},380);
+    root.querySelector('#spExtra').hidden=path[0]!==0;if(b)b.scrollTop=0;};
+  const e=anim&&SZ._ell&&SZ._ell[path[path.length-1]];
+  if(e&&SZ.svg){const z=Math.max(SZ.z*1.6,Math.min(8,Math.min(SZ.BW/(2*e.rx+30),SZ.BH/(2*e.ry+30))));SZ.anim(z,e.cx,e.cy,enter,480);}else enter();}
 
 const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
@@ -2148,11 +2174,12 @@ function layoutLabels(svg){
    縮放停下 180ms 後重排標籤，原本擠在一起被藏起來的名稱放大後會出現。 */
 /* makeZoom(BW,BH)：一張 SVG 一個實例。MZ＝地圖分頁、SZ＝資訊›景點的地圖。舊的 mzXxx() 名稱保留給 MZ 用 */
 function makeZoom(BW,BH){
-const Z={svg:null,z:1,vb:[0,0,BW,BH],BW,BH,zmax:16,done:0,sbar:null,_t:0};
+const Z={svg:null,z:1,vb:[0,0,BW,BH],BW,BH,zmax:16,done:0,sbar:null,_t:0,gen:0};
 Z.init=function(svg,W,H){
-  if(W){Z.BW=W;Z.BH=H;}Z.svg=svg;Z.z=1;Z.vb=[0,0,Z.BW,Z.BH];Z.done=0;
+  if(W){Z.BW=W;Z.BH=H;}Z.svg=svg;Z.z=1;Z.vb=[0,0,Z.BW,Z.BH];Z.done=0;Z.gen++; // gen：換圖後還在跑的舊動畫要停
   svg.querySelectorAll('.mk').forEach(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(m){g.dataset.bx=m[1];g.dataset.by=m[2];}});
-  svg.querySelectorAll('circle.hit').forEach(c=>c.dataset.r=c.getAttribute('r'));
+  svg.querySelectorAll('circle.hit,.sp-rg circle').forEach(c=>c.dataset.r=c.getAttribute('r'));
+  svg.querySelectorAll('.zs').forEach(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(m){g.dataset.bx=m[1];g.dataset.by=m[2];}});
   const sbar=[...svg.querySelectorAll(':scope>g')].find(g=>g.querySelector('text')&&g.querySelectorAll('line').length===3&&/km|m$/.test(g.querySelector('text').textContent));
   if(sbar){const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(sbar.getAttribute('transform'));const ln=sbar.querySelector('line');
     Z.sbar={g:sbar,x:+m[1],y:+m[2],w:+ln.getAttribute('x2'),km:parseFloat(sbar.querySelector('text').textContent)};if(/ m$/.test(sbar.querySelector('text').textContent))Z.sbar.km/=1000;Z.sbar.ppk=Z.sbar.w/Z.sbar.km;}else Z.sbar=null;
@@ -2165,8 +2192,8 @@ Z.apply=function(){
     svg.querySelectorAll('.leg').forEach(l=>{l.style.transition='none';if(!l.getAttribute('stroke-dasharray')){l.style.strokeDasharray='none';l.style.strokeDashoffset='0';}l.style.opacity=1;});
     svg.querySelectorAll('.mk').forEach(m=>{m.style.transition='none';m.style.opacity=1;});}
   svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
-  svg.querySelectorAll('.mk[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
-  svg.querySelectorAll('circle.hit').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
+  svg.querySelectorAll('.mk[data-bx],.zs[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
+  svg.querySelectorAll('circle[data-r]').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
   const S=Z.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
     const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=Z.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
     ls[0].setAttribute('x2',L.toFixed(1));ls[2].setAttribute('x1',L.toFixed(1));ls[2].setAttribute('x2',L.toFixed(1));
@@ -2181,8 +2208,8 @@ Z.set=function(z,px,py,fx,fy){ // 讓 viewBox 上的點 (px,py) 落在畫面比�
 Z.mid=function(){const [x,y,w,h]=Z.vb;return [x+w/2,y+h/2];};
 Z.center=function(px,py){Z.anim(Z.z,px,py);};
 Z.anim=function(z1,cx,cy,done,D){
-  z1=Math.max(1,Math.min(Z.zmax,z1));const z0=Z.z,[a0,b0]=Z.mid(),t0=performance.now();D=D||220;
-  const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;Z.set(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else{Z.relayout();if(done)done();}};
+  z1=Math.max(1,Math.min(Z.zmax,z1));const z0=Z.z,[a0,b0]=Z.mid(),t0=performance.now(),g=Z.gen;D=D||220;
+  const step=now=>{if(Z.gen!==g)return;const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;Z.set(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else{Z.relayout();if(done)done();}};
   requestAnimationFrame(step);
 };
 Z.relayout=function(){clearTimeout(Z._t);Z._t=setTimeout(()=>{if(Z.svg&&Z.svg._cfg)layoutLabels(Z.svg);},180);};
@@ -2307,9 +2334,9 @@ function appClick(e){
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
-  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot(null);return true;}
-  if(el=t.closest('[data-reg]')){showSpot(+el.dataset.reg,true);return true;}
-  if(el=t.closest('[data-regback]')){showSpot(null);return true;}
+  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([]);return true;}
+  if(el=t.closest('[data-reg]')){showSpot((APP.spot||[]).concat(+el.dataset.reg),true);return true;}
+  if(el=t.closest('[data-regback]')){showSpot((APP.spot||[]).slice(0,-1));return true;}
   if(el=t.closest('#spots .sp-map .mk-a[data-k]')){let k=el.dataset.k;
     if(t.classList.contains('hit')){let best=1e9;document.querySelectorAll('#spots .sp-map .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}
     openCard(k);return true;}
