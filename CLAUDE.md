@@ -334,8 +334,9 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   - 使用者傳 Safari（iOS 26 樣式）截圖：切到雨備後 Safari 自己的狀態列與底部工具列仍是米色，
     表示 **改 `meta[theme-color]` 的 content 沒被重讀**。改成每次切換把 meta 整個拆掉重放一個新的，
     並把 `html`／`body` 的背景也用 inline style 寫上（Safari 若改用取樣頁面底色，也會跟著變）。
-    **開發環境沒有 WebKit，這段沒驗證過**；若 Safari 仍不變色，就是該版 Safari 只在開頁時讀一次，無解，
-    桌面圖示版（standalone）靠 `#mapp::before` 色條不受影響。
+    第二輪截圖證實 Safari **有變色但慢一步**（晴天頁配灰藍 Safari、雨備頁配米色 Safari）：Safari 是在收到
+    meta 變動的瞬間取樣畫面顏色，網頁還沒重畫。改成 `bump()` 立刻一次、雙層 rAF 一次、350ms 後再一次。
+    開發環境沒有 WebKit，依截圖推論修的，待使用者確認。桌面圖示版（standalone）靠 `#mapp::before` 色條不受影響。
   - 手機地圖標籤：`marker()` 在 `big` 模式把名稱裡的「（待訂）」「（選項）」括號去掉；
     `layoutLabels` 不再強制顯示飯店標籤（Day 2 雨備靜岡站附近 4 點重疊時，飯店名硬壓在車站圓標上），
     放不下一律先藏，放大後重排就會出現。

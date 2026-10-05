@@ -1840,9 +1840,10 @@ function actStops(d){return rainOn(d)?d.rainStops:(d.stops||[]);}
 function applyTheme(){const on=(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]);const r=$a('mapp');if(r)r.classList.toggle('rainy',on);
   document.documentElement.classList.toggle('rainy-ui',on);
   const col=on?'#b7c6d6':'#f5ead8';document.documentElement.style.backgroundColor=col;document.body.style.backgroundColor=col;
-  // iOS Safari 的狀態列／工具列顏色：改 content 不一定會重讀，拆掉重放一個新的 meta 比較保險
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());
-  const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);}
+  // iOS Safari 的狀態列／工具列顏色：它是在「收到通知的那一瞬間」抓畫面顏色，網頁還沒重畫就會抓到舊色
+  // （使用者截圖：Safari 永遠慢一步顯示上一次的顏色）。所以先通知一次，等畫面畫好再通知兩次。
+  const bump=()=>{document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);};
+  bump();requestAnimationFrame(()=>requestAnimationFrame(bump));setTimeout(bump,350);}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
