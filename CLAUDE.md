@@ -607,7 +607,8 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、
    `cruise`、`sengen`、
    `yakiniku`、`roppongi`、`akiba`、`souvenir`；
-   2026-10-05 起新增的熱海／美食卡片也都沒照片：`kiunkaku`、`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   2026-10-05 起新增的熱海／美食卡片也都沒照片：`ginza`、`yoichi`、`asaichi`、`moa`、`fruitking`、`ekimae`、`kinmedai`。
+   **`kiunkaku` 已於 2026-10-05 補上 3 張**（洋館日光室彩繪玻璃當封面、庭園與和洋館外觀、池塘松樹）。單檔突破 **10 MB**（10.12 MB）。
    **`kinnoji` 已於 2026-10-05 補上 4 張**（醬汁もつカレー串當封面、烤もつ串、豬排、雞皮串）；內文「2/12 傍晚回靜岡還車」改成三保夕陽→柚木の郷。
    **`shimizu` 已於 2026-10-05 補上 4 張**（市場走道當封面、海鮮丼、船盛〔裁掉右上「本鮪 天然」印章〕、生魚片定食）。
    **`zoo` 已於 2026-10-05 補上 4 張**（小熊貓當封面、水豚、北極熊水中隧道、企鵝）；內文「這天沒有車，走 JR 到草薙站轉巴士」改成開車（變更十六後的狀態），info 交通欄也改成開車優先。
