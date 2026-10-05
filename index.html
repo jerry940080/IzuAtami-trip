@@ -286,6 +286,11 @@ footer p{max-width:70ch}
 .modal-video:not(:empty){padding:18px 24px 24px;border-top:1px solid var(--rule)}
 .modal-video .vt{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink2);margin-bottom:10px}
 .modal-video .yt{position:relative;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden}
+.yt-ld{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#1b1a19;color:#eee7db;font-size:13.5px;letter-spacing:.04em;pointer-events:none;transition:opacity .4s}
+.yt-ld i{width:34px;height:34px;border-radius:50%;border:3px solid rgba(238,231,219,.25);border-top-color:#f6a06b;animation:ytspin .9s linear infinite}
+.yt.ok .yt-ld{opacity:0;visibility:hidden}
+@keyframes ytspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.yt-ld i{animation-duration:2.4s}}
 .modal-video .yt+.vl{margin-top:16px}
 .modal-video .vl{font-size:13px;color:var(--ink2);margin-bottom:6px}
 .modal-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -638,19 +643,18 @@ html.app .app-only{display:block}
 .rn-tag{font-style:normal;font:700 11px var(--font-body);margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--color-accent-600);color:#fff;vertical-align:3px}
 .ma-rainnote{background:var(--color-surface);border-radius:18px;padding:11px 14px;margin:-4px 0 14px;font-size:13px;line-height:1.6;color:var(--color-neutral-800)}
 .ma-rainnote b{color:var(--color-accent-700)}
-#mapp.rainy{
-  --color-bg:#0e1622;--color-surface:#18243a;--color-text:#e6edf7;--color-accent:#4f8fdc;--color-accent-2:#6fa8c8;
-  --color-divider:rgba(230,237,247,.14);
-  --color-neutral-100:#141e2e;--color-neutral-200:#1f2b40;--color-neutral-300:#2b3a52;--color-neutral-400:#3f5170;--color-neutral-500:#5a6e8e;--color-neutral-600:#7d90ae;--color-neutral-700:#a3b2c9;--color-neutral-800:#c7d2e2;--color-neutral-900:#e6edf7;
-  --color-accent-100:#152a45;--color-accent-200:#1c3a60;--color-accent-300:#27548a;--color-accent-400:#3a70b4;--color-accent-500:#4f8fdc;--color-accent-600:#3b7fd4;--color-accent-700:#8dbbf2;--color-accent-800:#b5d3f7;--color-accent-900:#dbeafc;
-  --color-accent-2-100:#13293a;--color-accent-2-200:#1a364c;--color-accent-2-300:#25506b;--color-accent-2-400:#36708f;--color-accent-2-500:#4f8fb0;--color-accent-2-600:#6fa8c8;--color-accent-2-700:#2e5d7c;--color-accent-2-800:#a9d2e8;--color-accent-2-900:#d3eaf6;
-  --paper:#0e1622;--paper2:#18243a;--ink:#e6edf7;--ink2:#c7d2e2;--ink3:#a3b2c9;--rule:rgba(230,237,247,.14);--ai:#8dbbf2;
+#mapp.rainy{ /* 雨備：灰藍色調（使用者要求不要黑、不要太暗） */
+  --color-bg:#b7c6d6;--color-surface:#c9d5e2;--color-text:#1d2b3a;--color-accent:#3e6a9e;--color-accent-2:#44707f;
+  --color-divider:rgba(29,43,58,.16);
+  --color-neutral-100:#d8e1ea;--color-neutral-200:#cbd6e1;--color-neutral-300:#b4c3d2;--color-neutral-400:#97a9bc;--color-neutral-500:#7a8ca1;--color-neutral-600:#5f7187;--color-neutral-700:#4a5b70;--color-neutral-800:#34445a;--color-neutral-900:#1d2b3a;
+  --color-accent-100:#dbe6f3;--color-accent-200:#c3d5ea;--color-accent-300:#9dbbdc;--color-accent-400:#6f98c8;--color-accent-500:#4f7db3;--color-accent-600:#3e6a9e;--color-accent-700:#2e5381;--color-accent-800:#213e63;--color-accent-900:#142944;
+  --color-accent-2-100:#d6e4ea;--color-accent-2-200:#c0d5de;--color-accent-2-300:#9cbdcb;--color-accent-2-400:#74a0b3;--color-accent-2-500:#568499;--color-accent-2-600:#44707f;--color-accent-2-700:#355a67;--color-accent-2-800:#27434d;--color-accent-2-900:#192d34;
+  --paper:#b7c6d6;--paper2:#c9d5e2;--ink:#1d2b3a;--ink2:#34445a;--ink3:#4a5b70;--rule:rgba(29,43,58,.16);--ai:#2e5381;
   background:var(--color-bg);color:var(--color-text);transition:background .35s,color .35s}
-#mapp.rainy .rain-btn{background:#e6edf7;color:#0e1622}
-#mapp .rain-btn:active{transform:scale(.96)}
-#mapp.rainy .ma-map{background:#0b1320}
-#mapp.rainy .mm-svg svg{filter:invert(.92) hue-rotate(180deg) saturate(.85) brightness(.95)}
-#mapp.rainy .ma-th img,#mapp.rainy .sh-ph img{filter:brightness(.85)}
+#mapp.rainy .ma-map{background:#a9bacb}
+#mapp.rainy .mm-svg svg{filter:saturate(.5) brightness(.97)}
+/* App 外圈（狀態列、Safari 工具列、捲動露出的底色）也一起換 */
+html.rainy-ui,html.rainy-ui body{background:#b7c6d6}
 </style>
 </head>
 <body>
@@ -1634,7 +1638,9 @@ function openCard(id,fromMap){
   if(gu){const ga=document.createElement('a');ga.href=gu;ga.target='_blank';ga.rel='noopener noreferrer';
     ga.textContent='在 Google 地圖開啟 ↗';ga.title='另開分頁，可看即時評分、營業時間與路線';act.appendChild(ga);}
   const vids=[].concat(c.video||[]).map(v=>{const u=typeof v==='string'?v:v.u;return {id:ytId(u),st:ytStart(u),l:v.l};}).filter(v=>v.id);
-  document.getElementById('mVideo').innerHTML=(vids.length?'<div class="vt">介紹影片</div>':'')+vids.map(v=>`${v.l?`<div class="vl">${v.l}</div>`:''}<div class="yt"><iframe src="https://www.youtube.com/embed/${v.id}?rel=0${v.st?'&start='+v.st:''}" title="${c.name} ${v.l||'介紹影片'}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`).join('');
+  document.getElementById('mVideo').innerHTML=(vids.length?'<div class="vt">介紹影片</div>':'')+vids.map(v=>`${v.l?`<div class="vl">${v.l}</div>`:''}<div class="yt"><div class="yt-ld" aria-hidden="true"><i></i><span>影片載入中…</span></div><iframe onload="this.parentNode.classList.add('ok')" src="https://www.youtube.com/embed/${v.id}?rel=0${v.st?'&start='+v.st:''}" title="${c.name} ${v.l||'介紹影片'}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`).join('');
+  // 15 秒還沒載好就換成提醒文字（通常是網路太慢或沒連線）
+  setTimeout(()=>document.querySelectorAll('#mVideo .yt:not(.ok) .yt-ld span').forEach(e=>e.textContent='影片載入較慢，請確認網路連線…'),15000);
   modal.hidden=false;document.body.style.overflow='hidden';
   modal.querySelector('.modal-x').focus();
   modal.dataset.from=id;
@@ -1822,7 +1828,8 @@ function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function rainOn(d){return !!(d&&d.rainStops&&APP.rain&&APP.rain[d.n]);}
 function actStops(d){return rainOn(d)?d.rainStops:(d.stops||[]);}
 /* 開啟雨備的那一天：行程頁與地圖頁換成藍黑色調 */
-function applyTheme(){const r=$a('mapp');if(r)r.classList.toggle('rainy',(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]));}
+function applyTheme(){const on=(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]);const r=$a('mapp');if(r)r.classList.toggle('rainy',on);
+  document.documentElement.classList.toggle('rainy-ui',on);const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',on?'#b7c6d6':'#f5ead8');}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
