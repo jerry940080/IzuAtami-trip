@@ -3,8 +3,9 @@
    - 圖示、說明檔：先用快取。
    - 維基百科照片、Google 字型：抓過一次就存起來；網頁開啟時也會把所有照片網址送來預存（warm）。
    - YouTube 影片不快取（太大，也無法離線播放）。
-   改了這支檔案要把 V 的版本號加一，舊快取才會被清掉。 */
-const V='izu-v1', PAGE='./', CORE=['./','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
+   改了這支檔案要把 V 的版本號加一，舊快取才會被清掉。
+   網頁的 fetch 加 cache:'no-cache'，否則 GitHub Pages 的 10 分鐘 HTTP 快取會讓使用者一直看到舊版。 */
+const V='izu-v2', PAGE='./', CORE=['./','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 const isMedia=u=>/(^|\.)upload\.wikimedia\.org$/.test(u.hostname)||/fonts\.(googleapis|gstatic)\.com$/.test(u.hostname);
@@ -12,7 +13,8 @@ const isWikiApi=u=>/wikipedia\.org$/.test(u.hostname)&&u.pathname.endsWith('/api
 function timeout(ms){return new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms));}
 async function pageFirstNetwork(req){
   const c=await caches.open(V);
-  try{const r=await Promise.race([fetch(req),timeout(3000)]);if(r&&r.ok){c.put(PAGE,r.clone());return r;}throw new Error('bad');}
+  // cache:'no-cache'：一定向伺服器確認有沒有新版（GitHub Pages 會讓瀏覽器自己快取 10 分鐘，不加這個會拿到舊版）
+  try{const r=await Promise.race([fetch(req,{cache:'no-cache'}),timeout(3000)]);if(r&&r.ok){c.put(PAGE,r.clone());return r;}throw new Error('bad');}
   catch(err){return (await c.match(PAGE))||(await c.match(req,{ignoreSearch:true}))||Response.error();}
 }
 async function cacheFirst(req){

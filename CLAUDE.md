@@ -300,7 +300,9 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **離線版（PWA）**：新增 `manifest.webmanifest`、`sw.js`、`icons/`（192／512／apple-touch 180，PIL 畫的富士山）。
   `sw.js`：網頁 network-first（3 秒逾時用快取）、同源資源 cache-first、維基 API network-first、`upload.wikimedia.org`
   與 Google 字型 cache-first；PHOTOS 拿到縮圖網址後 `postMessage({type:'warm'})` 讓 SW 預存全部照片。
-  只在 http(s) 登記（`file://` 不會啟用）。**改 `sw.js` 要把 `V` 版本號加一**。驗證：本機 `python3 -m http.server`
+  只在 http(s) 登記（`file://` 不會啟用）。**改 `sw.js` 要把 `V` 版本號加一**。
+  **踩雷**：GitHub Pages 回 `Cache-Control: max-age=600`，SW 裡的 `fetch(req)` 會直接吃瀏覽器 HTTP 快取，推上去後 10 分鐘內
+  使用者重新整理還是舊版（2026-10-05 使用者測 Safari 變色時就是這樣）。網頁的 fetch 已改 `cache:'no-cache'`（v2）。驗證：本機 `python3 -m http.server`
   ＋ Playwright `setOffline(true)` 重新整理（`scratchpad/offline.js`）。照片預存因開發環境連不到維基而無法實測。
   加到主畫面：iPhone Safari 分享 →「加入主畫面」；Android Chrome 選單 →「安裝應用程式」。
 
