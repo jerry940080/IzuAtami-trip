@@ -1413,7 +1413,7 @@ function marker(key,pr,side,big,num){
   const sm=/^([tblr])(\d)?$/.exec(side||''), sd=sm?sm[1]:'', ex=sm&&sm[2]?(sm[2]-1)*17:0;
   const dx=sd==='l'?-(r+6+ex):sd==='r'?(r+6+ex):0, dy=sd==='t'?-(r+7+ex):sd==='b'?(r+14+ex):4.5;
   const anchor=sd==='l'?'end':sd==='r'?'start':'middle';
-  const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${name}</text>`:'';
+  const lbl=sd?`<text x="${dx}" y="${dy}" text-anchor="${anchor}" font-size="${big?12.5:11.5}" font-weight="${kind==='hotel'?700:500}" fill="#26292e" stroke="#fff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${kind==='hotel'?'🛏 ':''}${big?name.replace(/[（(][^）)]*[）)]/g,'').trim():name}</text>`:'';
   const g=`<g class="mk" data-key="${key}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">${dot}${lbl}</g>`;
   // 可點的標記外加一圈透明命中區（手指點在圓標附近也算），SVG 的 <g> 本身沒有填色面積，點到空隙會漏接
   const hit=`<circle class="hit" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${Math.max(r+6,16)}" fill="transparent" pointer-events="all"/>`;
@@ -1838,7 +1838,11 @@ function rainOn(d){return !!(d&&d.rainStops&&APP.rain&&APP.rain[d.n]);}
 function actStops(d){return rainOn(d)?d.rainStops:(d.stops||[]);}
 /* 開啟雨備的那一天：行程頁與地圖頁換成藍黑色調 */
 function applyTheme(){const on=(APP.tab==='plan'||APP.tab==='map')&&rainOn(DAYS[APP.day]);const r=$a('mapp');if(r)r.classList.toggle('rainy',on);
-  document.documentElement.classList.toggle('rainy-ui',on);const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',on?'#b7c6d6':'#f5ead8');}
+  document.documentElement.classList.toggle('rainy-ui',on);
+  const col=on?'#b7c6d6':'#f5ead8';document.documentElement.style.backgroundColor=col;document.body.style.backgroundColor=col;
+  // iOS Safari 的狀態列／工具列顏色：改 content 不一定會重讀，拆掉重放一個新的 meta 比較保險
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());
+  const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);}
 function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
@@ -1962,7 +1966,7 @@ function layoutLabels(svg){
       const out=Math.max(0,sb.left+2-b.left)+Math.max(0,b.right-sb.right+2)+Math.max(0,top-b.top)+Math.max(0,b.bottom-sb.bottom+2);
       const hit=placed.reduce((n,p)=>n+ov(b,p),0)+dots.reduce((n,d)=>n+3*ov(b,d),0);
       const score=out*1000+hit;if(!best||score<best.score)best={sd,score,b};if(score===0)break;}
-    if(best.score>0&&!hotel){t.style.display='none';return;}
+    if(best.score>0){t.style.display='none';return;} // 飯店也一樣：放不下先藏，放大後重排就會出現
     put(t,best.sd,r);placed.push(best.b);
   });
 }
