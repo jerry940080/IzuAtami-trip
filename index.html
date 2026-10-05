@@ -16,7 +16,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="熱海伊豆">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}</script>
+<script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}
+/* 上次是雨備模式就在第一次畫面前換好顏色：iOS 從桌面圖示啟動時只在這一刻讀 theme-color 當狀態列底色 */try{if(localStorage.getItem("izu-rain")==="true"){document.documentElement.classList.add("rainy-ui");var tm=document.querySelector('meta[name="theme-color"]');if(tm)tm.content="#e4eaf1";}}catch(e){}</script>
 <style>
 :root{
   --paper:#f8f5ee; --paper2:#efe9dc; --ink:#26292e; --ink2:#4d5259; --ink3:#7d8188;
