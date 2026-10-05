@@ -773,7 +773,7 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
           <tr><td>品川 → 靜岡</td><td>東海道新幹線 ひかり</td><td>約 1 小時</td><td>¥6,470</td><td class="mute">smart-EX，選可放行李箱座位</td></tr>
           <tr><td>靜岡 → 熱海 → 品川 自駕</td><td>租車（tabirai，異地還車）</td><td>2/11 中午–2/15 下午</td><td class="mute">概算 ¥30,000<br>＋異地還車費、高速費、停車費</td><td class="mute">tabirai 靜岡站前取車、品川還車</td></tr>
           <tr><td>熱海 → 河津</td><td>JR 踊子</td><td>約 1 小時 10 分</td><td>¥3,490</td><td class="mute">えきねっと・1／9 號車廂・A 席</td></tr>
-          <tr><td>河津 → 熱海（夜櫻後）</td><td>伊豆急＋JR 普通車</td><td>約 2 小時</td><td>約 ¥2,100</td><td class="mute">當日購票</td></tr>
+          <tr><td>河津 → 熱海（午餐後）</td><td>伊豆急＋JR 普通車</td><td>約 1 小時 50 分</td><td>約 ¥2,100</td><td class="mute">當日購票</td></tr>
           <tr><td>品川 → 成田 T2</td><td>JR 成田特快</td><td>08:05–09:30</td><td>¥3,330</td><td class="mute">えきねっと</td></tr>
         </table>
         <div class="money" id="moneyBox"></div>
@@ -823,7 +823,7 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
           <li><i style="background:#8a3f5c"></i><div><b>JR 成田特快 N'EX</b><span>成田機場 T2 ⇄ 品川・2/10 去、2/17 回・每趟 ¥3,330・全車指定席</span></div></li>
           <li><i style="background:#2b4c7e"></i><div><b>東海道新幹線</b><span>2/11 品川 → 靜岡（ひかり）¥6,470</span></div></li>
           <li><i style="background:#c8452e"></i><div><b>租車（紅虛線）</b><span>2/11 靜岡站前取車 → 2/13 開到熱海 → 2/15 開回品川還車；2/14 車停飯店</span></div></li>
-          <li><i style="background:#3c9a72"></i><div><b>JR 踊子・伊豆急行</b><span>2/14 熱海 → 河津 踊子 ¥3,490（A 席靠海）；夜櫻後伊豆急＋JR 普通車回熱海 約 ¥2,100</span></div></li>
+          <li><i style="background:#3c9a72"></i><div><b>JR 踊子・伊豆急行</b><span>2/14 熱海 → 河津 踊子 ¥3,490（A 席靠海）；午餐後伊豆急＋JR 普通車回熱海 約 ¥2,100</span></div></li>
         </ul>
     </div>
 
@@ -855,7 +855,7 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
       <div>
         <h4>JR 特急 踊子</h4>
         <div class="when">2/14 熱海→河津 ¥3,490 ・ <b>台灣時間 1/14 09:00 開賣</b></div>
-        <p>河津櫻まつり期間最難搶的一段，<b>えきねっと 一開賣就要下手</b>（日本 1/14 10:00＝台灣 09:00），晚一小時就只剩站票。座位挑 <b>A 席</b>，往下田方向的左側＝<b>靠海</b>，相模灣與伊豆大島一路看到底。行李箱放 <b>1 號或 9 號車廂</b>的置物區。夜櫻看完已經沒有踊子，改搭伊豆急＋JR 普通車回熱海，約 2 小時、約 ¥2,100，<b>不用訂票</b>。</p>
+        <p>河津櫻まつり期間最難搶的一段，<b>えきねっと 一開賣就要下手</b>（日本 1/14 10:00＝台灣 09:00），晚一小時就只剩站票。座位挑 <b>A 席</b>，往下田方向的左側＝<b>靠海</b>，相模灣與伊豆大島一路看到底。行李箱放 <b>1 號或 9 號車廂</b>的置物區。回程午餐後搭伊豆急＋JR 普通車回熱海，約 1 小時 50 分、約 ¥2,100，<b>不用訂票</b>；想快一點也可以另訂回程踊子。</p>
       </div>
       <div>
         <h4>租車：靜岡 → 熱海 → 品川</h4>
@@ -1083,10 +1083,10 @@ const CARDS={
   text:'面相模灣的溫泉度假飯店，大浴場看得到海。距熱海站計程車約 5 分。2/13 下午從靜岡開車到熱海，先停車寄行李再出門逛；連住兩晚：2/14 當天來回河津看櫻花，2/15 早上去梅園才回東京。',
   chips:['2/13–14 兩晚','海景溫泉','確認洗衣機','停車場待確認']},
  sakura:{url:'https://kawazuzakura.jp/',name:'河津櫻並木',jp:'河津桜並木',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=sMKtXfLhFZU',l:'白天'},{u:'https://www.youtube.com/watch?v=O6AGMRwyL1U&t=53s',l:'夜晚'}],short:'4 公里 850 棵早開河津櫻',wiki:['河津桜'],
-  text:'河津川兩岸約 4 公里、850 棵早開的河津桜，桃紅花瓣配上黃色油菜花，是全日本最早的賞櫻名所。河津桜まつり通常在 2 月上旬到 3 月上旬（2026 年為 2/7–3/8），2/14 開花進度約五五波（偏樂觀），出發前一週看河津町官網的開花情報再決定當天怎麼排。晚上點燈到 21:00，從河津站出來就是並木起點，攤位集中在站前到豐泉橋一帶。',
-  chips:['24 小時','免費','夜櫻點燈至 21:00','出發前查開花情報']},
+  text:'河津川兩岸約 4 公里、850 棵早開的河津桜，桃紅花瓣配上黃色油菜花，是全日本最早的賞櫻名所。河津桜まつり通常在 2 月上旬到 3 月上旬（2026 年為 2/7–3/8），2/14 開花進度約五五波（偏樂觀），出發前一週看河津町官網的開花情報再決定當天怎麼排。晚上有點燈到 21:00（這次上午去、不看夜櫻），從河津站出來就是並木起點，攤位集中在站前到豐泉橋一帶。',
+  chips:['24 小時','免費','2/14 上午去','出發前查開花情報']},
  teddy:{url:'https://teddynet.co.jp/',name:'伊豆泰迪熊博物館（選項）',jp:'伊豆テディベア・ミュージアム',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=302YvTBzyRM',l:''}],short:'古董泰迪熊與龍貓 DIY，中途下車選項',wiki:['伊豆テディベア・ミュージアム'],
-  text:'位在伊豆高原的英式紅磚小屋，1995 年開館，收藏世界各地的古董泰迪熊，鎮館之寶是 1904 年的 Steiff「Teddy Girl」。館內附設常設的龍貓布偶展，有龍貓公車與森林場景可以拍照，還能<b>參加體驗課自己動手做一隻龍貓玩偶、繡上名字帶回家</b>；另有英式茶室，喜歡吉卜力的話很值得。伊豆高原是踊子號的停靠站，可以中途下車逛 1 小時；但 17:00 閉館，要排就得放棄當天的夜櫻、提早回程。',
+  text:'位在伊豆高原的英式紅磚小屋，1995 年開館，收藏世界各地的古董泰迪熊，鎮館之寶是 1904 年的 Steiff「Teddy Girl」。館內附設常設的龍貓布偶展，有龍貓公車與森林場景可以拍照，還能<b>參加體驗課自己動手做一隻龍貓玩偶、繡上名字帶回家</b>；另有英式茶室，喜歡吉卜力的話很值得。伊豆高原在河津回熱海的路上，回程可以中途下車逛 1 小時多；17:00 閉館，排進去的話大約 17:00 回到熱海。',
   chips:['9:30–17:00（入館至 16:30）','大人 ¥1,800','龍貓玩偶 DIY 體驗','伊豆高原站步行 9 分','休館日請確認']},
  shirahama:{url:'https://ikonahime.jp/',name:'白濱神社',jp:'伊古奈比咩命神社',kind:'選項',video:[{u:'https://www.youtube.com/watch?v=iOLLz5F1cCU',l:''}],short:'大明神岩上的紅鳥居',wiki:['伊古奈比咩命神社'],
   text:'伊豆最古老的神社，據傳有 2,400 年歷史，鎮座於白濱海岸旁。穿過境內走到海邊，可以看到立在「大明神岩」上的紅色鳥居正對太平洋，浪打在岩石上，是下田最經典的一幕。從下田站搭東海巴士約 10 分。',
@@ -1161,10 +1161,10 @@ const DAYS=[
   map:{pts:['shizuoka','zoo','kiunkaku','livemax','ginza','itogawa','yoichi','kinomiya'],legs:[{a:'shizuoka',b:'zoo',mode:'car',line:'租車'},{a:'zoo',b:'shizuoka',mode:'car',line:'租車',curve:.3},{a:'shizuoka',b:'kiunkaku',mode:'car',line:'租車',via:['shimizu','satta','numazuStn','mishima']},{a:'kiunkaku',b:'livemax',mode:'car',line:'租車'},{a:'livemax',b:'ginza',mode:'walk'},{a:'ginza',b:'itogawa',mode:'walk'},{a:'itogawa',b:'yoichi',mode:'walk'},{a:'yoichi',b:'livemax',mode:'walk',curve:.3},{a:'livemax',b:'kinomiya',mode:'taxi',line:'夜晚選項'}],labels:{shizuoka:'l',zoo:'b',kiunkaku:'l',livemax:'b',ginza:'t',itogawa:'r',yoichi:'b',kinomiya:'t'},minSpan:.16},
   cards:['zoo','kiunkaku','livemax','ginza','itogawa','yoichi','kinomiya'],
   rain:'<b>雨備</b>　動物園有猛獸館 299、夜行性動物館與室內展示，下雨照去，只是戶外的小熊貓運動場要碰運氣。雨天開長途車多留點時間。到熱海先去起雲閣（室內為主），check-in 後先泡溫泉，熱海銀座雨小再逛，土曜夜市在魚市場室內，糸川夜櫻看雨勢；來宮神社點燈到 23:00，回飯店後雨停再去。'},
- {n:5,date:'2/14',wd:'日',title:'河津一日遊',sub:'踊子號靠海側南下賞櫻，看完夜櫻搭普通車回熱海',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
-  map:{pts:['livemax','atami','teddy','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
+ {n:5,date:'2/14',wd:'日',title:'河津半日遊',sub:'上午搭踊子到河津賞櫻，吃完午餐搭普通車回熱海，16:00 前回飯店休息',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
+  map:{pts:['livemax','atami','teddy','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車，午餐後）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
   cards:['sakura','minami','shirahama','teddy'],
-  rain:'<b>雨備</b>　河津櫻在雨中人少、拍起來另有味道，建議照去，只把戶外時間壓到傍晚點燈那一段（至 21:00）；白天改去泰迪熊博物館（室內、可 DIY 龍貓玩偶），或留在 LiVEMAX 泡湯，整趟縮成半日來回。'},
+  rain:'<b>雨備</b>　河津櫻在雨中人少、拍起來另有味道，踊子票已訂就照去，只撐傘走站前一段；午餐後改去伊豆高原的泰迪熊博物館（室內、可 DIY 龍貓玩偶），約 16:15 回到熱海。雨太大就整天留在 LiVEMAX 泡湯。'},
  {n:6,date:'2/15',wd:'一',title:'熱海 → 品川',sub:'睡飽再出門，想去就逛梅園（可不去），中午開車回東京，品川還車後吃烤肉',stay:'品川王子大飯店 北塔',
   map:{pts:['livemax','baien','atami','shinagawa','prince','roppongi','shimokita'],legs:[{a:'livemax',b:'baien',mode:'car',line:'租車'},{a:'baien',b:'atami',mode:'car',line:'租車'},{a:'atami',b:'shinagawa',mode:'car',line:'租車',via:['odawara','shinyoko']},{a:'shinagawa',b:'prince',mode:'walk'},{a:'prince',b:'roppongi',mode:'subway',line:'都營淺草線→都營大江戶線'}],labels:{atami:'b',shinagawa:'r',prince:'r',roppongi:'t',shimokita:'l'},minSpan:.3},
   cards:['baien','moa','yakiniku','roppongi','shimokita'],
@@ -1227,13 +1227,15 @@ const STOPS={
  {t:'選項',i:'🧺',n:'日曜朝市（渚小公園）',k:'選項',d:'2/14 是第 2 個週日有市，7:00 起；飯店走路約 3 分，逛完再回來吃早餐',card:'asaichi'},
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',d:'車停在飯店，這天照搭踊子：河津櫻まつり期間 135 號國道大塞車、停車場一位難求',go:[{at:'09:00',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
  {t:'09:30',i:'🚆',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分・¥3,490・A 席靠海',at:'atami'},
- {t:'11:00',i:'🌸',n:'河津櫻並木',k:'景點',d:'從河津站沿河走到豐泉橋',card:'sakura',dur:'1 小時 30 分'},
- {t:'12:30',i:'🍽',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛',at:'kawazu'},
- {t:'選項',i:'🌼',n:'南伊豆 櫻花與油菜花祭',k:'選項',d:'伊豆急 25 分＋巴士 25 分',card:'minami'},
- {t:'選項',i:'⛩',n:'白濱神社',k:'選項',d:'伊豆急到下田 25 分＋東海巴士 10 分',card:'shirahama'},
- {t:'選項',i:'🧸',n:'泰迪熊博物館（中途下車）',k:'選項',d:'可 DIY 龍貓玩偶；17:00 閉館，得放棄夜櫻',card:'teddy'},
- {t:'17:30',i:'🌙',n:'河津川夜櫻點燈',k:'景點',d:'點燈至 21:00',card:'sakura',dur:'2 小時',go:[{at:'19:30',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 2 小時・約 ¥2,100'}]},
- {t:'21:40',i:'♨',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'}
+ {t:'11:00',i:'🌸',n:'河津櫻並木',k:'景點',d:'從河津站沿河走到豐泉橋，攤位集中在站前到豐泉橋一帶',card:'sakura',dur:'1 小時 30 分'},
+ {t:'12:30',i:'🍽',n:'河津午餐',k:'美食',d:'祭典攤位或金目鯛',at:'kawazu',dur:'1 小時',go:[{at:'13:40',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 1 小時 50 分・約 ¥2,100（想快一點可搭踊子，要另外訂）'}]},
+ {t:'選項',i:'🌼',n:'南伊豆 櫻花與油菜花祭',k:'選項',d:'伊豆急 25 分＋巴士 25 分；去的話回到熱海約 18:00',card:'minami'},
+ {t:'選項',i:'⛩',n:'白濱神社',k:'選項',d:'伊豆急到下田 25 分＋東海巴士 10 分；去的話回到熱海約 17:30',card:'shirahama'},
+ {t:'選項',i:'🧸',n:'泰迪熊博物館（中途下車）',k:'選項',d:'回程在伊豆高原下車，可 DIY 龍貓玩偶，17:00 閉館；去的話回到熱海約 17:00',card:'teddy'},
+ {t:'15:30',i:'🚉',n:'回到熱海站',k:'交通',at:'atami',go:[{at:'15:35',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
+ {t:'15:45',i:'♨',n:'回飯店泡溫泉、休息',k:'溫泉',card:'livemax',dur:'2 小時 30 分'},
+ {t:'18:30',i:'🍽',n:'熱海晚餐',k:'美食',d:'飯店附近或熱海銀座周邊覓食；週日不少店公休，先查好'},
+ {t:'選項',i:'⛩',n:'來宮神社 大楠點燈（夜晚）',k:'選項',d:'Day 4 晚上沒去的話今晚去，點燈到 23:00，計程車約 10 分',card:'kinomiya'}
 ],
 6:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',d:'這天不趕，可以睡晚一點'},
@@ -1300,15 +1302,15 @@ const RAIN_STOPS={
 ],
 5:[
  {t:'選項',i:'🧺',n:'日曜朝市（渚小公園）',k:'選項',d:'第 2 個週日有市；露天市集，下雨可能縮小規模',card:'asaichi'},
- {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
- {t:'09:00',i:'♨',n:'飯店泡湯，慢慢出門',k:'溫泉',d:'雨天整趟縮成半日來回',card:'livemax',dur:'1 小時 30 分',go:[{at:'10:30',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
- {t:'10:50',i:'🚆',n:'熱海 → 伊豆高原',k:'交通',d:'JR 伊東線＋伊豆急 約 50 分；已訂踊子的話要改班次',at:'atami'},
- {t:'11:45',i:'🍽',n:'伊豆高原午餐',k:'美食',at:'izukogen',dur:'1 小時'},
- {t:'12:45',i:'🧸',n:'伊豆泰迪熊博物館',k:'景點',d:'室內，可 DIY 龍貓玩偶',card:'teddy',dur:'2 小時 30 分'},
- {t:'選項',i:'♨',n:'整天留在 LiVEMAX 泡湯',k:'選項',d:'不出門的話，傍晚再決定要不要去看夜櫻',card:'livemax',go:[{at:'15:15',i:'🚃',t:'伊豆高原 → 河津　伊豆急 約 30 分'}]},
- {t:'15:50',i:'☕',n:'河津站周邊 咖啡・晚餐',k:'美食',d:'等傍晚點燈，雨天戶外時間盡量壓短',at:'kawazu',dur:'1 小時 40 分'},
- {t:'17:30',i:'🌙',n:'河津川夜櫻點燈',k:'景點',d:'雨中人少、另有味道，點燈至 21:00',card:'sakura',dur:'2 小時',go:[{at:'19:30',i:'🚃',t:'河津 → 熱海　伊豆急＋JR 普通車・約 2 小時・約 ¥2,100'}]},
- {t:'21:40',i:'♨',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'}
+ {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',go:[{at:'09:00',i:'🚕',t:'飯店 → 熱海站　計程車約 5 分'}]},
+ {t:'09:30',i:'🚆',n:'熱海 → 河津',k:'交通',d:'JR 踊子・約 1 小時 10 分；票已經訂了就照搭',at:'atami'},
+ {t:'11:00',i:'🌸',n:'河津櫻並木（縮短）',k:'景點',d:'雨中人少、拍起來另有味道；撐傘走站前到豐泉橋一段就好',card:'sakura',dur:'45 分'},
+ {t:'11:45',i:'🍽',n:'河津午餐',k:'美食',d:'找有屋簷的店，金目鯛煮付',at:'kawazu',dur:'1 小時',go:[{at:'13:00',i:'🚃',t:'河津 → 伊豆高原　伊豆急 約 30 分'}]},
+ {t:'13:40',i:'🧸',n:'伊豆泰迪熊博物館',k:'景點',d:'室內，可 DIY 龍貓玩偶',card:'teddy',dur:'1 小時 40 分',go:[{at:'15:20',i:'🚃',t:'伊豆高原 → 熱海　伊豆急＋JR 伊東線 約 50 分'}]},
+ {t:'選項',i:'♨',n:'整天留在 LiVEMAX 泡湯',k:'選項',d:'雨太大就不出門，踊子票改班次或退票',card:'livemax'},
+ {t:'16:15',i:'🚉',n:'回到熱海站',k:'交通',at:'atami',go:[{at:'16:20',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
+ {t:'16:30',i:'♨',n:'回飯店泡溫泉、休息',k:'溫泉',card:'livemax',dur:'2 小時'},
+ {t:'18:30',i:'🍽',n:'熱海晚餐',k:'美食',d:'飯店附近，雨天少走路'}
 ],
 6:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',d:'這天不趕，可以睡晚一點'},
@@ -1362,7 +1364,7 @@ const COST=[
   ['2/11–15 油費','',null,'¥','car'],
   ['計程車（飯店 ⇄ 來宮神社〔夜晚選項〕、飯店 → 熱海站）','2/13、2/14',null,'¥','car'],
   ['2/14 踊子 熱海 → 河津','A 席・えきねっと',3490,'¥'],
-  ['2/14 伊豆急＋JR 普通車 河津 → 熱海','夜櫻後',2100,'¥','~'],
+  ['2/14 伊豆急＋JR 普通車 河津 → 熱海','午餐後',2100,'¥','~'],
   ['2/14 南伊豆／下田選項交通','伊豆急＋巴士，看當天決定',null,'¥'],
   ['2/15–16 東京地鐵','六本木、神保町、秋葉原、橫丁',null,'¥'],
   ['2/17 成田特快 品川 → 成田 T2','えきねっと',3330,'¥']]},
@@ -1375,7 +1377,7 @@ const COST=[
   ['2/12 三保松原・御穗神社','',0,'¥'],
   ['2/12 柚木の郷','平日價',1200,'¥'],
   ['2/13 日本平動物園','大人',620,'¥'],
-  ['2/14 河津櫻並木・夜櫻','',0,'¥'],
+  ['2/14 河津櫻並木','',0,'¥'],
   ['2/13 起雲閣','',610,'¥'],
   ['2/13 來宮神社・糸川夜櫻','',0,'¥'],
   ['2/15 熱海梅園','梅まつり',300,'¥']]},
