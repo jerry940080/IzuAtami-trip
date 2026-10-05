@@ -1,0 +1,15 @@
+{
+  "name": "熱海・伊豆・靜岡 旅のしおり",
+  "short_name": "熱海伊豆",
+  "description": "2027/2/10–2/17 熱海・伊豆・靜岡 8 天 7 夜行程",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5ead8",
+  "theme_color": "#f5ead8",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

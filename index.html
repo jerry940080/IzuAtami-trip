@@ -8,6 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f5ead8">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="熱海伊豆">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script>/* 手機（≤640px）改走獨立的 App 版面：先掛 class 避免桌機版閃一下 */if(matchMedia("(max-width:640px)").matches){document.documentElement.classList.add("app");}</script>
 <style>
 :root{
@@ -1680,6 +1688,7 @@ addEventListener('resize',()=>{pinEl?placeTip(pinEl):hideTip();});
       batch.forEach(t=>{const key=alias[t]||t;if(byTitle[key])thumb[t]=byTitle[key];else if(byTitle[t])thumb[t]=byTitle[t];});
     }
   }catch(e){ /* offline or blocked: keep placeholders */ }
+  try{const urls=[...new Set(Object.values(thumb))];if(urls.length&&navigator.serviceWorker){navigator.serviceWorker.ready.then(r=>{if(r.active)r.active.postMessage({type:'warm',urls});});}}catch(e){}
   imgs.forEach(img=>{
     const t=img.dataset.wiki.split('|').find(x=>thumb[x]);
     if(!t)return;
@@ -2040,6 +2049,9 @@ function appInit(){
 }
 appInit();
 
+
+/* 離線版：登記 service worker（sw.js），GitHub Pages 上才會啟用 */
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
 </script>
 
 </body>

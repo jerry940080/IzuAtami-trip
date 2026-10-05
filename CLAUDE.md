@@ -278,6 +278,32 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   **注意**：住宿每晚單價加總是 NT 14,439，和交通頁總覽 `.money` 寫的「已估住宿約 NT 12,500」對不上，已在頁面註明，待使用者確認。
   改行程或訂到房時，花費頁要跟著改（它是手寫 HTML，不是從 DAYS 算出來的）。
 
+### 2026-10-05 變更（二）：單一資料來源、桌機手機統一、「現在」模式、離線版
+使用者看完建議清單後選了：1 離線版（照片晚點給）、3 資料合併、4 現在模式、5 人數分攤（即時共用清單做不到，見下）、6 桌機手機統一；**2 緊急資訊頁不要**（他們去過日本很多次）。
+
+- **行程唯一來源＝`STOPS`**：已移到 `const DAYS=[…]` 正後方。`DAYS[].tl` 字面值全部刪除，改由
+  `stopsToTl(d.stops)` 產生（一站一列＝`i`＋`n`＋`d`，每段 `go` 一列 move）。每站多了 `i`（桌機圖示）。
+  **改行程只改 `STOPS`**；`DAYS` 只剩 `map／cards／rain／title…`。`locOf／routeInfo／dayMapCfg／dayCards`
+  也在這裡（桌機與手機共用）。
+- **花費唯一來源＝`COST`**（緊接在 `stopsToTl` 後）：`[名稱,說明,金額,幣別,旗標]`，金額 null＝未知、0＝免費；
+  旗標 `~`＝約、`car`＝每台計（依人數分攤）、`unit`＝每櫃計（不加總）。`renderCost()` 產生花費頁 `#costBody`
+  與交通頁總覽 `#moneyBox`。住宿依每晚單價加總 **NT 14,439**（舊的「約 NT 12,500」作廢）。
+- **同行人數**：花費頁 `−／＋`，存 localStorage `izu-ppl`；未設定時租車、停車顯示「設人數後計」不加總。
+  **即時共用行李清單做不到**：GitHub Pages 沒有伺服器，要另接雲端資料庫與帳號，使用者已知情。
+- **桌機手機統一**：Organic token 從 `html.app{}` 改成 `:root{}`（`html.app` 只留 `--tabh`），Caprasimo／Figtree
+  改靜態 `<link>` 全站載入；`KIND` 標記色不再限手機。桌機 **移除 `#pre`**，花費頁不再 `app-only`，導覽列末尾加「花費」。
+  桌機日圖改用 `dayMapCfg(d)`（含所有停留點、時間序編號），景點卡依時間排序、號碼＝地圖號碼（`dayCards`），
+  畫完後對每張日圖跑 `layoutLabels`。
+- **「現在」模式**（手機）：`tokyoNow()` 一律用 `Asia/Tokyo`；`dayDiff／todayIdx` 也改用它。`nowInfo()` 把今天有時間的站與
+  交通段排開，找出「現在」與「下一個」。首頁 `.mh-now` 卡片＋倒數；行程頁 `.ma-row.now`／`.ma-go.now` 標「現在」、
+  下一個標 `.nxc`，進今天的行程頁自動捲到該列；每 30 秒重繪。**網址加 `?now=2027-02-14T09:10` 可模擬**（驗證腳本 `scratchpad/now.js`）。
+- **離線版（PWA）**：新增 `manifest.webmanifest`、`sw.js`、`icons/`（192／512／apple-touch 180，PIL 畫的富士山）。
+  `sw.js`：網頁 network-first（3 秒逾時用快取）、同源資源 cache-first、維基 API network-first、`upload.wikimedia.org`
+  與 Google 字型 cache-first；PHOTOS 拿到縮圖網址後 `postMessage({type:'warm'})` 讓 SW 預存全部照片。
+  只在 http(s) 登記（`file://` 不會啟用）。**改 `sw.js` 要把 `V` 版本號加一**。驗證：本機 `python3 -m http.server`
+  ＋ Playwright `setOffline(true)` 重新整理（`scratchpad/offline.js`）。照片預存因開發環境連不到維基而無法實測。
+  加到主畫面：iPhone Safari 分享 →「加入主畫面」；Android Chrome 選單 →「安裝應用程式」。
+
 ## 待辦（新對話可協助的事）
 1. 靜岡站前飯店 2/11–12 未訂（候選：ホテルアソシア靜岡、東橫INN 等）→ 訂好後更新住宿表與費用。
 2. 缺照片的卡片（目前用 Wikipedia 自動抓或灰底佔位）：`shizuhotel`、`zoo`、`yume`、`toshogu`、
@@ -304,8 +330,8 @@ dataofjapan/land 簡化，**勿動**）；第二個是主程式，關鍵常數�
   （通常裁底部 8–9%）。多張時第一張為卡片封面。
 - `CARDS`＝景點卡 `{key:{name,jp,kind,short,wiki:[維基標題備援圖],text,chips:[],
   video:[{u:'youtube網址',l:'標籤(可空)'}]}}`。網址帶 `t=秒` 會從該秒開播。
-- `DAYS`＝八天陣列 `{n,date,wd,title,sub,stay,map:{pts,legs,labels,minSpan},tl:[時刻表列
-  {t,i,h,move}],cards:[cardKey],rain:'雨備HTML'}`。時刻表**只放標題不放描述**（使用者要求）。
+- `DAYS`＝八天陣列 `{n,date,wd,title,sub,stay,map:{pts,legs,labels,minSpan},cards:[cardKey],rain:'雨備HTML'}`。
+  時刻表 `tl` 已改由 `STOPS` 產生（見 2026-10-05 變更二），**不要再手寫 `tl`**。
 - 地圖引擎 `buildMap()` 自動算 bbox 投影；`labels` 值 t/b/l/r 是標籤方位；`curve` 讓重複
   路段彎開。首頁總覽圖在 IIFE 內另有 `cfg`。
 
@@ -314,7 +340,7 @@ dataofjapan/land 簡化，**勿動**）；第二個是主程式，關鍵常數�
 
 ## 修改慣例
 - 所有文案繁體中文；日文專名保留原文（例：夢テラス、えきねっと）。巴士/步行時間標「約」。
-- 版面風格：和紙底(#f8f5ee)＋藍(#2b4c7e)＋櫻粉(#e28aa5)，襯線標題 Noto Serif TC。
-- 費用：機票估 NT 15,358/人；已估住宿(品川3晚+熱海2晚)約 NT 12,500/人；日幣雜費概算
-  約 ¥36,000/人。改行程時記得同步「車票與費用」表、「訂票時程」、首頁路線字串與 hero 地圖 legs。
+- 版面風格：2026-10-05 起全站用 Organic（底 #f5ead8、強調 #c67139、橄欖綠 #7a8a5e，標題 Caprasimo、內文 Figtree＋Noto Sans TC）。
+- 費用：一律改 `COST` 資料（花費頁與交通頁總覽自動更新）。機票 NT 15,358/人、已知住宿 NT 14,439/人。
+  改行程時記得同步 `STOPS`、`COST`、「車票與費用」表、「訂票時程」、首頁路線字串與 hero 地圖 legs。
 - 使用者偏好一次改一件事、改完就能上 GitHub 覆蓋驗證；重大改版前先口頭確認方案再動手。
