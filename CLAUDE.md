@@ -777,7 +777,7 @@ dataofjapan/land 簡化，**勿動**）；第二個是主程式，關鍵常數�
 - `CARDS`＝景點卡 `{key:{name,jp,kind,short,wiki:[維基標題備援圖],text,chips:[],
   video:[{u:'youtube網址',l:'標籤(可空)'}]}}`。網址帶 `t=秒` 會從該秒開播。
 - `DAYS`＝八天陣列 `{n,date,wd,title,sub,stay,map:{pts,legs,labels,minSpan},cards:[cardKey],rain:'雨備HTML'}`。
-  每日地圖的路線已改由 `STOPS` 自動產生（見變更（三十）），`map.legs` 只剩首頁／總覽圖之外沒有作用。
+  每日地圖的路線已改由 `STOPS` 自動產生（見變更（三十）），`map.legs` 不再用於每日地圖。
   時刻表 `tl` 已改由 `STOPS` 產生（見 2026-10-05 變更二），**不要再手寫 `tl`**。
 - 地圖引擎 `buildMap()` 自動算 bbox 投影；`labels` 值 t/b/l/r 是標籤方位；`curve` 讓重複
   路段彎開。首頁總覽圖在 IIFE 內另有 `cfg`。
