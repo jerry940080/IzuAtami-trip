@@ -2436,9 +2436,14 @@ Z.set=function(z,px,py,fx,fy){ // 讓 viewBox 上的點 (px,py) 落在畫面比�
 };
 Z.mid=function(){const [x,y,w,h]=Z.vb;return [x+w/2,y+h/2];};
 Z.center=function(px,py){Z.anim(Z.z,px,py);};
-Z.anim=function(z1,cx,cy,done,D){
-  z1=Math.max(1,Math.min(Z.zmax,z1));const z0=Z.z,[a0,b0]=Z.mid(),t0=performance.now(),g=Z.gen;D=D||220;
-  const step=now=>{if(Z.gen!==g)return;const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),z=z0+(z1-z0)*e;Z.set(z,a0+(cx-a0)*e,b0+(cy-b0)*e,.5,.5);if(k<1)requestAnimationFrame(step);else{Z.relayout();if(done)done();}};
+Z.anim=function(z1,cx,cy,done,D,fy,fxr){ // fy／fxr：目標點落在畫面的縱向／橫向比例（預設正中）
+  z1=Math.max(1,Math.min(Z.zmax,z1));fy=fy==null?.5:fy;fxr=fxr==null?.5:fxr;const z0=Z.z,[x0,y0]=Z.vb,t0=performance.now(),g=Z.gen;D=D||220;
+  const cl=(v,z,B)=>Math.max(0,Math.min(B-B/z,v)),x1=cl(cx-fxr*Z.BW/z1,z1,Z.BW),y1=cl(cy-fy*Z.BH/z1,z1,Z.BH),r=z0/z1,zoom=Math.abs(Math.log(r))>.01;
+  // 倍率在對數上內插，並繞著「起點畫面與終點畫面共用的不動點」縮放：目標區一路留在畫面裡，不會先飛走再拉回來
+  const fx=zoom?(x1-x0*r)/(1-r):0,fyy=zoom?(y1-y0*r)/(1-r):0;
+  const step=now=>{if(Z.gen!==g)return;const k=Math.min(1,(now-t0)/D),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+    let z,x,y;if(zoom){z=z0*Math.pow(z1/z0,e);x=fx-(fx-x0)*z0/z;y=fyy-(fyy-y0)*z0/z;}else{z=z1;x=x0+(x1-x0)*e;y=y0+(y1-y0)*e;}
+    Z.set(z,x,y,0,0);if(k<1)requestAnimationFrame(step);else{Z.relayout();if(done)done();}};
   requestAnimationFrame(step);
 };
 Z.relayout=function(){clearTimeout(Z._t);Z._t=setTimeout(()=>{if(Z.svg&&Z.svg._cfg)layoutLabels(Z.svg);},180);};
@@ -2582,7 +2587,7 @@ function appClick(e){
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('[data-wxtog]')){const dd=$a('maPlan').querySelector('.wxd');if(dd)dd.hidden=!dd.hidden;return true;}
   if(el=t.closest('#maMap .mz-zone')){ // 放大到讓區內的點攤在畫面中間（左右留縮圖寬、上方留日期膠囊）
-    const w=Math.max(1,+el.dataset.w),h=Math.max(1,+el.dataset.h);MZ.anim(Math.min(MZ.zmax,(MZ.BW-110)/w,(MZ.BH-190)/h),+el.dataset.cx,+el.dataset.cy,null,450);return true;}
+    const w=Math.max(1,+el.dataset.w),h=Math.max(1,+el.dataset.h);const z1=Math.min(MZ.zmax,(MZ.BW-140)/w,(MZ.BH-190)/h);MZ.anim(z1,+el.dataset.cx,+el.dataset.cy,null,Math.round(380+140*Math.log(Math.max(1,z1/MZ.z))),.59,.57);return true;} // 放大越多跑越久；(.57,.59)＝扣掉頂端日期膠囊與左下縮放鈕後的畫面中心
   if(el=t.closest('#maMap .mk-a[data-k]')||t.closest('#maMap .mk[data-key]')){let k=el.dataset.k||el.dataset.key;
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
