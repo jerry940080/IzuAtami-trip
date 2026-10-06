@@ -669,6 +669,19 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   手機行程頁放在 `.ma-area` 下方；桌機每日 `.day-head` 最後一列（`flex-basis:100%`）；地圖分頁 `.mm-pill` 第二行改成「日期 · 地點 溫度　地點 溫度」（`wxPill`）。
 - 驗證：`scratchpad/wx.js`（平年值顯示、假預報抓取後卡片與膠囊更新、Day 1/6/8 膠囊不溢出、重新整理用快取不重抓、桌機 Day 4）；其他回歸測試無錯誤。
 
+### 2026-10-06 變更（二十八）：天氣改得更顯眼（行程頁 B 標題卡右側＋地圖天氣徽章）
+使用者嫌（二十七）的天氣卡太不明顯，看過樣板（scratchpad `wx-mockup.html`）後選：行程頁「B 標題卡右側」、地圖頁「3 地圖上的天氣徽章」。
+- **行程頁（手機）**：`.ma-area` 右側 `<button class="wts" data-wxtog data-wxt>`，每個地點一格 `.wt`（大圖示或「平年」小字、高溫大字、地名＋低溫）；
+  點一下展開下方 `.wxd[data-wxd]`（天氣文字、高／低溫、降雨機率、資料來源），`appClick` 的 `[data-wxtog]` 切 `hidden`。
+  **桌機**：`.day-head` 住宿框右邊放 `.wts.dk`（白底框）＋右對齊的 `.wxd.dk`（一律顯示）。舊的 `wxCard`／`.wx` 卡片已刪。
+- **地圖分頁**：`addWxBadges(svg,d)`（`renderMap` 在 `addZones` 後呼叫）在每個城市上方畫白色徽章 `<g class="wxb zs">`（圖示＋高溫＋地名低溫；平年值加「約」與「平年」）。
+  錨點＝`WX_LOC` 第 6 欄的 `P` key（成田 nrt、東京 shinagawa、靜岡 shizuoka、熱海 livemax、河津 kawazu）；該點不在當天地圖上時，用地圖上其他標記做經緯度→座標的最小平方線性擬合推出位置。
+  擺放：依序試**上、下、右、左**四個位置，挑「壓到最少東西」的——頂端日期膠囊（y<74）、左下縮放鈕、色塊標籤（`.mz-zone>g`）、前面畫好的徽章，出界重罰；上下擺時框會往內推、小三角仍指錨點。
+  畫完再跑一次 `layoutLabels`（避讓清單含 `.wxb rect`），地名讓開徽章、放不下的先藏。`.wxb` 有 `zs` class 所以縮放時維持螢幕大小，`.ma-map.zoomed .wxb{opacity:0}` 放大就淡出。
+  `pointer-events="none"`，不擋標記與色塊點擊。尺寸用 `MZ.BW／BH`（放大中 viewBox 會變）。地圖膠囊第二行恢復成只有日期（`wxPill` 已刪）。
+- `wxPaint()` 更新 `[data-wxt]`、`[data-wxd]` 並重畫地圖徽章。
+- 無頭 Chromium 沒有彩色 emoji 字型，截圖裡圖示是黑白的，手機上是彩色。驗證 `scratchpad/wx2.js`（**要帶 scratchpad 路徑參數**，否則截圖寫到 `undefined/`）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
