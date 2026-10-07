@@ -811,6 +811,18 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 驗證：`scratchpad/rsth.js`（八天縮圖數、群組、點群組放大、點縮圖標亮名單、依地區、電腦版 Day 3／5，截圖 `appshots/rth_all.png`）；
   `rsb.js` 原本點 Day 5 的 rs_7，現在它在群組裡，改點 Day 3 的 rs_3。
 
+### 2026-10-07 變更（三十七）：匯出成 Claude Code skill（`.claude/skills/trip-guide/`）
+使用者要在其他 GitHub 專案規劃不同行程時直接套用這套做法。
+- `SKILL.md`（流程與原則）＋ `references/`：`new-trip-checklist.md`（範例裡所有綁定這次行程的地方與 grep 錨點）、
+  `architecture.md`（資料格式與引擎）、`features.md`、`pitfalls.md`（本檔所有踩雷整理）、`collaboration.md`（合作、查證、CLAUDE.md 格式、部署）。
+- `assets/reference-guide.html`：本專案 `index.html` 拿掉內嵌照片的版本（11.1 MB → 0.42 MB），由 `scripts/strip_media.py` 產生；
+  另附 `sw.js`（快取名改 `trip-v1`）、`manifest.webmanifest`（名稱改佔位字）、`icons/`。
+- `scripts/`：`check.js`（資料引用完整性、座標落海、桌機手機零錯誤與無溢出，可輸出截圖）、`make_geo.py`（從 dataofjapan／Natural Earth
+  產生任意範圍的 `LAND`，可選粗略鐵道，`--write` 直接寫入）、`addphotos.py`（加 `--html` 參數）、`strip_media.py`。
+- 試跑：複製參考版 → 加照片 → 重產 LAND → `check.js` 全部通過。本專案跑 `check.js` 也通過。
+- **之後本專案加了新功能，要重跑 `strip_media.py` 更新參考版**，並視需要補 `references/`。
+- 注意：同一個 GitHub 帳號的 Pages 同網域，新行程必須換 localStorage 前綴（`izu-`）與 SW 快取名（清單第 6、7 節）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
