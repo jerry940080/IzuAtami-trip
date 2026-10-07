@@ -1219,7 +1219,7 @@ const DAYS=[
   map:{pts:['shizuoka','zoo','kiunkaku','livemax','ginza','itogawa','yoichi','kinomiya'],legs:[{a:'shizuoka',b:'zoo',mode:'car',line:'租車'},{a:'zoo',b:'shizuoka',mode:'car',line:'租車',curve:.3},{a:'shizuoka',b:'kiunkaku',mode:'car',line:'租車',via:['shimizu','satta','numazuStn','mishima']},{a:'kiunkaku',b:'livemax',mode:'car',line:'租車'},{a:'livemax',b:'ginza',mode:'walk'},{a:'ginza',b:'itogawa',mode:'walk'},{a:'itogawa',b:'yoichi',mode:'walk'},{a:'yoichi',b:'livemax',mode:'walk',curve:.3},{a:'livemax',b:'kinomiya',mode:'taxi',line:'夜晚選項'}],labels:{shizuoka:'l',zoo:'b',kiunkaku:'l',livemax:'b',ginza:'t',itogawa:'r',yoichi:'b',kinomiya:'t'},minSpan:.16},
   cards:['zoo','kiunkaku','livemax','ginza','itogawa','yoichi','kinomiya'],
   rain:'<b>雨備</b>　動物園有猛獸館 299、夜行性動物館與室內展示，下雨照去，只是戶外的小熊貓運動場要碰運氣。雨天開長途車多留點時間。到熱海先去起雲閣（室內為主），check-in 後先泡溫泉，熱海銀座雨小再逛，土曜夜市在魚市場室內，糸川夜櫻看雨勢；來宮神社點燈到 23:00，回飯店後雨停再去。'},
- {n:5,date:'2/14',wd:'日',title:'河津賞櫻',sub:'上午搭踊子到河津，櫻花步道、足湯、原木與千年大楠慢慢逛，16:00 搭普通車回熱海泡溫泉',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
+ {n:5,date:'2/14',wd:'日',title:'河津賞櫻',sub:'上午搭踊子到河津，櫻花步道、足湯、原木與千年大楠慢慢逛，16:00 搭普通車回熱海，晚上訂一家吃大餐',stay:'LiVEMAX Resort 熱海 Ocean（續住）',
   map:{pts:['livemax','atami','teddy','kawazu','sakura','shimoda','shirahama','minami'],legs:[{a:'livemax',b:'atami',mode:'taxi'},{a:'atami',b:'kawazu',mode:'rail',line:'JR 伊東線＋伊豆急行線（特急踊り子）',via:['ito','izukogen','atagawa','inatori']},{a:'kawazu',b:'sakura',mode:'walk'},{a:'kawazu',b:'shimoda',mode:'izukyu',line:'伊豆急行線'},{a:'shimoda',b:'shirahama',mode:'bus',line:'東海バス'},{a:'shimoda',b:'minami',mode:'bus',line:'東海バス'},{a:'kawazu',b:'atami',mode:'izukyu',line:'伊豆急行線＋JR 伊東線（普通車，午餐後）',curve:.28}],labels:{atami:'t',livemax:'l',teddy:'r',kawazu:'b',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.22},
   cards:['sakura','kinmedai','minami','shirahama','teddy'],
   rain:'<b>雨備</b>　河津櫻在雨中人少、拍起來另有味道，踊子票已訂就照去，只撐傘走站前一段；午餐後改去伊豆高原的泰迪熊博物館（室內、可 DIY 龍貓玩偶），約 16:15 回到熱海。雨太大就整天留在 LiVEMAX 泡湯。'},
@@ -1298,10 +1298,9 @@ const STOPS={
  {t:'選項',i:'⛩',n:'白濱神社',k:'選項',d:'取代下午的步道行程：午餐後伊豆急到下田 25 分＋東海巴士 10 分；回到熱海約 18:00',card:'shirahama',ol:[['kawazu','shimoda','izukyu'],['shimoda','shirahama','bus']]},
  {t:'選項',i:'🧸',n:'泰迪熊博物館（中途下車）',k:'選項',d:'回程在伊豆高原下車，可 DIY 龍貓玩偶，17:00 閉館（入館至 16:30）；要去的話 14:30 前離開河津，回到熱海約 17:30',card:'teddy'},
  {t:'17:50',i:'🚉',n:'回到熱海站',k:'交通',at:'atami',go:[{at:'17:55',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
- {t:'18:05',i:'♨',n:'回飯店泡溫泉、休息',k:'溫泉',card:'livemax',dur:'55 分'},
- {t:'19:00',i:'🍽',n:'熱海晚餐',k:'美食',d:'從下面兩區挑一區；週日不少店公休，先查好'},
- {t:'選項',i:'🍶',n:'晚餐：熱海銀座～中央町一帶',k:'選項',d:'飯店走路 5–10 分；老鬧區，小酒館、復古酒吧、居酒屋零星分布，氣氛安靜；週日公休多，先查店家',card:'ginza'},
- {t:'選項',i:'🍶',n:'晚餐：平和通り・仲見世周邊',k:'選項',d:'熱海站前，海鮮居酒屋與定食店多、好點菜；飯店計程車約 5 分（上坡），很多店 20:00–21:00 就收',at:'atami'},
+ {t:'18:05',i:'🛏',n:'回飯店放東西、稍作休息',k:'住宿',card:'livemax',dur:'25 分'},
+ {t:'18:30',i:'🍣',n:'晚餐大餐（訂位）',k:'美食',d:'18:30 或 19:00 入席，4 人，店家自選、先訂位；週日不少店公休、又是情人節，出發前一個月就訂。候選參考：鮨 加喜田（渚町，飯店走路幾分鐘，座敷＋花火懷石）、寿し忠（熱海銀座老舗，20:00 打烊要訂 18:30）、熱海 お肴野郎 清介（靜岡地酒，週日營業待確認）',dur:'1 小時 30 分'},
+ {t:'20:15',i:'♨',n:'回飯店泡溫泉',k:'溫泉',card:'livemax'},
  {t:'選項',i:'⛩',n:'來宮神社 大楠點燈（夜晚）',k:'選項',d:'Day 4 晚上沒去的話今晚去，點燈到 23:00，計程車約 10 分',card:'kinomiya',ol:[['livemax','kinomiya','taxi']]}
 ],
 6:[
@@ -1376,10 +1375,8 @@ const RAIN_STOPS={
  {t:'13:40',i:'🧸',n:'伊豆泰迪熊博物館',k:'景點',d:'室內，可 DIY 龍貓玩偶',card:'teddy',dur:'1 小時 40 分',go:[{at:'15:20',i:'🚃',t:'伊豆高原 → 熱海　伊豆急＋JR 伊東線 約 50 分'}]},
  {t:'選項',i:'♨',n:'整天留在 LiVEMAX 泡湯',k:'選項',d:'雨太大就不出門，踊子票改班次或退票',card:'livemax'},
  {t:'16:15',i:'🚉',n:'回到熱海站',k:'交通',at:'atami',go:[{at:'16:20',i:'🚕',t:'熱海站 → LiVEMAX　計程車約 5 分'}]},
- {t:'16:30',i:'♨',n:'回飯店泡溫泉、休息',k:'溫泉',card:'livemax',dur:'2 小時'},
- {t:'18:30',i:'🍽',n:'熱海晚餐',k:'美食',d:'雨天少走路，從下面兩區挑一區'},
- {t:'選項',i:'🍶',n:'晚餐：熱海銀座～中央町一帶',k:'選項',d:'飯店走路 5–10 分，雨天最近；老鬧區，小酒館、復古酒吧、居酒屋零星分布，氣氛安靜；週日公休多，先查店家',card:'ginza'},
- {t:'選項',i:'🍶',n:'晚餐：平和通り・仲見世周邊',k:'選項',d:'熱海站前，海鮮居酒屋與定食店多、好點菜；雨天搭計程車約 5 分，很多店 20:00–21:00 就收',at:'atami'}
+ {t:'16:30',i:'♨',n:'回飯店泡溫泉、休息',k:'溫泉',card:'livemax',dur:'1 小時 50 分'},
+ {t:'18:30',i:'🍣',n:'晚餐大餐（訂位）',k:'美食',d:'18:30 或 19:00 入席，4 人，雨天挑飯店走路或計程車近的店，店家自選、先訂位；週日不少店公休、又是情人節，出發前一個月就訂。候選參考：鮨 加喜田（渚町，飯店走路幾分鐘，座敷＋花火懷石）、寿し忠（熱海銀座老舗，20:00 打烊要訂 18:30）、熱海 お肴野郎 清介（靜岡地酒，週日營業待確認）',dur:'1 小時 30 分'},
 ],
 6:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食',d:'這天不趕，可以睡晚一點'},
@@ -1612,6 +1609,7 @@ const BOOK=[
  ['nex2','2027-01-17','1/17 起','えきねっと 訂 2/17 成田特快（品川 → 成田）','08:05 發','https://www.eki-net.com/|えきねっと'],
  ['vjw','2027-02-03','出發前一週','填 Visit Japan Web','入境審查與海關申報 QR','https://www.vjw.digital.go.jp/|Visit Japan Web'],
  ['bbq','2027-02-08','出發前一週','訂 2/15 烤肉大餐','品川或六本木，店家待定',''],
+ ['dinner','2027-01-14','出發前一個月','訂 2/14 熱海晚餐大餐','18:30 或 19:00、4 人；週日＋情人節容易滿。候選：鮨 加喜田（0557-81-4323）、寿し忠（0557-82-3222）、熱海 お肴野郎 清介（0557-55-7762）',''],
  ['sakura','2027-02-07','出發前一週','看河津町開花情報','決定 2/14 要不要往南伊豆或下田跑','https://www.kawazuzakura.net/|河津櫻まつり'],
  ['hanabi',null,'日期公布後','查 2027 年 2 月熱海海上花火大会日期','若在 2/13 或 2/14 晚上，飯店前的親水公園就是觀賞點，20:20 前回到海邊',''],
 ];
