@@ -1727,10 +1727,10 @@ let W=600,H=440;
 const MOB=matchMedia('(max-width:640px)').matches;
 KIND.spot.c='#201e1d';KIND.hotel.c='#56633f';KIND.station.s='#201e1d'; // 與手機 App 同一套標記色
 if(MOB){W=380;H=280;}
-let PADT=0;
+let PADT=0,PADS=34;
 function proj(bbox){ // bbox {la0,la1,lo0,lo1}
   const k=Math.cos((bbox.la0+bbox.la1)/2*Math.PI/180);
-  const pad=34,ex=PADT; // PADT：上方額外留白（手機 App 地圖頂端有浮動膠囊），桌機為 0
+  const pad=PADS,ex=PADT; // PADT：上方額外留白（手機 App 地圖頂端有浮動膠囊），桌機為 0
   const s=Math.min((W-2*pad)/((bbox.lo1-bbox.lo0)*k),(H-2*pad-ex)/(bbox.la1-bbox.la0));
   const cx=(bbox.lo0+bbox.lo1)/2, cy=(bbox.la0+bbox.la1)/2;
   return {s,k,pt:(p)=>[W/2+(p[1]-cx)*k*s, H/2+ex/2-(p[0]-cy)*s]};
@@ -1850,7 +1850,7 @@ function modeSwatch(m){const M=MODE[m],w=M.w+(M.trk?1.4:m==='car'?.8:0);
 function legendRows(legs){const seen=[];legs.forEach(l=>{if(!seen.includes(l.mode))seen.push(l.mode);});
   const ord=Object.keys(MODE);return seen.sort((a,b)=>ord.indexOf(a)-ord.indexOf(b));}
 function buildMap(cfg,opts={}){
-  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;} PADT=opts.padT||0;
+  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;} PADT=opts.padT||0;PADS=opts.pad||34;
   const bbox=cfg.bbox||bboxOf(cfg.pts,cfg.minSpan||.05);
   const pr=proj(bbox);
   const legs=cfg.auto?autoLegSvg(cfg.legs,pr,opts.big):cfg.legs.map((lg,i)=>{const M=MODE[lg.mode];return `<path class="leg" data-i="${i}" d="${legPath(lg,pr)}" fill="none" stroke="${M.c}" stroke-width="${M.w}" ${M.d?`stroke-dasharray="${M.d}"`:''} stroke-linecap="${M.cap||'round'}" stroke-linejoin="round"/>`;}).join('');
@@ -1866,7 +1866,7 @@ ${railBg(pr,bbox)}
 <g class="mks">${mks}</g>
 ${scaleBar(pr)}
 </svg>`;
-  W=oW;H=oH;PADT=0;
+  W=oW;H=oH;PADT=0;PADS=34;
   return out;
 }
 function animateMap(svg){
@@ -2324,7 +2324,7 @@ function renderResto(){
       if(A.length||M.length)groups.push({m:ms[0],head:lab,A,M,wd:1});});
   }
   let n=0;const pts=[];
-  const body=groups.map(g=>{const rows=g.A.map(r=>[r,0]).concat(g.M.map(r=>[r,1])).map(([r,mi])=>{const ll=rsLL(r);let num=0;if(ll){num=++n;pts.push({num,ll,m:r.m,n:r.n});}return rsRow(r,mi,g.wd,num);}).join('');
+  const body=groups.map(g=>{const rows=g.A.map(r=>[r,0]).concat(g.M.map(r=>[r,1])).map(([r,mi])=>{const ll=rsLL(r);let num=0;if(ll){num=++n;pts.push({num,ll,m:r.m,n:r.n,card:r.card&&CARDS[r.card]?r.card:''});}return rsRow(r,mi,g.wd,num);}).join('');
     return `<div class="rs-slot"><h4><span><i class="rs-dot" style="background:${RS_COL[g.m]||'#9a8b7a'}"></i>${g.head}</span>${g.A.length+g.M.length?`<em>${g.A.length+g.M.length} 家</em>`:''}</h4>${rows}${g.A.length+g.M.length?'':'<p class="rs-empty">還沒有候選，按「＋ 新增餐廳」推薦一家</p>'}</div>`;}).join('');
   h+=`<div class="rs-split"><div class="rs-mapw"><div class="rs-map"></div><div class="rs-zm"><button data-rsz="in" aria-label="放大">＋</button><button data-rsz="out" aria-label="縮小">－</button><button data-rsz="reset" aria-label="還原">↺</button></div>
     <div class="rs-leg"><span><i style="background:${RS_COL.午餐}"></i>午餐</span><span><i style="background:${RS_COL.晚餐}"></i>晚餐</span><span><i style="background:${RS_COL.早餐}"></i>早餐・點心</span></div></div>
@@ -2339,26 +2339,35 @@ function rsDrawMap(p,pts){
   Object.keys(P).forEach(k=>{if(k.startsWith('rs_')){delete P[k];delete NAMES[k];}});
   pts.forEach(q=>{const k='rs_'+q.num;P[k]=q.ll;NAMES[k]=[q.n,'spot'];keys.push(k);nums[k]=q.num;labels[k]='b';});
   const cfg={pts:keys,legs:[],labels,nums,minSpan:.012};
-  box.innerHTML=buildMap(cfg,{W:RW,H:RH,big:MOB,aria:'餐廳位置圖'});
+  box.innerHTML=buildMap(cfg,{W:RW,H:RH,big:MOB,pad:56,aria:'餐廳位置圖'});  // 縮圖半徑 25＋下方店名，邊界多留一點
   const svg=box.querySelector('svg');if(!svg)return;
-  pts.forEach(q=>{const g=svg.querySelector(`.mk[data-key="rs_${q.num}"]`);if(!g)return;g.dataset.meal=q.m;const c=g.querySelector(':scope>circle');if(c)c.setAttribute('fill',RS_COL[q.m]||'#2a221b');});
+  svg._thk={};
+  pts.forEach(q=>{const g=svg.querySelector(`.mk[data-key="rs_${q.num}"]`);if(!g)return;g.dataset.meal=q.m;const c=g.querySelector(':scope>circle');if(c)c.setAttribute('fill',RS_COL[q.m]||'#2a221b');
+    svg._thk['rs_'+q.num]=q.card;if(q.card&&(IMG[q.card]||cardImg(q.card))){g.dataset.th='1';g.dataset.card=q.card;}});
   svg._cfg=cfg;
   const Z=makeZoom(RW,RH);Z.zmax=80;Z.init(svg,RW,RH);box._z=Z;if(MOB)Z.bind(box);
   Z.relayout=function(){clearTimeout(Z._t);Z._t=setTimeout(()=>{rsCluster(svg,Z);try{layoutLabels(svg);}catch(e){}},180);};
+  svg._pre=()=>rsCluster(svg,Z);
   rsCluster(svg,Z);try{layoutLabels(svg);}catch(e){}
 }
-/* 靠太近的標記（螢幕上 26px 內）合成一顆群組圓標：中間是家數、外圈依餐別比例分色；點一下放大到分得開。縮放停下後重算 */
+/* 靠太近的標記合成一顆群組圓標（有照片的標記是 51px 縮圖，所以距離門檻依兩邊大小算）：外圈依餐別比例分色、家數；
+   群組裡有照片就顯示第一張照片（疊兩層像一疊相片），沒有就是白底數字。點一下放大到分得開。縮放停下後重算 */
 function rsCluster(svg,Z){
   svg.querySelectorAll('.rs-cl').forEach(g=>g.remove());
-  const mk=[...svg.querySelectorAll('.mk[data-key^="rs_"]')].map(g=>{g.style.display='';return {g,x:+g.dataset.bx,y:+g.dataset.by,m:g.dataset.meal,k:g.dataset.key};});
-  const R=26/Z.z,used=new Set();let out='';
+  const mk=[...svg.querySelectorAll('.mk[data-key^="rs_"]')].map(g=>{g.style.display='';return {g,x:+g.dataset.bx,y:+g.dataset.by,m:g.dataset.meal,k:g.dataset.key,c:g.dataset.card,r:g.dataset.th?25.5:11};});
+  const used=new Set();let out='';
   mk.forEach((p,i)=>{if(used.has(i))return;const grp=[i];used.add(i);
-    for(let a=0;a<grp.length;a++)mk.forEach((q,j)=>{if(!used.has(j)&&Math.hypot(q.x-mk[grp[a]].x,q.y-mk[grp[a]].y)<R){used.add(j);grp.push(j);}});
+    for(let a=0;a<grp.length;a++){const b=mk[grp[a]];mk.forEach((q,j)=>{if(!used.has(j)&&Math.hypot(q.x-b.x,q.y-b.y)<(q.r+b.r+2)/Z.z){used.add(j);grp.push(j);}});}
     if(grp.length<2)return;const G=grp.map(j=>mk[j]);G.forEach(q=>{q.g.style.display='none';});
-    const cx=G.reduce((s,q)=>s+q.x,0)/G.length,cy=G.reduce((s,q)=>s+q.y,0)/G.length,C=2*Math.PI*12;let off=0;
+    const cx=G.reduce((s,q)=>s+q.x,0)/G.length,cy=G.reduce((s,q)=>s+q.y,0)/G.length;
+    const ph=G.map(q=>q.c&&thumbSrc(q.c)).find(Boolean),AR=ph?22.5:12,C=2*Math.PI*AR;let off=0;
     const cnt={};G.forEach(q=>{const c=RS_COL[q.m]||'#2a221b';cnt[c]=(cnt[c]||0)+1;});
-    const arcs=Object.entries(cnt).map(([c,n])=>{const L=C*n/G.length,a=`<circle r="12" fill="none" stroke="${c}" stroke-width="6" stroke-dasharray="${L.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90)"/>`;off+=L;return a;}).join('');
-    out+=`<g class="rs-cl zs" role="button" aria-label="${G.length} 家餐廳，點一下放大" data-keys="${G.map(q=>q.k).join(',')}" data-bx="${cx.toFixed(1)}" data-by="${cy.toFixed(1)}" transform="translate(${cx.toFixed(1)},${cy.toFixed(1)})"><circle r="17" fill="#fff" stroke="rgba(0,0,0,.18)"/>${arcs}<text y="4.6" text-anchor="middle" font-size="13" font-weight="800" fill="#2a221b">${G.length}</text></g>`;});
+    const arcs=Object.entries(cnt).map(([c,n])=>{const L=C*n/G.length,a=`<circle r="${AR}" fill="none" stroke="${c}" stroke-width="${ph?4:6}" stroke-dasharray="${L.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90)"/>`;off+=L;return a;}).join('');
+    let inner;
+    if(ph){if(!svg._thc){THN=(THN||0)+1;svg._thc='thc'+THN;svg.insertAdjacentHTML('afterbegin',`<defs><clipPath id="${svg._thc}"><circle r="22.5"/></clipPath></defs>`);}
+      inner=`<circle cx="5" cy="-5" r="25.5" fill="#fff" stroke="rgba(0,0,0,.2)"/><circle r="25.5" fill="#fff" stroke="rgba(0,0,0,.12)"/><image x="-22.5" y="-22.5" width="45" height="45" preserveAspectRatio="xMidYMid slice" clip-path="url(#${svg._thc})" href="${ph}"/>${arcs}<g transform="translate(18,18)"><circle r="11" fill="#2a221b" stroke="#fff" stroke-width="2"/><text y="4.3" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${G.length}</text></g>`;}
+    else inner=`<circle r="17" fill="#fff" stroke="rgba(0,0,0,.18)"/>${arcs}<text y="4.6" text-anchor="middle" font-size="13" font-weight="800" fill="#2a221b">${G.length}</text>`;
+    out+=`<g class="rs-cl zs" role="button" aria-label="${G.length} 家餐廳，點一下放大" data-keys="${G.map(q=>q.k).join(',')}" data-bx="${cx.toFixed(1)}" data-by="${cy.toFixed(1)}" transform="translate(${cx.toFixed(1)},${cy.toFixed(1)})">${inner}</g>`;});
   if(out){svg.insertAdjacentHTML('beforeend',out);}
   Z.apply();
 }
@@ -2693,7 +2702,7 @@ function fitLabels(cfg,box,aria){
    切換地區、換天時直接顯示（使用者要求，不等放大）；照片在開頁後就先在背景縮好，換圖時不用等。內嵌照片先用 canvas 縮成 96px 方圖快取，
    避免把 100 KB 的 base64 重複塞進每張地圖；維基圖直接用網址。原本的圓標只設透明（不隱藏），字卡定位與點擊判斷照舊用它。 */
 var THB,THN,thT; // 用 var：桌機日圖在這段之前就排標籤了，const 會 TDZ 報錯
-function thumbReady(){clearTimeout(thT);thT=setTimeout(()=>document.querySelectorAll('svg').forEach(v=>{if(v._cfg&&v.querySelector('.mk[data-key]'))try{layoutLabels(v);}catch(e){}}),80);}
+function thumbReady(){clearTimeout(thT);thT=setTimeout(()=>document.querySelectorAll('svg').forEach(v=>{if(v._cfg&&v.querySelector('.mk[data-key]'))try{v._pre&&v._pre();layoutLabels(v);}catch(e){}}),80);}
 addEventListener('wikithumbs',thumbReady);
 // 開頁後在背景把所有內嵌照片先縮好（一張接一張，不卡畫面），之後切地區、換天時縮圖馬上就有
 setTimeout(()=>{const ks=Object.keys(IMG);let i=0;const nx=()=>{if(i>=ks.length)return;const k=ks[i++];if(CARDS[k])thumbSrc(k);setTimeout(nx,40);};nx();},600);
@@ -2710,8 +2719,9 @@ function applyThumbs(svg){
   const R=25.5,mks=[...svg.querySelectorAll('.mk[data-key]')];
   mks.forEach((g,i)=>{
     const k=g.dataset.key,nt=g.querySelector(':scope>text');let on=false;
-    if(nt&&/^\d+$/.test(nt.textContent)&&CARDS[k]){
-      {const src=thumbSrc(k);if(src){
+    const ck=svg._thk?svg._thk[k]:k;  // 餐廳地圖的標記是暫時的 rs_N，靠 _thk 對回卡片
+    if(nt&&/^\d+$/.test(nt.textContent)&&ck&&CARDS[ck]){
+      {const src=thumbSrc(ck);if(src){
         if(!svg._thc){THN=(THN||0)+1;svg._thc='thc'+THN;svg.insertAdjacentHTML('afterbegin',`<defs><clipPath id="${svg._thc}"><circle r="22.5"/></clipPath></defs>`);}
         let t=g.querySelector('.mth');
         if(!t){const col=(g.querySelector(':scope>circle')||{getAttribute:()=>'#c67139'}).getAttribute('fill');
