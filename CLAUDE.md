@@ -822,6 +822,7 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 試跑：複製參考版 → 加照片 → 重產 LAND → `check.js` 全部通過。本專案跑 `check.js` 也通過。
 - **之後本專案加了新功能，要重跑 `strip_media.py` 更新參考版**，並視需要補 `references/`。
 - 注意：同一個 GitHub 帳號的 Pages 同網域，新行程必須換 localStorage 前綴（`izu-`）與 SW 快取名（清單第 6、7 節）。
+- **修正（同日）**：skill 的 `assets/sw.js` 第 8 行我加的行尾註解把同一行後面的 `PAGE`、`CORE` 宣告吃掉，service worker 會安裝失敗（2025 北陸行程的對話發現的）。註解改到上一行；trip-template 同步修正。本專案根目錄的 `sw.js` 沒受影響。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
