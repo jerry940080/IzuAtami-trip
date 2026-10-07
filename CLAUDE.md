@@ -754,7 +754,7 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 ### 2026-10-07 變更（三十三）：資訊 › 「美食」改成「餐廳」頁（每日三餐表＋家人推薦口袋名單＋LINE 送出）
 使用者看過樣板（scratchpad `resto-mockup.html`／`.png`）後選：**A 每日三餐表**、送出方式 **LINE／訊息分享**、**美食頁併進餐廳頁**。
 - **分頁**：`INFO_PANES` 第四項 `['food','美食']` → `['resto','餐廳']`（存檔裡的舊 `food` 自動轉 `resto`）。手機的美食地圖頁（`FOOD_TREE`／`MPN('food')`／`FZ`）不再顯示，程式碼還留著；
-  桌機 `#food` 搬進餐廳頁底部的 `<details class="rs-must">`「必吃料理一覽」。**桌機版不變**（仍是原本的 `#food` 區塊，沒有餐廳頁）。
+  桌機 `#food` 搬進餐廳頁底部的 `<details class="rs-must">`「必吃料理一覽」。（桌機版的餐廳頁見變更（三十四）。）
 - **正式版資料 `RESTO`**（緊接 `INFO_PANES`）：`{v,date,list}`，每列 `[id,第幾天(0＝未定),餐別(早餐/午餐/點心/晚餐),地區(靜岡/熱海・河津/東京),店名,料理,備註,狀態('in' 已排入／'c' 候選),卡片 key,Google 地圖查詢字]`。
   v1 收 22 家：行程裡已排入的（青葉橫丁、まぐろ館、石垣草莓、柚木の郷、土曜夜市、烤肉、神田勝本、居酒屋橫丁）、原美食卡片候選（日本平飯店、金之字、フルーツキング、日曜朝市、站前甜點）、
   河津午餐六家、2/14 晚餐三家。有卡片的列點了開完整卡片（`data-full`），沒卡片的點了開 Google 地圖；每列右邊 📍 一律開 Google 地圖（有 `q` 用 `q`，否則 `GQ[card]`，再否則店名）。
@@ -771,6 +771,16 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   `#mapp button{color:inherit}` 權重（ID）比 `.rs-chips button.on` 高，選中的膠囊變成深底深字，餐廳頁按鈕顏色都要加 `#mapp` 前綴。
 - 驗證：`scratchpad/resto.js`（八天時段與名單、依地區、貼完整網址自動帶入、短網址提示、存並送出的分享文字、刪除、必吃料理、點列開卡片；`navigator.share` 用假函式攔截）。
   `food.js` 已過時（美食分頁不存在）。其他回歸無錯誤，`twostep.js` 逐字相同。
+
+### 2026-10-07 變更（三十四）：電腦版也加上餐廳頁
+- 靜態 `<section class="block" id="resto">` 放在 `#food`（美食・行李）前面，導覽列 `#strip` 在「交通・訂票」後加「餐廳」。
+  **桌機的 `#food` 保留不動**（右欄有行李清單，桌機沒有清單分頁）。
+- `rsDeskInit()`（`if(!MOB)setTimeout(…,0)`，等 `APP` 定義完）：填版本字、在 `body` 末尾建 `#rsForm`、綁 document click（`#resto`／`#rsForm` 內：`[data-full]` 開卡片，其餘交給 `rsClick`）與 Esc 關表單。
+  `renderResto()` 改成手機畫進 `#maInfo .rs-body`、桌機畫進 `#resto .rs-body`；時段卡外包 `.rs-grid`，桌機 `.rs-dk .rs-grid` 是 `auto-fill minmax(330px,1fr)` 多欄。
+- 桌機沒有懸浮鈕，改標題列右邊 `.rs-add`「＋ 新增餐廳」；表單 `html:not(.app) .rs-fm` 置中彈窗（540px、淡入），不顯示拖曳把手。
+  電腦瀏覽器沒有 `navigator.share`，「送出」走 `rsShowText` 文字框＋複製（複製後標記已送出）。
+- 文案改成通用：空時段「按「＋ 新增餐廳」推薦一家」、表單說明「只存在這台裝置…（電腦上改成複製文字）」。
+- 驗證：`scratchpad/rsdesk.js`（導覽列、版本字、Day 5 三欄、點列開卡片、貼網址自動帶入東京、送出改複製且剪貼簿內容正確、依地區）；`resto.js`（手機）與其他回歸無錯誤，`twostep.js` 逐字相同。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
