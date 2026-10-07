@@ -824,6 +824,16 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 注意：同一個 GitHub 帳號的 Pages 同網域，新行程必須換 localStorage 前綴（`izu-`）與 SW 快取名（清單第 6、7 節）。
 - **修正（同日）**：skill 的 `assets/sw.js` 第 8 行我加的行尾註解把同一行後面的 `PAGE`、`CORE` 宣告吃掉，service worker 會安裝失敗（2025 北陸行程的對話發現的）。註解改到上一行；trip-template 同步修正。本專案根目錄的 `sw.js` 沒受影響。
 
+### 2026-10-07 變更（三十八）：首頁 jerry940080.github.io 與 trip.json
+使用者要把所有行程集中在一個網站看，選了「每個行程維持自己的 repo＋另開總整理首頁」、版面 B（路線地圖＋年份時間軸）。
+- 首頁 repo `jerry940080/jerry940080.github.io`（main 發布）：每次打開用 GitHub 公開 API 找出有 Pages（或 `trip` 標籤）的 repo，
+  讀各網站根目錄的 `trip.json`。細節見那個 repo 的 CLAUDE.md。
+- 本專案新增 `trip.json`（places 依行程順序：成田、品川、靜岡、清水、熱海、河津、品川）與 `cover.jpg`（夢テラス照片 640px）。
+  **改日期、主要地點、封面時要一起改 `trip.json`**。
+- 另外三個行程 repo（北陸、大阪京都神戶、台灣）也各加了 `trip.json`，推在各自的 Pages 發布分支。
+- repo 的 `trip` 標籤這個環境的 API 不准寫入（403），沒加；四個行程都有 Pages＋trip.json，首頁不靠標籤也找得到。
+- skill 補上 `trip.json`：SKILL.md 流程第 5 步、`new-trip-checklist.md` 第 9 節、`assets/trip.json` 範例；trip-template 同步。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
