@@ -662,7 +662,12 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .rp{font-style:normal;font-size:10.5px;border-radius:99px;padding:1px 7px;font-weight:700;margin-left:5px;vertical-align:2px}
 .p-ok{background:#dfe6cf;color:#4d5a33}.p-fam{background:#e3e6f3;color:#3f4f8a}
 .tt-go{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--color-surface,#fffaf2);border:1.5px solid var(--color-accent-500,#c67139);border-radius:20px;padding:12px 16px;margin:12px 0 18px}
-.tt-go .i{font-size:24px}.tt-go b{display:block;font-size:15px}.tt-go small{display:block;font-size:12px;color:var(--color-neutral-700,#7c6f62);line-height:1.5}.tt-go .ar{margin-left:auto;color:var(--color-accent-500,#c67139);font-weight:800;white-space:nowrap}.p-mine{background:#f6dcc8;color:#a4521f}.p-wait{background:#e7e2da;color:#7d7468}
+.tt-go .i{font-size:24px}
+button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
+.tt-off{margin:16px;padding:14px 16px;border-radius:18px;background:var(--color-surface,#fffaf2);font-size:14px;line-height:1.7}
+.tt-fr{display:block;width:100%;height:100%;border:0;background:#f5ead8}
+#maInfo.tt-on{overflow:hidden}#maInfo.tt-on .ma-pane.on{height:100%}
+.tt-dk{max-width:560px;height:min(860px,86vh);border-radius:26px;overflow:hidden;box-shadow:0 6px 24px rgba(42,34,27,.12);border:1px solid var(--rule,#e4d6c0)}.tt-go b{display:block;font-size:15px}.tt-go small{display:block;font-size:12px;color:var(--color-neutral-700,#7c6f62);line-height:1.5}.tt-go .ar{margin-left:auto;color:var(--color-accent-500,#c67139);font-weight:800;white-space:nowrap}.p-mine{background:#f6dcc8;color:#a4521f}.p-wait{background:#e7e2da;color:#7d7468}
 .rs-gm{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--color-surface);color:var(--color-neutral-700)}
 .rs-del{flex:none;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--color-neutral-500);font-size:20px;line-height:1}
 .rs-empty{font-size:12.5px;color:var(--color-neutral-500);margin:4px 0 2px;padding:0 16px}.rs-slot .rs-empty{padding:0}
@@ -1044,8 +1049,15 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
   <div class="wrap">
     <h2>花費</h2>
     <p class="lead">全部以<b>每人</b>計。機票與住宿都還沒買，標「未知」的等訂好或查到再補。</p>
-    <a class="tt-go" id="ttCost" target="_blank" rel="noopener"><span class="i">🧾</span><span><b>這頁是出發前的預估</b><small>旅途中實際花了多少、誰該給誰多少，用記帳工具記（要登入、只有同行的人看得到）</small></span><span class="ar">記帳 ↗</span></a>
+    <a class="tt-go" id="ttCost"><span class="i">🧾</span><span><b>這頁是出發前的預估</b><small>旅途中實際花了多少、誰該給誰多少，到「記帳」記（用 Google 登入、只有同行的人看得到）</small></span><span class="ar">記帳 →</span></a>
     <div id="costBody"></div>
+  </div>
+</section>
+<section class="block" id="acct">
+  <div class="wrap">
+    <h2>記帳・分帳</h2>
+    <p class="lead">旅途中實際花了多少、誰該給誰多少。用 Google 登入，只有同行的人看得到；可以記日圓或台幣，分法有平均、比例、指定金額、有人請客。</p>
+    <div class="tt-dk"><iframe class="tt-fr" title="記帳・分帳" allow="clipboard-write"></iframe></div>
   </div>
 </section>
 <footer><div class="wrap">
@@ -1911,10 +1923,17 @@ function animateMap(svg){
 // 記帳工具（trip-tools，另一個網站，要登入）的連結
 const TT={url:'/trip-tools/',trip:'IzuAtami-trip',q:'https://firestore.googleapis.com/v1/projects/trip-tools-21847/databases/(default)/documents/trips/IzuAtami-trip:runQuery?key=AIzaSyBL1D01Tdjqd1_gjJtXFaJdEo0GsLgz-7M'};
 const ttLink=h=>TT.url+'?openExternalBrowser=1#/t/'+TT.trip+'/'+h;
+const ttEmbed=h=>TT.url+'?embed='+TT.trip+'#/t/'+TT.trip+'/'+h; // 嵌在本頁的 iframe（記帳工具的嵌入模式：分頁在上方、沒有測試橫條）
+function ttLoad(fr){ // 第一次打開才載入，平常不碰 Firebase；沒網路時先顯示說明，連上網再自動載入
+  if(!fr||fr.getAttribute('src'))return;
+  const note=fr.parentNode.querySelector('.tt-off');
+  if(navigator.onLine===false){if(!note)fr.insertAdjacentHTML('beforebegin','<p class="tt-off">📡 記帳要連上網路才能打開（行程、地圖等其他內容離線照常可看）。連上網路後會自動載入。</p>');
+    addEventListener('online',()=>ttLoad(fr),{once:true});return;}
+  if(note)note.remove();fr.src=ttEmbed('exp');}
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#cost">花費</a><a href="'+ttLink('exp')+'" target="_blank" rel="noopener">記帳 ↗</a>';
-{const a=document.getElementById('ttCost');if(a)a.href=ttLink('exp');}
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#cost">花費</a><a href="#acct">記帳</a>';
+{const a=document.getElementById('ttCost');if(a){a.href='#acct';a.dataset.ttgo='1';}if(!MOB)ttLoad(document.querySelector('#acct .tt-fr'));}
 
 // days
 function imgsHTML(c,id){
@@ -2258,7 +2277,7 @@ const PACK=[
  {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
-const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['tix','交通',['#tickets']],['resto','餐廳',[]]];
+const INFO_PANES=[['cost','花費',['#cost','footer']],['acct','記帳',[]],['spots','景點',[]],['tix','交通',['#tickets']],['resto','餐廳',[]]];
 /* ================= 資訊 › 餐廳（取代美食頁）=================
    RESTO＝網站上的「餐廳選項」正式版：要更新時改這裡並把 v 加一、date 改當天。
    每列 [id, 第幾天(0＝未定), 餐別, 地區, 店名, 料理, 備註, 狀態('in' 已排入／'c' 候選), 卡片 key, Google 地圖查詢字, 座標(沒卡片時填，[lat,lng])]。
@@ -2626,7 +2645,7 @@ function renderHome(){
   <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${pd}/${pt}</b><span>行李</span></div></div>
   <button class="mh-cta" data-go="plan">打開行程${ico('right',18)}</button>
   <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 虎航 IT202　2/10 桃園 13:30 → 成田 17:30</span></div><div>${ico('plane',16)}<span><b>回程</b> 虎航 IT201　2/17 成田 13:00 → 桃園 16:25</span></div></div>
-  <a class="tt-go" href="${ttLink('exp')}" target="_blank" rel="noopener"><span class="i">🧾</span><span><b>記帳・分帳</b><small>和同行的人一起記實際花費，用 Google 登入</small></span><span class="ar">打開 ↗</span></a>
+  <button class="tt-go" data-ttgo><span class="i">🧾</span><span><b>記帳・分帳</b><small>和同行的人一起記實際花費，用 Google 登入</small></span><span class="ar">打開 →</span></button>
   <div class="mh-h">每日行程</div>
   <div class="mh-days">${DAYS.map((d,i)=>`<button class="ma-drow" data-day="${i}"><div class="dt-tile"><span>DAY ${d.n}</span><b>${d.date.split('/')[1]}</b></div><div class="dr-tx"><b>${d.title}</b><span>週${d.wd} · 住 ${d.stay.replace(/（.*?）/g,'')}</span></div>${i===ti?'<span class="dr-pill">今天</span>':''}<span class="chev">${ico('right',16)}</span></button>`).join('')}</div>`;
 }
@@ -2905,6 +2924,7 @@ function savePack(){lsSet('izu-pack',APP.pack);}
 function renderSeg(){
   $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
   document.querySelectorAll('#maInfo .ma-pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===APP.pane));
+  $a('maInfo').classList.toggle('tt-on',APP.pane==='acct');if(APP.pane==='acct')ttLoad(document.querySelector('#maInfo .tt-fr'));
 }
 function appClick(e){
   const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
@@ -2930,6 +2950,7 @@ function appClick(e){
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
+  if(t.closest('[data-ttgo]')){e.preventDefault();APP.pane='acct';go('info');renderSeg();saveApp();return true;}
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([],false,MPN('spots'));if(APP.pane==='resto')renderResto();return true;}
   if(el=t.closest('[data-reg]')){const c=mpOf(el);showSpot((c.path||[]).concat(+el.dataset.reg),true,c);return true;}
   if(el=t.closest('[data-regback]')){const c=mpOf(el);showSpot((c.path||[]).slice(0,-1),false,c);return true;}
@@ -2959,6 +2980,7 @@ function appInit(){
     if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div>
       <details class="rs-must"><summary>必吃料理一覽<small>不分店家的特色料理與伴手禮</small></summary></details><button class="rs-fab" data-rsadd>＋ 新增餐廳</button></div>`;
       const f=document.querySelector('#food');if(f)p.querySelector('.rs-must').appendChild(f);}
+    if(k==='acct')p.innerHTML='<iframe class="tt-fr" title="記帳・分帳" allow="clipboard-write"></iframe>';
     if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
     info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();

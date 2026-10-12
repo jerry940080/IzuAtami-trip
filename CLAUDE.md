@@ -844,11 +844,24 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
   名單標藍色「家人推薦」膠囊（`.p-fam`），排在同時段已排入、候選之後；沒排日期的放「日期未定」。
 - **「＋ 新增餐廳」**改成開 `ttLink('resto/add')`（記帳工具的推薦表單，要登入且是成員）。**變更（三十三）的口袋名單（`izu-resto`）、
   LINE 送出、`#rsForm` 表單與 `rsParse／rsSend…` 已整段刪除**（使用者選的；舊 CSS 沒刪）。`RESTO` 仍是主辦人手寫的正式版。
-- **記帳入口**：手機首頁航班下方 `.tt-go` 卡、花費頁導言下方 `#ttCost`（預估 vs 實際）、桌機導覽列最後「記帳 ↗」。
+- **記帳入口**：手機首頁航班下方 `.tt-go` 卡、花費頁導言下方 `#ttCost`（預估 vs 實際）、桌機導覽列最後「記帳」（變更（四十）起改為嵌入，不開新分頁）。
   `TT`／`ttLink()` 定義在 `// strip nav` 前（導覽列用到，放後面會 TDZ）。連結都帶 `?openExternalBrowser=1`（LINE 改用外部瀏覽器）。
 - **前提**：trip-tools 的 `firestore.rules` 要開放 `restos` 在 `status=='in'` 時免登入讀取（2026-10-12 已改，使用者要重貼一次）。
 - 驗證：scratchpad `tt/site.js`（假 Firestore 回應：首頁卡、Day 5 家人推薦、日期未定、依地區、＋按鈕開新分頁、讀不到照舊、桌機導覽列）；
   `check.js` 全過；`twostep.js` 有 4 個「點不到」，但改版前輸出逐字相同（既有問題，不是這次造成）。
+
+### 2026-10-12 變更（四十）：記帳嵌進行程網站（不再開新分頁）
+使用者覺得點「記帳」跳到另一個網站很突兀（主畫面 App 還會跳出到 Safari），選了「A 嵌進行程網站」：
+- **手機**：`INFO_PANES` 加 `['acct','記帳',[]]`（花費後面），pane 裡一個 `<iframe class="tt-fr">`；`renderSeg()` 切到 acct 時給 `#maInfo` 加 `.tt-on`
+  （不捲動、pane 撐滿高度）並 `ttLoad()`。首頁記帳卡與花費頁 `#ttCost` 都是 `[data-ttgo]` → `APP.pane='acct'` 切過去。
+- **桌機**：`#cost` 後面新增 `<section id="acct">`（`.tt-dk` 560 寬、高 min(860px,86vh) 的 iframe），導覽列「記帳」改錨點 `#acct`，開頁就載入。
+- `ttEmbed(h)`＝`/trip-tools/?embed=IzuAtami-trip#/t/IzuAtami-trip/h`；`ttLoad(fr)` **第一次打開才設 src**（平常開行程網站不碰 Firebase）；
+  離線時改顯示 `.tt-off` 說明，`online` 事件後自動載入。記帳工具本身沒有 SW，**離線打不開記帳**（行程內容照常離線可看）。
+- trip-tools 的嵌入模式（`?embed=`）：沒有測試橫條、分頁改成上方分段（記帳／結算／推薦／成員）、鎖在這一趟、登出回這趟的登入頁、
+  登入頁多「改在新視窗打開記帳」備援（iframe 裡彈出視窗被擋時用）。同網域 iframe，登入與資料都是第一方，**實機登入待使用者確認**。
+- `ttLink()`（外部開啟版）仍給餐廳頁「＋ 新增餐廳」用（要開推薦表單）。
+- 驗證：scratchpad `tt/emb.js`（fb.js 換成 mock.js：首頁卡→記帳、分段、iframe 撐滿、記一筆／結算、花費卡、記住分段、未登入、桌機區塊）、
+  `tt/off.js`（離線說明與連網自動載入）、`tt/site.js`、`check.js` 全過。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
