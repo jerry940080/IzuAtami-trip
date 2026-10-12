@@ -834,6 +834,22 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - repo 的 `trip` 標籤這個環境的 API 不准寫入（403），沒加；四個行程都有 Pages＋trip.json，首頁不靠標籤也找得到。
 - skill 補上 `trip.json`：SKILL.md 流程第 5 步、`new-trip-checklist.md` 第 9 節、`assets/trip.json` 範例；trip-template 同步。
 
+### 2026-10-12 變更（三十九）：接上記帳工具 trip-tools（家人推薦餐廳＋記帳入口）
+使用者在 `jerry940080/trip-tools`（https://jerry940080.github.io/trip-tools/ ，Firebase 專案 `trip-tools-21847`，細節見那個 repo 的 CLAUDE.md）
+測過分帳與餐廳收錄後，選了「接到行程網站」。
+- **家人推薦**：`rsFetchFam()` 用 Firestore REST `:runQuery`（不載入 SDK）讀 `trips/IzuAtami-trip/restos` 裡 `status=='in'` 的店，
+  存 localStorage **`izu-fsresto`**＝`{ts,list}`，開頁 1.2 秒後讀一次、之後每 10 分鐘；資料有變才 `renderResto()`。
+  讀不到（離線、規則沒開）就沿用上次的，再不行只顯示 `RESTO`。`rsFam()` 轉成和 `RESTO` 一樣的物件（`fam:1`、`st:'c'`、`by`＝推薦人、
+  `g`＝Google 地圖網址、`d` 依日期換算第幾天、地區由座標推 `rsRegOf`），和正式版同名的自動略過；`rsOff()`＝`RESTO.list`＋`rsFam()`。
+  名單標藍色「家人推薦」膠囊（`.p-fam`），排在同時段已排入、候選之後；沒排日期的放「日期未定」。
+- **「＋ 新增餐廳」**改成開 `ttLink('resto/add')`（記帳工具的推薦表單，要登入且是成員）。**變更（三十三）的口袋名單（`izu-resto`）、
+  LINE 送出、`#rsForm` 表單與 `rsParse／rsSend…` 已整段刪除**（使用者選的；舊 CSS 沒刪）。`RESTO` 仍是主辦人手寫的正式版。
+- **記帳入口**：手機首頁航班下方 `.tt-go` 卡、花費頁導言下方 `#ttCost`（預估 vs 實際）、桌機導覽列最後「記帳 ↗」。
+  `TT`／`ttLink()` 定義在 `// strip nav` 前（導覽列用到，放後面會 TDZ）。連結都帶 `?openExternalBrowser=1`（LINE 改用外部瀏覽器）。
+- **前提**：trip-tools 的 `firestore.rules` 要開放 `restos` 在 `status=='in'` 時免登入讀取（2026-10-12 已改，使用者要重貼一次）。
+- 驗證：scratchpad `tt/site.js`（假 Firestore 回應：首頁卡、Day 5 家人推薦、日期未定、依地區、＋按鈕開新分頁、讀不到照舊、桌機導覽列）；
+  `check.js` 全過；`twostep.js` 有 4 個「點不到」，但改版前輸出逐字相同（既有問題，不是這次造成）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

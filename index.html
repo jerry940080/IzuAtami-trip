@@ -660,7 +660,9 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .rs-tx{min-width:0}.rs-tx b{display:block;font-size:14px;line-height:1.35}.rs-tx small{display:block;font-size:11.5px;color:var(--color-neutral-500);line-height:1.4}
 .rs-nt{margin:4px 0 0;font-size:12px;color:var(--color-neutral-700)}
 .rp{font-style:normal;font-size:10.5px;border-radius:99px;padding:1px 7px;font-weight:700;margin-left:5px;vertical-align:2px}
-.p-ok{background:#dfe6cf;color:#4d5a33}.p-mine{background:#f6dcc8;color:#a4521f}.p-wait{background:#e7e2da;color:#7d7468}
+.p-ok{background:#dfe6cf;color:#4d5a33}.p-fam{background:#e3e6f3;color:#3f4f8a}
+.tt-go{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--color-surface,#fffaf2);border:1.5px solid var(--color-accent-500,#c67139);border-radius:20px;padding:12px 16px;margin:12px 0 18px}
+.tt-go .i{font-size:24px}.tt-go b{display:block;font-size:15px}.tt-go small{display:block;font-size:12px;color:var(--color-neutral-700,#7c6f62);line-height:1.5}.tt-go .ar{margin-left:auto;color:var(--color-accent-500,#c67139);font-weight:800;white-space:nowrap}.p-mine{background:#f6dcc8;color:#a4521f}.p-wait{background:#e7e2da;color:#7d7468}
 .rs-gm{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--color-surface);color:var(--color-neutral-700)}
 .rs-del{flex:none;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--color-neutral-500);font-size:20px;line-height:1}
 .rs-empty{font-size:12.5px;color:var(--color-neutral-500);margin:4px 0 2px;padding:0 16px}.rs-slot .rs-empty{padding:0}
@@ -1042,6 +1044,7 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
   <div class="wrap">
     <h2>花費</h2>
     <p class="lead">全部以<b>每人</b>計。機票與住宿都還沒買，標「未知」的等訂好或查到再補。</p>
+    <a class="tt-go" id="ttCost" target="_blank" rel="noopener"><span class="i">🧾</span><span><b>這頁是出發前的預估</b><small>旅途中實際花了多少、誰該給誰多少，用記帳工具記（要登入、只有同行的人看得到）</small></span><span class="ar">記帳 ↗</span></a>
     <div id="costBody"></div>
   </div>
 </section>
@@ -1905,9 +1908,13 @@ function animateMap(svg){
   io.observe(svg);
 })();
 
+// 記帳工具（trip-tools，另一個網站，要登入）的連結
+const TT={url:'/trip-tools/',trip:'IzuAtami-trip',q:'https://firestore.googleapis.com/v1/projects/trip-tools-21847/databases/(default)/documents/trips/IzuAtami-trip:runQuery?key=AIzaSyBL1D01Tdjqd1_gjJtXFaJdEo0GsLgz-7M'};
+const ttLink=h=>TT.url+'?openExternalBrowser=1#/t/'+TT.trip+'/'+h;
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#cost">花費</a>';
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#cost">花費</a><a href="'+ttLink('exp')+'" target="_blank" rel="noopener">記帳 ↗</a>';
+{const a=document.getElementById('ttCost');if(a)a.href=ttLink('exp');}
 
 // days
 function imgsHTML(c,id){
@@ -2255,7 +2262,7 @@ const INFO_PANES=[['cost','花費',['#cost','footer']],['spots','景點',[]],['t
 /* ================= 資訊 › 餐廳（取代美食頁）=================
    RESTO＝網站上的「餐廳選項」正式版：要更新時改這裡並把 v 加一、date 改當天。
    每列 [id, 第幾天(0＝未定), 餐別, 地區, 店名, 料理, 備註, 狀態('in' 已排入／'c' 候選), 卡片 key, Google 地圖查詢字, 座標(沒卡片時填，[lat,lng])]。
-   家人在手機上新增的餐廳只存在自己手機（localStorage izu-resto），按「送出」用 LINE 等分享給主辦人，主辦人決定要不要收進 RESTO。 */
+   家人推薦改由記帳工具（trip-tools）收：「＋ 新增餐廳」開它的推薦表單，主辦人收錄後由 rsFam() 讀進來標「家人推薦」。 */
 const RESTO={v:1,date:'2026/10/07',list:[
  ['ndhotel',2,'點心','靜岡','日本平飯店 露台酒廊','下午茶','14:00–17:00，全景窗看富士山','c','ndhotel',''],
  ['aoba',2,'晚餐','靜岡','青葉橫丁','靜岡おでん','小店多，現場排','in','aoba',''],
@@ -2280,14 +2287,29 @@ const RESTO={v:1,date:'2026/10/07',list:[
  ['katsumoto',7,'午餐','東京','神田勝本','沾麵','排隊約 20 分','in','katsumoto',''],
  ['yokocho',7,'晚餐','東京','居酒屋橫丁','居酒屋','地點待定（首推野毛）','in','yokocho','']
 ].map(([id,d,m,reg,n,c,note,st,card,q,ll])=>({id,d,m,reg,n,c,note,st,card,q,ll}))};
+/* 家人推薦（記帳工具 trip-tools 收錄的店）：用 Firestore REST 讀 status=='in' 的公開資料，不載入 SDK；
+   存 localStorage izu-fsresto，離線或讀不到時沿用上次的，再不行就只顯示上面的正式版 RESTO。 */
+function rsFam(){const v=lsGet('izu-fsresto',null),off=new Set(RESTO.list.map(r=>rsNorm(r.n)));return v&&Array.isArray(v.list)?v.list.filter(r=>!off.has(rsNorm(r.n))):[];}
+const rsOff=()=>RESTO.list.concat(rsFam());
+function rsRegOf(ll){if(!ll)return '其他';const [la,lo]=ll;return la>=35.4?'東京':la<35.25&&lo<138.75?'靜岡':la<35.25?'熱海・河津':'其他';}
+function rsFetchFam(){
+  if(!window.fetch||navigator.onLine===false)return;
+  fetch(TT.q,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'restos'}],where:{fieldFilter:{field:{fieldPath:'status'},op:'EQUAL',value:{stringValue:'in'}}}}})})
+  .then(r=>r.ok?r.json():Promise.reject(r.status)).then(rows=>{
+    const val=v=>!v?null:'stringValue' in v?v.stringValue:'doubleValue' in v?+v.doubleValue:'integerValue' in v?+v.integerValue:'arrayValue' in v?(v.arrayValue.values||[]).map(val):null;
+    const t0=new Date('2027-02-10T12:00:00');
+    const list=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);const day=g('day'),ll=g('ll');
+      const d=day?Math.round((new Date(day+'T12:00:00')-t0)/864e5)+1:0,okll=Array.isArray(ll)&&ll.length===2?ll:null;
+      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:'',note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
+    const old=JSON.stringify((lsGet('izu-fsresto',{})||{}).list||[]);lsSet('izu-fsresto',{ts:Date.now(),list});
+    if(JSON.stringify(list)!==old)renderResto();
+  }).catch(()=>{});}
+setTimeout(rsFetchFam,1200);setInterval(rsFetchFam,10*60*1000);
 const RS_MEALS=['早餐','午餐','點心','晚餐'],RS_REGS=['靜岡','熱海・河津','東京'];
 const rsNorm=t=>(t||'').replace(/[\s・·（）()「」]/g,'').toLowerCase();
-function rsMine(){const v=lsGet('izu-resto',[]);return Array.isArray(v)?v:[];}
-function rsSaveMine(v){lsSet('izu-resto',v);}
-function rsMineShown(){const off=new Set(RESTO.list.map(r=>rsNorm(r.n)));return rsMine().filter(r=>!off.has(rsNorm(r.n)));} // 已收進正式版的就不重複顯示
 function rsMealOf(t){const m=/^(\d\d):(\d\d)/.exec(t||'');if(!m)return '';const h=+m[1]+m[2]/60;return h<10.5?'早餐':h<14.5?'午餐':h<17?'點心':'晚餐';}
 function rsSlots(dn){ // 當天的用餐時段：行程裡的「美食」站＋有餐廳的餐別，依時間排序；沒有候選的飯店早餐不列
-  const d=DAYS[dn-1],S=(d&&d.stops)||[],o={},ents=RESTO.list.concat(rsMineShown()).filter(r=>r.d===dn),tm=t=>/^\d\d:\d\d/.test(t||'')?t:'';
+  const d=DAYS[dn-1],S=(d&&d.stops)||[],o={},ents=rsOff().filter(r=>r.d===dn),tm=t=>/^\d\d:\d\d/.test(t||'')?t:'';
   S.forEach(s=>{if(s.k!=='美食')return;const m=rsMealOf(s.t);if(!m||o[m])return;if(/早餐$/.test(s.n)&&!ents.some(r=>r.m===m))return;o[m]={m,t:s.t,n:s.n};});
   ents.forEach(r=>{const s=r.card&&S.find(x=>x.card===r.card&&tm(x.t));if(!o[r.m])o[r.m]={m:r.m,t:s?s.t:'',n:''};else if(!o[r.m].t&&s)o[r.m].t=s.t;});
   const DEF={早餐:'08:00',午餐:'12:00',點心:'15:00',晚餐:'19:00'};
@@ -2297,35 +2319,35 @@ function rsThumb(r){const src=r.card&&CARDS[r.card]?cardImg(r.card):'';return `<
 function rsDayLab(dn){const d=DAYS[dn-1];return d?`${d.date}（${d.wd}）`:'日期未定';}
 const RS_COL={早餐:'#7a8a5e',點心:'#7a8a5e',午餐:'#d9822b',晚餐:'#3f4f8a'};
 const rsLL=r=>r.ll||(r.card&&P[r.card])||null;
-function rsRow(r,mine,withDay,num){
-  const pill=mine?(r.sent?'<em class="rp p-wait">已送出</em>':'<em class="rp p-mine">我的口袋</em>'):(r.st==='in'?'<em class="rp p-ok">已排入</em>':'');
-  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',r.c,mine?(r.by?r.by+' 推薦':''):r.note,num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
-  const act=r.card&&CARDS[r.card]&&!mine?` data-full="${r.card}"`:` data-rsx="${mine?'m':'o'}:${r.id}"`;
-  return `<div class="rs-it"${num?` data-rsn="${num}"`:''}><div class="rs-main"${act}><div class="rs-thw">${rsThumb(r)}${num?`<i class="rs-n" style="background:${RS_COL[r.m]||'#2a221b'}">${num}</i>`:''}</div><div class="rs-tx"><b>${r.n}${pill}</b><small>${sub}</small>${mine&&r.note?`<p class="rs-nt" hidden>${r.note}</p>`:''}</div></div>
-    <a class="rs-gm" href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('pin',17)}</a>${mine?`<button class="rs-del" data-rsdel="${r.id}" aria-label="刪除">×</button>`:''}</div>`;}
+function rsRow(r,withDay,num){
+  const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const pill=r.fam?'<em class="rp p-fam">家人推薦</em>':(r.st==='in'?'<em class="rp p-ok">已排入</em>':'');
+  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',esc(r.c),r.fam?(r.by?esc(r.by)+' 推薦':''):r.note,r.fam?esc(r.note):'',num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
+  const act=r.card&&CARDS[r.card]?` data-full="${r.card}"`:` data-rsx="${r.fam?'f':'o'}:${r.id}"`;
+  return `<div class="rs-it"${num?` data-rsn="${num}"`:''}><div class="rs-main"${act}><div class="rs-thw">${rsThumb(r)}${num?`<i class="rs-n" style="background:${RS_COL[r.m]||'#2a221b'}">${num}</i>`:''}</div><div class="rs-tx"><b>${r.fam?esc(r.n):r.n}${pill}</b><small>${sub}</small></div></div>
+    <a class="rs-gm" href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('pin',17)}</a></div>`;}
 function renderResto(){
   const ps=document.querySelectorAll(MOB?'#maInfo .rs-body':'#resto .rs-body');if(!ps.length)return;
-  const mine=rsMineShown(),uns=mine.filter(r=>!r.sent).length,V=APP.rview||'day',groups=[];
+  const V=APP.rview||'day',groups=[];
   let h=`<div class="ma-segc rs-seg"><button data-rsv="day" class="${V==='day'?'on':''}">依日期</button><button data-rsv="reg" class="${V==='reg'?'on':''}">依地區</button></div>`;
-  if(mine.length)h+=`<div class="rs-mine">📌 我的口袋名單 <b>${mine.length}</b> 家${uns?`，<b>${uns}</b> 家還沒送出`:'，都送出了'}<button data-rssend>${uns?'送出給主辦人':'再傳一次'}</button></div>`;
   if(V==='day'){
     const dn=APP.rday||1;
     h+=`<div class="rs-days">${DAYS.map(d=>`<button data-rsday="${d.n}" class="${d.n===dn?'on':''}"><small>週${d.wd}</small><b>${d.date.split('/')[1]}</b></button>`).join('')}</div>`;
-    const all=RESTO.list.filter(r=>r.d===dn),mm=mine.filter(r=>r.d===dn);
+    const OFF=rsOff(),all=OFF.filter(r=>r.d===dn);
     rsSlots(dn).forEach(x=>groups.push({m:x.m,head:`${x.m}${/^\d/.test(x.t||'')?' · '+x.t:''}${x.n&&!all.some(r=>r.m===x.m&&r.st==='in')?' · '+x.n:''}`,
-      A:all.filter(r=>r.m===x.m).sort((a,b)=>(a.st==='in'?0:1)-(b.st==='in'?0:1)),M:mm.filter(r=>r.m===x.m),wd:0,empty:1}));
-    const und=mine.filter(r=>!r.d);if(und.length)groups.push({m:'',head:'日期未定',A:[],M:und,wd:1});
+      A:all.filter(r=>r.m===x.m).sort((a,b)=>(a.st==='in'?0:a.fam?2:1)-(b.st==='in'?0:b.fam?2:1)),wd:0,empty:1}));
+    const undF=OFF.filter(r=>r.fam&&!r.d);if(undF.length)groups.push({m:'',head:'日期未定',A:undF,wd:1});
   }else{
-    const R=APP.rreg||'熱海・河津',regs=RS_REGS.concat(mine.some(r=>(r.reg||'其他')==='其他')?['其他']:[]);
-    h+=`<div class="rs-chips">${regs.map(g=>{const c=RESTO.list.filter(r=>r.reg===g).length+mine.filter(r=>(r.reg||'其他')===g).length;return `<button data-rsreg="${g}" class="${R===g?'on':''}">${g} ${c}</button>`;}).join('')}</div>`;
+    const R=APP.rreg||'熱海・河津',regs=RS_REGS.concat(rsFam().some(r=>(r.reg||'其他')==='其他')?['其他']:[]);
+    h+=`<div class="rs-chips">${regs.map(g=>{const c=rsOff().filter(r=>(r.reg||'其他')===g).length;return `<button data-rsreg="${g}" class="${R===g?'on':''}">${g} ${c}</button>`;}).join('')}</div>`;
     const ord=(a,b)=>(a.d||99)-(b.d||99)||RS_MEALS.indexOf(a.m)-RS_MEALS.indexOf(b.m),inR=r=>(r.reg||'其他')===R;
     [['午餐',['午餐']],['晚餐',['晚餐']],['早餐・點心',['早餐','點心']]].forEach(([lab,ms])=>{
-      const A=RESTO.list.filter(r=>inR(r)&&ms.includes(r.m)).sort(ord),M=mine.filter(r=>inR(r)&&ms.includes(r.m)).sort(ord);
-      if(A.length||M.length)groups.push({m:ms[0],head:lab,A,M,wd:1});});
+      const A=rsOff().filter(r=>inR(r)&&ms.includes(r.m)).sort(ord);
+      if(A.length)groups.push({m:ms[0],head:lab,A,wd:1});});
   }
   let n=0;const pts=[];
-  const body=groups.map(g=>{const rows=g.A.map(r=>[r,0]).concat(g.M.map(r=>[r,1])).map(([r,mi])=>{const ll=rsLL(r);let num=0;if(ll){num=++n;pts.push({num,ll,m:r.m,n:r.n,card:r.card&&CARDS[r.card]?r.card:''});}return rsRow(r,mi,g.wd,num);}).join('');
-    return `<div class="rs-slot"><h4><span><i class="rs-dot" style="background:${RS_COL[g.m]||'#9a8b7a'}"></i>${g.head}</span>${g.A.length+g.M.length?`<em>${g.A.length+g.M.length} 家</em>`:''}</h4>${rows}${g.A.length+g.M.length?'':'<p class="rs-empty">還沒有候選，按「＋ 新增餐廳」推薦一家</p>'}</div>`;}).join('');
+  const body=groups.map(g=>{const rows=g.A.map(r=>{const ll=rsLL(r);let num=0;if(ll){num=++n;pts.push({num,ll,m:r.m,n:r.n,card:r.card&&CARDS[r.card]?r.card:''});}return rsRow(r,g.wd,num);}).join('');
+    return `<div class="rs-slot"><h4><span><i class="rs-dot" style="background:${RS_COL[g.m]||'#9a8b7a'}"></i>${g.head}</span>${g.A.length?`<em>${g.A.length} 家</em>`:''}</h4>${rows}${g.A.length?'':'<p class="rs-empty">還沒有候選，按「＋ 新增餐廳」推薦一家</p>'}</div>`;}).join('');
   h+=`<div class="rs-split"><div class="rs-mapw"><div class="rs-map"></div><div class="rs-zm"><button data-rsz="in" aria-label="放大">＋</button><button data-rsz="out" aria-label="縮小">－</button><button data-rsz="reset" aria-label="還原">↺</button></div>
     <div class="rs-leg"><span><i style="background:${RS_COL.午餐}"></i>午餐</span><span><i style="background:${RS_COL.晚餐}"></i>晚餐</span><span><i style="background:${RS_COL.早餐}"></i>早餐・點心</span></div></div>
     <div class="rs-lst"><div class="rs-grid">${body||'<p class="rs-empty">這天沒有安排在外用餐（移動日／機場）。</p>'}</div></div></div>`;
@@ -2372,57 +2394,12 @@ function rsCluster(svg,Z){
   Z.apply();
 }
 /* 新增表單：貼 Google 地圖連結（可連同分享時附帶的店名一起貼），能讀出的名稱與座標自動帶入 */
-function rsParse(txt){
-  const o={};const u=(txt||'').match(/https?:\/\/\S+/);if(u)o.g=u[0].replace(/[)）\]」]+$/,'');
-  const before=u?txt.slice(0,u.index).trim():'';if(before)o.n=before.split(/\n/)[0].trim().replace(/^[「『]|[」』]$/g,'');
-  if(o.g){let m=/\/maps\/place\/([^/@?]+)/.exec(o.g);if(m&&!o.n){try{o.n=decodeURIComponent(m[1].replace(/\+/g,' '));}catch(e){}}
-    m=/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/.exec(o.g)||/@(-?\d+\.\d+),(-?\d+\.\d+)/.exec(o.g)||/[?&](?:q|query|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/.exec(o.g);
-    if(m){o.ll=[+m[1],+m[2]];const [la,lo]=o.ll;o.reg=la>=35.4?'東京':la<35.25&&lo<138.75?'靜岡':la<35.25?'熱海・河津':'其他';}
-    o.short=/goo\.gl|maps\.app/.test(o.g);}
-  return o;}
-function rsOpenForm(){
-  const f=$a('rsForm'),me=lsGet('izu-me','');
-  f.querySelector('.rs-fs').innerHTML=`<div class="rs-hd"></div><h3>新增想去的餐廳</h3>
-   <label class="rs-f"><span>Google 地圖連結（在 Google 地圖按「分享」→ 複製，貼在這裡）</span><textarea id="rsLink" rows="2" placeholder="https://maps.app.goo.gl/… 或 https://www.google.com/maps/place/…"></textarea><div class="rs-auto" id="rsAuto" hidden></div></label>
-   <label class="rs-f"><span>店名</span><input id="rsName" placeholder="例：鮨 加喜田"></label>
-   <div class="rs-two"><label class="rs-f"><span>哪一天</span><select id="rsDay"><option value="0">還不確定</option>${DAYS.map(d=>`<option value="${d.n}"${d.n===(APP.rday||0)&&APP.rview!=='reg'?' selected':''}>Day ${d.n} ${d.date}（${d.wd}）</option>`).join('')}</select></label>
-   <label class="rs-f"><span>哪一餐</span><select id="rsMeal">${RS_MEALS.map(m=>`<option${m==='晚餐'?' selected':''}>${m}</option>`).join('')}</select></label></div>
-   <div class="rs-two"><label class="rs-f"><span>地區</span><select id="rsReg">${RS_REGS.concat(['其他']).map(g=>`<option${g===(APP.rreg||'')?' selected':''}>${g}</option>`).join('')}</select></label>
-   <label class="rs-f"><span>料理</span><input id="rsCui" placeholder="例：壽司、拉麵"></label></div>
-   <label class="rs-f"><span>推薦人</span><input id="rsBy" value="${(me||'').replace(/"/g,'&quot;')}" placeholder="例：媽媽"></label>
-   <label class="rs-f"><span>備註（為什麼想去、價位、要不要訂位）</span><input id="rsNote"></label>
-   <p class="rs-err" id="rsErr" hidden></p>
-   <div class="rs-btns"><button data-rsclose class="b0">取消</button><button data-rssave="0" class="b1">存到口袋名單</button><button data-rssave="1" class="b2">存並送出</button></div>
-   <p class="rs-tip">只存在這台裝置；按「送出」會跳出分享選單（電腦上改成複製文字），用 LINE 傳給主辦人。網站要不要收錄由主辦人決定。</p>`;
-  f.hidden=false;requestAnimationFrame(()=>f.classList.add('on'));
-  const L=$a('rsLink');L.addEventListener('input',()=>{const o=rsParse(L.value),A=$a('rsAuto');
-    if(o.n&&!$a('rsName').value)$a('rsName').value=o.n;if(o.reg)$a('rsReg').value=o.reg;
-    A.hidden=!o.g;A.textContent=o.g?(o.ll?`✓ 讀到位置，自動歸到「${o.reg}」`:o.short?'✓ 收到連結（短網址讀不到位置，請自己選地區）':'✓ 收到連結'):'';});}
-function rsCloseForm(){const f=$a('rsForm');f.classList.remove('on');setTimeout(()=>{f.hidden=true;},250);}
-function rsText(items){const me=lsGet('izu-me','');const now=new Date();
-  return `【熱海伊豆行・餐廳推薦】\n推薦人：${me||'（未填）'}　${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}\n（目前網站餐廳選項 v${RESTO.v}）\n\n`+items.map((r,i)=>`${i+1}. ${r.n}\n   ${r.d?rsDayLab(r.d):'日期未定'} ${r.m}・${r.reg||'其他'}${r.c?'・'+r.c:''}${r.note?'\n   備註：'+r.note:''}${r.g?'\n   '+r.g:''}`).join('\n\n');}
-function rsSend(){
-  const all=rsMine(),shown=new Set(rsMineShown().map(r=>r.id));let items=all.filter(r=>shown.has(r.id)&&!r.sent);if(!items.length)items=all.filter(r=>shown.has(r.id));if(!items.length)return;
-  const txt=rsText(items),mark=()=>{const ids=new Set(items.map(r=>r.id)),t=Date.now();rsSaveMine(rsMine().map(r=>ids.has(r.id)?Object.assign(r,{sent:r.sent||t}):r));renderResto();};
-  if(navigator.share){navigator.share({title:'餐廳推薦',text:txt}).then(mark).catch(e=>{if(e&&e.name!=='AbortError')rsShowText(txt,mark);});}
-  else rsShowText(txt,mark);}
-function rsShowText(txt,mark){ // 不支援分享選單（電腦瀏覽器）：顯示文字讓使用者複製
-  const f=$a('rsForm');f.querySelector('.rs-fs').innerHTML=`<div class="rs-hd"></div><h3>複製這段文字傳給主辦人</h3><textarea class="rs-out" readonly rows="10"></textarea><div class="rs-btns"><button data-rsclose class="b0">關閉</button><button data-rscopy class="b2">複製</button></div>`;
-  f.querySelector('.rs-out').value=txt;f.hidden=false;requestAnimationFrame(()=>f.classList.add('on'));APP._rsMark=mark;}
-function rsSave(send){
-  const n=$a('rsName').value.trim(),o=rsParse($a('rsLink').value),err=$a('rsErr');
-  if(!n){err.textContent='請填店名（貼 Google 地圖完整網址會自動帶入）';err.hidden=false;return;}
-  const by=$a('rsBy').value.trim();lsSet('izu-me',by);
-  const r={id:'m'+Date.now().toString(36),n,d:+$a('rsDay').value,m:$a('rsMeal').value,reg:$a('rsReg').value,c:$a('rsCui').value.trim(),note:$a('rsNote').value.trim(),by,g:o.g||'',ll:o.ll||null,sent:0};
-  rsSaveMine(rsMine().concat(r));if(r.d){APP.rday=r.d;}rsCloseForm();renderResto();if(send)setTimeout(rsSend,280);}
 function rsDeskInit(){ // 電腦版：同一份資料與表單，畫在 #resto 區塊
   const sec=document.getElementById('resto');if(!sec)return;
   sec.querySelector('.rs-ver').textContent=`餐廳選項 v${RESTO.v} · ${RESTO.date} 更新`;
-  document.body.insertAdjacentHTML('beforeend','<div class="rs-fm" id="rsForm" hidden><div class="rs-fs" role="dialog" aria-modal="true" aria-label="新增餐廳"></div></div>');
   APP.rday=APP.rday||(todayIdx()>=0?todayIdx()+1:1);
-  document.addEventListener('click',e=>{const t=e.target;if(!t.closest||!t.closest('#resto,#rsForm'))return;
+  document.addEventListener('click',e=>{const t=e.target;if(!t.closest||!t.closest('#resto'))return;
     const f=t.closest('[data-full]');if(f){openCard(f.dataset.full);return;}rsClick(t);});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$a('rsForm').hidden)rsCloseForm();});
   renderResto();}
 if(!MOB)setTimeout(rsDeskInit,0);
 function rsClick(t){let el;
@@ -2436,14 +2413,8 @@ function rsClick(t){let el;
   if(el=t.closest('[data-rsv]')){APP.rview=el.dataset.rsv;renderResto();return true;}
   if(el=t.closest('[data-rsday]')){APP.rday=+el.dataset.rsday;renderResto();return true;}
   if(el=t.closest('[data-rsreg]')){APP.rreg=el.dataset.rsreg;renderResto();return true;}
-  if(t.closest('[data-rsadd]')){rsOpenForm();return true;}
-  if(el=t.closest('[data-rssave]')){rsSave(el.dataset.rssave==='1');return true;}
-  if(t.closest('[data-rsclose]')||t.id==='rsForm'){rsCloseForm();return true;}
-  if(t.closest('[data-rssend]')){rsSend();return true;}
-  if(t.closest('[data-rscopy]')){const ta=document.querySelector('#rsForm .rs-out');ta.select();const done=()=>{if(APP._rsMark)APP._rsMark();APP._rsMark=null;t.closest('[data-rscopy]').textContent='已複製';};
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,()=>{try{document.execCommand('copy');done();}catch(e){}});else{try{document.execCommand('copy');done();}catch(e){}}return true;}
-  if(el=t.closest('[data-rsdel]')){if(confirm('從口袋名單刪除這家？')){rsSaveMine(rsMine().filter(r=>r.id!==el.dataset.rsdel));renderResto();}return true;}
-  if(el=t.closest('[data-rsx]')){const nt=el.querySelector('.rs-nt');if(nt)nt.hidden=!nt.hidden;else{const [k,id]=el.dataset.rsx.split(':'),r=(k==='m'?rsMine():RESTO.list).find(x=>x.id===id);if(r)window.open(rsGmap(r),'_blank','noopener');}return true;}
+  if(t.closest('[data-rsadd]')){window.open(ttLink('resto/add'),'_blank','noopener');return true;}
+  if(el=t.closest('[data-rsx]')){{const [k,id]=el.dataset.rsx.split(':'),r=(k==='f'?rsFam():RESTO.list).find(x=>x.id===id);if(r)window.open(rsGmap(r),'_blank','noopener');}return true;}
   return false;}
 
 /* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
@@ -2655,6 +2626,7 @@ function renderHome(){
   <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${pd}/${pt}</b><span>行李</span></div></div>
   <button class="mh-cta" data-go="plan">打開行程${ico('right',18)}</button>
   <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 虎航 IT202　2/10 桃園 13:30 → 成田 17:30</span></div><div>${ico('plane',16)}<span><b>回程</b> 虎航 IT201　2/17 成田 13:00 → 桃園 16:25</span></div></div>
+  <a class="tt-go" href="${ttLink('exp')}" target="_blank" rel="noopener"><span class="i">🧾</span><span><b>記帳・分帳</b><small>和同行的人一起記實際花費，用 Google 登入</small></span><span class="ar">打開 ↗</span></a>
   <div class="mh-h">每日行程</div>
   <div class="mh-days">${DAYS.map((d,i)=>`<button class="ma-drow" data-day="${i}"><div class="dt-tile"><span>DAY ${d.n}</span><b>${d.date.split('/')[1]}</b></div><div class="dr-tx"><b>${d.title}</b><span>週${d.wd} · 住 ${d.stay.replace(/（.*?）/g,'')}</span></div>${i===ti?'<span class="dr-pill">今天</span>':''}<span class="chev">${ico('right',16)}</span></button>`).join('')}</div>`;
 }
@@ -2936,7 +2908,7 @@ function renderSeg(){
 }
 function appClick(e){
   const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
-  if(t.closest('.ma-pane[data-pane="resto"],#rsForm')&&rsClick(t))return true;
+  if(t.closest('.ma-pane[data-pane="resto"]')&&rsClick(t))return true;
   let el;
   if(el=t.closest('[data-full]')){openCard(el.dataset.full);return true;}
   if(t.closest('[data-close]')||t.closest('#maBack')){closeSheet();return true;}
@@ -2996,7 +2968,7 @@ function appInit(){
   APP.rday=ti>=0?ti+1:(APP.day|0)+1;
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
   APP.rain=lsGet('izu-rain',false)===true;
-  root.insertAdjacentHTML('beforeend','<div class="rs-fm" id="rsForm" hidden><div class="rs-fs" role="dialog" aria-modal="true" aria-label="新增餐廳"></div></div>');
+
   renderPlan();renderPack();renderSeg();renderResto();go(APP.tab);
   setInterval(()=>{if(todayIdx()<0)return;if(APP.tab==='home')renderHome();else if(APP.tab==='plan'&&APP.day===todayIdx()&&!APP.sheet)renderPlan();},30000);
   const plan=$a('maPlan');let sx=null;
