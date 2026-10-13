@@ -955,6 +955,10 @@ html.dk #stay .st-map{max-width:860px}
 .dkv-sec p{margin:0;font-size:13px;line-height:1.6}
 .dkst-txt .sta-must{margin-top:4px}.dkst-txt .st-mini{margin-top:10px}.dkst-txt .sta-foot{margin-top:10px}
 html.dk #stay .st-grid{max-width:1180px}
+html:not(.dk) .dk-sub{display:none}
+.dk-sub{position:sticky;top:0;z-index:15;display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 18px;padding:10px 0;background:var(--color-bg,#f5ead8);border-bottom:1px solid var(--color-neutral-300,#e4d6c0)}
+.dk-sub button{border:1.5px solid var(--color-neutral-300,#e4d6c0);background:var(--color-surface,#fffaf2);border-radius:999px;padding:7px 16px;font:700 14px var(--font-body,inherit);cursor:pointer;color:inherit}
+.dk-sub button:hover{border-color:#c67139}.dk-sub button.on{background:#2a221b;border-color:#2a221b;color:#fff}
 /* 電腦版：左側目錄＋一次一頁 */
 html.dk body{padding-left:250px}
 html.dk .strip{display:none}
@@ -3186,9 +3190,22 @@ function deskInit(){
     ${item(PG[0])}<div class="dk-g">行程</div>${PG.slice(1,9).map(item).join('')}<div class="dk-g">資訊</div>${PG.slice(9).map(item).join('')}`;
   document.body.prepend(side);
   const all=PG.flatMap(([id])=>el(id)).filter(Boolean);
+  // 太長的兩頁拆成頁內分頁：交通依小標（h3）切；靜岡總覽依內容切。沒分到組的（標題、導言）一律顯示
+  const SUB={};
+  {const w=document.querySelector('#tickets .wrap');if(w){const G=[];[...w.children].forEach(c=>{if(c.matches('h3.sub-h'))G.push([c.textContent.trim().replace(/[（(].*$/,''),[c]]);else if(G.length)G[G.length-1][1].push(c);});SUB.tickets=G;}}
+  {const w=document.querySelector('#shizuoka .wrap');if(w){const acc=[...w.querySelectorAll(':scope>details.acc')],q=x=>[...w.querySelectorAll(':scope>'+x)];
+    SUB.shizuoka=[['景點',[...q('.cards'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
+  const subOn={};
+  function setSub(pg,i){const G=SUB[pg];if(!G)return;subOn[pg]=i;G.forEach(([,els],k)=>els.forEach(e=>e.classList.toggle('dk-off',k!==i)));
+    document.querySelectorAll(`.dk-sub[data-pg="${pg}"] button`).forEach((b,k)=>b.classList.toggle('on',k===i));
+    requestAnimationFrame(()=>G[i][1].forEach(e=>e.querySelectorAll('svg').forEach(v=>{if(v._cfg)try{layoutLabels(v);}catch(_){}})));}
+  Object.entries(SUB).forEach(([pg,G])=>{if(G.length<2)return;const first=G[0][1][0];
+    first.insertAdjacentHTML('beforebegin',`<div class="dk-sub" data-pg="${pg}">${G.map(([t],k)=>`<button data-sub="${k}">${t}</button>`).join('')}</div>`);
+    first.previousElementSibling.addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){setSub(pg,+b.dataset.sub);window.scrollTo(0,0);}});setSub(pg,0);});
   let cur=null;
   function show(id,scroll){
-    if(!PG.some(p=>p[0]===id)){const t=document.getElementById(id),pg=t&&PG.find(([p])=>el(p).some(e=>e&&e.contains(t)));id=pg?pg[0]:'home';}
+    if(!PG.some(p=>p[0]===id)){const t=document.getElementById(id),pg=t&&PG.find(([p])=>el(p).some(e=>e&&e.contains(t)));id=pg?pg[0]:'home';
+      if(t&&SUB[id]){const k=SUB[id].findIndex(([,els])=>els.some(e=>e.contains(t)));if(k>=0)setSub(id,k);}} // 頁內錨點：切到含它的分頁
     const on=el(id).filter(Boolean);all.forEach(e=>e.classList.toggle('dk-off',!on.includes(e)));
     side.querySelectorAll('[data-pg]').forEach(a=>a.classList.toggle('on',a.dataset.pg===id));cur=id;
     if(scroll!==false)window.scrollTo(0,0);
