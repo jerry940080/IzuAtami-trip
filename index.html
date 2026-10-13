@@ -959,6 +959,36 @@ html:not(.dk) .dk-sub{display:none}
 .dk-sub{position:sticky;top:0;z-index:15;display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 18px;padding:10px 0;background:var(--color-bg,#f5ead8);border-bottom:1px solid var(--color-neutral-300,#e4d6c0)}
 .dk-sub button{border:1.5px solid var(--color-neutral-300,#e4d6c0);background:var(--color-surface,#fffaf2);border-radius:999px;padding:7px 16px;font:700 14px var(--font-body,inherit);cursor:pointer;color:inherit}
 .dk-sub button:hover{border-color:#c67139}.dk-sub button.on{background:#2a221b;border-color:#2a221b;color:#fff}
+
+/* 電腦版交通地圖（逐日點亮）與靜岡三欄 */
+html.dk .dk-old{display:none!important}
+.txm{margin:10px 0 18px}.txm-days{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.txm-days button{border:1.5px solid var(--color-neutral-300,#e4d6c0);background:var(--color-surface,#fffaf2);border-radius:12px;padding:6px 12px;font:700 13.5px var(--font-body,inherit);cursor:pointer;color:inherit;display:flex;gap:6px;align-items:center}
+.txm-days button b{width:21px;height:21px;border-radius:50%;background:#eadfcb;display:grid;place-items:center;font-size:11.5px}
+.txm-days button.on{background:#2a221b;border-color:#2a221b;color:#fff}.txm-days button.on b{background:#c67139;color:#fff}
+.txm-body{display:grid;grid-template-columns:minmax(0,700px) minmax(300px,1fr);gap:20px;align-items:start}
+.txm-map,.shzb-map{border-radius:18px;overflow:hidden;background:#d7e3ea;box-shadow:0 2px 8px rgba(0,0,0,.06)}.txm-map svg,.shzb-map svg{display:block;width:100%;height:auto}
+.txr-t{font-size:15px;font-weight:800;stroke:#fff;stroke-width:4px;paint-order:stroke}
+.txb text{font-size:13px;font-weight:800;fill:#fff}
+.txm-map .leg,.txm-map .legx,.txr,.txb{transition:opacity .3s}.txdim{opacity:.16!important}
+.txp-h{font-size:18px;font-weight:800;margin-bottom:10px}
+.txs{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;background:var(--color-surface,#fffaf2);border-radius:12px;padding:7px 10px;margin-bottom:6px}
+.txs i{width:26px;height:26px;border-radius:50%;color:#fff;font-style:normal;font-weight:800;display:grid;place-items:center;font-size:13px}.txs b{display:block;font-size:14px}.txs span{font-size:12.5px;color:var(--color-neutral-700,#645c50)}
+.txs em,.txk b{font-style:normal;font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.tx-need{background:#fbe0d0;color:#a3421a}.tx-car{background:#f6dcdc;color:#a33}.tx-day{background:#e3ecd8;color:#4d6a2f}
+.txp-legs{margin-top:8px}.txp-tip{background:var(--color-surface,#fffaf2);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.6;margin-top:8px}
+.txp-bk{background:#fbeadb;border-radius:14px;padding:10px 12px;margin-top:10px;font-size:13.5px}.txp-bk>b{display:block;color:#8c491a;margin-bottom:4px}
+.txk{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dashed #ecc9ad}.txk:last-child{border-bottom:0}.txk b{color:#a3421a;background:none;padding:0}.txk.done span{color:#7a8a5e;text-decoration:line-through}
+.txp-n{font-size:12.5px;color:var(--color-neutral-700,#645c50);margin:8px 2px 0;line-height:1.6}
+.shzb{margin:6px 0 16px}.shzb-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.shzb-col{background:var(--color-surface,#fffaf2);border-radius:16px;overflow:hidden;padding-bottom:6px}
+.shzb-h{color:#fff;padding:10px 14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 8px}.shzb-h b{font-size:17px}.shzb-h span{font-size:12px;opacity:.92}.shzb-h small{flex-basis:100%;font-size:12px;opacity:.85}
+.shz-row{position:relative;display:grid;grid-template-columns:96px 1fr;gap:10px;padding:7px 10px;align-items:center;cursor:pointer;border-radius:12px}.shz-row:hover{background:rgba(198,113,57,.08)}
+.shz-row img,.shz-row .ni{width:96px;height:66px;object-fit:cover;border-radius:10px;display:block;background:#eadfcb}
+.shz-row i{position:absolute;left:14px;top:11px;width:22px;height:22px;border-radius:50%;color:#fff;font-style:normal;font-size:11.5px;font-weight:800;display:grid;place-items:center;border:2px solid #fff}
+.shz-row b{display:block;font-size:14px}.shz-row small{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);margin:1px 0 4px;line-height:1.4}
+.shz-row .tg{font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;background:#56633f;color:#fff}.shz-row .tg.cd{background:#eadfcb;color:#645c50}
+.shzb-map .txr{transition:opacity .25s}
 /* 電腦版：左側目錄＋一次一頁 */
 html.dk body{padding-left:250px}
 html.dk .strip{display:none}
@@ -2867,6 +2897,7 @@ function thumbSrc(k){
   im.onerror=()=>{THB[k]=null;};im.src=src;return 0;
 }
 function applyThumbs(svg){
+  if(svg._nothumb)return; // 交通總覽、靜岡總覽的大圖點太密，維持號碼圓標
   const R=25.5,mks=[...svg.querySelectorAll('.mk[data-key]')];
   mks.forEach((g,i)=>{
     const k=g.dataset.key,nt=g.querySelector(':scope>text');let on=false;
@@ -3171,7 +3202,7 @@ appInit();
    原本整站 35 個螢幕一路往下捲；現在左邊固定目錄，右邊一次只顯示一頁。網址 #day3、#stay… 對應頁面，原本頁內的錨點連結照常可用。 */
 function deskInit(){
   if(MOB)return;
-  const H=document.documentElement;H.classList.add('dk');
+  document.documentElement.classList.add('dk'); // 不要宣告成 H：H 是地圖引擎的全域高度
   const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['tickets','🚆','交通・訂票'],['resto','🍽','餐廳'],['food','🍜','美食・行李'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
   const el=id=>id==='home'?[document.querySelector('header.hero'),document.getElementById('dkHome'),document.querySelector('body>footer')]:[document.getElementById(id)];
   // 首頁：hero 下面加 8 天一覽
@@ -3190,11 +3221,77 @@ function deskInit(){
     ${item(PG[0])}<div class="dk-g">行程</div>${PG.slice(1,9).map(item).join('')}<div class="dk-g">資訊</div>${PG.slice(9).map(item).join('')}`;
   document.body.prepend(side);
   const all=PG.flatMap(([id])=>el(id)).filter(Boolean);
+  // ---- 交通頁（電腦版）：地區色塊地圖＋逐日點亮（使用者選的 C） ----
+  {const tl=document.querySelector('#tickets .tx-lead');if(tl){
+    const TXREG=[['成田','#2b4c7e',['nrt'],'t'],['東京・品川','#7b5ea7',['shinagawa','jimbocho','akiba','roppongi'],'t'],['靜岡','#56633f',['shizuoka','yume','miho','shimizu','ichigo','zoo'],'l'],['熱海','#b2622d',['atami','livemax','kiunkaku','baien'],'t'],['河津','#3c9a72',['kawazu','sakura'],'l']];
+    const TXLEGS=[['nrt','shinagawa','rail'],['shinagawa','shizuoka','shinkansen'],['shizuoka','yume','car'],['shizuoka','miho','car'],['shizuoka','atami','car'],['atami','kawazu','izukyu'],['atami','shinagawa','car'],['shinagawa','jimbocho','subway'],['jimbocho','akiba','subway']];
+    // [號碼,顏色,區間,方式,日期,狀態,地圖上的線,號碼放在線的哪裡]
+    const TXSEG=[[1,'#2b4c7e','成田機場 ⇄ 品川',"JR 成田特快 N'EX",'2/10 去・2/17 回','need',[0],[0,.5]],[2,'#1f3a66','品川 → 靜岡','東海道新幹線 ひかり','2/11','need',[1],[1,.35]],
+      [3,'#c0392b','靜岡地區','開車（租車）','2/11–2/13','need',[2,3],[3,.55]],[4,'#c0392b','靜岡 → 熱海','開車 約 1 小時 40 分','2/13','car',[4],[4,.4]],
+      [5,'#3c9a72','熱海 ⇄ 河津','JR 踊子／伊豆急','2/14','need',[5],[5,.5]],[6,'#c0392b','熱海 → 品川','開車 約 2 小時・品川還車','2/15','car',[6],[6,.55]],[7,'#7b5ea7','東京市區','地鐵','2/16','day',[7,8],[7,.5]]];
+    const TXDAY={1:[[1],['成田','東京・品川'],['nex1']],2:[[2,3],['東京・品川','靜岡'],['sx','car','abnb']],3:[[3],['靜岡'],['ichigo']],4:[[3,4],['靜岡','熱海'],[]],
+      5:[[5],['熱海','河津'],['odo','dinner']],6:[[6],['熱海','東京・品川'],['bbq']],7:[[7],['東京・品川'],[]],8:[[1],['東京・品川','成田'],['nex2']]};
+    const ST={need:'要先訂',car:'開車',day:'當天'},MW=700,MH=470;
+    const cfg={pts:['nrt','shinagawa','shizuoka','atami','kawazu'],legs:TXLEGS.map(([a,b,m])=>({a,b,mode:m,opt:0,geo:legGeo(a,b,m)})),auto:1,labels:{nrt:'b',shinagawa:'b',shizuoka:'b',atami:'r',kawazu:'r'},minSpan:.3};
+    const box=document.createElement('div');box.className='txm';
+    box.innerHTML=`<div class="txm-days"><button data-txd="0" class="on">全程</button>${DAYS.map(d=>`<button data-txd="${d.n}"><b>${d.n}</b>${d.date}</button>`).join('')}</div>
+      <div class="txm-body"><div class="txm-map">${buildMap(cfg,{W:MW,H:MH,aria:'整趟交通地圖'})}</div><div class="txm-panel"></div></div>`;
+    tl.after(box);
+    const svg=box.querySelector('svg');svg._cfg=cfg;svg._nothumb=1;svg.querySelectorAll('.legi').forEach(e=>e.remove());
+    // 地區色塊（座標要用和 buildMap 一樣的投影：W／H 是全域變數，算完再還原）
+    {const oW=W,oH=H;W=MW;H=MH;PADS=34;PADT=0;const pr=proj(bboxOf(cfg.pts,cfg.minSpan)),PT=k=>pr.pt(P[k]);
+     let g='';TXREG.forEach(([n,c,ks,lab])=>{const xy=ks.filter(k=>P[k]).map(PT),xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]);
+       const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(20,(Math.max(...xs)-Math.min(...xs))/2+14),ry=Math.max(17,(Math.max(...ys)-Math.min(...ys))/2+14);
+       let lx=cx,ly=cy-ry-8,anc='middle';if(lab==='l'){lx=cx-rx-6;ly=cy+5;anc='end';}
+       g+=`<g class="txr" data-r="${n}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" class="txr-t" fill="${c}">${n}</text></g>`;});
+     W=oW;H=oH;const f=svg.querySelector('.leg');f.insertAdjacentHTML('beforebegin',`<g class="txrs">${g}</g>`);}
+    // 路段號碼
+    svg.insertAdjacentHTML('beforeend','<g class="txbs">'+TXSEG.map(sg=>{const pth=svg.querySelector(`.leg[data-i="${sg[7][0]}"]`);if(!pth)return'';const q=pth.getPointAtLength(pth.getTotalLength()*sg[7][1]);
+      return `<g class="txb" data-s="${sg[0]}" transform="translate(${q.x.toFixed(1)},${q.y.toFixed(1)})"><circle r="11" fill="${sg[1]}" stroke="#fff" stroke-width="2.5"/><text y="4.5" text-anchor="middle">${sg[0]}</text></g>`;}).join('')+'</g>');
+    const lday=[...document.querySelectorAll('#tickets .ldays .lday')];
+    const segRow=sg=>`<div class="txs"><i style="background:${sg[1]}">${sg[0]}</i><div><b>${sg[2]}</b><span>${sg[3]}・${sg[4]}</span></div><em class="tx-${sg[5]}">${ST[sg[5]]}</em></div>`;
+    const bkRow=id=>{const b=BOOK.find(x=>x[0]===id);return b?`<div class="txk${BK[id]?' done':''}"><span>${BK[id]?'✓ ':''}${b[3]}</span><b>${b[2]}</b></div>`:'';};
+    function txShow(n){box.querySelectorAll('[data-txd]').forEach(b=>b.classList.toggle('on',+b.dataset.txd===n));
+      const dd=TXDAY[n],segs=dd?dd[0]:TXSEG.map(x=>x[0]),regs=dd?dd[1]:TXREG.map(x=>x[0]),legs=new Set(TXSEG.filter(x=>segs.includes(x[0])).flatMap(x=>x[6]));
+      svg.querySelectorAll('.leg,.legx').forEach(e=>e.classList.toggle('txdim',!legs.has(+e.dataset.i)));
+      svg.querySelectorAll('.txr').forEach(e=>e.classList.toggle('txdim',!regs.includes(e.dataset.r)));
+      svg.querySelectorAll('.txb').forEach(e=>e.classList.toggle('txdim',!segs.includes(+e.dataset.s)));
+      const pn=box.querySelector('.txm-panel');
+      if(!n){pn.innerHTML=`<div class="txp-h">整趟 7 段交通</div>${TXSEG.map(segRow).join('')}<p class="txp-n">選上面的日期，地圖只亮那天經過的地區和路段。要先訂的票在下面「訂票清單」。</p>`;return;}
+      const d=DAYS[n-1],L=lday[n-1],tip=L&&L.querySelector('.ld-tip');
+      pn.innerHTML=`<div class="txp-h">Day ${n}　${d.date}（${d.wd}）${d.title}</div><div class="txp-segs">${TXSEG.filter(x=>segs.includes(x[0])).map(segRow).join('')}</div>
+        <div class="ldays txp-legs">${L?[...L.querySelectorAll('.lg')].map(x=>x.outerHTML).join(''):''}</div>${tip?`<div class="txp-tip">${tip.innerHTML}</div>`:''}
+        ${dd[2].length?`<div class="txp-bk"><b>這天要先訂／預約</b>${dd[2].map(bkRow).join('')}</div>`:''}`;}
+    box.addEventListener('click',e=>{const b=e.target.closest('[data-txd]');if(b)txShow(+b.dataset.txd);});
+    const tj=todayIdx();txShow(tj>=0?tj+1:0);}}
+  // ---- 靜岡總覽（電腦版）：地圖畫三個地區＋各景點，下面依地區分三欄（使用者選的 B） ----
+  {const cardsEl=document.querySelector('#shizuoka .wrap>.cards');if(cardsEl){
+    const ORD=['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','hobby','sengen','yunoki','shizuhotel'],NUMS={};ORD.forEach((k,i)=>NUMS[k]=i+1);
+    const SHR=[['靜岡市區','#56633f',['aoba','sengen','hobby','yunoki','shizuhotel'],'住的地方、晚上吃おでん'],['日本平・久能','#b2622d',['zoo','yume','ndhotel','toshogu','ichigo'],'山上看富士山、草莓、動物園'],['清水・三保','#2b4c7e',['shimizu','kinnoji','maruko','cruise','miho','mihoshrine'],'港口吃鮪魚、海邊看夕陽']];
+    const pts=ORD.filter(k=>P[k]),MW=1000,MH=400,labels={};pts.forEach(k=>labels[k]='b');
+    const cfg={pts,legs:[],labels,nums:NUMS,minSpan:.03};
+    const box=document.createElement('div');box.className='shzb';
+    const row=(k,c)=>{const st=spotStatus(k),img=cardImg(k);return `<div class="shz-row" data-card="${k}" role="button" tabindex="0">${img?`<img src="${img}" alt="" loading="lazy">`:'<span class="ni"></span>'}<i style="background:${c}">${NUMS[k]}</i><div><b>${CARDS[k].name}</b><small>${CARDS[k].short||''}</small><span class="tg${st.in?'':' cd'}">${st.tag}</span></div></div>`;};
+    box.innerHTML=`<div class="shzb-map">${buildMap(cfg,{W:MW,H:MH,aria:'靜岡三個地區與景點'})}</div>
+      <div class="shzb-cols">${SHR.map(([n,c,ks,sub])=>`<div class="shzb-col" data-r="${n}"><div class="shzb-h" style="background:${c}"><b>${n}</b><span>${ks.length} 個・已排入 ${ks.filter(k=>spotStatus(k).in).length}</span><small>${sub}</small></div>${ks.map(k=>row(k,c)).join('')}</div>`).join('')}</div>`;
+    cardsEl.before(box);cardsEl.classList.add('dk-old');
+    const svg=box.querySelector('svg');svg._cfg=cfg;svg._nothumb=1;
+    {const oW=W,oH=H;W=MW;H=MH;PADS=34;PADT=0;const pr=proj(bboxOf(cfg.pts,cfg.minSpan)),PT=k=>pr.pt(P[k]);
+     let g='';SHR.forEach(([n,c,ks])=>{const xy=ks.filter(k=>P[k]).map(PT),xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]);
+       const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(40,(Math.max(...xs)-Math.min(...xs))/2+26),ry=Math.max(30,(Math.max(...ys)-Math.min(...ys))/2+24);
+       g+=`<g class="txr" data-r="${n}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" fill-opacity=".14" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/><text x="${cx.toFixed(1)}" y="${(cy-ry-8).toFixed(1)}" text-anchor="middle" class="txr-t" fill="${c}">${n}</text></g>`;});
+     W=oW;H=oH;const f=svg.querySelector('.mk,.mk-a');(f?f:svg.lastChild).insertAdjacentHTML('beforebegin',`<g class="txrs">${g}</g>`);}
+    box.addEventListener('click',e=>{const r=e.target.closest('.shz-row');if(r)openCard(r.dataset.card);});
+    box.addEventListener('keydown',e=>{const r=e.target.closest('.shz-row');if(r&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openCard(r.dataset.card);}});
+    // 滑過某一欄，地圖上那一區亮起來
+    box.querySelectorAll('.shzb-col').forEach(c=>{c.addEventListener('mouseenter',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.toggle('txdim',g.dataset.r!==c.dataset.r)));c.addEventListener('mouseleave',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.remove('txdim')));});}}
   // 太長的兩頁拆成頁內分頁：交通依小標（h3）切；靜岡總覽依內容切。沒分到組的（標題、導言）一律顯示
   const SUB={};
-  {const w=document.querySelector('#tickets .wrap');if(w){const G=[];[...w.children].forEach(c=>{if(c.matches('h3.sub-h'))G.push([c.textContent.trim().replace(/[（(].*$/,''),[c]]);else if(G.length)G[G.length-1][1].push(c);});SUB.tickets=G;}}
+  {const w=document.querySelector('#tickets .wrap');if(w){const G=[];[...w.children].forEach(c=>{if(c.matches('h3.sub-h'))G.push([c.textContent.trim().replace(/[（(].*$/,''),[c]]);else if(G.length)G[G.length-1][1].push(c);});
+    const rm=G.findIndex(g=>/^線路圖/.test(g[0]));if(rm>=0){G[rm][1].forEach(e=>e.classList.add('dk-old'));G.splice(rm,1);} // 電腦版改用上面的交通地圖
+    SUB.tickets=G;}}
   {const w=document.querySelector('#shizuoka .wrap');if(w){const acc=[...w.querySelectorAll(':scope>details.acc')],q=x=>[...w.querySelectorAll(':scope>'+x)];
-    SUB.shizuoka=[['景點',[...q('.cards'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
+    SUB.shizuoka=[['景點',[...q('.shzb'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
   const subOn={};
   function setSub(pg,i){const G=SUB[pg];if(!G)return;subOn[pg]=i;G.forEach(([,els],k)=>els.forEach(e=>e.classList.toggle('dk-off',k!==i)));
     document.querySelectorAll(`.dk-sub[data-pg="${pg}"] button`).forEach((b,k)=>b.classList.toggle('on',k===i));
