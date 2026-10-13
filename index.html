@@ -793,12 +793,17 @@ html.app .app-only{display:block}
 .cs-sum small{font-size:11.5px;color:var(--color-neutral-700,#645c50);margin-top:2px}
 .cs-g{margin-top:18px}
 .cs-g h3{margin:0 0 4px;font-size:17px}
-.cs-r{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--color-divider,#ddd)}
+.cs-r{display:grid;grid-template-columns:minmax(0,1fr) 84px 92px;align-items:start;gap:10px;padding:10px 0;border-bottom:1px solid var(--color-divider,#ddd)}
+.cs-r>em{text-align:right}.cs-r em.na{color:var(--color-neutral-600,#82796a);font-weight:400}
+.cs-h{align-items:end;padding:0 0 6px;border-bottom:1.5px solid var(--color-text,#2a221b)}.cs-h h3{margin:0}
+.cs-h i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--color-neutral-700,#645c50);text-align:right}
+.cs-t{border-bottom:0;font-size:13px}.cs-t em small{display:block;font-weight:400;font-size:11px;color:var(--color-neutral-700,#645c50)}
+.cs-sum .k{font-size:12px;font-weight:600;color:var(--color-neutral-700,#645c50);margin:0 0 2px}
 .cs-r b{display:block;font-size:14px;font-weight:600}
 .cs-r span{display:block;font-size:12px;line-height:1.5;color:var(--color-neutral-700,#645c50);margin-top:2px}
 .cs-r em,.cs-t em{flex:none;font-style:normal;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.cs-r em.unk{font-weight:600;color:var(--color-neutral-600,#82796a);background:var(--color-neutral-200,#eee7db);padding:1px 9px;border-radius:999px;font-size:12px}
-.cs-t{display:flex;justify-content:space-between;padding:10px 0 0;font-size:13px;color:var(--color-neutral-700,#645c50)}
+.cs-r em.unk{justify-self:end;font-weight:600;color:var(--color-neutral-600,#82796a);background:var(--color-neutral-200,#eee7db);padding:1px 9px;border-radius:999px;font-size:12px}
+.cs-t{padding:10px 0 0;color:var(--color-neutral-700,#645c50)}
 .cs-t em{color:var(--color-accent-700,#8c491a)}
 .cs-note{margin-top:16px;font-size:12px;line-height:1.6}
 
@@ -1048,7 +1053,7 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 <section class="block" id="cost">
   <div class="wrap">
     <h2>花費</h2>
-    <p class="lead">全部以<b>每人</b>計。機票與住宿都還沒買，標「未知」的等訂好或查到再補。</p>
+    <p class="lead">每一列左欄是<b>每人</b>、右欄是<b>全體</b>，依下方同行人數換算。機票與靜岡住宿已訂，標「未知」的等訂好或查到再補。</p>
     <a class="tt-go" id="ttCost"><span class="i">🧾</span><span><b>這頁是出發前的預估</b><small>旅途中實際花了多少、誰該給誰多少，到「記帳」記（用 Google 登入、只有同行的人看得到）</small></span><span class="ar">記帳 →</span></a>
     <div id="costBody"></div>
   </div>
@@ -1558,19 +1563,20 @@ function dayCards(d){const R=routeInfo(d),first=k=>{const i=(d.stops||[]).findIn
 
 /* ================= 花費：唯一資料來源（花費頁與交通頁總覽都由這裡算） =================
    每列 [名稱, 說明, 金額, 幣別, 旗標]；金額 null＝未知、0＝免費；
-   旗標 '~'＝約、'car'＝每台計（依同行人數分攤）、'unit'＝每櫃／每份計（不分攤，列出來參考）。 */
+   旗標 '~'＝約、'grp'＝全體總價（機票、Airbnb 這種一次付清的）、'car'＝每台計（租車、停車、油費）、'unit'＝每份計（不加總，列出來參考）。
+   沒有 grp／car 的列是「每人」單價：全體＝單價 × 同行人數；有 grp／car 的列：每人＝金額 ÷ 同行人數。 */
 const COST=[
- {g:'機票',k:'air',rows:[['國泰 桃園 ⇄ 成田 來回','CX450 2/10 去・CX451 2/17 回・已訂（4 人共 NT 75,980）',18995,'NT']]},
+ {g:'機票',k:'air',rows:[['國泰 桃園 ⇄ 成田 來回','CX450 2/10 去・CX451 2/17 回・已訂',75980,'NT','grp']]},
  {g:'住宿',k:'stay',rows:[
   ['2/10 品川王子大飯店 北塔','1 晚・NT 2,145／晚',2145,'NT'],
-  ['2/11–12 靜岡 Airbnb（馬渕・整棟）','2 晚・已訂（4 人共 NT 12,176，每人 NT 1,522／晚）',3044,'NT'],
+  ['2/11–12 靜岡 Airbnb（馬渕・整棟）','2 晚・已訂・整棟',12176,'NT','grp'],
   ['2/13–14 LiVEMAX Resort 熱海 Ocean','2 晚・NT 4,122／晚',8244,'NT'],
   ['2/15–16 品川王子大飯店 北塔','2 晚・NT 2,025／晚',4050,'NT']]},
  {g:'交通',k:'move',rows:[
   ['2/10 成田特快 成田 T2 → 品川','えきねっと',3330,'¥'],
   ['2/11 新幹線 品川 → 靜岡','ひかり・smart-EX',6470,'¥'],
   ['2/11 日本平纜車 來回','日本平 ⇄ 久能山東照宮',1400,'¥'],
-  ['2/11–15 租車 5 天','每台概算（使用者估 ¥90,000），訂車後改實價',90000,'¥','car~'],
+  ['2/11–15 租車 5 天','概算，訂車後改實價',90000,'¥','car~'],
   ['異地還車費（靜岡取、品川還）','每台，依租車公司而定',null,'¥','car'],
   ['高速公路費','靜岡 → 熱海、熱海 → 品川，每台',null,'¥','car'],
   ['2/11–12 靜岡停車費','Airbnb 附免費停車位',0,'¥','car'],
@@ -1607,29 +1613,31 @@ const COST=[
   ['旅遊保險','',null,'NT'],
   ['伴手禮','',null,'¥']]}
 ];
-let PPL=0;try{PPL=Math.max(0,Math.min(12,parseInt(localStorage.getItem('izu-ppl'))||0));}catch(e){}
+let PPL=4;try{PPL=Math.max(1,Math.min(12,parseInt(localStorage.getItem('izu-ppl'))||4));}catch(e){} // 同行人數，預設 4
 const fmtC=(v,c)=>(c==='NT'?'NT ':'¥')+Math.round(v).toLocaleString('en-US');
-/* 每人金額：null＝未知；每台計的費用有設人數才分攤 */
-function costPer(r){const v=r[2],f=r[4]||'';if(v==null)return null;if(f.includes('car'))return PPL?v/PPL:null;return v;}
-function costSum(keys){const t={NT:0,'¥':0},u={n:0};COST.filter(G=>!G.opt&&keys.includes(G.k)).forEach(G=>G.rows.forEach(r=>{if((r[4]||'').includes('unit'))return;const v=costPer(r);if(v==null)u.n++;else t[r[3]]+=v;}));return {t,u:u.n};}
+const costShared=r=>/grp|car/.test(r[4]||'');
+/* 每人與全體金額：null＝未知；unit（每份計）不換算全體 */
+function costPer(r){const v=r[2];if(v==null)return null;return costShared(r)?v/PPL:v;}
+function costAll(r){const v=r[2],f=r[4]||'';if(v==null)return null;if(f.includes('unit'))return null;return costShared(r)?v:v*PPL;}
+function costSum(keys){const t={NT:0,'¥':0},a={NT:0,'¥':0},u={n:0};COST.filter(G=>!G.opt&&keys.includes(G.k)).forEach(G=>G.rows.forEach(r=>{if((r[4]||'').includes('unit'))return;const v=costPer(r);if(v==null)u.n++;else{t[r[3]]+=v;a[r[3]]+=costAll(r);}}));return {t,a,u:u.n};}
 function renderCost(){
   const box=document.getElementById('costBody');if(!box)return;
   const A=costSum(['air','stay']),B=costSum(['move','ticket']),all=costSum(['air','stay','move','ticket','food','etc']);
-  const amt=r=>{const v=costPer(r),f=r[4]||'';if(r[2]===0)return '<em>免費</em>';
-    if(v==null)return f.includes('car')&&r[2]!=null?`<em class="unk">設人數後計</em>`:'<em class="unk">未知</em>';
+  const cell=(r,v)=>{const f=r[4]||'';if(r[2]===0)return '<em>免費</em>';if(r[2]==null)return '<em class="unk">未知</em>';if(v==null)return '<em class="na">—</em>';
     return `<em>${f.includes('~')?'約 ':''}${fmtC(v,r[3])}</em>`;};
-  const sub=r=>{const f=r[4]||'';let x=r[1]||'';if(f.includes('car')&&PPL&&r[2]!=null)x=(x?x+'・':'')+`${PPL} 人分攤`;return x?`<span>${x}</span>`:'';};
-  const tot=G=>{if(G.opt)return '';const t={NT:0,'¥':0};let u=0;G.rows.forEach(r=>{if((r[4]||'').includes('unit'))return;const v=costPer(r);if(v==null)u++;else t[r[3]]+=v;});
-    const parts=Object.entries(t).filter(([c,v])=>v).map(([c,v])=>fmtC(v,c));return `<div class="cs-t"><span>小計</span><em>${parts.join(' ＋ ')||''}${u?(parts.length?' ＋ ':'')+'未知':''}</em></div>`;};
+  const sub=r=>{const f=r[4]||'';let x=r[1]||'';if(r[2]){if(f.includes('car'))x=(x?x+'・':'')+`每台，${PPL} 人分攤`;else if(f.includes('grp'))x=(x?x+'・':'')+`總價，${PPL} 人分攤`;else if(f.includes('unit'))x=(x?x+'・':'')+'每份計，不加總';}return x?`<span>${x}</span>`:'';};
+  const sumTxt=(o,c)=>{const p=Object.entries(o).filter(([k,v])=>v).map(([k,v])=>fmtC(v,k));return p.join(' ＋ ')||'—';};
+  const tot=G=>{if(G.opt)return '';const t={NT:0,'¥':0},a={NT:0,'¥':0};let u=0;G.rows.forEach(r=>{if((r[4]||'').includes('unit'))return;const v=costPer(r);if(v==null)u++;else{t[r[3]]+=v;a[r[3]]+=costAll(r);}});
+    const unk=u?'<small>＋ 未知</small>':'';return `<div class="cs-r cs-t"><div><b>小計</b></div><em>${sumTxt(t)}${unk}</em><em>${sumTxt(a)}${unk}</em></div>`;};
   box.innerHTML=`
-  <div class="cs-ppl"><span>同行人數</span><button data-ppl="-1" aria-label="減少">−</button><b>${PPL||'未設定'}</b><button data-ppl="1" aria-label="增加">＋</button><small>租車、停車等「每台計」的費用依人數分攤</small></div>
+  <div class="cs-ppl"><span>同行人數</span><button data-ppl="-1" aria-label="減少">−</button><b>${PPL} 人</b><button data-ppl="1" aria-label="增加">＋</button><small>機票、Airbnb、租車這類總價，依人數算出每人；車票、門票這類每人價，乘上人數算出全體。</small></div>
   <div class="cs-sum">
-    <div><b>${fmtC(A.t.NT,'NT')}</b><span>機票＋已知住宿</span><small>${A.u?'另有 '+A.u+' 項未知（靜岡 2 晚）':'全部已知'}</small></div>
-    <div><b>${fmtC(B.t['¥'],'¥')}</b><span>交通＋門票（已知）</span><small>${B.u} 項未知${PPL?'':'・租車未分攤'}</small></div>
-  </div>`+COST.map(G=>`<div class="cs-g"><h3>${G.g}</h3>${G.rows.map(r=>`<div class="cs-r"><div><b>${r[0]}</b>${sub(r)}</div>${amt(r)}</div>`).join('')}${tot(G)}</div>`).join('')+
-  `<p class="mute cs-note">金額每人計，交通與門票來自車票表和各景點卡片，匯率未換算。住宿依每晚單價加總。合計共 ${all.u} 項未知，訂好或查到後改 <code>COST</code> 資料即可，花費頁與交通頁總覽會一起更新。</p>`;
+    <div><span class="k">機票＋住宿</span><b>${fmtC(A.t.NT,'NT')}</b><span>每人</span><small>全體 ${fmtC(A.a.NT,'NT')}${A.u?'・另有 '+A.u+' 項未知':''}</small></div>
+    <div><span class="k">交通＋門票（已知）</span><b>${fmtC(B.t['¥'],'¥')}</b><span>每人</span><small>全體 ${fmtC(B.a['¥'],'¥')}・${B.u} 項未知</small></div>
+  </div>`+COST.map(G=>`<div class="cs-g"><div class="cs-r cs-h"><h3>${G.g}</h3><i>每人</i><i>全體</i></div>${G.rows.map(r=>`<div class="cs-r"><div><b>${r[0]}</b>${sub(r)}</div>${cell(r,costPer(r))}${cell(r,costAll(r))}</div>`).join('')}${tot(G)}</div>`).join('')+
+  `<p class="mute cs-note">「每人」與「全體」依上方同行人數換算；日圓與台幣分開加總，沒有換匯。合計共 ${all.u} 項未知，訂好或查到後改 <code>COST</code> 資料即可，花費頁與交通頁總覽會一起更新。</p>`;
   const mb=document.getElementById('moneyBox');
-  if(mb)mb.innerHTML=`<div><div class="big">${fmtC(A.t.NT,'NT')}</div><div class="lab">每人・機票＋已知住宿</div></div><div><div class="big">${fmtC(B.t['¥'],'¥')}</div><div class="lab">每人・已知車資＋門票${PPL?'（租車 '+PPL+' 人分攤）':'（不含租車）'}</div></div><div><div class="big">${all.u} 項未知</div><div class="lab">含靜岡 2 晚住宿、餐費，詳見花費頁</div></div>`;
+  if(mb)mb.innerHTML=`<div><div class="big">${fmtC(A.t.NT,'NT')}</div><div class="lab">每人・機票＋住宿（${PPL} 人全體 ${fmtC(A.a.NT,'NT')}）</div></div><div><div class="big">${fmtC(B.t['¥'],'¥')}</div><div class="lab">每人・已知車資＋門票（租車 ${PPL} 人分攤）</div></div><div><div class="big">${all.u} 項未知</div><div class="lab">高速費、油費、餐費等，詳見花費頁</div></div>`;
 }
 /* ===== 天氣：平常顯示 2 月平年值（約），出發前 16 天內自動抓 Open-Meteo 即時預報（免金鑰，使用者瀏覽器直接連） =====
    WX_LOC＝[名稱,緯度,經度,2 月平均高溫,平均低溫]，平年值是依氣象廳 1991–2020 平年值的約略數字（沒逐筆查證，所以標「約」）。
@@ -1727,7 +1735,7 @@ if(matchMedia('(max-width:640px)').matches)document.querySelectorAll('#tickets d
 renderBook();
 wxFetch();setInterval(()=>wxFetch(),30*60e3);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ppl]');if(!b)return;
-  PPL=Math.max(0,Math.min(12,PPL+(+b.dataset.ppl)));try{localStorage.setItem('izu-ppl',PPL);}catch(err){}renderCost();});
+  PPL=Math.max(1,Math.min(12,PPL+(+b.dataset.ppl)));try{localStorage.setItem('izu-ppl',PPL);}catch(err){}renderCost();});
 
 
 const AREAMAPS=[
