@@ -932,6 +932,29 @@ html.sa .ma-tabs{height:calc(var(--tabh) + max(env(safe-area-inset-bottom),22px)
 html.sa .ma-scr{bottom:calc(var(--tabh) + max(env(safe-area-inset-bottom),22px))}
 html.sa,html.sa body{background:var(--color-neutral-100)}
 html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
+
+
+html.dk #stay[data-sel="prince"] .st-card:not(#st-prince),html.dk #stay[data-sel="shizuhotel"] .st-card:not(#st-shizuhotel),html.dk #stay[data-sel="livemax"] .st-card:not(#st-livemax){display:none}
+html.dk .st-chip.on{background:var(--c);color:#fff}html.dk .st-chip.on small{color:#fffd}html.dk .st-chip.on i{background:#fff;color:var(--c)}
+html.dk #stay .st-map{max-width:860px}
+/* 電腦版：左側目錄＋一次一頁 */
+html.dk body{padding-left:250px}
+html.dk .strip{display:none}
+html.dk .dk-off{display:none!important}
+#dkSide{position:fixed;left:0;top:0;bottom:0;width:250px;z-index:30;background:#2a221b;color:#f3ebdd;padding:18px 14px 24px;overflow-y:auto;font-size:14px;scrollbar-width:thin}
+#dkSide a{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:11px;color:inherit;text-decoration:none;line-height:1.3}
+#dkSide a:hover{background:rgba(255,255,255,.08)}#dkSide a.on{background:#c67139;color:#fff}
+#dkSide a i{font-style:normal;flex:none;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:12px;font-weight:800}
+#dkSide a.on i{background:rgba(255,255,255,.25)}#dkSide a span{flex:1;min-width:0}#dkSide a small{opacity:.6;font-size:11.5px}
+#dkSide .dk-brand{display:block;padding:4px 9px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px}#dkSide .dk-brand:hover{background:none}
+#dkSide .dk-brand b{display:block;font-size:19px}#dkSide .dk-brand small{display:block;margin-top:3px}
+#dkSide .dk-g{font-size:11px;letter-spacing:.12em;opacity:.5;margin:14px 9px 5px}
+.dk-days{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.dk-day{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;background:var(--color-surface,#fffaf2);border-radius:18px;padding:10px;color:inherit;text-decoration:none;transition:transform .15s}
+.dk-day:hover{transform:translateY(-2px)}.dk-day img,.dk-day .ni{width:96px;height:72px;border-radius:12px;object-fit:cover;background:#eadfcb;display:block}
+.dk-day small{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);font-weight:700}.dk-day b{display:block;font-size:15.5px;margin:2px 0}.dk-day span{font-size:12px;color:var(--color-neutral-700,#645c50)}
+.dk-pn{display:flex;justify-content:space-between;gap:12px;margin-top:22px;margin-bottom:10px}html:not(.dk) .dk-pn{display:none}
+.dk-pn a{background:var(--color-surface,#fffaf2);border:1.5px solid var(--color-neutral-300,#e4d6c0);border-radius:999px;padding:9px 18px;font-weight:700;font-size:14px;color:inherit;text-decoration:none}.dk-pn a:hover{border-color:#c67139}
 </style>
 </head>
 <body>
@@ -2498,10 +2521,13 @@ function renderStay(){
    ov=ov.replace('</svg>',halo+'</svg>');}
   const legend=STAYS.map((S,i)=>`<button class="st-chip" data-stgo="${S.key}" style="--c:${S.col}"><i>${i+1}</i>${S.area}<small>${S.stays.map(x=>x[0].replace(/（.*）/,'')).join('、')}</small></button>`).join('');
   boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map((S,i)=>stayCardHTML(S,i,true)).join('')}</div>`;});
+  const st=document.getElementById('stay');if(st){if(!st.dataset.sel)st.dataset.sel=STAYS[0].key;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===st.dataset.sel));}
 }
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   const ph=t.closest('[data-ph]');if(ph){openPhoto(ph.dataset.ph,+ph.dataset.i);return;}
-  const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st,c=document.getElementById('st-'+k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return;}
+  const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st;
+    if(!MOB){const st=document.getElementById('stay');st.dataset.sel=k;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===k));return;} // 電腦版一次只看一家
+    const c=document.getElementById('st-'+k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return;}
 });
 if(!MOB)setTimeout(renderStay,0);
 function rsClick(t){let el;
@@ -3092,6 +3118,45 @@ function appInit(){
 }
 appInit();
 
+
+/* ============ 電腦版：左側目錄＋一次一頁（2026-10-13 使用者從四個樣板選 A） ============
+   原本整站 35 個螢幕一路往下捲；現在左邊固定目錄，右邊一次只顯示一頁。網址 #day3、#stay… 對應頁面，原本頁內的錨點連結照常可用。 */
+function deskInit(){
+  if(MOB)return;
+  const H=document.documentElement;H.classList.add('dk');
+  const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['tickets','🚆','交通・訂票'],['resto','🍽','餐廳'],['food','🍜','美食・行李'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
+  const el=id=>id==='home'?[document.querySelector('header.hero'),document.getElementById('dkHome'),document.querySelector('body>footer')]:[document.getElementById(id)];
+  // 首頁：hero 下面加 8 天一覽
+  const hero=document.querySelector('header.hero'),home=document.createElement('section');home.id='dkHome';home.className='block';
+  home.innerHTML=`<div class="wrap"><h2>8 天一覽</h2><div class="dk-days">${DAYS.map(d=>{const k=(d.cards||[]).find(c=>IMG[c]&&!/hotel|prince|livemax/.test(c))||(d.cards||[])[0],src=k?cardImg(k):'';
+    return `<a class="dk-day" href="#day${d.n}">${src?`<img src="${src}" alt="">`:'<span class="ni"></span>'}<div><small>Day ${d.n}・${d.date}（${d.wd}）</small><b>${d.title}</b><span>🛏 ${d.stay||'—'}</span></div></a>`;}).join('')}</div></div>`;
+  hero.after(home);
+  // 每天頁尾：上一天／下一天
+  DAYS.forEach((d,i)=>{const sec=document.getElementById('day'+d.n);if(!sec)return;const pv=DAYS[i-1],nx=DAYS[i+1];
+    sec.insertAdjacentHTML('beforeend',`<div class="wrap dk-pn">${pv?`<a href="#day${pv.n}">← Day ${pv.n} ${pv.title}</a>`:'<span></span>'}${nx?`<a href="#day${nx.n}">Day ${nx.n} ${nx.title} →</a>`:'<a href="#tickets">交通・訂票 →</a>'}</div>`);});
+  // 側邊欄
+  const cd=Math.ceil((new Date('2027-02-10T00:00:00+09:00')-Date.now())/864e5);
+  const side=document.createElement('aside');side.id='dkSide';
+  const item=([id,ic,t,dt])=>`<a href="#${id}" data-pg="${id}"><i>${ic}</i><span>${t}</span>${dt?`<small>${dt}</small>`:''}</a>`;
+  side.innerHTML=`<a class="dk-brand" href="#home"><b>熱海・伊豆・靜岡</b><small>2027/2/10–2/17${cd>0?`・還有 ${cd} 天`:''}</small></a>
+    ${item(PG[0])}<div class="dk-g">行程</div>${PG.slice(1,9).map(item).join('')}<div class="dk-g">資訊</div>${PG.slice(9).map(item).join('')}`;
+  document.body.prepend(side);
+  const all=PG.flatMap(([id])=>el(id)).filter(Boolean);
+  let cur=null;
+  function show(id,scroll){
+    if(!PG.some(p=>p[0]===id)){const t=document.getElementById(id),pg=t&&PG.find(([p])=>el(p).some(e=>e&&e.contains(t)));id=pg?pg[0]:'home';}
+    const on=el(id).filter(Boolean);all.forEach(e=>e.classList.toggle('dk-off',!on.includes(e)));
+    side.querySelectorAll('[data-pg]').forEach(a=>a.classList.toggle('on',a.dataset.pg===id));cur=id;
+    if(scroll!==false)window.scrollTo(0,0);
+    // 剛顯示的地圖重新排標籤（隱藏時量不到文字大小）
+    requestAnimationFrame(()=>on.forEach(e=>e.querySelectorAll('svg').forEach(v=>{if(v._cfg)try{layoutLabels(v);}catch(_){}})));
+  }
+  const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));show(h||'home');};
+  addEventListener('hashchange',fromHash);fromHash();
+  document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(!document.getElementById('modal').hidden||!document.getElementById('lb').hidden)return;
+    const m=/^day(\d)$/.exec(cur||'');if(!m||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight'))return;const n=+m[1]+(e.key==='ArrowRight'?1:-1);if(n>=1&&n<=DAYS.length)location.hash='#day'+n;});
+}
+deskInit();
 
 /* 離線版：登記 service worker（sw.js），GitHub Pages 上才會啟用 */
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
