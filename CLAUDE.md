@@ -904,6 +904,17 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **前提**：使用者要重貼 trip-tools 的 `firestore.rules`（多了 `budget`），並在預算頁按一次「匯入」；匯入後刪掉 trip-tools 的 `seeds/IzuAtami-trip.json`。
 - 驗證：scratchpad `tt/emb3.js`（原始碼無金額、花費→預算、記帳分段同一個 iframe 不重載、頁尾在交通、首頁卡、桌機、未登入）、`check.js` 全過。
 
+### 2026-10-13 變更（四十四）：花費只剩預算一頁、記帳去掉預算、推薦搬進餐廳頁
+使用者：「花費跟記帳看起來太像，花費就只需要一個預算頁面（上面就有新增項目、點每個項目就能改），記帳把預算拿掉，推薦應該放在餐廳裡面。」
+- trip-tools 嵌入模式：預算頁與推薦頁不顯示分頁列；記帳只有 記帳／結算／成員（見 trip-tools CLAUDE.md）。花費、記帳仍共用同一個 iframe。
+- **餐廳頁**（手機 `INFO_PANES` resto 與桌機 `#resto`）：分段多一個「**家人推薦**」（`APP.rview='fam'`）。`.rs-body` 旁邊放一個 `.rs-fam` 容器
+  （放在 `.rs-body` 外面，`renderResto()` 重畫名單時 iframe 才不會被洗掉），裡面是 trip-tools `resto` 頁的 iframe，第一次切過去才載入。
+  `fam` 時 `.rs` 加 `.fam`，藏外層「＋ 新增餐廳」、必吃料理、導言；手機 iframe 高度 `100dvh − 分頁列 − 232px − 安全區`，底部不會被分頁列擋住。
+- **「＋ 新增餐廳」**不再開新分頁：切到家人推薦並開 `resto/add`（`APP._rsAdd`）。從家人推薦切回依日期／依地區時呼叫 `rsFetchFam()`，剛收錄的店馬上出現。
+- `renderSeg` 找花費 iframe 改用 `.ma-pane[data-pane="cost"] .tt-fr`（資訊頁現在有兩個 iframe）。桌機導覽列「花費・記帳」。
+- 驗證：scratchpad `tt/rs3.js`（花費無分頁列、記帳三分頁、餐廳家人推薦、推薦 iframe 不壓到分頁列、＋新增餐廳開表單且不開新分頁、桌機）、
+  `emb3.js`／`site.js`（選擇器改成限定花費 pane、site.js 也改用 mock 取代 fb.js）、`bud.js`、`t1.js`、`check.js` 全過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

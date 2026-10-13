@@ -677,6 +677,9 @@ html.app #cost h2,html.app #cost .lead{display:none}html.app #cost .tt-dk{height
 .rs-must>summary{list-style:none;cursor:pointer;padding:13px 12px;font-weight:700;font-size:14.5px;display:flex;flex-direction:column}.rs-must>summary::-webkit-details-marker{display:none}
 .rs-must>summary small{font-weight:400;font-size:11.5px;color:var(--color-neutral-500)}.rs-must>summary::after{content:'＋';position:absolute;right:30px;margin-top:6px;color:var(--color-neutral-500)}.rs-must[open]>summary::after{content:'－'}
 .rs-must #food{padding-top:0}.rs-must #food .wrap{padding:0 8px 10px}.rs-must #food h2{display:none}.rs-must #food .two>div:last-child{display:none}
+.rs.fam .rs-fab,.rs.fam .rs-must,.rs.fam .rs-lead{display:none}
+.rs-fam .tt-dk{height:calc(100dvh - var(--tabh,66px) - 232px - env(safe-area-inset-top) - env(safe-area-inset-bottom));min-height:400px;max-width:none;margin-top:8px}
+html:not(.app) .rs-fam .tt-dk{height:min(820px,84vh);max-width:560px}
 .rs-fab{position:sticky;float:right;bottom:16px;margin:12px 16px 0 0;border:0;border-radius:99px;background:var(--color-accent-500,#c67139);color:#fff;font:800 14px var(--font-body);padding:12px 18px;box-shadow:0 4px 12px rgba(198,113,57,.4);z-index:3}
 .rs-fm{position:fixed;inset:0;z-index:80;background:rgba(42,34,27,0);transition:background .25s;display:flex;align-items:flex-end}
 .rs-fm.on{background:rgba(42,34,27,.4)}.rs-fm[hidden]{display:none}
@@ -994,8 +997,8 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
   <div class="wrap">
     <h2>餐廳</h2>
     <div class="rs rs-dk"><div class="rs-dtop"><small class="rs-ver"></small><button class="rs-add" data-rsadd>＋ 新增餐廳</button></div>
-      <p class="rs-lead">依日期看每天的早、午、點心、晚餐，或依地區看全部候選。想推薦店家就按「新增餐廳」貼 Google 地圖連結，存在自己的裝置，再按「送出給主辦人」傳 LINE；要不要收錄由主辦人決定。</p>
-      <div class="rs-body"></div></div>
+      <p class="rs-lead">依日期看每天的早、午、點心、晚餐，或依地區看全部候選。想推薦店家按「新增餐廳」或切到「家人推薦」，貼 Google 地圖連結（要登入）；主辦人收錄後會出現在名單裡，標「家人推薦」。</p>
+      <div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-write"></iframe></div></div></div>
   </div>
 </section>
 <section class="block" id="food">
@@ -2269,7 +2272,9 @@ function rsRow(r,withDay,num){
 function renderResto(){
   const ps=document.querySelectorAll(MOB?'#maInfo .rs-body':'#resto .rs-body');if(!ps.length)return;
   const V=APP.rview||'day',groups=[];
-  let h=`<div class="ma-segc rs-seg"><button data-rsv="day" class="${V==='day'?'on':''}">依日期</button><button data-rsv="reg" class="${V==='reg'?'on':''}">依地區</button></div>`;
+  let h=`<div class="ma-segc rs-seg"><button data-rsv="day" class="${V==='day'?'on':''}">依日期</button><button data-rsv="reg" class="${V==='reg'?'on':''}">依地區</button><button data-rsv="fam" class="${V==='fam'?'on':''}">家人推薦</button></div>`;
+  ps.forEach(p=>{const rs=p.closest('.rs');rs.classList.toggle('fam',V==='fam');rs.querySelector('.rs-fam').hidden=V!=='fam';}); // 家人推薦＝嵌入記帳工具的推薦・收錄頁
+  if(V==='fam'){ps.forEach(p=>{p.innerHTML=h;ttLoad(p.closest('.rs').querySelector('.rs-fam .tt-fr'),APP._rsAdd?'resto/add':'resto');});APP._rsAdd=0;return;}
   if(V==='day'){
     const dn=APP.rday||1;
     h+=`<div class="rs-days">${DAYS.map(d=>`<button data-rsday="${d.n}" class="${d.n===dn?'on':''}"><small>週${d.wd}</small><b>${d.date.split('/')[1]}</b></button>`).join('')}</div>`;
@@ -2350,10 +2355,10 @@ function rsClick(t){let el;
     const sp=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys),1);Z.anim(Math.min(Z.zmax,Math.max(Z.z*1.6,(Math.min(Z.BW,Z.BH)*.55)/sp)),(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2,null,420);}return true;}
   if(el=t.closest('.rs-map .mk[data-key^="rs_"]')){const num=el.dataset.key.slice(3),row=el.closest('.rs-body').querySelector(`.rs-it[data-rsn="${num}"]`);
     if(row){row.scrollIntoView({block:MOB?'nearest':'center',behavior:'smooth'});row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash');}return true;}
-  if(el=t.closest('[data-rsv]')){APP.rview=el.dataset.rsv;renderResto();return true;}
+  if(el=t.closest('[data-rsv]')){const was=APP.rview;APP.rview=el.dataset.rsv;if(was==='fam'&&APP.rview!=='fam')rsFetchFam();renderResto();return true;} // 從推薦切回名單時重抓一次收錄結果
   if(el=t.closest('[data-rsday]')){APP.rday=+el.dataset.rsday;renderResto();return true;}
   if(el=t.closest('[data-rsreg]')){APP.rreg=el.dataset.rsreg;renderResto();return true;}
-  if(t.closest('[data-rsadd]')){window.open(ttLink('resto/add'),'_blank','noopener');return true;}
+  if(t.closest('[data-rsadd]')){APP.rview='fam';APP._rsAdd=1;renderResto();return true;} // 直接在餐廳頁裡打開推薦表單
   if(el=t.closest('[data-rsx]')){{const [k,id]=el.dataset.rsx.split(':'),r=(k==='f'?rsFam():RESTO.list).find(x=>x.id===id);if(r)window.open(rsGmap(r),'_blank','noopener');}return true;}
   return false;}
 
@@ -2847,7 +2852,7 @@ function renderSeg(){
   const tt=APP.pane==='cost'||APP.pane==='acct',pk=tt?'cost':APP.pane; // 花費＝預算分頁、記帳＝記帳分頁，同一個 iframe
   document.querySelectorAll('#maInfo .ma-pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===pk));
   $a('maInfo').classList.toggle('tt-on',tt);
-  if(tt){const pg=APP.pane==='acct'?'exp':'budget';if(APP._ttPg!==pg){APP._ttPg=pg;ttLoad(document.querySelector('#maInfo .tt-fr'),pg);}}
+  if(tt){const pg=APP.pane==='acct'?'exp':'budget';if(APP._ttPg!==pg){APP._ttPg=pg;ttLoad(document.querySelector('#maInfo .ma-pane[data-pane="cost"] .tt-fr'),pg);}}
 }
 function appClick(e){
   const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
@@ -2900,7 +2905,7 @@ function appInit(){
   document.body.appendChild(root);
   const info=$a('maInfo');
   INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});
-    if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div>
+    if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-write"></iframe></div></div>
       <details class="rs-must"><summary>必吃料理一覽<small>不分店家的特色料理與伴手禮</small></summary></details><button class="rs-fab" data-rsadd>＋ 新增餐廳</button></div>`;
       const f=document.querySelector('#food');if(f)p.querySelector('.rs-must').appendChild(f);}
     if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
