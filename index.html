@@ -990,6 +990,24 @@ html.dk .dk-old{display:none!important}
 .shz-row .tg{font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;background:#56633f;color:#fff}.shz-row .tg.cd{background:#eadfcb;color:#645c50}
 .shzb-map .txr{transition:opacity .25s}
 
+/* 待辦事項 */
+.td-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--color-neutral-200,#ece0cc);border-radius:999px;padding:4px;margin:2px 0 14px}
+#mapp .td-tabs button{border:0;border-radius:999px;background:transparent;padding:9px 6px;font:700 14px var(--font-body);color:var(--color-text);cursor:pointer;display:flex;gap:6px;justify-content:center;align-items:baseline}
+#mapp .td-tabs button small{font-weight:500;font-size:12px;opacity:.65}
+#mapp .td-tabs button.on{background:var(--color-text);color:var(--color-bg)}
+.td-note{font-size:12.5px;color:var(--color-neutral-700,#645c50);line-height:1.6;margin:0 2px 2px}
+#maPack .bklist{margin-top:8px}
+.td-dk{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:34px;margin-top:14px;align-items:start}
+.td-col h3{font-size:18px;padding-bottom:6px;border-bottom:2px solid var(--ink);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline}
+.td-col h3 small{font:500 13px var(--font-body);color:var(--color-neutral-700,#645c50)}
+.td-dk .bklist{grid-template-columns:1fr}
+.td-dk .ma-segc{display:inline-flex;gap:4px;background:var(--color-neutral-200,#ece0cc);border-radius:999px;padding:3px;margin:4px 0 2px}
+.td-dk .ma-segc button{white-space:nowrap;flex:none;height:auto;border:0;background:transparent;border-radius:999px;padding:6px 14px;font:600 13px var(--font-body);cursor:pointer;color:var(--color-text)}
+.td-dk .ma-segc button.on{background:var(--color-text);color:var(--color-bg)}
+.td-dk .pk-it{min-height:42px}
+.tx-links a{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink)}
+.tx-links a b{color:var(--shu,#c67139)}.tx-links a span{font-size:13px;color:var(--color-neutral-700,#645c50)}
+.txp-bk small{display:block;font-size:11.5px;color:#8c491a;opacity:.8;margin-top:4px}.txp-bk .ld-lk{margin-top:6px}
 .tx-rail{display:none!important}
 html.app .txm{margin:6px 0 14px}html.app .txm-days{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}html.app .txm-days::-webkit-scrollbar{display:none}
 html.app .txm-days button{flex:none;padding:5px 10px;font-size:13px}
@@ -1076,12 +1094,19 @@ html.dk .dk-off{display:none!important}
         </ul>
     </div>
 
-    <h3 class="sub-h">訂票清單</h3>
-    <p class="mute tx-note">依截止日排序，打勾會記在這支手機／這台電腦上。JR 車票在乘車日前一個月的日本時間 10:00 開賣（台灣 09:00）。</p>
-    <ul class="bklist" id="bookList"></ul>
+    <h3 class="sub-h">訂票網站</h3>
+    <p class="mute tx-note">JR 車票在乘車日前一個月的日本時間 10:00 開賣（台灣 09:00）。要訂哪些、截止日和打勾，都在「待辦事項」。</p>
+    <div class="linkgrid tx-links">
+      <a href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer"><b>えきねっと ↗</b><span>JR 東日本：2/10、2/17 成田特快、2/14 踊子</span></a>
+      <a href="https://smart-ex.jp/" target="_blank" rel="noopener noreferrer"><b>smart-EX ↗</b><span>東海道新幹線：2/11 品川 → 靜岡</span></a>
+      <a href="https://www.tabirai.net/car/" target="_blank" rel="noopener noreferrer"><b>tabirai ↗</b><span>租車比價：2/11 靜岡取車 → 2/15 品川還車</span></a>
+      <a href="https://www.mvdis.gov.tw/" target="_blank" rel="noopener noreferrer"><b>監理服務網 ↗</b><span>申請駕照日文譯本</span></a>
+      <a href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener noreferrer"><b>Visit Japan Web ↗</b><span>入境審查與海關申報 QR</span></a>
+      <a href="https://www.izukyu.co.jp/" target="_blank" rel="noopener noreferrer"><b>伊豆急行 ↗</b><span>2/14 河津回程時刻</span></a>
+      <a href="https://www.kawazuzakura.net/" target="_blank" rel="noopener noreferrer"><b>河津櫻まつり ↗</b><span>開花情報</span></a>
+    </div>
 
-    <h3 class="sub-h">每日交通</h3>
-    <div class="ldays">
+    <div class="ldays tx-rail" aria-hidden="true"><!-- 每日交通：不顯示，交通地圖的每日面板從這裡取資料 -->
       <details class="lday" open data-mc><summary><div class="ld-h"><span class="n">1</span><b>2/10（三）</b><span>成田 → 品川</span></div>
       <div class="lg"><i>🚆</i><div><b>成田 T2 → 品川　JR 成田特快 N'EX</b><span>約 18:15 前後發・約 1 小時 10 分・¥3,330・全車指定席</span></div><em class="bg-need">要先訂</em></div><span class="ld-more">要訣與訂票連結</span></summary>
       <p class="ld-tip"><b>全車指定席</b>，沒劃位不能上車；えきねっと線上訂，這條不難買。車廂<b>兩端有大型行李放置區</b>（附號碼鎖），29 吋行李箱放得下。班機 16:50 落地，通關＋領行李抓約 1 小時 15 分，訂 18:15 前後那班；怕來不及可以訂晚一班。</p><div class="ld-lk"><a href="https://www.eki-net.com/" target="_blank" rel="noopener noreferrer">えきねっと ↗</a></div></details><details class="lday" open data-mc><summary><div class="ld-h"><span class="n">2</span><b>2/11（四・假日）</b><span>品川 → 靜岡，取車上日本平</span></div>
@@ -1132,8 +1157,8 @@ html.dk .dk-off{display:none!important}
 </section>
 <section class="block" id="food">
   <div class="wrap">
-    <h2>要吃的、要帶的</h2>
-    <div class="two">
+    <h2>要吃的</h2>
+    <div>
       <div>
         <h3>靜岡・伊豆特色美食</h3>
         <div class="foodgrid">
@@ -1161,23 +1186,16 @@ html.dk .dk-off{display:none!important}
         <p class="mute fdnote">照片由維基百科即時載入，僅示意，需連網。</p>
         <p class="mute" style="margin-top:10px">東京想吃的清單：燒肉（2/15 晚）、鰻魚飯、烤飯糰、炸牛排、拉麵、壽司。<br>注意：2 月駿河灣禁捕しらす，生しらす丼吃不到。</p>
       </div>
-      <div>
-        <h3>行李清單</h3>
-        <ul>
-          <li>護照・機票・日幣・信用卡</li>
-          <li><b>台灣駕照正本＋日文譯本</b>（租車必帶，兩份缺一不可）</li>
-          <li>衣服（至少 4 天份）</li>
-          <li>發熱衣褲・外套・手套・圍巾</li>
-          <li>行動電源（需 PSE／CC 認證）</li>
-          <li>延長線・吹風機</li>
-          <li>牙刷牙膏牙線・小毛巾</li>
-          <li>乳液・護唇膏・護手霜</li>
-          <li>口罩・洗衣袋</li>
-          <li>餐具（筷子叉子湯匙）</li>
-        </ul>
-        <p class="mute" style="margin-top:10px">國泰經濟艙：託運額度依票種而定，以電子機票上寫的為準；手提行李 1 件＋個人小包。干物、櫻花蝦、茶葉記得放託運。</p>
-      </div>
     </div>
+  </div>
+</section>
+
+<!-- ============ TODO ============ -->
+<section class="block" id="todo">
+  <div class="wrap">
+    <h2>待辦事項</h2>
+    <p class="lead">出發前要訂的票、要預約的店、要辦的手續，和行李清單。打勾只存在這台裝置上，不會同步給其他人。</p>
+    <div class="td-dk" id="todoDk"></div>
   </div>
 </section>
 
@@ -1758,7 +1776,7 @@ function wxFetch(force){
      WX={ts:Date.now(),d};try{localStorage.setItem('izu-wx',JSON.stringify(WX));}catch(e){}wxPaint();})
    .catch(()=>{});
 }
-/* 交通頁「訂票清單」：依截止日排序，打勾存 localStorage izu-book；截止日用日本時間算剩幾天 */
+/* 「待辦事項」：依截止日排序，打勾存 localStorage izu-book；截止日用日本時間算剩幾天 */
 const BOOK=[
  ['car',null,'越早越好','tabirai 預約租車','2/11 中午靜岡站前取車 → 2/15 下午品川還車（5 天，異地還車）；順便問 ETC 卡、品川營業所位置','https://www.tabirai.net/car/|tabirai'],
  ['ichigo',null,'越早越好','預約石垣草莓 2/12 上午 10:00 場','2 月是旺季，週末常滿',''],
@@ -1775,22 +1793,20 @@ const BOOK=[
  ['hanabi',null,'日期公布後','查 2027 年 2 月熱海海上花火大会日期','若在 2/13 或 2/14 晚上，飯店前的親水公園就是觀賞點，20:20 前回到海邊',''],
 ];
 let BK={};try{BK=JSON.parse(localStorage.getItem('izu-book')||'{}')||{};}catch(e){}
-function renderBook(){
-  const ul=document.getElementById('bookList');if(!ul)return;
-  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));now.setHours(0,0,0,0);
-  const left=d=>Math.round((new Date(d+'T00:00:00')-now)/864e5);
-  const rank=b=>b[1]?left(b[1]):(b[2]==='越早越好'?-1e6:1e6);
-  ul.innerHTML=BOOK.slice().sort((a,b)=>(!!BK[a[0]]-!!BK[b[0]])||rank(a)-rank(b)).map(b=>{
+function bookRank(){const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));now.setHours(0,0,0,0);
+  const left=d=>Math.round((new Date(d+'T00:00:00')-now)/864e5);return [left,b=>b[1]?left(b[1]):(b[2]==='越早越好'?-1e6:1e6)];}
+function bookCount(){return [BOOK.filter(b=>BK[b[0]]).length,BOOK.length];}
+function bookListHTML(){const [left,rank]=bookRank();
+  return '<ul class="bklist">'+BOOK.slice().sort((a,b)=>(!!BK[a[0]]-!!BK[b[0]])||rank(a)-rank(b)).map(b=>{
     const [id,dl,when,t,sub,link]=b,done=!!BK[id],n=dl?left(dl):null;
     const cd=done?'已完成':n==null?'':n>0?`還有 ${n} 天`:n===0?'就是今天':'已過';
     const lnk=link?link.split('|'):null;
-    return `<li class="${done?'done':''}"><input type="checkbox" data-bk="${id}" ${done?'checked':''} aria-label="${t}"><div class="bk-t"><b>${t}</b><span>${sub}</span>${lnk?`<a href="${lnk[0]}" target="_blank" rel="noopener noreferrer">${lnk[1]} ↗</a>`:''}</div><div class="bk-d${!done&&n!=null&&n<=14?' soon':''}"><b>${when}</b>${cd}</div></li>`;}).join('');
-}
+    return `<li class="${done?'done':''}"><input type="checkbox" data-bk="${id}" ${done?'checked':''} aria-label="${t}"><div class="bk-t"><b>${t}</b><span>${sub}</span>${lnk?`<a href="${lnk[0]}" target="_blank" rel="noopener noreferrer">${lnk[1]} ↗</a>`:''}</div><div class="bk-d${!done&&n!=null&&n<=14?' soon':''}"><b>${when}</b>${cd}</div></li>`;}).join('')+'</ul>';}
+function renderBook(){if(typeof MOB==='undefined')return;if(MOB){if(APP.tab==='pack')renderPack();}else renderTodoDesk();}
 document.addEventListener('change',e=>{const c=e.target.closest&&e.target.closest('[data-bk]');if(!c)return;
   if(c.checked)BK[c.dataset.bk]=1;else delete BK[c.dataset.bk];try{localStorage.setItem('izu-book',JSON.stringify(BK));}catch(err){}renderBook();});
 document.addEventListener('click',e=>{const su=e.target.closest&&e.target.closest('#tickets details[data-mc]>summary');if(su&&!matchMedia('(max-width:640px)').matches)e.preventDefault();}); // 桌機一律展開，點標題不收合
-if(matchMedia('(max-width:640px)').matches)document.querySelectorAll('#tickets details[data-mc]').forEach(d=>d.removeAttribute('open')); // 手機：每日交通的要訣、自駕須知預設收合
-renderBook();
+if(matchMedia('(max-width:640px)').matches)document.querySelectorAll('#tickets details[data-mc]').forEach(d=>d.removeAttribute('open')); // 手機：自駕須知預設收合
 wxFetch();setInterval(()=>wxFetch(),30*60e3);
 
 
@@ -1997,7 +2013,7 @@ function ttLoad(fr,pg){ // 第一次打開才載入，平常不碰 Firebase；�
   if(note)note.remove();fr.src=ttEmbed(pg);}
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#todo">待辦事項</a><a href="#resto">餐廳</a><a href="#food">美食</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
 if(!MOB)ttLoad(document.querySelector('#acct .tt-fr'),'budget');
 
 // days
@@ -2782,7 +2798,7 @@ function applyTheme(anim){const on=!!APP.rain;const r=$a('mapp');if(r){r.classLi
   const bump=()=>{document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());const m=document.createElement('meta');m.name='theme-color';m.content=col;document.head.appendChild(m);};
   bump();requestAnimationFrame(()=>requestAnimationFrame(bump));setTimeout(bump,800);
 }
-function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane});}
+function saveApp(){lsSet('izu-app',{tab:APP.tab,day:APP.day,pane:APP.pane,tview:APP.tview});}
 /* ===== 「現在」模式：一律用日本時間判斷（手機在台灣時區也一樣），網址加 ?now=2027-02-14T09:10 可模擬 ===== */
 const NOW_Q=(()=>{try{const m=/[?&]now=([0-9T:\-]+)/.exec(location.search);return m?m[1]:'';}catch(e){return '';}})();
 function tokyoNow(){
@@ -2837,11 +2853,11 @@ function renderHome(){
   ${nowCard()}
   <div class="mh-ttl" data-go="plan">熱海・伊豆・靜岡</div>
   <div class="mh-en">Atami · Izu · Shizuoka · 2.10 – 2.17</div>
-  <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${pd}/${pt}</b><span>行李</span></div></div>
+  <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${bookCount()[0]}/${bookCount()[1]}</b><span>待辦</span></div></div>
   <button class="mh-cta" data-go="plan">打開行程${ico('right',18)}</button>
   <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 國泰 CX450　2/10 桃園 12:50 → 成田 16:50</span></div><div>${ico('plane',16)}<span><b>回程</b> 國泰 CX451　2/17 成田 15:30 → 桃園 18:35</span></div></div>
   <button class="tt-go" data-go="acct"><span class="i">🧾</span><span><b>記帳・分帳</b><small>和同行的人一起記實際花費，用 Google 登入</small></span><span class="ar">打開 →</span></button>
-  <button class="tt-go pk-go" data-go="pack"><span class="i">🧳</span><span><b>行李清單</b><small>已打包 ${pd}/${pt}</small></span><span class="ar">打開 →</span></button>
+  <button class="tt-go pk-go" data-go="pack"><span class="i">✅</span><span><b>待辦事項</b><small>待辦 ${bookCount()[0]}/${bookCount()[1]} 完成・行李 ${pd}/${pt}</small></span><span class="ar">打開 →</span></button>
   <div class="mh-h">每日行程</div>
   <div class="mh-days">${DAYS.map((d,i)=>`<button class="ma-drow" data-day="${i}"><div class="dt-tile"><span>DAY ${d.n}</span><b>${d.date.split('/')[1]}</b></div><div class="dr-tx"><b>${d.title}</b><span>週${d.wd} · 住 ${d.stay.replace(/（.*?）/g,'')}</span></div>${i===ti?'<span class="dr-pill">今天</span>':''}<span class="chev">${ico('right',16)}</span></button>`).join('')}</div>`;
 }
@@ -3105,18 +3121,25 @@ function sheetSwipe(){const sh=$a('maSheet');if(!sh)return;let y0=0,dy=0,on=fals
     e.preventDefault();sh.classList.add('dragging');sh.style.transform='translateY('+dy*0.9+'px)';},{passive:false});
   const end=()=>{if(!on)return;on=false;sh.classList.remove('dragging');sh.style.transform='';if(dy>90)closeSheet();};
   sh.addEventListener('touchend',end);sh.addEventListener('touchcancel',end);}
-function renderPack(){
-  const P=APP.pack,todo=P.filter==='todo',[pd,pt]=packCount(),pct=pt?Math.round(pd/pt*100):0;
+function packListHTML(){
+  const P=APP.pack,todo=P.filter==='todo';
   const groups=PACK.concat(P.extra.length?[{id:'other',zh:'其他',en:'Other',items:P.extra}]:[]);
-  $a('maPack').innerHTML=`<button class="pk-back" data-go="home">‹ 首頁</button><div class="mh-kick">PACKING</div>
-  <div class="pk-top"><div class="pk-ttl">行李清單</div><div class="pk-n">${pd}/${pt}</div></div>
-  <div class="pk-bar"><i style="width:${pct}%"></i></div>
-  <div class="ma-segc">${[['all','全部'],['todo','還沒打包']].map(([k,l])=>`<button data-pf="${k}" class="${P.filter===k?'on':''}">${l}</button>`).join('')}</div>
+  return `<div class="ma-segc">${[['all','全部'],['todo','還沒打包']].map(([k,l])=>`<button data-pf="${k}" class="${P.filter===k?'on':''}">${l}</button>`).join('')}</div>
   ${groups.map(g=>{const vis=g.items.filter(([id])=>!todo||!P.packed[id]);if(!vis.length)return'';
     return `<div class="pk-g"><span>${g.en}</span><b>${g.zh}</b></div>`+vis.map(([id,l])=>{const on=!!P.packed[id];return `<button class="pk-it${on?' on':''}" data-pk="${id}"><span class="bx">${ico('check',16)}</span><span class="lb2">${l}</span></button>`;}).join('');}).join('')}
   <div class="pk-add"><input id="pkIn" placeholder="新增物品…" aria-label="新增物品"><button id="pkAdd" aria-label="加入">${ico('plus')}</button></div>
-  <p class="pk-note">勾選只存在這支手機上，不會同步給其他人。</p>`;
+  <p class="pk-note">國泰經濟艙：託運額度依票種，以電子機票上寫的為準；手提 1 件＋個人小包。干物、櫻花蝦、茶葉記得放託運。</p>`;}
+function renderPack(){
+  const v=APP.tview==='pack'?'pack':'todo',[pd,pt]=packCount(),[bd,bt]=bookCount(),[d,t]=v==='pack'?[pd,pt]:[bd,bt],pct=t?Math.round(d/t*100):0;
+  $a('maPack').innerHTML=`<button class="pk-back" data-go="home">‹ 首頁</button><div class="mh-kick">TO-DO</div>
+  <div class="pk-top"><div class="pk-ttl">待辦事項</div><div class="pk-n">${d}/${t}</div></div>
+  <div class="pk-bar"><i style="width:${pct}%"></i></div>
+  <div class="td-tabs">${[['todo','待辦事項',bd,bt],['pack','行李清單',pd,pt]].map(([k,l,a,b])=>`<button data-tv="${k}" class="${v===k?'on':''}">${l}<small>${a}/${b}</small></button>`).join('')}</div>
+  ${v==='pack'?packListHTML():`<p class="td-note">要訂的票、要預約的店、要辦的手續。依截止日排序，做完打勾（只存在這支手機上）。</p>${bookListHTML()}`}`;
 }
+function renderTodoDesk(){const el=$a('todoDk');if(!el)return;const [pd,pt]=packCount(),[bd,bt]=bookCount();
+  el.innerHTML=`<div class="td-col"><h3>待辦事項 <small>${bd}/${bt} 完成</small></h3><p class="td-note">依截止日排序，做完打勾；14 天內到期的變紅。</p>${bookListHTML()}</div>
+  <div class="td-col"><h3>行李清單 <small>已打包 ${pd}/${pt}</small></h3>${packListHTML()}</div>`;}
 function savePack(){lsSet('izu-pack',APP.pack);}
 function renderSeg(){
   $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
@@ -3156,6 +3179,7 @@ function appClick(e){
     openCard(k);return true;}
   if(el=t.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();renderPack();return true;}
   if(el=t.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();renderPack();return true;}
+  if(el=t.closest('[data-tv]')){APP.tview=el.dataset.tv;saveApp();renderPack();$a('maPack').scrollTop=0;return true;}
   if(t.closest('#pkAdd')){addPack();return true;}
   return false;
 }
@@ -3184,6 +3208,7 @@ function appInit(){
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
   APP.tab=['home','plan','map','pack','acct','info'].includes(sv.tab)?sv.tab:'home';
+  APP.tview=sv.tview==='pack'?'pack':'todo';
   APP.pane=sv.pane==='food'?'resto':INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'stay';
   APP.rday=ti>=0?ti+1:(APP.day|0)+1;
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
@@ -3210,7 +3235,14 @@ appInit();
 function deskInit(){
   if(MOB)return;
   document.documentElement.classList.add('dk'); // 不要宣告成 H：H 是地圖引擎的全域高度
-  const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['tickets','🚆','交通・訂票'],['resto','🍽','餐廳'],['food','🍜','美食・行李'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
+  // 待辦事項（電腦版）：左待辦、右行李，勾選與手機同一組 localStorage（izu-book、izu-pack）
+  {const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
+   const R=()=>renderTodoDesk(),add=()=>{const i=$a('pkIn'),v=(i&&i.value||'').trim();if(!v)return;APP.pack.extra.push(['x'+Date.now(),v]);savePack();R();const n=$a('pkIn');if(n)n.focus();};
+   const box=$a('todoDk');if(box){R();
+     box.addEventListener('click',e=>{let el;if(el=e.target.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();R();}
+       else if(el=e.target.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();R();}else if(e.target.closest('#pkAdd'))add();});
+     box.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pkIn')add();});}}
+  const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['tickets','🚆','交通・訂票'],['todo','✅','待辦事項'],['resto','🍽','餐廳'],['food','🍜','美食'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
   const el=id=>id==='home'?[document.querySelector('header.hero'),document.getElementById('dkHome'),document.querySelector('body>footer')]:[document.getElementById(id)];
   // 首頁：hero 下面加 8 天一覽
   const hero=document.querySelector('header.hero'),home=document.createElement('section');home.id='dkHome';home.className='block';
@@ -3322,11 +3354,11 @@ function txMapInit(){
     svg.querySelectorAll('.txr').forEach(e=>e.classList.toggle('txdim',!regs.includes(e.dataset.r)));
     svg.querySelectorAll('.txb').forEach(e=>e.classList.toggle('txdim',!segs.includes(+e.dataset.s)));
     const pn=box.querySelector('.txm-panel');
-    if(!n){pn.innerHTML=`<div class="txp-h">整趟 7 段交通</div>${TXSEG.map(segRow).join('')}<p class="txp-n">選上面的日期，地圖只亮那天經過的地區和路段。要先訂的票在「訂票清單」。</p>`;return;}
-    const d=DAYS[n-1],L=lday[n-1],tip=L&&L.querySelector('.ld-tip');
+    if(!n){pn.innerHTML=`<div class="txp-h">整趟 7 段交通</div>${TXSEG.map(segRow).join('')}<p class="txp-n">選上面的日期，地圖只亮那天經過的地區和路段。要先訂的票在「待辦事項」打勾。</p>`;return;}
+    const d=DAYS[n-1],L=lday[n-1],tip=L&&L.querySelector('.ld-tip'),lk=L&&L.querySelector('.ld-lk');
     pn.innerHTML=`<div class="txp-h">Day ${n}　${d.date}（${d.wd}）${d.title}</div><div class="txp-segs">${TXSEG.filter(x=>segs.includes(x[0])).map(segRow).join('')}</div>
       <div class="ldays txp-legs">${L?[...L.querySelectorAll('.lg')].map(x=>x.outerHTML).join(''):''}</div>${tip?`<div class="txp-tip">${tip.innerHTML}</div>`:''}
-      ${dd[2].length?`<div class="txp-bk"><b>這天要先訂／預約</b>${dd[2].map(bkRow).join('')}</div>`:''}`;}
+      ${dd[2].length?`<div class="txp-bk"><b>這天要先訂／預約</b>${dd[2].map(bkRow).join('')}<small>在「待辦事項」打勾</small>${lk?`<div class="ld-lk">${lk.innerHTML}</div>`:''}</div>`:''}`;}
   box.addEventListener('click',e=>{const b=e.target.closest('[data-txd]');if(b){txShow(+b.dataset.txd);if(MOB)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}});
   const tj=todayIdx();txShow(tj>=0?tj+1:0);
 }
