@@ -915,6 +915,23 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 驗證：scratchpad `tt/rs3.js`（花費無分頁列、記帳三分頁、餐廳家人推薦、推薦 iframe 不壓到分頁列、＋新增餐廳開表單且不開新分頁、桌機）、
   `emb3.js`／`site.js`（選擇器改成限定花費 pane、site.js 也改用 mock 取代 fb.js）、`bud.js`、`t1.js`、`check.js` 全過。
 
+### 2026-10-13 變更（四十五）：底部「清單」換成「記帳」、行李清單改首頁按鈕、資訊多「住宿」介紹
+使用者要求：清單的位置換成記帳；行李清單放首頁記帳按鈕下面（按鈕跳轉）；資訊原本的記帳改成住宿介紹（地點地圖、依住宿分地區、每人每晚、到車站多久、早餐、車位，不確定填「待確認」）。
+- **底部分頁**：`renderTabs` 第四個 `pack` → **`acct` 記帳**（新圖示 `ICO.wallet`）；新 `.ma-scr[data-tab="acct"]` 內一個 `.tt-tab` iframe，`go('acct')` 時 `ttLoad(…,'exp')`。
+  行李清單畫面 `pack` 還在（`go('pack')`），只是不在分頁列；頂端加「‹ 首頁」`.pk-back`。首頁記帳卡 `data-go="acct"`，下面多一顆 `.pk-go` 行李清單按鈕（顯示已打包數）。
+  舊的 `[data-ttgo]` 處理拿掉。存檔裡的舊 pane `acct` 轉成 `stay`。
+- **資訊分段**：花費／**住宿**／景點／交通／餐廳。花費＝預算 iframe（只剩這一個用途）。
+- **住宿**（`#stay` 區塊，手機搬進資訊 pane、桌機在花費前面，導覽列「住宿」）：資料 `STAYS`（品川王子、靜岡 Airbnb、LiVEMAX；每筆 `{key,st 最近車站,area,col,stays:[[日期,晚數,預算名稱關鍵字]],addr,stn,mode,bf,park,chk}`）。
+  `renderStay()`：總覽圖（三個住宿編號＋各自顏色的虛線地區圈，點圈或下方地區膠囊捲到該卡）＋每家一張卡（照片、每人每晚、到車站、早餐、車位、入住、地址、
+  住宿→車站小地圖、看完整介紹／Google 地圖）。「待確認」自動加灰底（`stTbd`）。
+  **到車站、早餐、車位**：品川王子「高輪口步行約 3 分」、Airbnb「步行約 10–15 分（估計位置，待確認）、車位免費」，其餘早餐、LiVEMAX 車位與步行、入住時間都是「待確認」。
+- **每人每晚（登入才看得到）**：`ttToken()` 讀同網域記帳工具登入後 Firebase 存在 IndexedDB 的憑證（`firebaseLocalStorageDb`／`firebase:authUser:<apiKey>:[DEFAULT]`，
+  過期就用 refresh token 換新的），再用 Firestore REST 讀 trip 文件的 `ppl` 和 `budget` 裡 `g=='住宿'` 的項目，依計算方式與晚數算每人每晚（`stayNight`，名稱關鍵字比對）。
+  沒登入／不是成員顯示「登入後顯示」＋「到記帳登入」。**不存快取**（金額不留在裝置的 localStorage）。這是依 Firebase SDK 10 的內部儲存格式寫的，SDK 大改版時要再確認。
+- **桌機**：`#stay`、`#cost`（預算）、`#acct`（記帳）三個區塊，導覽列「住宿／花費／記帳」。
+- 驗證：scratchpad `tt/stay.js`（底部分頁、首頁行李按鈕與返回、記帳分頁 iframe、資訊分段、三張卡與待確認、地區色塊、未登入不顯示價錢、
+  假憑證＋假 Firestore 回應下 Airbnb 1,522／品川 2,145、2,025／LiVEMAX 4,122、桌機）、`check.js` 全過。`emb3.js`、`rs3.js` 依舊版分段寫的，已過時。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
