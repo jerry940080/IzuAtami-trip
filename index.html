@@ -1538,8 +1538,9 @@ const DAYS=[
    go＝到下一站的交通（可多段，每段帶出發時間），內容與桌機時刻表的交通列一一對應。 */
 const STOPS={
 1:[
- {t:'12:50',i:'✈',n:'桃園 T1 → 成田 T2',k:'交通',d:'國泰 CX450・16:50 抵達成田',dur:'4 小時'},
- {t:'17:00',i:'🧳',n:'領行李、入境',k:'交通',d:'Visit Japan Web 先填好；通關＋領行李抓約 1 小時 15 分',at:'nrt',go:[{at:'18:15',i:'🚆',t:'成田 T2 → 品川　JR 成田特快 約 18:15 前後發・約 1 小時 10 分・¥3,330（班次以えきねっと為準）'}]},
+ {t:'10:20',i:'🛄',n:'桃園機場 第一航廈（T1）報到',k:'交通',d:'國泰櫃台報到、託運行李；起飛前約 2.5 小時到'},
+ {t:'12:50',i:'✈',n:'起飛：桃園 T1 → 成田 T2',k:'交通',d:'國泰 CX450・12:50 桃園第一航廈起飛 → 16:50（日本時間）成田第二航廈降落・飛行約 3 小時',dur:'3 小時'},
+ {t:'16:50',i:'🛬',n:'降落：成田機場 第二航廈（T2）',k:'交通',d:'日本時間比台灣快 1 小時；入境、領行李。Visit Japan Web 先填好，通關＋領行李抓約 1 小時 15 分',at:'nrt',go:[{at:'18:15',i:'🚆',t:'成田 T2 → 品川　JR 成田特快 約 18:15 前後發・約 1 小時 10 分・¥3,330（班次以えきねっと為準）'}]},
  {t:'19:30',i:'🛏',n:'品川王子大飯店 北塔',k:'住宿',d:'check-in，站內覓食',card:'prince'}
 ],
 2:[
@@ -1621,8 +1622,9 @@ const STOPS={
 8:[
  {t:'08:00',i:'🍳',n:'早餐',k:'美食',d:'飛機下午才飛，不用早起'},
  {t:'10:30',i:'🧳',n:'Check-out',k:'住宿',d:'行李可先寄飯店櫃台，到品川站周邊做最後採買',at:'prince',go:[{at:'11:30',i:'🚆',t:'品川 → 成田機場 T2　JR 成田特快 約 11:30 前後發・約 1 小時 20 分・¥3,330（班次以えきねっと為準）'}]},
- {t:'13:00',i:'🛍',n:'機場 check-in、買伴手禮',k:'購物',d:'國際線起飛前約 2.5 小時到；液體類出境後再買',card:'souvenir',at:'nrt'},
- {t:'15:30',i:'✈',n:'成田 T2 → 桃園 T1',k:'交通',d:'國泰 CX451・18:35 抵達桃園',at:'nrt'}
+ {t:'13:00',i:'🛄',n:'成田機場 第二航廈（T2）報到',k:'購物',d:'國泰櫃台報到、託運行李（起飛前約 2.5 小時到）；之後買伴手禮，液體類出境後再買',card:'souvenir',at:'nrt'},
+ {t:'15:30',i:'✈',n:'起飛：成田 T2 → 桃園 T1',k:'交通',d:'國泰 CX451・15:30 成田第二航廈起飛 → 18:35（台灣時間）桃園第一航廈降落・飛行約 4 小時',at:'nrt',dur:'4 小時'},
+ {t:'18:35',i:'🛬',n:'降落：桃園機場 第一航廈（T1）',k:'交通',d:'台灣時間，比日本慢 1 小時'}
 ]};
 DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
 /* ================= 雨備版停留點（手機行程頁按「☔ 雨備」切換） =================
@@ -1823,6 +1825,8 @@ function wxFetch(force){
 /* 「待辦事項」：依截止日排序，打勾存 localStorage izu-book；截止日用日本時間算剩幾天 */
 const BOOK=[
  ['car',null,'越早越好','tabirai 預約租車','2/11 中午靜岡站前取車 → 2/15 下午品川還車（5 天，異地還車）；順便問 ETC 卡、品川營業所位置','https://www.tabirai.net/car/|tabirai'],
+ ['hotel1',null,'越早越好','訂品川王子大飯店 北塔（2/10 一晚＋2/15–16 兩晚）','4 人；兩段分開訂，確認房型與早餐。2/10 約 19:30 到、2/15 下午還車後才 check-in','https://www.princehotels.co.jp/shinagawa/|品川王子'],
+ ['hotel2',null,'越早越好','訂 LiVEMAX Resort 熱海 Ocean（2/13–14 兩晚）','4 人；週末加河津櫻季容易滿。2/13 開車到，順便確認有沒有停車場、費用','https://www.hotel-livemax.com/|LiVEMAX'],
  ['ichigo',null,'越早越好','預約石垣草莓 2/12 上午 10:00 場','2 月是旺季，週末常滿',''],
  ['lic','2027-01-29','1 月底前','監理站申請駕照日文譯本','NT 100，可線上申請郵寄；開車的人每位都要','https://www.mvdis.gov.tw/|監理服務網'],
  ['nex1','2027-01-10','1/10 起','えきねっと 訂 2/10 成田特快（成田 → 品川）','乘車日前一個月開賣，不難買','https://www.eki-net.com/|えきねっと'],
@@ -2934,7 +2938,7 @@ function renderHome(){
   <div class="mh-en">Atami · Izu · Shizuoka · 2.10 – 2.17</div>
   <div class="mh-stats"><div><b>8</b><span>天 · 7 夜</span></div><div><b>${spots}</b><span>個景點</span></div><div class="pk" data-go="pack"><b>${bookCount()[0]}/${bookCount()[1]}</b><span>待辦</span></div></div>
   <button class="mh-cta" data-go="plan">打開行程${ico('right',18)}</button>
-  <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 國泰 CX450　2/10 桃園 12:50 → 成田 16:50</span></div><div>${ico('plane',16)}<span><b>回程</b> 國泰 CX451　2/17 成田 15:30 → 桃園 18:35</span></div></div>
+  <div class="mh-flt"><div>${ico('plane',16)}<span><b>去程</b> 國泰 CX450　2/10 桃園 T1 12:50 → 成田 T2 16:50</span></div><div>${ico('plane',16)}<span><b>回程</b> 國泰 CX451　2/17 成田 T2 15:30 → 桃園 T1 18:35</span></div></div>
   <button class="tt-go" data-go="acct"><span class="i">🧾</span><span><b>記帳・分帳</b><small>和同行的人一起記實際花費，用 Google 登入</small></span><span class="ar">打開 →</span></button>
   <button class="tt-go pk-go" data-go="pack"><span class="i">✅</span><span><b>待辦事項</b><small>待辦 ${bookCount()[0]}/${bookCount()[1]} 完成・行李 ${pd}/${pt}</small></span><span class="ar">打開 →</span></button>
   <div class="mh-h">每日行程</div>
