@@ -1008,6 +1008,10 @@ html.dk .dk-old{display:none!important}
 .tx-links a{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink)}
 .tx-links a b{color:var(--shu,#c67139)}.tx-links a span{font-size:13px;color:var(--color-neutral-700,#645c50)}
 .txp-bk small{display:block;font-size:11.5px;color:#8c491a;opacity:.8;margin-top:4px}.txp-bk .ld-lk{margin-top:6px}
+html:not(.dk) .tt-sub{display:none}
+html.dk #acct .tt-sub{margin:4px 0 12px}html.dk #acct .tt-lead{font-size:13px;margin:-2px 0 4px;max-width:none}
+html.dk #acct .tt-dk{max-width:none;border:0;box-shadow:none;border-radius:0;background:transparent}
+html.dk #acct .tt-dk iframe{background:transparent}
 .tx-rail{display:none!important}
 html.app .txm{margin:6px 0 14px}html.app .txm-days{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}html.app .txm-days::-webkit-scrollbar{display:none}
 html.app .txm-days button{flex:none;padding:5px 10px;font-size:13px}
@@ -1211,7 +1215,8 @@ html.dk .dk-off{display:none!important}
 <section class="block" id="acct">
   <div class="wrap">
     <h2>花費・記帳</h2>
-    <p class="lead">出發前的預算（花費）與旅途中的記帳、結算。用 Google 登入，只有同行的人看得到；預算由主辦人填寫與修改。</p>
+    <p class="lead tt-lead">出發前的預算（花費）與旅途中的記帳、結算。用 Google 登入，只有同行的人看得到；預算由主辦人填寫與修改。</p>
+    <div class="dk-sub tt-sub"><button data-ttpg="budget" class="on">花費</button><button data-ttpg="exp">記帳</button><button data-ttpg="settle">結算</button><button data-ttpg="mem">成員</button></div>
     <div class="tt-dk"><iframe class="tt-fr" title="記帳" allow="clipboard-write"></iframe></div>
   </div>
 </section>
@@ -2003,18 +2008,25 @@ function animateMap(svg){
 // 記帳工具（trip-tools，另一個網站，要登入）的連結
 const TT={url:'/trip-tools/',trip:'IzuAtami-trip',key:'AIzaSyBL1D01Tdjqd1_gjJtXFaJdEo0GsLgz-7M',db:'https://firestore.googleapis.com/v1/projects/trip-tools-21847/databases/(default)/documents/',q:'https://firestore.googleapis.com/v1/projects/trip-tools-21847/databases/(default)/documents/trips/IzuAtami-trip:runQuery?key=AIzaSyBL1D01Tdjqd1_gjJtXFaJdEo0GsLgz-7M'};
 const ttLink=h=>TT.url+'?openExternalBrowser=1#/t/'+TT.trip+'/'+h;
-const ttEmbed=h=>TT.url+'?embed='+TT.trip+'#/t/'+TT.trip+'/'+h; // 嵌在本頁的 iframe（記帳工具的嵌入模式：分頁在上方、沒有測試橫條）
+const ttEmbed=(h,w)=>TT.url+'?embed='+TT.trip+(w?'&wide=1':'')+'#/t/'+TT.trip+'/'+h; // 嵌在本頁的 iframe（記帳工具的嵌入模式：分頁在上方、沒有測試橫條）
 function ttLoad(fr,pg){ // 第一次打開才載入，平常不碰 Firebase；沒網路時先顯示說明，連上網再自動載入。pg＝budget（預算）或 exp（記帳）
   pg=pg||'budget';if(!fr)return;
   if(fr.getAttribute('src')){try{fr.contentWindow.location.hash='#/t/'+TT.trip+'/'+pg;}catch(e){}return;}
   const note=fr.parentNode.querySelector('.tt-off');
   if(navigator.onLine===false){if(!note)fr.insertAdjacentHTML('beforebegin','<p class="tt-off">📡 記帳要連上網路才能打開（行程、地圖等其他內容離線照常可看）。連上網路後會自動載入。</p>');
     addEventListener('online',()=>ttLoad(fr,pg),{once:true});return;}
-  if(note)note.remove();fr.src=ttEmbed(pg);}
+  if(note)note.remove();fr.src=ttEmbed(pg,!!fr.closest('#acct')&&!MOB);}
 // strip nav
 const strip=document.getElementById('strip');
 strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#todo">待辦事項</a><a href="#resto">餐廳</a><a href="#food">美食</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
-if(!MOB)ttLoad(document.querySelector('#acct .tt-fr'),'budget');
+if(!MOB){const fr=document.querySelector('#acct .tt-fr'),sub=document.querySelector('#acct .tt-sub');ttLoad(fr,'budget');
+  // 電腦版：分頁按鈕在這頁（記帳工具 wide 模式不畫分頁列），iframe 撐滿畫面剩下的高度、只在 iframe 裡捲動
+  const mark=pg=>sub.querySelectorAll('[data-ttpg]').forEach(b=>b.classList.toggle('on',b.dataset.ttpg===pg));
+  const sync=()=>{try{const m=fr.contentWindow.location.hash.match(/\/(budget|exp|settle|mem)\b/);if(m)mark(m[1]);}catch(e){}};
+  sub.addEventListener('click',e=>{const b=e.target.closest('[data-ttpg]');if(b){mark(b.dataset.ttpg);ttLoad(fr,b.dataset.ttpg);}});
+  fr.addEventListener('load',()=>{sync();try{fr.contentWindow.addEventListener('hashchange',sync);}catch(e){}});
+  const fit=()=>{const box=fr.parentNode;if(!box.offsetParent)return;box.style.height=Math.max(520,innerHeight-(box.getBoundingClientRect().top+scrollY)-22)+'px';};
+  addEventListener('resize',fit);addEventListener('hashchange',()=>setTimeout(fit,30));setTimeout(fit,0);}
 
 // days
 function imgsHTML(c,id){

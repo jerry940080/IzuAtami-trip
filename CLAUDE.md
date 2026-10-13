@@ -1042,6 +1042,15 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 驗證：scratchpad `tt/todo.js`（交通三分頁、每日交通藏、7 個連結、Day 5 面板、電腦待辦 13＋行李 10、打勾與新增、美食頁沒行李、手機首頁按鈕、分段切換與記住、手機交通頁、無溢出）；
   `txm.js`、`dksub.js`、`dk.js`（目錄 16 項）已改成新版、`stay.js`、`sta.js`、`check.js` 全過。
 
+### 2026-10-13 變更（五十五）：電腦版「花費・記帳」改成全寬兩欄（使用者從四個樣板選 A）
+原本是 560px 寬的手機框靠左、右邊大片空白、框裡還要另外捲。樣板在 scratchpad `acmk/mk_A～D.png`（A 全寬兩欄＋上方分頁／B 儀表板／C 預算 vs 實際／D 保留手機框＋右邊摘要）。
+- `#acct`：導言下面一排 `.dk-sub.tt-sub` 按鈕（花費／記帳／結算／成員，`[data-ttpg]`），按了 `ttLoad(fr,pg)` 換 iframe 的 hash；iframe `load` 後掛 `hashchange`，iframe 內自己換頁時按鈕跟著亮。
+- iframe 帶 `&wide=1`（`ttEmbed(h,w)`，只有電腦版的 `#acct`），記帳工具那邊不畫分頁列、內容拆左右兩欄、表單改置中彈窗（見 trip-tools CLAUDE.md）。
+  `.tt-dk` 在電腦版去掉框線與陰影，高度用 JS 算成「畫面剩下的高度」（`fit()`，resize 與換頁時重算），整頁不捲、只在 iframe 裡捲。
+- 手機的記帳分頁、餐廳頁的家人推薦 iframe 都沒帶 wide，照舊。
+- 驗證：scratchpad `tt/wide.js`（wide=1、沒有分頁列、撐到畫面底、按鈕切頁與反向同步、記帳兩欄、置中彈窗、手機照舊）、`acshot.js`（四頁截圖 `acmk/w_*.png`）；
+  trip-tools `bud2.js`、`t1.js`，本專案 `stay.js`、`dk.js`、`todo.js`、`check.js` 通過（`rs3.js` 點的「花費」分段在變更（四十六）就拿掉了，已過時）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
