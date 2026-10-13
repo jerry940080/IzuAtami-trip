@@ -989,6 +989,12 @@ html.dk .dk-old{display:none!important}
 .shz-row b{display:block;font-size:14px}.shz-row small{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);margin:1px 0 4px;line-height:1.4}
 .shz-row .tg{font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;background:#56633f;color:#fff}.shz-row .tg.cd{background:#eadfcb;color:#645c50}
 .shzb-map .txr{transition:opacity .25s}
+
+.tx-rail{display:none!important}
+html.app .txm{margin:6px 0 14px}html.app .txm-days{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}html.app .txm-days::-webkit-scrollbar{display:none}
+html.app .txm-days button{flex:none;padding:5px 10px;font-size:13px}
+html.app .txm-body{grid-template-columns:1fr;gap:12px}html.app .txm-map{border-radius:16px}html.app .txp-h{font-size:16px}
+html.app .txb text{font-size:12px}
 /* 電腦版：左側目錄＋一次一頁 */
 html.dk body{padding-left:250px}
 html.dk .strip{display:none}
@@ -3115,6 +3121,7 @@ function savePack(){lsSet('izu-pack',APP.pack);}
 function renderSeg(){
   $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
   document.querySelectorAll('#maInfo .ma-pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===APP.pane));
+  if(APP.pane==='tix'&&TXSVG)requestAnimationFrame(()=>{try{layoutLabels(TXSVG);}catch(_){}});
 }
 function appClick(e){
   const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
@@ -3221,49 +3228,6 @@ function deskInit(){
     ${item(PG[0])}<div class="dk-g">行程</div>${PG.slice(1,9).map(item).join('')}<div class="dk-g">資訊</div>${PG.slice(9).map(item).join('')}`;
   document.body.prepend(side);
   const all=PG.flatMap(([id])=>el(id)).filter(Boolean);
-  // ---- 交通頁（電腦版）：地區色塊地圖＋逐日點亮（使用者選的 C） ----
-  {const tl=document.querySelector('#tickets .tx-lead');if(tl){
-    const TXREG=[['成田','#2b4c7e',['nrt'],'t'],['東京・品川','#7b5ea7',['shinagawa','jimbocho','akiba','roppongi'],'t'],['靜岡','#56633f',['shizuoka','yume','miho','shimizu','ichigo','zoo'],'l'],['熱海','#b2622d',['atami','livemax','kiunkaku','baien'],'t'],['河津','#3c9a72',['kawazu','sakura'],'l']];
-    const TXLEGS=[['nrt','shinagawa','rail'],['shinagawa','shizuoka','shinkansen'],['shizuoka','yume','car'],['shizuoka','miho','car'],['shizuoka','atami','car'],['atami','kawazu','izukyu'],['atami','shinagawa','car'],['shinagawa','jimbocho','subway'],['jimbocho','akiba','subway']];
-    // [號碼,顏色,區間,方式,日期,狀態,地圖上的線,號碼放在線的哪裡]
-    const TXSEG=[[1,'#2b4c7e','成田機場 ⇄ 品川',"JR 成田特快 N'EX",'2/10 去・2/17 回','need',[0],[0,.5]],[2,'#1f3a66','品川 → 靜岡','東海道新幹線 ひかり','2/11','need',[1],[1,.35]],
-      [3,'#c0392b','靜岡地區','開車（租車）','2/11–2/13','need',[2,3],[3,.55]],[4,'#c0392b','靜岡 → 熱海','開車 約 1 小時 40 分','2/13','car',[4],[4,.4]],
-      [5,'#3c9a72','熱海 ⇄ 河津','JR 踊子／伊豆急','2/14','need',[5],[5,.5]],[6,'#c0392b','熱海 → 品川','開車 約 2 小時・品川還車','2/15','car',[6],[6,.55]],[7,'#7b5ea7','東京市區','地鐵','2/16','day',[7,8],[7,.5]]];
-    const TXDAY={1:[[1],['成田','東京・品川'],['nex1']],2:[[2,3],['東京・品川','靜岡'],['sx','car','abnb']],3:[[3],['靜岡'],['ichigo']],4:[[3,4],['靜岡','熱海'],[]],
-      5:[[5],['熱海','河津'],['odo','dinner']],6:[[6],['熱海','東京・品川'],['bbq']],7:[[7],['東京・品川'],[]],8:[[1],['東京・品川','成田'],['nex2']]};
-    const ST={need:'要先訂',car:'開車',day:'當天'},MW=700,MH=470;
-    const cfg={pts:['nrt','shinagawa','shizuoka','atami','kawazu'],legs:TXLEGS.map(([a,b,m])=>({a,b,mode:m,opt:0,geo:legGeo(a,b,m)})),auto:1,labels:{nrt:'b',shinagawa:'b',shizuoka:'b',atami:'r',kawazu:'r'},minSpan:.3};
-    const box=document.createElement('div');box.className='txm';
-    box.innerHTML=`<div class="txm-days"><button data-txd="0" class="on">全程</button>${DAYS.map(d=>`<button data-txd="${d.n}"><b>${d.n}</b>${d.date}</button>`).join('')}</div>
-      <div class="txm-body"><div class="txm-map">${buildMap(cfg,{W:MW,H:MH,aria:'整趟交通地圖'})}</div><div class="txm-panel"></div></div>`;
-    tl.after(box);
-    const svg=box.querySelector('svg');svg._cfg=cfg;svg._nothumb=1;svg.querySelectorAll('.legi').forEach(e=>e.remove());
-    // 地區色塊（座標要用和 buildMap 一樣的投影：W／H 是全域變數，算完再還原）
-    {const oW=W,oH=H;W=MW;H=MH;PADS=34;PADT=0;const pr=proj(bboxOf(cfg.pts,cfg.minSpan)),PT=k=>pr.pt(P[k]);
-     let g='';TXREG.forEach(([n,c,ks,lab])=>{const xy=ks.filter(k=>P[k]).map(PT),xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]);
-       const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(20,(Math.max(...xs)-Math.min(...xs))/2+14),ry=Math.max(17,(Math.max(...ys)-Math.min(...ys))/2+14);
-       let lx=cx,ly=cy-ry-8,anc='middle';if(lab==='l'){lx=cx-rx-6;ly=cy+5;anc='end';}
-       g+=`<g class="txr" data-r="${n}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" class="txr-t" fill="${c}">${n}</text></g>`;});
-     W=oW;H=oH;const f=svg.querySelector('.leg');f.insertAdjacentHTML('beforebegin',`<g class="txrs">${g}</g>`);}
-    // 路段號碼
-    svg.insertAdjacentHTML('beforeend','<g class="txbs">'+TXSEG.map(sg=>{const pth=svg.querySelector(`.leg[data-i="${sg[7][0]}"]`);if(!pth)return'';const q=pth.getPointAtLength(pth.getTotalLength()*sg[7][1]);
-      return `<g class="txb" data-s="${sg[0]}" transform="translate(${q.x.toFixed(1)},${q.y.toFixed(1)})"><circle r="11" fill="${sg[1]}" stroke="#fff" stroke-width="2.5"/><text y="4.5" text-anchor="middle">${sg[0]}</text></g>`;}).join('')+'</g>');
-    const lday=[...document.querySelectorAll('#tickets .ldays .lday')];
-    const segRow=sg=>`<div class="txs"><i style="background:${sg[1]}">${sg[0]}</i><div><b>${sg[2]}</b><span>${sg[3]}・${sg[4]}</span></div><em class="tx-${sg[5]}">${ST[sg[5]]}</em></div>`;
-    const bkRow=id=>{const b=BOOK.find(x=>x[0]===id);return b?`<div class="txk${BK[id]?' done':''}"><span>${BK[id]?'✓ ':''}${b[3]}</span><b>${b[2]}</b></div>`:'';};
-    function txShow(n){box.querySelectorAll('[data-txd]').forEach(b=>b.classList.toggle('on',+b.dataset.txd===n));
-      const dd=TXDAY[n],segs=dd?dd[0]:TXSEG.map(x=>x[0]),regs=dd?dd[1]:TXREG.map(x=>x[0]),legs=new Set(TXSEG.filter(x=>segs.includes(x[0])).flatMap(x=>x[6]));
-      svg.querySelectorAll('.leg,.legx').forEach(e=>e.classList.toggle('txdim',!legs.has(+e.dataset.i)));
-      svg.querySelectorAll('.txr').forEach(e=>e.classList.toggle('txdim',!regs.includes(e.dataset.r)));
-      svg.querySelectorAll('.txb').forEach(e=>e.classList.toggle('txdim',!segs.includes(+e.dataset.s)));
-      const pn=box.querySelector('.txm-panel');
-      if(!n){pn.innerHTML=`<div class="txp-h">整趟 7 段交通</div>${TXSEG.map(segRow).join('')}<p class="txp-n">選上面的日期，地圖只亮那天經過的地區和路段。要先訂的票在下面「訂票清單」。</p>`;return;}
-      const d=DAYS[n-1],L=lday[n-1],tip=L&&L.querySelector('.ld-tip');
-      pn.innerHTML=`<div class="txp-h">Day ${n}　${d.date}（${d.wd}）${d.title}</div><div class="txp-segs">${TXSEG.filter(x=>segs.includes(x[0])).map(segRow).join('')}</div>
-        <div class="ldays txp-legs">${L?[...L.querySelectorAll('.lg')].map(x=>x.outerHTML).join(''):''}</div>${tip?`<div class="txp-tip">${tip.innerHTML}</div>`:''}
-        ${dd[2].length?`<div class="txp-bk"><b>這天要先訂／預約</b>${dd[2].map(bkRow).join('')}</div>`:''}`;}
-    box.addEventListener('click',e=>{const b=e.target.closest('[data-txd]');if(b)txShow(+b.dataset.txd);});
-    const tj=todayIdx();txShow(tj>=0?tj+1:0);}}
   // ---- 靜岡總覽（電腦版）：地圖畫三個地區＋各景點，下面依地區分三欄（使用者選的 B） ----
   {const cardsEl=document.querySelector('#shizuoka .wrap>.cards');if(cardsEl){
     const ORD=['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','hobby','sengen','yunoki','shizuhotel'],NUMS={};ORD.forEach((k,i)=>NUMS[k]=i+1);
@@ -3288,17 +3252,18 @@ function deskInit(){
   // 太長的兩頁拆成頁內分頁：交通依小標（h3）切；靜岡總覽依內容切。沒分到組的（標題、導言）一律顯示
   const SUB={};
   {const w=document.querySelector('#tickets .wrap');if(w){const G=[];[...w.children].forEach(c=>{if(c.matches('h3.sub-h'))G.push([c.textContent.trim().replace(/[（(].*$/,''),[c]]);else if(G.length)G[G.length-1][1].push(c);});
-    const rm=G.findIndex(g=>/^線路圖/.test(g[0]));if(rm>=0){G[rm][1].forEach(e=>e.classList.add('dk-old'));G.splice(rm,1);} // 電腦版改用上面的交通地圖
+    const rm=G.findIndex(g=>/^線路圖/.test(g[0]));if(rm>=0)G.splice(rm,1); // 改用交通地圖（.tx-rail 已藏）
+    const txm=w.querySelector(':scope>.txm');if(txm)G.unshift(['交通地圖',[txm]]);
     SUB.tickets=G;}}
   {const w=document.querySelector('#shizuoka .wrap');if(w){const acc=[...w.querySelectorAll(':scope>details.acc')],q=x=>[...w.querySelectorAll(':scope>'+x)];
-    SUB.shizuoka=[['景點',[...q('.shzb'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
+    SUB.shizuoka=[['景點',[...q('p.lead'),...q('.shzb'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
   const subOn={};
   function setSub(pg,i){const G=SUB[pg];if(!G)return;subOn[pg]=i;G.forEach(([,els],k)=>els.forEach(e=>e.classList.toggle('dk-off',k!==i)));
     document.querySelectorAll(`.dk-sub[data-pg="${pg}"] button`).forEach((b,k)=>b.classList.toggle('on',k===i));
     requestAnimationFrame(()=>G[i][1].forEach(e=>e.querySelectorAll('svg').forEach(v=>{if(v._cfg)try{layoutLabels(v);}catch(_){}})));}
-  Object.entries(SUB).forEach(([pg,G])=>{if(G.length<2)return;const first=G[0][1][0];
-    first.insertAdjacentHTML('beforebegin',`<div class="dk-sub" data-pg="${pg}">${G.map(([t],k)=>`<button data-sub="${k}">${t}</button>`).join('')}</div>`);
-    first.previousElementSibling.addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){setSub(pg,+b.dataset.sub);window.scrollTo(0,0);}});setSub(pg,0);});
+  Object.entries(SUB).forEach(([pg,G])=>{if(G.length<2)return;const h2=document.querySelector(`#${pg} .wrap>h2`)||G[0][1][0];
+    h2.insertAdjacentHTML('afterend',`<div class="dk-sub" data-pg="${pg}">${G.map(([t],k)=>`<button data-sub="${k}">${t}</button>`).join('')}</div>`); // 分頁按鈕緊接在標題下面，捲動時固定在頂端
+    h2.nextElementSibling.addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){setSub(pg,+b.dataset.sub);window.scrollTo(0,0);}});setSub(pg,0);});
   let cur=null;
   function show(id,scroll){
     if(!PG.some(p=>p[0]===id)){const t=document.getElementById(id),pg=t&&PG.find(([p])=>el(p).some(e=>e&&e.contains(t)));id=pg?pg[0]:'home';
@@ -3315,6 +3280,57 @@ function deskInit(){
     if(cur==='stay'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const k=document.getElementById('stay').dataset.sel;dkvGo(k,(DKV[k]||0)+(e.key==='ArrowRight'?1:-1));return;}
     const m=/^day(\d)$/.exec(cur||'');if(!m||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight'))return;const n=+m[1]+(e.key==='ArrowRight'?1:-1);if(n>=1&&n<=DAYS.length)location.hash='#day'+n;});
 }
+/* ============ 交通地圖：地區色塊＋逐日點亮（2026-10-13 使用者選的 C；電腦版與手機資訊›交通共用） ============ */
+const TXREG=[['成田','#2b4c7e',['nrt'],'t'],['東京・品川','#7b5ea7',['shinagawa','jimbocho','akiba','roppongi'],'t'],['靜岡','#56633f',['shizuoka','yume','miho','shimizu','ichigo','zoo'],'l'],['熱海','#b2622d',['atami','livemax','kiunkaku','baien'],'t'],['河津','#3c9a72',['kawazu','sakura'],'l']];
+const TXLEGS=[['nrt','shinagawa','rail'],['shinagawa','shizuoka','shinkansen'],['shizuoka','yume','car'],['shizuoka','miho','car'],['shizuoka','atami','car'],['atami','kawazu','izukyu'],['atami','shinagawa','car'],['shinagawa','jimbocho','subway'],['jimbocho','akiba','subway']];
+// [號碼,顏色,區間,方式,日期,狀態,地圖上的線,號碼放在哪條線的多少比例]
+const TXSEG=[[1,'#2b4c7e','成田機場 ⇄ 品川',"JR 成田特快 N'EX",'2/10 去・2/17 回','need',[0],[0,.5]],[2,'#1f3a66','品川 → 靜岡','東海道新幹線 ひかり','2/11','need',[1],[1,.35]],
+  [3,'#c0392b','靜岡地區','開車（租車）','2/11–2/13','need',[2,3],[3,.55]],[4,'#c0392b','靜岡 → 熱海','開車 約 1 小時 40 分','2/13','car',[4],[4,.4]],
+  [5,'#3c9a72','熱海 ⇄ 河津','JR 踊子／伊豆急','2/14','need',[5],[5,.5]],[6,'#c0392b','熱海 → 品川','開車 約 2 小時・品川還車','2/15','car',[6],[6,.55]],[7,'#7b5ea7','東京市區','地鐵','2/16','day',[7,8],[7,.5]]];
+// 每天：[路段, 經過的地區, 那天要先訂的 BOOK id]
+const TXDAY={1:[[1],['成田','東京・品川'],['nex1']],2:[[2,3],['東京・品川','靜岡'],['sx','car','abnb']],3:[[3],['靜岡'],['ichigo']],4:[[3,4],['靜岡','熱海'],[]],
+  5:[[5],['熱海','河津'],['odo','dinner']],6:[[6],['熱海','東京・品川'],['bbq']],7:[[7],['東京・品川'],[]],8:[[1],['東京・品川','成田'],['nex2']]};
+let TXSVG=null;
+function txMapInit(){
+  const tl=document.querySelector('#tickets .tx-lead');if(!tl||document.querySelector('.txm'))return;
+  // 舊的示意線路圖（小標＋圖）兩版都藏起來，由這張地圖取代
+  const rail=document.querySelector('#tickets .railmap');if(rail){rail.classList.add('tx-rail');const h=rail.previousElementSibling;if(h&&h.matches('h3'))h.classList.add('tx-rail');}
+  const MW=MOB?358:700,MH=MOB?300:470,ST={need:'要先訂',car:'開車',day:'當天'};
+  const cfg={pts:['nrt','shinagawa','shizuoka','atami','kawazu'],legs:TXLEGS.map(([a,b,m])=>({a,b,mode:m,opt:0,geo:legGeo(a,b,m)})),auto:1,labels:{nrt:'b',shinagawa:'b',shizuoka:'b',atami:'r',kawazu:'r'},minSpan:MOB?.35:.3};
+  let svgS=buildMap(cfg,{W:MW,H:MH,big:MOB,aria:'整趟交通地圖'});
+  // 色塊與號碼的座標：和 buildMap 一樣的投影（W／H 是全域變數，算完要還原）；號碼沿路線幾何算位置，不靠已畫出的元素（手機分頁還沒顯示時量不到）
+  {const oW=W,oH=H;W=MW;H=MH;PADS=34;PADT=0;const pr=proj(bboxOf(cfg.pts,cfg.minSpan)),PT=k=>pr.pt(P[k]),fs=MOB?13:15,br=MOB?10:11;
+   let g='';TXREG.forEach(([n,c,ks,lab])=>{const xy=ks.filter(k=>P[k]).map(PT),xs=xy.map(q=>q[0]),ys=xy.map(q=>q[1]);
+     const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rx=Math.max(MOB?14:20,(Math.max(...xs)-Math.min(...xs))/2+(MOB?10:14)),ry=Math.max(MOB?12:17,(Math.max(...ys)-Math.min(...ys))/2+(MOB?10:14));
+     let lx=cx,ly=cy-ry-6,anc='middle';if(lab==='l'){lx=cx-rx-5;ly=cy+5;anc='end';}
+     g+=`<g class="txr" data-r="${n}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" class="txr-t" style="font-size:${fs}px" fill="${c}">${n}</text></g>`;});
+   const at=(geo,f)=>{const q=geo.map(x=>pr.pt(x));let L=0;const d=[0];for(let i=1;i<q.length;i++){L+=Math.hypot(q[i][0]-q[i-1][0],q[i][1]-q[i-1][1]);d.push(L);}const t=L*f;let i=1;while(i<q.length-1&&d[i]<t)i++;const r=(t-d[i-1])/((d[i]-d[i-1])||1);return [q[i-1][0]+(q[i][0]-q[i-1][0])*r,q[i-1][1]+(q[i][1]-q[i-1][1])*r];};
+   const bs=TXSEG.map(sg=>{const lg=cfg.legs[sg[7][0]];if(!lg||!lg.geo||lg.geo.length<2)return'';const [x,y]=at(lg.geo,sg[7][1]);
+     return `<g class="txb" data-s="${sg[0]}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><circle r="${br}" fill="${sg[1]}" stroke="#fff" stroke-width="2.5"/><text y="4.5" text-anchor="middle">${sg[0]}</text></g>`;}).join('');
+   W=oW;H=oH;const i=svgS.indexOf('<path class="leg');svgS=svgS.slice(0,i)+`<g class="txrs">${g}</g>`+svgS.slice(i);svgS=svgS.replace(/<\/svg>\s*$/,`<g class="txbs">${bs}</g></svg>`);}
+  const box=document.createElement('div');box.className='txm';
+  box.innerHTML=`<div class="txm-days"><button data-txd="0" class="on">全程</button>${DAYS.map(d=>`<button data-txd="${d.n}"><b>${d.n}</b>${d.date}</button>`).join('')}</div>
+    <div class="txm-body"><div class="txm-map">${svgS}</div><div class="txm-panel"></div></div>`;
+  tl.after(box);
+  const svg=box.querySelector('svg');TXSVG=svg;svg._cfg=cfg;svg._nothumb=1;svg.querySelectorAll('.legi').forEach(e=>e.remove());
+  const lday=[...document.querySelectorAll('#tickets .ldays .lday')];
+  const segRow=sg=>`<div class="txs"><i style="background:${sg[1]}">${sg[0]}</i><div><b>${sg[2]}</b><span>${sg[3]}・${sg[4]}</span></div><em class="tx-${sg[5]}">${ST[sg[5]]}</em></div>`;
+  const bkRow=id=>{const b=BOOK.find(x=>x[0]===id);return b?`<div class="txk${BK[id]?' done':''}"><span>${BK[id]?'✓ ':''}${b[3]}</span><b>${b[2]}</b></div>`:'';};
+  function txShow(n){box.querySelectorAll('[data-txd]').forEach(b=>b.classList.toggle('on',+b.dataset.txd===n));
+    const dd=TXDAY[n],segs=dd?dd[0]:TXSEG.map(x=>x[0]),regs=dd?dd[1]:TXREG.map(x=>x[0]),legs=new Set(TXSEG.filter(x=>segs.includes(x[0])).flatMap(x=>x[6]));
+    svg.querySelectorAll('.leg,.legx').forEach(e=>e.classList.toggle('txdim',!legs.has(+e.dataset.i)));
+    svg.querySelectorAll('.txr').forEach(e=>e.classList.toggle('txdim',!regs.includes(e.dataset.r)));
+    svg.querySelectorAll('.txb').forEach(e=>e.classList.toggle('txdim',!segs.includes(+e.dataset.s)));
+    const pn=box.querySelector('.txm-panel');
+    if(!n){pn.innerHTML=`<div class="txp-h">整趟 7 段交通</div>${TXSEG.map(segRow).join('')}<p class="txp-n">選上面的日期，地圖只亮那天經過的地區和路段。要先訂的票在「訂票清單」。</p>`;return;}
+    const d=DAYS[n-1],L=lday[n-1],tip=L&&L.querySelector('.ld-tip');
+    pn.innerHTML=`<div class="txp-h">Day ${n}　${d.date}（${d.wd}）${d.title}</div><div class="txp-segs">${TXSEG.filter(x=>segs.includes(x[0])).map(segRow).join('')}</div>
+      <div class="ldays txp-legs">${L?[...L.querySelectorAll('.lg')].map(x=>x.outerHTML).join(''):''}</div>${tip?`<div class="txp-tip">${tip.innerHTML}</div>`:''}
+      ${dd[2].length?`<div class="txp-bk"><b>這天要先訂／預約</b>${dd[2].map(bkRow).join('')}</div>`:''}`;}
+  box.addEventListener('click',e=>{const b=e.target.closest('[data-txd]');if(b){txShow(+b.dataset.txd);if(MOB)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}});
+  const tj=todayIdx();txShow(tj>=0?tj+1:0);
+}
+txMapInit();
 deskInit();
 
 /* 離線版：登記 service worker（sw.js），GitHub Pages 上才會啟用 */
