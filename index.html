@@ -696,8 +696,11 @@ button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
 .sta .st-mini{margin:4px 0 6px}
 .sta-sec{margin-top:16px}.sta-sec h4{margin:0 0 7px;font-size:15px;display:flex;align-items:center;gap:7px}
 .sta-sec h4 em{font-style:normal;background:var(--c);color:#fff;border-radius:7px;padding:1px 8px;font-size:12px}
-.sta-ph img{display:block;width:100%;object-fit:cover;cursor:zoom-in;background:#eee7db}.sta-ph .big{aspect-ratio:16/10;border-radius:14px}
-.sta-ph .sm{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.sta-ph .sm img{aspect-ratio:4/3;border-radius:11px}.sta-ph .sm img:last-child:nth-child(odd){grid-column:span 2;aspect-ratio:16/9}.sta-ph img.pt{object-fit:contain;background:#efe6d6}
+.sta-sec h4 small{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--color-neutral-700,#645c50)}
+.sta-ph img{display:block;cursor:zoom-in;background:#eee7db}
+.sta-strip{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px;padding:0 14px 4px;scroll-padding:0 14px;scrollbar-width:none}.sta-strip::-webkit-scrollbar{display:none}
+.sta-strip img{flex:none;height:190px;width:auto;border-radius:14px;scroll-snap-align:start}
+.sta-one img{width:100%;height:auto;border-radius:14px;background:#fff}
 .sta-sec p{margin:8px 2px 0;font-size:13.5px;line-height:1.65}
 .sta-must{margin-top:16px;background:#fbeadb;border-radius:16px;padding:11px 14px;font-size:13px;line-height:1.65}.sta-must b{display:block;color:#8c491a;margin-bottom:2px}
 .sta-must div:before{content:"•";color:#8c491a;margin-right:6px}
@@ -705,7 +708,7 @@ button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
 .sta-foot a{flex:none;font-weight:700;font-size:13px;color:var(--color-accent-600,#a85a2a);text-decoration:none;border:1.5px solid currentColor;border-radius:999px;padding:5px 12px}
 html:not(.app) #stay .st-grid{grid-template-columns:1fr;max-width:860px}
 html:not(.app) .sta-hero img{aspect-ratio:auto;height:380px}html:not(.app) .sta .st-mini{max-width:520px}html:not(.app) .sta-price{flex-direction:row;flex-wrap:wrap}
-html:not(.app) .sta-sec{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}html:not(.app) .sta-sec h4{grid-column:1/-1;margin:0}html:not(.app) .sta-sec p{margin:0;font-size:14px}
+html:not(.app) .sta-sec{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}html:not(.app) .sta-ph{min-width:0}html:not(.app) .sta-strip{margin:0;padding:0 0 4px}html:not(.app) .sta-strip img{height:250px}html:not(.app) .sta-one img{max-height:420px;width:auto;max-width:100%}html:not(.app) .sta-sec h4{grid-column:1/-1;margin:0}html:not(.app) .sta-sec p{margin:0;font-size:14px}
 .st-mini .leg{stroke:var(--c)!important;stroke-width:4!important;stroke-dasharray:1 8!important;stroke-linecap:round}
 .st-mini{border-radius:14px;overflow:hidden;background:#d7e3ea}.st-mini svg{display:block;width:100%;height:auto}
 .st-act{display:flex;gap:8px;margin-top:10px}.st-act>*{flex:1;text-align:center;border-radius:12px;padding:9px;font:700 13px var(--font-body,inherit);border:0;background:var(--color-neutral-200,#eee7db);color:inherit;text-decoration:none;cursor:pointer}
@@ -2419,9 +2422,10 @@ const STAYS=[
   addr:'靜岡市駿河區馬渕 1-14-15',stn:'JR 靜岡站，步行約 13 分（房源說明）',mode:'walk',bf:'不附（整棟自理；有廚房、電鍋、微波爐）',park:'車庫 1 台免費（要事先聯絡房東）',chk:'入住 16:00・退房 10:00',
   hero:0,sub:'三層獨棟 129㎡・整棟只有我們',tags:['步行靜岡站 13 分','!車庫 1 台・要先說','不附早餐','16:00 入住／10:00 退房'],
   secs:[['抵達','外觀・玄關',[15,14,16],'靜岡站南邊的住宅區，門牌 14-15。玄關右邊就是車庫，進門就是樓梯。'],
+   ['格局','平面圖',[17],'1F 車庫・浴室・洗衣機，2F 客廳・廚房・廁所，3F 西式房和和室。點圖可以放大。'],
    ['1F','車庫・浴室',[13,10,9,12],'車停 1 樓車庫（免費，<b>要事先跟房東說</b>）。浴室有洗髮精、潤髮乳、沐浴乳，旁邊是洗衣機和洗手台。'],
    ['2F','客廳・廚房',[1,2,7,8,11],'8 人大餐桌、沙發床、電視。廚房有瓦斯爐、電鍋、微波爐、烤箱，可以外帶おでん回來吃。廁所在 2 樓。'],
-   ['3F','臥室',[3,4,5,6,17],'西式房 3 張雙人床，4 人睡這間就夠；和室還有雙人床＋2 組日式床墊。最後一張是格局圖。']],
+   ['3F','臥室',[3,4,5,6],'西式房 3 張雙人床，4 人睡這間就夠；和室還有雙人床＋2 組日式床墊。']],
   must:['出發前一週跟房東說要用車位（沒通知不能用）','4 人入住前上傳護照影本（日本法規）','住宿期間不打掃、不換毛巾；垃圾放室內']},
  {key:'livemax',st:'atami',area:'熱海',col:'#b2622d',stays:[['2/13–14（六・日）',2,'LiVEMAX']],
   addr:'熱海市渚町 22-8',stn:'熱海站，計程車約 5 分；步行時間待確認',mode:'taxi',bf:'待確認',park:'待確認（開車抵達，出發前要問）',chk:'入住／退房時間待確認',
@@ -2459,11 +2463,12 @@ function stayCardHTML(S,i,mini){
   const price=S.stays.map(([d,n,m])=>{const v=STP.st==='ok'?stayNight(m):null;
     return `<span class="pz">${d.replace(/（.*）/,'')}・${n} 晚　${STP.st==='ok'?(v?`每人每晚 <b>${v}</b>`:'預算裡還沒有金額'):STP.st==='loading'?'讀取中…':'每人每晚・登入後顯示'}</span>`;}).join('')+(STP.st==='no'?`<span class="st-login">只有這趟的成員看得到價錢・${login}</span>`:'');
   const nm=NAMES[S.key][0],L=[].concat(IMG[S.key]||[]),nights=S.stays.reduce((a,x)=>a+x[1],0);
-  const im=(j,c)=>L[j]?`<img class="${c}" src="${L[j]}" alt="" loading="lazy" data-ph="${S.key}" data-i="${j}" onload="if(this.naturalHeight>this.naturalWidth)this.classList.add('pt')">`:''; // 直式照片整張顯示不裁
+  const im=j=>`<img src="${L[j]}" alt="" data-ph="${S.key}" data-i="${j}">`;
   const hero=L.length?`<div class="sta-hero" data-ph="${S.key}" data-i="${S.hero||0}"><img src="${L[S.hero||0]}" alt=""><div><b>${nm}</b><small>${S.sub||''}</small></div></div>`:`<div class="st-h"><b>${nm}</b></div>`;
   const tags=(S.tags||[]).map(t=>`<span class="${t[0]==='!'?'w':/待確認/.test(t)?'q':''}">${t.replace(/^!/,'')}</span>`).join('');
-  const secs=(S.secs||[]).map(([tg,ti,ix,p])=>{const [b0,...rest]=ix.filter(j=>L[j]);
-    return `<section class="sta-sec"><h4><em>${tg}</em>${ti}</h4><div class="sta-ph">${b0!=null?im(b0,'big'):''}${rest.length?`<div class="sm">${rest.map(j=>im(j,'')).join('')}</div>`:''}</div><p>${p}</p></section>`;}).join('');
+  // 一段一張：整張顯示；多張：同高度一列左右滑（照片不裁切）
+  const secs=(S.secs||[]).map(([tg,ti,ix,p])=>{const J=ix.filter(j=>L[j]);
+    return `<section class="sta-sec"><h4><em>${tg}</em>${ti}${J.length>1?`<small>${J.length} 張・左右滑 ›</small>`:''}</h4><div class="sta-ph">${J.length>1?`<div class="sta-strip">${J.map(im).join('')}</div>`:J.length?`<div class="sta-one">${im(J[0])}</div>`:''}</div><p>${p}</p></section>`;}).join('');
   const must=(S.must||[]).length?`<div class="sta-must"><b>要記得</b>${S.must.map(x=>`<div>${x}</div>`).join('')}</div>`:'';
   const mm=mini?`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},MOB?340:440,MOB?150:170,nm+'到車站')}</div>`:'';
   return `<article class="st-card sta" id="st-${S.key}" style="--c:${S.col}">
