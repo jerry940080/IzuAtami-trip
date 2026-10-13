@@ -928,9 +928,23 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **每人每晚（登入才看得到）**：`ttToken()` 讀同網域記帳工具登入後 Firebase 存在 IndexedDB 的憑證（`firebaseLocalStorageDb`／`firebase:authUser:<apiKey>:[DEFAULT]`，
   過期就用 refresh token 換新的），再用 Firestore REST 讀 trip 文件的 `ppl` 和 `budget` 裡 `g=='住宿'` 的項目，依計算方式與晚數算每人每晚（`stayNight`，名稱關鍵字比對）。
   沒登入／不是成員顯示「登入後顯示」＋「到記帳登入」。**不存快取**（金額不留在裝置的 localStorage）。這是依 Firebase SDK 10 的內部儲存格式寫的，SDK 大改版時要再確認。
-- **桌機**：`#stay`、`#cost`（預算）、`#acct`（記帳）三個區塊，導覽列「住宿／花費／記帳」。
+- **桌機**：`#stay`、`#cost`（預算）、`#acct`（記帳）三個區塊，導覽列「住宿／花費／記帳」（變更（四十六）已合併成「花費・記帳」）。
 - 驗證：scratchpad `tt/stay.js`（底部分頁、首頁行李按鈕與返回、記帳分頁 iframe、資訊分段、三張卡與待確認、地區色塊、未登入不顯示價錢、
   假憑證＋假 Firestore 回應下 Airbnb 1,522／品川 2,145、2,025／LiVEMAX 4,122、桌機）、`check.js` 全過。`emb3.js`、`rs3.js` 依舊版分段寫的，已過時。
+
+### 2026-10-13 變更（四十六）：花費搬到「記帳」分頁、住宿改成景點那種地圖頁
+使用者：「花費也幫我拉到錢包那個頁面（跟記帳結算成員並排），住宿的地圖就比照景點的方式，但詳細資訊點到該地區後才在下方列出」。
+- **trip-tools 嵌入模式的分頁**改成 **花費／記帳／結算／成員**（`tabs()`，`html.embed .tabs` 四欄）；餐廳頁裡的推薦（`resto`）嵌入時不顯示分頁列。
+  底部「記帳」分頁仍開 `exp`，花費就在它左邊一格。
+- **資訊分段**拿掉花費：**住宿／景點／交通／餐廳**（預設與存檔找不到時都回 `stay`）。`#maInfo.tt-on`、`html.app #cost` 那幾條 CSS 已刪。
+- **桌機**：`#cost` 區塊刪除，`#acct` 改名「花費・記帳」、iframe 預設開 `budget`（裡面有四個分頁）；導覽列「住宿／花費・記帳」。
+- **手機住宿頁**沿用景點頁的機制（`spotsHTML／showSpot`）：`MPN('stay')`（`id:'stays'`、縮放實例 **`TZ=makeZoom(390,340)`**、`tree:STAY_TREE()`）。
+  `STAY_TREE()` 由 `STAYS` 產生，每個住宿一個地區節點（`keys:[住宿 key]`、`ct`＝色塊第二行「飯店名・N 晚」）。
+  總覽只有地圖與三個色塊；點色塊放大進去 → `stayLeafMap`（住宿＋最近車站＋路線）＋下方 `stayListHTML` 列出那一家的卡（`stayCardHTML`，和桌機同一份）。
+  通用函式為此多了掛鉤：`spotGroupMap` 讀 `r.ct`；`showSpot` 讀 `ctx.leaf`／`ctx.list`／`ctx.hint`；`mpOf`、`[data-mz]` 認得 `#stays`。
+  價錢讀到後 `renderStay()` 在手機只重畫目前打開的那一家；桌機 `renderStay()` 照舊（總覽圖＋三張卡全部列出）。
+- 驗證：scratchpad `tt/stay.js` 改寫（底部分頁、資訊四段、總覽三色塊且不列卡、點靜岡／熱海列出對應的卡、未登入／假憑證價錢、回地區選擇、
+  記帳分頁 iframe 內四個分頁、桌機導覽列與 `#acct` 開 budget、無錯誤，26 項全過）、`check.js` 全過。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。

@@ -680,6 +680,8 @@ button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
 .st-dl dt{color:var(--color-neutral-700,#645c50);font-weight:700}.st-dl dd{margin:0}.st-dl b{color:var(--c)}
 .st-dl .tbd{background:var(--color-neutral-200,#eee7db);color:var(--color-neutral-700,#645c50);border-radius:6px;padding:0 5px;font-size:12.5px}
 .st-login{font-size:12px;color:var(--color-neutral-700,#645c50);margin-top:2px}.st-login .lnk{border:0;background:none;padding:0;color:var(--color-accent-600,#a4521f);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+#stays .leg{stroke:var(--color-accent-500,#c67139)!important;stroke-width:4!important;stroke-dasharray:1 8!important;stroke-linecap:round}
+.st-one{margin-top:6px}.st-one .st-card{border-top-width:5px}
 .st-mini .leg{stroke:var(--c)!important;stroke-width:4!important;stroke-dasharray:1 8!important;stroke-linecap:round}
 .st-mini{border-radius:14px;overflow:hidden;background:#d7e3ea}.st-mini svg{display:block;width:100%;height:auto}
 .st-act{display:flex;gap:8px;margin-top:10px}.st-act>*{flex:1;text-align:center;border-radius:12px;padding:9px;font:700 13px var(--font-body,inherit);border:0;background:var(--color-neutral-200,#eee7db);color:inherit;text-decoration:none;cursor:pointer}
@@ -688,9 +690,6 @@ html.app #stay{padding:12px 16px 30px}html.app #stay .wrap{padding:0}html.app #s
 .pk-back{border:0;background:none;padding:4px 0 10px;font:700 14px var(--font-body,inherit);color:var(--color-accent-600,#a4521f);cursor:pointer}
 .pk-go{margin-top:-6px}
 .tt-fr{display:block;width:100%;height:100%;border:0;background:#f5ead8}
-#maInfo.tt-on{overflow:hidden}#maInfo.tt-on .ma-pane.on{height:100%}
-html.app #cost{height:100%;padding:0;margin:0;background:none}html.app #cost .wrap{height:100%;padding:0;max-width:none}
-html.app #cost h2,html.app #cost .lead{display:none}html.app #cost .tt-dk{height:100%;max-width:none;border:0;border-radius:0;box-shadow:none}
 .tt-dk{max-width:560px;height:min(860px,86vh);border-radius:26px;overflow:hidden;box-shadow:0 6px 24px rgba(42,34,27,.12);border:1px solid var(--rule,#e4d6c0)}.tt-go b{display:block;font-size:15px}.tt-go small{display:block;font-size:12px;color:var(--color-neutral-700,#7c6f62);line-height:1.5}.tt-go .ar{margin-left:auto;color:var(--color-accent-500,#c67139);font-weight:800;white-space:nowrap}.p-mine{background:#f6dcc8;color:#a4521f}.p-wait{background:#e7e2da;color:#7d7468}
 .rs-gm{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--color-surface);color:var(--color-neutral-700)}
 .rs-del{flex:none;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--color-neutral-500);font-size:20px;line-height:1}
@@ -1083,17 +1082,10 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
     <div class="st-body"></div>
   </div>
 </section>
-<section class="block" id="cost">
-  <div class="wrap">
-    <h2>花費（預算）</h2>
-    <p class="lead">出發前的預算。用 Google 登入，只有這趟的成員看得到；由主辦人填寫與修改。</p>
-    <div class="tt-dk"><iframe class="tt-fr" title="花費" allow="clipboard-write"></iframe></div>
-  </div>
-</section>
 <section class="block" id="acct">
   <div class="wrap">
-    <h2>記帳・分帳</h2>
-    <p class="lead">旅途中實際花了多少、誰該給誰多少。用 Google 登入，只有同行的人看得到。</p>
+    <h2>花費・記帳</h2>
+    <p class="lead">出發前的預算（花費）與旅途中的記帳、結算。用 Google 登入，只有同行的人看得到；預算由主辦人填寫與修改。</p>
     <div class="tt-dk"><iframe class="tt-fr" title="記帳" allow="clipboard-write"></iframe></div>
   </div>
 </section>
@@ -1893,8 +1885,8 @@ function ttLoad(fr,pg){ // 第一次打開才載入，平常不碰 Firebase；�
   if(note)note.remove();fr.src=ttEmbed(pg);}
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#stay">住宿</a><a href="#cost">花費</a><a href="#acct">記帳</a>';
-if(!MOB){ttLoad(document.querySelector('#cost .tt-fr'),'budget');ttLoad(document.querySelector('#acct .tt-fr'),'exp');}
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#resto">餐廳</a><a href="#food">美食・行李</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
+if(!MOB)ttLoad(document.querySelector('#acct .tt-fr'),'budget');
 
 // days
 function imgsHTML(c,id){
@@ -2238,7 +2230,7 @@ const PACK=[
  {id:'tech',zh:'3C',en:'Gadgets',items:[['p5','行動電源（需 PSE／CC 認證）'],['p6','延長線・吹風機']]},
  {id:'misc',zh:'盥洗與雜物',en:'Toiletries',items:[['p7','牙刷牙膏牙線・小毛巾'],['p8','乳液・護唇膏・護手霜'],['p9','口罩・洗衣袋'],['p10','餐具（筷子叉子湯匙）']]}
 ];
-const INFO_PANES=[['cost','花費',['#cost']],['stay','住宿',['#stay']],['spots','景點',[]],['tix','交通',['#tickets','footer']],['resto','餐廳',[]]];
+const INFO_PANES=[['stay','住宿',[]],['spots','景點',[]],['tix','交通',['#tickets','footer']],['resto','餐廳',[]]];
 /* ================= 資訊 › 餐廳（取代美食頁）=================
    RESTO＝網站上的「餐廳選項」正式版：要更新時改這裡並把 v 加一、date 改當天。
    每列 [id, 第幾天(0＝未定), 餐別, 地區, 店名, 料理, 備註, 狀態('in' 已排入／'c' 候選), 卡片 key, Google 地圖查詢字, 座標(沒卡片時填，[lat,lng])]。
@@ -2420,29 +2412,36 @@ function stayNight(match){const it=(STP.items||[]).find(x=>x.name.includes(match
   if(!n)return null;const v=Math.round(per/n);return (it.cur==='NT'?'NT ':'¥')+v.toLocaleString('en-US');}
 const stTbd=t=>String(t).replace(/(待確認)/g,'<span class="tbd">$1</span>');
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
+function stayCardHTML(S,i,mini){
+  const login=MOB?'<button class="lnk" data-go="acct">到「記帳」登入</button>':'<a class="lnk" href="#acct">到「花費・記帳」登入</a>';
+  const price=S.stays.map(([d,n,m])=>{const v=STP.st==='ok'?stayNight(m):null;
+    return `<div>${d}・${n} 晚：${STP.st==='ok'?(v?`<b>每人每晚 ${v}</b>`:'<span class="tbd">預算裡還沒有金額</span>'):STP.st==='loading'?'讀取中…':`<span class="tbd">登入後顯示</span>`}</div>`;}).join('')+(STP.st==='no'?`<div class="st-login">只有這趟的成員看得到價錢・${login}</div>`:'');
+  const nm=NAMES[S.key][0],img=cardImg(S.key),nights=S.stays.reduce((a,x)=>a+x[1],0);
+  const mm=mini?`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},MOB?340:440,MOB?150:170,nm+'到車站')}</div>`:'';
+  return `<article class="st-card" id="st-${S.key}" style="--c:${S.col}">
+    <div class="st-h"><i class="st-n">${i+1}</i><div><small>${S.area}・共 ${nights} 晚</small><b>${nm}</b></div></div>
+    ${img?`<div class="st-ph" data-full="${S.key}"><img src="${img}" alt="" loading="lazy"></div>`:''}
+    <dl class="st-dl"><dt>每人每晚</dt><dd>${price}</dd><dt>到車站</dt><dd>${stTbd(S.stn)}</dd><dt>早餐</dt><dd>${stTbd(S.bf)}</dd>
+      <dt>車位</dt><dd>${stTbd(S.park)}</dd><dt>入住</dt><dd>${stTbd(S.chk)}</dd><dt>地址</dt><dd>${S.addr}</dd></dl>${mm}
+    <div class="st-act"><button data-full="${S.key}">看完整介紹</button><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
+/* 手機：住宿也用景點頁的地圖機制（SPOT 的 showSpot），每個住宿一個地區色塊，點進去才在下方列出那一家 */
+function STAY_TREE(){return STAYS.map(S=>({name:S.area,sub:NAMES[S.key][0],col:S.col,lab:S.key==='prince'?'b':'t',keys:[S.key],
+  ct:NAMES[S.key][0].replace(/大飯店|Resort |（.*?）/g,'').replace(' 熱海 Ocean','')+'・'+S.stays.reduce((a,x)=>a+x[1],0)+' 晚'}));}
+function stayLeafMap(node){const S=STAYS.find(x=>x.key===node.keys[0]),nums={[S.key]:STAYS.indexOf(S)+1};
+  const cfg={pts:[S.key,S.st],legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'},nums,minSpan:.012};
+  return {svg:buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:NAMES[S.key][0]+'與車站'}),cfg,nums,focus:null};}
+function stayListHTML(node){if(STP.st==='idle')stayPrices();const S=STAYS.find(x=>x.key===node.keys[0]);return `<div class="st-one">${stayCardHTML(S,STAYS.indexOf(S),false)}</div>`;}
 function renderStay(){
+  if(MOB){const c=MPN('stay');if(c.path&&c.path.length){const reg=document.querySelector('#stays .sp-reg');if(reg)reg.innerHTML=stayListHTML(spotNode(c.path,c.tree));}return;}
   const boxes=document.querySelectorAll('.st-body');if(!boxes.length)return;
   if(STP.st==='idle')stayPrices();
   const keys=STAYS.map(x=>x.key),nums={},labels={};keys.forEach((k,i)=>{nums[k]=i+1;labels[k]='b';});labels.prince='l';
-  const OW=MOB?380:760,OH=MOB?260:300;
-  let ov=stayMap(keys,{labels,nums,minSpan:.3},OW,OH,'三個住宿的位置');
+  const OW=760,OH=300;let ov=stayMap(keys,{labels,nums,minSpan:.3},OW,OH,'三個住宿的位置');
   {const oW=W,oH=H;W=OW;H=OH;const pr=proj(bboxOf(keys,.3)),xy=keys.map(k=>pr.pt(P[k]));W=oW;H=oH; // 每個住宿一個地區色塊
-   const halo=STAYS.map((S,i)=>`<circle class="st-rg" data-st="${S.key}" cx="${xy[i][0].toFixed(1)}" cy="${xy[i][1].toFixed(1)}" r="${MOB?30:34}" fill="${S.col}" fill-opacity=".16" stroke="${S.col}" stroke-width="1.6" stroke-dasharray="5 4"/>`).join('');
-   ov=ov.replace(/(<svg[^>]*>)/,'$1').replace('</svg>','')+'</svg>';ov=ov.replace(/(<rect[^>]*\/>\s*(?:<path[^>]*\/>\s*)*)/,'$1'+halo);if(!ov.includes('st-rg'))ov=ov.replace('</svg>',halo+'</svg>');}
-  const login=MOB?'<button class="lnk" data-go="acct">到「記帳」登入</button>':'<a class="lnk" href="#acct">到「記帳」登入</a>';
-  const price=S=>S.stays.map(([d,n,m])=>{const v=STP.st==='ok'?stayNight(m):null;
-    return `<div>${d}・${n} 晚：${STP.st==='ok'?(v?`<b>每人每晚 ${v}</b>`:'<span class="tbd">預算裡還沒有金額</span>'):STP.st==='loading'?'讀取中…':`<span class="tbd">登入後顯示</span>`}</div>`;}).join('')+(STP.st==='no'?`<div class="st-login">只有這趟的成員看得到價錢・${login}</div>`:'');
-  const card=(S,i)=>{const nm=NAMES[S.key][0],img=cardImg(S.key),nights=S.stays.reduce((a,x)=>a+x[1],0);
-    const mini=stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},MOB?340:440,MOB?150:170,nm+'到車站');
-    return `<article class="st-card" id="st-${S.key}" style="--c:${S.col}">
-    <div class="st-h"><i class="st-n">${i+1}</i><div><small>${S.area}・共 ${nights} 晚</small><b>${nm}</b></div></div>
-    ${img?`<div class="st-ph" data-full="${S.key}"><img src="${img}" alt="" loading="lazy"></div>`:''}
-    <dl class="st-dl"><dt>每人每晚</dt><dd>${price(S)}</dd><dt>到車站</dt><dd>${stTbd(S.stn)}</dd><dt>早餐</dt><dd>${stTbd(S.bf)}</dd>
-      <dt>車位</dt><dd>${stTbd(S.park)}</dd><dt>入住</dt><dd>${stTbd(S.chk)}</dd><dt>地址</dt><dd>${S.addr}</dd></dl>
-    <div class="st-mini">${mini}</div>
-    <div class="st-act"><button data-full="${S.key}">看完整介紹</button><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;};
+   const halo=STAYS.map((S,i)=>`<circle class="st-rg" data-st="${S.key}" cx="${xy[i][0].toFixed(1)}" cy="${xy[i][1].toFixed(1)}" r="34" fill="${S.col}" fill-opacity=".16" stroke="${S.col}" stroke-width="1.6" stroke-dasharray="5 4"/>`).join('');
+   ov=ov.replace('</svg>',halo+'</svg>');}
   const legend=STAYS.map((S,i)=>`<button class="st-chip" data-stgo="${S.key}" style="--c:${S.col}"><i>${i+1}</i>${S.area}<small>${S.stays.map(x=>x[0].replace(/（.*）/,'')).join('、')}</small></button>`).join('');
-  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map(card).join('')}</div>`;});
+  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map((S,i)=>stayCardHTML(S,i,true)).join('')}</div>`;});
 }
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st,c=document.getElementById('st-'+k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return;}
@@ -2533,7 +2532,7 @@ function spotGroupMap(node){
     if(lab==='r'){lx=cx+rx+8/zf;anc='start';}else if(lab==='l'){lx=cx-rx-8/zf;anc='end';}else if(lab==='t')ly=cy-ry-22/zf;else if(lab==='b')ly=cy+ry+22/zf;
     return `<g class="sp-rg" data-reg="${i}" role="button" tabindex="0" aria-label="${r.name}"><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${c}" stroke="${c}"/>
       ${xy.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${c}"/>`).join('')}
-      <g class="zs" transform="translate(${lx.toFixed(1)},${ly.toFixed(1)})"><text y="-4" text-anchor="${anc}" class="nm">${r.name}</text><text y="16" text-anchor="${anc}" class="ct">已排入 ${sch} · 候選 ${r.keys.length-sch}</text></g></g>`;}).join('');
+      <g class="zs" transform="translate(${lx.toFixed(1)},${ly.toFixed(1)})"><text y="-4" text-anchor="${anc}" class="nm">${r.name}</text><text y="16" text-anchor="${anc}" class="ct">${r.ct||`已排入 ${sch} · 候選 ${r.keys.length-sch}`}</text></g></g>`;}).join('');
   return {svg:svg.replace('<svg ','<svg class="ov" ').replace('</svg>',over+'</svg>'),ell,focus};}
 /* 葉節點詳細圖：所有地點都畫、依名單順序編號；同一地點共用一個號碼 */
 function spotLeafMap(node){
@@ -2553,9 +2552,11 @@ let _MP=null;
 function MPN(k){ // 兩個地圖頁：景點、美食；共用 spotGroupMap／spotLeafMap／showSpot
   if(!_MP)_MP={
     spots:{id:'spots',tree:SPOT_TREE,Z:SZ,path:null,h:'景點',lead:'要看哪一個地區？點地圖上的色塊。',ex:'spExtra',exShow:p=>p[0]===0},
-    food:{id:'foods',tree:FOOD_TREE,Z:FZ,path:null,h:'美食',lead:'要吃哪一區？點地圖上的色塊。',ex:'fdExtra',exShow:p=>p.length===0}};
+    food:{id:'foods',tree:FOOD_TREE,Z:FZ,path:null,h:'美食',lead:'要吃哪一區？點地圖上的色塊。',ex:'fdExtra',exShow:p=>p.length===0},
+    stay:{id:'stays',tree:STAY_TREE(),Z:TZ,path:null,h:'住宿',lead:'三個住宿在哪裡？點地圖上的色塊，下面會列出那一家的詳細資訊。',ex:'stExtra',exShow:()=>false,
+      leaf:stayLeafMap,list:stayListHTML,hint:'地圖上是住宿和最近的車站；點住宿標記看完整介紹。'}};
   return _MP[k];}
-function mpOf(el){return MPN(el&&el.closest&&el.closest('#foods')?'food':'spots');}
+function mpOf(el){return MPN(el&&el.closest&&el.closest('#foods')?'food':el&&el.closest&&el.closest('#stays')?'stay':'spots');}
 const ZOOMBTN=`<div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
 function spotsHTML(ctx){
   ctx=ctx||MPN('spots');const ov=spotGroupMap(spotNode([],ctx.tree));ctx.Z._ell=ov.ell;
@@ -2590,14 +2591,14 @@ function showSpot(path,anim,ctx){
     let focus=null;const reg=root.querySelector('.sp-reg');
     if(node.kids){const gm=spotGroupMap(node);Z._ell=gm.ell;spotSwap(ctx,gm.svg,W0,H0,null);focus=gm.focus;
       root.querySelector('.sp-hint').textContent=path.length?'點色塊進入該區；縮小可以看到更遠的地方。':'';reg.classList.remove('on');reg.innerHTML='';}
-    else{const rm=spotLeafMap(node);Z._ell=null;spotSwap(ctx,rm.svg,W0,H0,rm.cfg);focus=rm.focus;
-      root.querySelector('.sp-hint').textContent='地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';reg.classList.add('on');reg.innerHTML=spotLists(node);}
+    else{const rm=(ctx.leaf||spotLeafMap)(node);Z._ell=null;spotSwap(ctx,rm.svg,W0,H0,rm.cfg);focus=rm.focus;
+      root.querySelector('.sp-hint').textContent=ctx.hint||'地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';reg.classList.add('on');reg.innerHTML=(ctx.list||spotLists)(node);}
     if(focus&&focus.z>1.05)setTimeout(()=>{if(ctx.path===path)Z.anim(focus.z,focus.cx,focus.cy,null,420);},380);
     root.querySelector('#'+ctx.ex).hidden=!ctx.exShow(path);if(b)b.scrollTop=0;};
   const e=anim&&Z._ell&&Z._ell[path[path.length-1]];
   if(e&&Z.svg){const z=Math.max(Z.z*1.6,Math.min(8,Math.min(Z.BW/(2*e.rx+30),Z.BH/(2*e.ry+30))));Z.anim(z,e.cx,e.cy,enter,480);}else enter();}
 
-const APP={tab:'home',day:0,pin:null,pane:'cost',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
+const APP={tab:'home',day:0,pin:null,pane:'stay',sheet:false,rain:{},pack:{packed:{},extra:[],filter:'all'}};
 const $a=id=>document.getElementById(id);
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -2865,7 +2866,7 @@ Z.bind=function(box){
     Z.set(Z.z*Math.exp(-e.deltaY*.0025),Z.vb[0]+fx*Z.vb[2],Z.vb[1]+fy*Z.vb[3],fx,fy);Z.relayout();},{passive:false});
 };
 return Z;}
-const MZ=makeZoom(390,400),SZ=makeZoom(390,340),FZ=makeZoom(390,340);
+const MZ=makeZoom(390,400),SZ=makeZoom(390,340),FZ=makeZoom(390,340),TZ=makeZoom(390,340);
 MZ.zmax=80; // 地圖分頁：熱海飯店周邊的點只差一兩百公尺，縮圖 51px，要放到幾十倍才分得開
 function mzInit(svg){MZ.init(svg);}function mzAnim(a,b,c){MZ.anim(a,b,c);}function mzMid(){return MZ.mid();}function mzCenter(a,b){MZ.center(a,b);}function mzBind(b){MZ.bind(b);}
 /* 地圖與路線列表都以當天的停留點為準：每站的位置＝at（P 的 key）或 card 的座標，
@@ -2951,11 +2952,7 @@ function renderPack(){
 function savePack(){lsSet('izu-pack',APP.pack);}
 function renderSeg(){
   $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
-  const tt=APP.pane==='cost'; // 花費＝嵌入記帳工具的預算頁（記帳改到底部分頁）
   document.querySelectorAll('#maInfo .ma-pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===APP.pane));
-  $a('maInfo').classList.toggle('tt-on',tt);
-  if(tt)ttLoad(document.querySelector('#maInfo .ma-pane[data-pane="cost"] .tt-fr'),'budget');
-  if(APP.pane==='stay')renderStay();
 }
 function appClick(e){
   const t=e.target;if(!t.closest||!t.closest('#mapp'))return false;
@@ -2972,7 +2969,7 @@ function appClick(e){
   if(el=t.closest('.ma-row[data-stop]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.stop]);return true;}
   if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
-  if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
+  if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#stays')?TZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
   if(el=t.closest('[data-wxtog]')){const dd=$a('maPlan').querySelector('.wxd');if(dd)dd.hidden=!dd.hidden;return true;}
   if(el=t.closest('#maMap .mz-zone')){ // 放大到讓區內的點攤在畫面中間（左右留縮圖寬、上方留日期膠囊）
@@ -2981,7 +2978,7 @@ function appClick(e){
     if(t.classList.contains('hit')){ // 點擊範圍互相重疊時（標記很密），選離手指最近的那個
       let best=1e9;document.querySelectorAll('#maMap .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}if(!routeInfo(DAYS[APP.day]).nums[k]&&!CARDS[k])return true;if(APP.pin===k)openSheet(stopFor(k));else focusPin(k,false,true);return true;}
   if(el=t.closest('#maRoute .mr-row')){if(el.dataset.pin)focusPin(el.dataset.pin);else openSheet(actStops(DAYS[APP.day])[+el.dataset.sidx]);return true;}
-  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([],false,MPN('spots'));if(APP.pane==='resto')renderResto();return true;}
+  if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([],false,MPN('spots'));if(APP.pane==='stay')showSpot([],false,MPN('stay'));if(APP.pane==='resto')renderResto();return true;}
   if(el=t.closest('[data-reg]')){const c=mpOf(el);showSpot((c.path||[]).concat(+el.dataset.reg),true,c);return true;}
   if(el=t.closest('[data-regback]')){const c=mpOf(el);showSpot((c.path||[]).slice(0,-1),false,c);return true;}
   if(el=t.closest('.spp .sp-map .mk-a[data-k]')){let k=el.dataset.k;const sc=el.closest('.spp').id;
@@ -3011,12 +3008,13 @@ function appInit(){
     if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-write"></iframe></div></div>
       <details class="rs-must"><summary>必吃料理一覽<small>不分店家的特色料理與伴手禮</small></summary></details><button class="rs-fab" data-rsadd>＋ 新增餐廳</button></div>`;
       const f=document.querySelector('#food');if(f)p.querySelector('.rs-must').appendChild(f);}
+    if(k==='stay')p.innerHTML=spotsHTML(MPN('stay'));
     if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
     info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
   APP.tab=['home','plan','map','pack','acct','info'].includes(sv.tab)?sv.tab:'home';
-  APP.pane=sv.pane==='food'?'resto':sv.pane==='acct'?'stay':INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'cost';
+  APP.pane=sv.pane==='food'?'resto':INFO_PANES.some(p=>p[0]===sv.pane)?sv.pane:'stay';
   APP.rday=ti>=0?ti+1:(APP.day|0)+1;
   const pk=lsGet('izu-pack',null);if(pk&&typeof pk==='object')APP.pack={packed:pk.packed||{},extra:Array.isArray(pk.extra)?pk.extra:[],filter:pk.filter==='todo'?'todo':'all'};
   APP.rain=lsGet('izu-rain',false)===true;
@@ -3028,6 +3026,7 @@ function appInit(){
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
   mzBind($a('maMap'));sheetSwipe();
   {const sb=document.querySelector('#spots .sp-map');if(sb){SZ.bind(sb);const sv=sb.querySelector('svg');if(sv)SZ.init(sv,SPOT_OV.W,SPOT_OV.H);}}
+  {const tb=document.querySelector('#stays .sp-map');if(tb){TZ.bind(tb);const tv=tb.querySelector('svg');if(tv)TZ.init(tv,SPOT_OV.W,SPOT_OV.H);}}
   {const fb=document.querySelector('#foods .sp-map');if(fb){FZ.bind(fb);const fv=fb.querySelector('svg');if(fv)FZ.init(fv,SPOT_OV.W,SPOT_OV.H);}}
   root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.ma-row[data-stop]')){e.preventDefault();openSheet(actStops(DAYS[APP.day])[+e.target.dataset.stop]);}if(e.key==='Enter'&&e.target.id==='pkIn')addPack();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&APP.sheet&&modal.hidden)closeSheet();});
