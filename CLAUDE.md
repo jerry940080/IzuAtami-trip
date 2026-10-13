@@ -1051,6 +1051,16 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 驗證：scratchpad `tt/wide.js`（wide=1、沒有分頁列、撐到畫面底、按鈕切頁與反向同步、記帳兩欄、置中彈窗、手機照舊）、`acshot.js`（四頁截圖 `acmk/w_*.png`）；
   trip-tools `bud2.js`、`t1.js`，本專案 `stay.js`、`dk.js`、`todo.js`、`check.js` 通過（`rs3.js` 點的「花費」分段在變更（四十六）就拿掉了，已過時）。
 
+### 2026-10-13 變更（五十六）：待辦事項改版（電腦 D「下一件＋精簡清單＋月曆」、手機 M3「行事曆條列」）
+使用者要手機和電腦分開設計。電腦樣板在 scratchpad `tdmk/mk_A～D.png`，選 **D**；手機另出四個以截止日為主的樣板 `tdmk/mob.png`（M1 月曆＋清單／M2 日期橫條／M3 行事曆條列／M4 倒數軌道），選 **M3**。
+- 資料不變（`BOOK`＋`izu-book`），共用函式在 `bookRank` 後面：`bookSorted()`（未完成優先＋截止日）、`bkMeta(b)`（剩幾天、星期、`when`＝「1/10 起（週日）」「出發前一週（2/3 週三）」）、
+  `bookNextHTML(mob)`「下一件」黑卡（打開網站＋`[data-bkdone]` 標記完成）。舊的 `bookListHTML` 已刪。
+- **電腦** `renderTodoDesk()`：左欄＝下一件＋`bookCompactHTML()` 一行一件（勾選框、標題、截止日與剩幾天；點標題 `[data-bkx]` 展開說明與連結，展開狀態在 `TDOPEN`）；
+  右欄＝`bookCalHTML()` 月曆（只有有截止日的月份可切換 `[data-tdm]`，`TDM` 預設＝下一個截止的月份；截止日橘色、全部完成變綠、2 月標旅行期間；點截止日 `[data-tdday]` 讓清單那幾列閃一下）＋該月截止清單＋行李清單。
+- **手機** `renderPack()` 的待辦分段：下一件黑卡＋`bookAgendaHTML()`：每件左邊日期方塊（月／日／週，沒固定日期的寫「越早」「待定」，14 天內變紅），右邊勾選、標題、說明、截止與剩幾天、連結；完成的移到最下面「已完成 N」。
+- 點擊（完成鈕、展開、換月、點日期）是一個獨立的 document click 監聽，手機電腦共用；勾選照舊走 `change` 事件。
+- 驗證：scratchpad `tt/todo.js`（加了：下一件、展開、月曆 1 月 5 個截止日、換 2 月與旅行期間、點 1/14 標亮 2 列、標記完成換下一件、手機日期方塊、完成移到已完成）、`txm.js`、`dk.js`、`stay.js`、`check.js` 通過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

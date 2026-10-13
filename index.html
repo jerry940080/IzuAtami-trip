@@ -1012,6 +1012,45 @@ html:not(.dk) .tt-sub{display:none}
 html.dk #acct .tt-sub{margin:4px 0 12px}html.dk #acct .tt-lead{font-size:13px;margin:-2px 0 4px;max-width:none}
 html.dk #acct .tt-dk{max-width:none;border:0;box-shadow:none;border-radius:0;background:transparent}
 html.dk #acct .tt-dk iframe{background:transparent}
+/* 待辦：下一件卡（共用）、電腦 D 精簡清單＋月曆、手機 M3 行事曆條列 */
+.td-next{background:var(--color-text,#2a221b);color:#fff;border-radius:18px;padding:14px 16px;margin:0 0 14px}
+.td-next small{display:block;font-size:12px;opacity:.75}.td-next b{display:block;font-size:19px;line-height:1.35;margin:3px 0 2px}.td-next span{display:block;font-size:12.5px;opacity:.8}
+.td-nb{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.td-nb a,.td-nb button{border:0;border-radius:999px;padding:7px 14px;font:700 13px var(--font-body,inherit);text-decoration:none;cursor:pointer}
+.td-nb a{background:#c67139;color:#fff}.td-nb button{background:#fff;color:#2a221b}
+#mapp .td-nb button{color:#2a221b}
+.td-list{background:var(--color-surface,#fffaf2);border-radius:16px;padding:2px 14px}
+.td-r{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;align-items:center;border-bottom:1px dashed var(--rule,#e4d6c0);border-radius:8px}.td-r:last-child{border-bottom:0}
+.td-r input{width:18px;height:18px;accent-color:#7a8a5e;margin:0}
+.td-t{display:grid;grid-template-columns:minmax(0,1fr) auto 14px;gap:10px;align-items:center;border:0;background:none;padding:10px 0;text-align:left;cursor:pointer;color:inherit;font:inherit;width:100%}
+.td-t b{font-size:14px;font-weight:700}.td-t i{font-style:normal;color:var(--color-neutral-600,#9b8f80);font-size:12px}
+.td-d{text-align:right;font-size:11.5px;color:var(--color-neutral-700,#645c50);white-space:nowrap;line-height:1.35}.td-d em{display:block;font-style:normal;font-weight:800;color:#a4521f;font-size:12.5px}.td-d.soon,.td-d.soon em{color:#b23a2a}
+.td-more{grid-column:2;font-size:12.5px;color:var(--color-neutral-700,#645c50);line-height:1.6;padding:0 0 10px}.td-more a{color:#a4521f;font-weight:700}
+.td-r.done .td-t b{text-decoration:line-through;opacity:.5}.td-r.done .td-d{opacity:.6}
+.td-r.flash{animation:tdfl 1.4s}@keyframes tdfl{0%,40%{background:#fde3cf}100%{background:transparent}}
+.td-cal{background:var(--color-surface,#fffaf2);border-radius:16px;padding:12px 14px;margin-bottom:16px}
+.td-ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.td-ch b{font-size:16px}
+.td-ch button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--rule,#e4d6c0);background:#fff;font-size:17px;cursor:pointer;line-height:1}.td-ch button[disabled]{opacity:.3;cursor:default}
+.td-cg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:12.5px}
+.td-cg>*{padding:6px 0;border-radius:8px;border:0;background:none;font:inherit;color:inherit;position:relative}.td-cg .h{font-size:11px;font-weight:700;color:var(--color-neutral-600,#9b8f80)}
+.td-cg .trip{background:#e7d9c2}.td-cg .td{box-shadow:inset 0 0 0 2px #2a221b}
+.td-cg button.m{background:#c67139;color:#fff;font-weight:800;cursor:pointer}.td-cg button.m.dn{background:#a9b38f}.td-cg sup{font-size:9px;margin-left:1px}
+.td-cl{margin-top:10px;font-size:12.5px;line-height:1.5}.td-cl div{padding:3px 0;border-top:1px dashed var(--rule,#e4d6c0)}.td-cl em{font-style:normal;font-weight:800;color:#a4521f;margin-right:6px}.td-cl .done{opacity:.5;text-decoration:line-through}
+.td-lg{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:11px;color:var(--color-neutral-700,#645c50);margin-top:8px}.td-lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:-8px}
+.td-lg i.m{background:#c67139}.td-lg i.dn{background:#a9b38f}.td-lg i.trip{background:#e7d9c2}
+.td-pk{background:var(--color-surface,#fffaf2);border-radius:16px;padding:12px 14px}.td-pk h3{margin-top:0}
+.td-dk .td-col>h3{margin-top:4px}
+/* 手機 M3 */
+.ag{margin-top:2px}.ag-r{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;margin-bottom:8px;align-items:start}
+.ag-d{background:var(--color-text,#2a221b);color:#fff;border-radius:14px;text-align:center;padding:6px 0 7px;line-height:1.15}
+.ag-d small{display:block;font-size:10.5px;opacity:.8}.ag-d b{display:block;font-size:21px;font-weight:800;margin:1px 0}.ag-d b.tx{font-size:14px;margin:4px 0}
+.ag-d.soft{background:#e7d9c2;color:#5a4f43}.ag-d.soon{background:#b23a2a}
+.ag-c{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;background:var(--color-surface,#fffaf2);border-radius:14px;padding:10px 12px;align-items:start}
+.ag-c input{width:20px;height:20px;margin:1px 0 0;accent-color:#7a8a5e}
+.ag-c b{display:block;font-size:14.5px;line-height:1.35}.ag-c span{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);line-height:1.5;margin-top:2px}
+.ag-c em{display:block;font-style:normal;font-size:12px;font-weight:800;color:#a4521f;margin-top:3px}.ag-c em.soon{color:#b23a2a}
+.ag-c a{display:inline-block;font-size:12px;font-weight:700;color:#a4521f;margin-top:3px}
+.ag-r.done{opacity:.55}.ag-r.done .ag-c b{text-decoration:line-through}.ag-r.done .ag-d{background:#a9b38f}
+.ag-h{font-size:12px;font-weight:800;color:var(--color-neutral-700,#645c50);margin:14px 2px 6px}
 .tx-rail{display:none!important}
 html.app .txm{margin:6px 0 14px}html.app .txm-days{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}html.app .txm-days::-webkit-scrollbar{display:none}
 html.app .txm-days button{flex:none;padding:5px 10px;font-size:13px}
@@ -1801,13 +1840,41 @@ let BK={};try{BK=JSON.parse(localStorage.getItem('izu-book')||'{}')||{};}catch(e
 function bookRank(){const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));now.setHours(0,0,0,0);
   const left=d=>Math.round((new Date(d+'T00:00:00')-now)/864e5);return [left,b=>b[1]?left(b[1]):(b[2]==='越早越好'?-1e6:1e6)];}
 function bookCount(){return [BOOK.filter(b=>BK[b[0]]).length,BOOK.length];}
-function bookListHTML(){const [left,rank]=bookRank();
-  return '<ul class="bklist">'+BOOK.slice().sort((a,b)=>(!!BK[a[0]]-!!BK[b[0]])||rank(a)-rank(b)).map(b=>{
-    const [id,dl,when,t,sub,link]=b,done=!!BK[id],n=dl?left(dl):null;
-    const cd=done?'已完成':n==null?'':n>0?`還有 ${n} 天`:n===0?'就是今天':'已過';
-    const lnk=link?link.split('|'):null;
-    return `<li class="${done?'done':''}"><input type="checkbox" data-bk="${id}" ${done?'checked':''} aria-label="${t}"><div class="bk-t"><b>${t}</b><span>${sub}</span>${lnk?`<a href="${lnk[0]}" target="_blank" rel="noopener noreferrer">${lnk[1]} ↗</a>`:''}</div><div class="bk-d${!done&&n!=null&&n<=14?' soon':''}"><b>${when}</b>${cd}</div></li>`;}).join('')+'</ul>';}
+/* 待辦版面：電腦＝D「下一件＋精簡清單＋月曆」、手機＝M3「行事曆條列」（變更（五十六）） */
+const WDN='日一二三四五六',TDOPEN=new Set();let TDM=null;
+function bookSorted(){const [,rank]=bookRank();return BOOK.slice().sort((a,b)=>(!!BK[a[0]]-!!BK[b[0]])||rank(a)-rank(b));}
+function bkMeta(b){const [left]=bookRank(),n=b[1]?left(b[1]):null,d=b[1]?new Date(b[1]+'T00:00:00'):null,md=d?(d.getMonth()+1)+'/'+d.getDate():'';
+  return {n,d,md,wd:d?WDN[d.getDay()]:'',left:BK[b[0]]?'已完成':n==null?'':n>0?`還有 ${n} 天`:n===0?'就是今天':'已過',soon:!BK[b[0]]&&n!=null&&n<=14,lnk:b[5]?b[5].split('|'):null,
+    when:b[2]+(d?(b[2].startsWith(md)?`（週${WDN[d.getDay()]}）`:`（${md} 週${WDN[d.getDay()]}）`):'')};}
+const bkA=l=>l?`<a href="${l[0]}" target="_blank" rel="noopener noreferrer">${l[1]} ↗</a>`:'';
+function bookNextHTML(mob){const b=bookSorted().find(x=>!BK[x[0]]);if(!b)return '<div class="td-next"><b>全部完成了 🎉</b></div>';const m=bkMeta(b);
+  return `<div class="td-next"><small>下一件・${m.when}${m.left?'・'+m.left:''}</small><b>${b[3]}</b>${mob?'':`<span>${b[4]}</span>`}<div class="td-nb">${m.lnk?`<a href="${m.lnk[0]}" target="_blank" rel="noopener noreferrer">打開 ${m.lnk[1]} ↗</a>`:''}<button type="button" data-bkdone="${b[0]}">✓ 標記完成</button></div></div>`;}
+function bookCompactHTML(){return '<div class="td-list">'+bookSorted().map(b=>{const m=bkMeta(b),dn=!!BK[b[0]],op=TDOPEN.has(b[0]);
+  return `<div class="td-r${dn?' done':''}${op?' open':''}" data-bkrow="${b[0]}" data-dl="${b[1]||''}"><input type="checkbox" data-bk="${b[0]}" ${dn?'checked':''} aria-label="${b[3]}"><button type="button" class="td-t" data-bkx="${b[0]}"><b>${b[3]}</b><span class="td-d${m.soon?' soon':''}"><em>${b[2]}</em>${m.left}</span><i>${op?'⌃':'⌄'}</i></button>${op?`<div class="td-more">${b[4]}${m.lnk?'　'+bkA(m.lnk):''}</div>`:''}</div>`;}).join('')+'</div>';}
+function bookCalHTML(){const L=BOOK.filter(b=>b[1]),months=[...new Set(L.map(b=>b[1].slice(0,7)))].sort();if(!months.length)return '';
+  if(!months.includes(TDM)){const nx=bookSorted().find(b=>!BK[b[0]]&&b[1]);TDM=nx?nx[1].slice(0,7):months[0];}
+  const [y,mo]=TDM.split('-').map(Number),first=new Date(y,mo-1,1).getDay(),days=new Date(y,mo,0).getDate(),k=months.indexOf(TDM);
+  const tn=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'})),today=`${tn.getFullYear()}-${String(tn.getMonth()+1).padStart(2,'0')}-${String(tn.getDate()).padStart(2,'0')}`;
+  let c='';for(let d=1;d<=days;d++){const iso=`${TDM}-${String(d).padStart(2,'0')}`,it=L.filter(b=>b[1]===iso),dn=it.length&&it.every(b=>BK[b[0]]);
+    const cls=[it.length?(dn?'m dn':'m'):'',iso>='2027-02-10'&&iso<='2027-02-17'?'trip':'',iso===today?'td':''].filter(Boolean).join(' ');
+    c+=it.length?`<button type="button" class="${cls}" data-tdday="${iso}" title="${it.map(b=>b[3]).join('\n')}">${d}${it.length>1?`<sup>${it.length}</sup>`:''}</button>`:`<span class="${cls}">${d}</span>`;}
+  const ML=L.filter(b=>b[1].startsWith(TDM)).sort((a,b)=>a[1].localeCompare(b[1]));
+  return `<div class="td-cal"><div class="td-ch"><button type="button" data-tdm="-1" ${k?'':'disabled'} aria-label="上個月">‹</button><b>${y} 年 ${mo} 月</b><button type="button" data-tdm="1" ${k<months.length-1?'':'disabled'} aria-label="下個月">›</button></div>
+  <div class="td-cg">${WDN.split('').map(x=>`<span class="h">${x}</span>`).join('')}${'<span></span>'.repeat(first)}${c}</div>
+  <div class="td-cl">${ML.map(b=>{const m=bkMeta(b);return `<div class="${BK[b[0]]?'done':''}"><em>${m.md}（${m.wd}）</em>${b[3]}</div>`;}).join('')}</div>
+  <p class="td-lg"><i class="m"></i>截止日（小數字＝件數）<i class="dn"></i>已完成${TDM==='2027-02'?'<i class="trip"></i>旅行期間':''}</p></div>`;}
+function bookAgendaHTML(){const S=bookSorted(),un=S.filter(b=>!BK[b[0]]),dn=S.filter(b=>BK[b[0]]);
+  const row=b=>{const m=bkMeta(b),d=!!BK[b[0]];
+    const blk=b[1]?`<small>${m.d.getMonth()+1} 月</small><b>${m.d.getDate()}</b><small>週${m.wd}</small>`:`<small>不限</small><b class="tx">${b[2]==='越早越好'?'越早':'待定'}</b>`;
+    return `<div class="ag-r${d?' done':''}"><div class="ag-d${b[1]?'':' soft'}${m.soon?' soon':''}">${blk}</div><div class="ag-c"><input type="checkbox" data-bk="${b[0]}" ${d?'checked':''} aria-label="${b[3]}"><div><b>${b[3]}</b><span>${b[4]}</span>${b[1]||b[2]!=='越早越好'?`<em class="${m.soon?'soon':''}">${b[2]}${m.left?'・'+m.left:''}</em>`:''}${bkA(m.lnk)}</div></div></div>`;};
+  return '<div class="ag">'+un.map(row).join('')+(dn.length?`<div class="ag-h">已完成 ${dn.length}</div>`+dn.map(row).join(''):'')+'</div>';}
 function renderBook(){if(typeof MOB==='undefined')return;if(MOB){if(APP.tab==='pack')renderPack();}else renderTodoDesk();}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-bkdone],[data-bkx],[data-tdm],[data-tdday]');if(!t)return;
+  if(t.dataset.bkdone){BK[t.dataset.bkdone]=1;try{localStorage.setItem('izu-book',JSON.stringify(BK));}catch(err){}renderBook();return;}
+  if(t.dataset.bkx){const k=t.dataset.bkx;TDOPEN.has(k)?TDOPEN.delete(k):TDOPEN.add(k);renderBook();return;}
+  if(t.dataset.tdm){const L=[...new Set(BOOK.filter(b=>b[1]).map(b=>b[1].slice(0,7)))].sort(),i=L.indexOf(TDM)+(+t.dataset.tdm);if(L[i]){TDM=L[i];renderBook();}return;}
+  if(t.dataset.tdday){const rs=document.querySelectorAll(`[data-bkrow][data-dl="${t.dataset.tdday}"]`);rs.forEach(r=>{r.classList.remove('flash');void r.offsetWidth;r.classList.add('flash');});if(rs[0])rs[0].scrollIntoView({block:'center',behavior:'smooth'});}
+});
 document.addEventListener('change',e=>{const c=e.target.closest&&e.target.closest('[data-bk]');if(!c)return;
   if(c.checked)BK[c.dataset.bk]=1;else delete BK[c.dataset.bk];try{localStorage.setItem('izu-book',JSON.stringify(BK));}catch(err){}renderBook();});
 document.addEventListener('click',e=>{const su=e.target.closest&&e.target.closest('#tickets details[data-mc]>summary');if(su&&!matchMedia('(max-width:640px)').matches)e.preventDefault();}); // 桌機一律展開，點標題不收合
@@ -3147,11 +3214,11 @@ function renderPack(){
   <div class="pk-top"><div class="pk-ttl">待辦事項</div><div class="pk-n">${d}/${t}</div></div>
   <div class="pk-bar"><i style="width:${pct}%"></i></div>
   <div class="td-tabs">${[['todo','待辦事項',bd,bt],['pack','行李清單',pd,pt]].map(([k,l,a,b])=>`<button data-tv="${k}" class="${v===k?'on':''}">${l}<small>${a}/${b}</small></button>`).join('')}</div>
-  ${v==='pack'?packListHTML():`<p class="td-note">要訂的票、要預約的店、要辦的手續。依截止日排序，做完打勾（只存在這支手機上）。</p>${bookListHTML()}`}`;
+  ${v==='pack'?packListHTML():`${bookNextHTML(true)}${bookAgendaHTML()}<p class="pk-note">打勾只存在這支手機上，不會同步給其他人。</p>`}`;
 }
 function renderTodoDesk(){const el=$a('todoDk');if(!el)return;const [pd,pt]=packCount(),[bd,bt]=bookCount();
-  el.innerHTML=`<div class="td-col"><h3>待辦事項 <small>${bd}/${bt} 完成</small></h3><p class="td-note">依截止日排序，做完打勾；14 天內到期的變紅。</p>${bookListHTML()}</div>
-  <div class="td-col"><h3>行李清單 <small>已打包 ${pd}/${pt}</small></h3>${packListHTML()}</div>`;}
+  el.innerHTML=`<div class="td-col">${bookNextHTML()}<h3>全部待辦 <small>${bd}/${bt} 完成・點一列看說明與連結</small></h3>${bookCompactHTML()}</div>
+  <div class="td-col">${bookCalHTML()}<div class="td-pk"><h3>行李清單 <small>已打包 ${pd}/${pt}</small></h3>${packListHTML()}</div></div>`;}
 function savePack(){lsSet('izu-pack',APP.pack);}
 function renderSeg(){
   $a('maSeg').innerHTML=INFO_PANES.map(([k,l])=>`<button data-seg="${k}" class="${APP.pane===k?'on':''}">${l}</button>`).join('');
