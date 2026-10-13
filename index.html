@@ -937,6 +937,24 @@ html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 html.dk #stay[data-sel="prince"] .st-card:not(#st-prince),html.dk #stay[data-sel="shizuhotel"] .st-card:not(#st-shizuhotel),html.dk #stay[data-sel="livemax"] .st-card:not(#st-livemax){display:none}
 html.dk .st-chip.on{background:var(--c);color:#fff}html.dk .st-chip.on small{color:#fffd}html.dk .st-chip.on i{background:#fff;color:var(--c)}
 html.dk #stay .st-map{max-width:860px}
+
+/* 電腦版住宿：大圖瀏覽器 */
+.dkst-h{display:flex;gap:10px;align-items:center;margin-bottom:8px}.dkst-h b{display:block;font-size:22px}.dkst-h small{color:var(--c);font-weight:700;font-size:13px}
+.dkst-body{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;margin-top:6px}
+.dkv-main{position:relative;border-radius:18px;overflow:hidden;background:#2a221b}
+.dkv-main img{display:block;width:100%;height:500px;object-fit:contain;cursor:zoom-in}
+.dkv-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,250,242,.88);font-size:26px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.dkv-nav:hover{background:#fff}.dkv-nav.p{left:14px}.dkv-nav.n{right:14px}
+.dkv-cap{position:absolute;left:14px;bottom:14px;background:rgba(0,0,0,.66);color:#fff;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:700}.dkv-cap small{font-weight:400;opacity:.75;margin-left:4px}
+.dkv-grp{display:flex;gap:6px;margin:12px 0 8px;flex-wrap:wrap}.dkv-grp button{border:0;border-radius:999px;padding:5px 13px;font:700 13px var(--font-body,inherit);background:var(--color-neutral-200,#eee7db);cursor:pointer}
+.dkv-grp button.on{background:var(--c);color:#fff}
+.dkv-th{display:flex;gap:8px;flex-wrap:wrap}.dkv-th img{width:96px;height:68px;object-fit:cover;border-radius:10px;opacity:.6;cursor:pointer;transition:opacity .15s}.dkv-th img:hover{opacity:.9}.dkv-th img.on{opacity:1;outline:3px solid #c67139;outline-offset:1px}
+.dkv-sec{display:block;width:100%;text-align:left;border:0;background:var(--color-bg,#fff8ee);border-radius:14px;padding:10px 13px;margin-bottom:8px;cursor:pointer;font:inherit;color:inherit;box-shadow:inset 0 0 0 1.5px var(--color-neutral-300,#e4d6c0)}
+.dkv-sec:hover{box-shadow:inset 0 0 0 1.5px var(--c)}.dkv-sec.on{box-shadow:inset 0 0 0 2.5px var(--c);background:#fff}
+.dkv-sec h4{margin:0 0 4px;font-size:14.5px;display:flex;gap:7px;align-items:center}.dkv-sec h4 em{font-style:normal;background:var(--c);color:#fff;border-radius:6px;padding:1px 7px;font-size:11.5px}
+.dkv-sec p{margin:0;font-size:13px;line-height:1.6}
+.dkst-txt .sta-must{margin-top:4px}.dkst-txt .st-mini{margin-top:10px}.dkst-txt .sta-foot{margin-top:10px}
+html.dk #stay .st-grid{max-width:1180px}
 /* 電腦版：左側目錄＋一次一頁 */
 html.dk body{padding-left:250px}
 html.dk .strip{display:none}
@@ -2498,6 +2516,31 @@ function stayCardHTML(S,i,mini){
     <div class="sta-top"><i class="st-n">${i+1}</i><small>${S.area}・共 ${nights} 晚</small></div>${hero}
     <div class="sta-tags">${tags}</div><div class="sta-price">${price}</div>${mm}${secs}${must}
     <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
+/* 電腦版住宿（使用者選的 B）：左邊大圖瀏覽器（箭頭、分組、縮圖），右邊各段說明；滑鼠不用左右滑也看得到全部照片 */
+const DKV={}; // 每家目前看到第幾張（攤平後的順序）
+function stayFlat(S){const L=[].concat(IMG[S.key]||[]),G=[['總覽',NAMES[S.key][0],[S.hero||0],'']].concat(S.secs||[]),F=[];
+  G.forEach((g,gi)=>g[2].forEach(j=>{if(L[j])F.push({gi,j});}));return {L,G,F};}
+function stayDeskHTML(S,i){
+  const {L,G,F}=stayFlat(S),n=Math.min(DKV[S.key]||0,Math.max(0,F.length-1)),f=F[n],gi=f?f.gi:0,inG=F.map((x,k)=>[x,k]).filter(([x])=>x.gi===gi);
+  const login='<a class="lnk" href="#acct">到「花費・記帳」登入</a>';
+  const price=S.stays.map(([d,nn,m])=>{const v=STP.st==='ok'?stayNight(m):null;
+    return `<span class="pz">${d.replace(/（.*）/,'')}・${nn} 晚　${STP.st==='ok'?(v?`每人每晚 <b>${v}</b>`:'預算裡還沒有金額'):STP.st==='loading'?'讀取中…':'每人每晚・登入後顯示'}</span>`;}).join('')+(STP.st==='no'?`<span class="st-login">只有這趟的成員看得到價錢・${login}</span>`:'');
+  const tags=(S.tags||[]).map(t=>`<span class="${t[0]==='!'?'w':/待確認/.test(t)?'q':''}">${t.replace(/^!/,'')}</span>`).join('');
+  const nights=S.stays.reduce((a,x)=>a+x[1],0);
+  const view=f?`<div class="dkv-main"><img src="${L[f.j]}" alt="" data-ph="${S.key}" data-i="${f.j}"><button class="dkv-nav p" data-dkv="${S.key}" data-n="${n-1}" aria-label="上一張">‹</button><button class="dkv-nav n" data-dkv="${S.key}" data-n="${n+1}" aria-label="下一張">›</button>
+      <span class="dkv-cap">${G[gi][0]==='總覽'?'總覽':G[gi][0]+' '+G[gi][1]}　${inG.findIndex(([,k])=>k===n)+1} / ${inG.length}<small>（全部 ${n+1} / ${F.length}）</small></span></div>
+    <div class="dkv-grp">${G.map((g,k)=>F.some(x=>x.gi===k)?`<button data-dkv="${S.key}" data-n="${F.findIndex(x=>x.gi===k)}" class="${k===gi?'on':''}">${g[0]}</button>`:'').join('')}</div>
+    <div class="dkv-th">${inG.map(([x,k])=>`<img src="${L[x.j]}" alt="" data-dkv="${S.key}" data-n="${k}" class="${k===n?'on':''}">`).join('')}</div>`:'';
+  const secs=(S.secs||[]).map(([tg,ti,,p],k)=>{const first=F.findIndex(x=>x.gi===k+1);return `<button class="dkv-sec${k+1===gi?' on':''}" ${first>=0?`data-dkv="${S.key}" data-n="${first}"`:''}><h4><em>${tg}</em>${ti}</h4><p>${p}</p></button>`;}).join('');
+  const must=(S.must||[]).length?`<div class="sta-must"><b>要記得</b>${S.must.map(x=>`<div>${x}</div>`).join('')}</div>`:'';
+  return `<article class="st-card dkst" id="st-${S.key}" style="--c:${S.col}">
+    <div class="dkst-h"><i class="st-n">${i+1}</i><div><b>${NAMES[S.key][0]}</b><small>${S.area}・共 ${nights} 晚・${S.sub||''}</small></div></div>
+    <div class="sta-tags">${tags}</div><div class="sta-price">${price}</div>
+    <div class="dkst-body"><div class="dkv">${view}</div><div class="dkst-txt">${secs}${must}
+      <div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},360,150,NAMES[S.key][0]+'到車站')}</div>
+      <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
+function dkvGo(k,n){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;const F=stayFlat(S).F;DKV[k]=(n+F.length)%F.length;
+  art.outerHTML=stayDeskHTML(S,STAYS.indexOf(S));}
 // 住宿照片：點了開燈箱（不開景點字卡），左右鍵或按鈕換張
 function openPhoto(k,i){const L=[].concat(IMG[k]||[]);if(!L.length)return;i=(i+L.length)%L.length;
   document.getElementById('lbT').textContent=NAMES[k]?NAMES[k][0]:'';document.getElementById('lbS').textContent=`${i+1} / ${L.length}`;
@@ -2520,10 +2563,11 @@ function renderStay(){
    const halo=STAYS.map((S,i)=>`<circle class="st-rg" data-st="${S.key}" cx="${xy[i][0].toFixed(1)}" cy="${xy[i][1].toFixed(1)}" r="34" fill="${S.col}" fill-opacity=".16" stroke="${S.col}" stroke-width="1.6" stroke-dasharray="5 4"/>`).join('');
    ov=ov.replace('</svg>',halo+'</svg>');}
   const legend=STAYS.map((S,i)=>`<button class="st-chip" data-stgo="${S.key}" style="--c:${S.col}"><i>${i+1}</i>${S.area}<small>${S.stays.map(x=>x[0].replace(/（.*）/,'')).join('、')}</small></button>`).join('');
-  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map((S,i)=>stayCardHTML(S,i,true)).join('')}</div>`;});
+  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map((S,i)=>stayDeskHTML(S,i)).join('')}</div>`;});
   const st=document.getElementById('stay');if(st){if(!st.dataset.sel)st.dataset.sel=STAYS[0].key;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===st.dataset.sel));}
 }
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
+  const dv=t.closest('[data-dkv]');if(dv){dkvGo(dv.dataset.dkv,+dv.dataset.n);return;}
   const ph=t.closest('[data-ph]');if(ph){openPhoto(ph.dataset.ph,+ph.dataset.i);return;}
   const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st;
     if(!MOB){const st=document.getElementById('stay');st.dataset.sel=k;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===k));return;} // 電腦版一次只看一家
@@ -3154,6 +3198,7 @@ function deskInit(){
   const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));show(h||'home');};
   addEventListener('hashchange',fromHash);fromHash();
   document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(!document.getElementById('modal').hidden||!document.getElementById('lb').hidden)return;
+    if(cur==='stay'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const k=document.getElementById('stay').dataset.sel;dkvGo(k,(DKV[k]||0)+(e.key==='ArrowRight'?1:-1));return;}
     const m=/^day(\d)$/.exec(cur||'');if(!m||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight'))return;const n=+m[1]+(e.key==='ArrowRight'?1:-1);if(n>=1&&n<=DAYS.length)location.hash='#day'+n;});
 }
 deskInit();

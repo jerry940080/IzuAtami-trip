@@ -985,6 +985,17 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 手機版完全沒動。trip-guide skill 的參考版還是舊的單頁版，之後要更新時重跑 `strip_media.py`。
 - 驗證：scratchpad `tt/dk.js`（目錄 15 項、首頁 8 天一覽、各頁高度、只顯示一頁、方向鍵與頁尾換天、景點卡照開、關卡片後方向鍵正常、住宿一次一家與換家、錨點回首頁、Day 2 標籤有排）、`check.js` 全過。
 
+### 2026-10-13 變更（五十）：電腦版住宿頁改成「大圖瀏覽器＋縮圖列」（使用者從四個樣板選 B）
+使用者回報電腦版住宿照片無法滑動（`.sta-strip` 橫向捲動用滑鼠滑不動）。樣板在 scratchpad `staymk/desk-stay-mockup.png`（A 照片排滿整列／B 大圖瀏覽器／C 相簿固定＋文字捲動／D 點平面圖看樓層）。
+- **只改電腦版**：`renderStay()` 桌機改用 `stayDeskHTML(S,i)`；手機住宿頁照舊用 `stayCardHTML`（圖文分段＋左右滑）。
+- 版面：標題／標籤／每人每晚 → 左邊 `.dkv` 大圖（高 500px、`contain` 深色底，‹ › 按鈕、左下「2F 客廳・廚房 1 / 5（全部 10 / 18）」）＋分組按鈕（總覽＋各段標籤）＋目前分組的縮圖；
+  右邊 340px 欄是各段說明卡 `.dkv-sec`（點了跳到那一組第一張，目前那組亮框）、要記得、小地圖、地址與 Google 地圖。
+- `stayFlat(S)` 把「封面（總覽）＋各段照片」攤平成一串，`DKV[key]`＝目前第幾張；`dkvGo(key,n)` 循環換張並重畫那一家（`outerHTML`）。
+  按鈕、分組、縮圖、說明卡都是 `[data-dkv][data-n]`；點大圖開全螢幕燈箱（`openPhoto`）；住宿頁時鍵盤 ←／→ 換張（`deskInit` 的 keydown，沒開卡片或燈箱時）。
+- 住宿頁高度 2.2 → 1.5 個螢幕。
+- 驗證：scratchpad `tt/dkst.js`（從第 1 張開始、下一張進抵達、點 2F 分組與縮圖、右邊說明亮起、點 3F 說明跳照片、方向鍵、箭頭繞一圈看到 18 張、點大圖開燈箱、LiVEMAX 6 張）；
+  `dk.js`、`sta.js`、`stay.js`（桌機部分改成開 `#stay`、一次一家）、`check.js` 全過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
