@@ -1116,6 +1116,15 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 封面（`hero`）照片不必再放進段落；每家的封面＋三段仍要涵蓋全部照片。
 - La Vista 已改：公共設施［5,9,8,6］、房間［1,2,3,4］、其他［7］（價格文字併進「其他」）。scratchpad `tt/lv.js` 已改成檢查三段。
 
+### 2026-10-14 變更（六十二）：飯店候選改成 B「三個分頁切換」版面（手機＋電腦）
+使用者從四個樣板（scratchpad `lvmk/mk_A～D.png`）選 B，並要求分類按鈕要顯眼，不然會以為只有那幾張照片。
+- `stayHotelHTML(S,i)`：`isHotelCand(S)`（`cand`、`kind:'飯店'`、有照片分段）時，`stayCardHTML`（手機）與 `stayDeskHTML`（電腦）都改用它；靜岡 Airbnb 等非候選照舊。
+  版面：標題＋標籤 → 重點數字 `.ht-kp`（每人每晚佔兩格、房型、到車站〔用 `walk`〕、早餐、評分）→ 提示「📷 照片分 N 類、共 N 張，點下面切換」→
+  **大分頁列** `.ht-tabs`（每類一顆大按鈕：該類第一張縮圖＋名稱＋張數，選中用區域色填滿）→ 大圖（‹ › 到底會跨到下一類）＋縮圖列＋該類說明＋「下一類：○○（N 張）›」按鈕 → 優缺點 → 要記得＋小地圖＋地址。
+- 狀態 `HT[key]={t,j}`；點擊 `[data-ht][data-t][data-j]` → `htGo`；電腦住宿頁方向鍵改呼叫 `htStep`。點大圖仍開燈箱（`data-ph`）。
+- **hero 不再另外算**：飯店的封面照片要放進某一類（La Vista 房間［0,1,2,3,4］）。品川王子改 公共設施［1］／房間［0,2］，LiVEMAX 改 公共設施［1,5］／房間［3,4,2,0］，都照（六十一）的三類。
+- 驗證：scratchpad `tt/lv.js`（三分頁與張數、手機按下一張走完 10 張、點分頁、下一類按鈕）、`sta.js`、`dkst.js`（LiVEMAX 改看 `.ht-hint`）、`stay.js`、`dk.js`、`split.js`、`check.js` 通過；截圖 `lvmk/b_*.png`。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
