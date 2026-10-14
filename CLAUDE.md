@@ -1227,6 +1227,12 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - key `compass`，`st:'takanawadaiSt'`（新增 `P／NAMES／GQ` 的高輪台站 35.6318,139.7302）；房子座標 35.6333,139.7275 是估的。
 - 照片 5 張：0 平面圖、1 客廳看兩間臥室、2 廚房與客廳、3 餐桌與吊燈（封面）、4 廚房（直式）。分頁 格局［0］／客廳［3,1,2,4］／臥室［］（待補）；分頁名稱不要用「・」，會被拆成小字。
 
+### 2026-10-14 變更（七十一）：手機住宿排版修正
+使用者說手機版住宿排版有問題。截圖發現：照片大圖、縮圖列、說明、「下一類」按鈕超出卡片右邊（`.ht-body` 的 1fr 被縮圖列撐開）；品川 5 家候選卡直排佔掉一個多螢幕。
+- `html.app .ht-body{grid-template-columns:minmax(0,1fr)}`、`.ht-ph／.ht-txt／.ht-main{min-width:0}`、`.ht{overflow:hidden}`。
+- 候選比較卡在手機改**橫向滑動**（`.stc-row` flex＋scroll-snap，每張 74% 寬），標題說明後面自動加「・左右滑看全部」；卡片內價格、膠囊不再縮排。
+- 卡片標題列的編號圓標改靠上對齊，名稱 21px。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

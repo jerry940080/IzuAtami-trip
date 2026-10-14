@@ -1150,6 +1150,19 @@ html.app .ht-info dl>div:nth-last-child(2){border-bottom:1px dashed #e3d6c2}
 .stc-c.more{justify-content:center;gap:2px}.stc-c.more b{font-size:14px}.stc-c.more small{font-size:12px;color:#7d6f63}
 .ht-info dl>div{font-size:15.5px;grid-template-columns:96px 1fr;padding:11px 0}.ht-info dt{font-size:14.5px}
 html.app .ht-info dl>div{font-size:15px;grid-template-columns:86px 1fr}html.app .ht-info dt{font-size:14px}
+
+/* 手機住宿排版修正（2026-10-14）：照片區不撐出卡片、候選卡改左右滑、標題列對齊 */
+html.app .ht{overflow:hidden}
+html.app .ht-body{grid-template-columns:minmax(0,1fr)}
+html.app .ht-ph,html.app .ht-txt,html.app .ht-main{min-width:0;max-width:100%}
+html.app .ht-th{max-width:100%}
+html.app .ht .dkst-h{align-items:flex-start}html.app .ht .dkst-h .st-n{margin-top:4px;flex:none}
+html.app .ht .dkst-h b{font-size:21px;line-height:1.25}html.app .ht .dkst-h small{font-size:12.5px;line-height:1.5}
+html.app .stc-row{display:flex;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px;margin:10px -14px 0;padding:2px 14px 8px;-webkit-overflow-scrolling:touch}
+html.app .stc-row{align-items:flex-start}html.app .stc-row>.stc-c{flex:0 0 74%;scroll-snap-align:start;padding:10px 12px;gap:4px}html.app .stc-p,html.app .stc-m{padding-left:0}html.app .stc-t em{font-size:10.5px;padding:0 6px}html.app .stc-h small{font-size:11.5px}
+html.app .stc-row>.stc-c.more{display:none}
+html.app .stc-t b{font-size:14.5px}html.app .stc-p strong{font-size:18px}
+html.app .stc-h small::after{content:"・左右滑看全部"}
 </style>
 </head>
 <body>
