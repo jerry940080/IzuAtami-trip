@@ -1233,6 +1233,14 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 候選比較卡在手機改**橫向滑動**（`.stc-row` flex＋scroll-snap，每張 74% 寬），標題說明後面自動加「・左右滑看全部」；卡片內價格、膠囊不再縮排。
 - 卡片標題列的編號圓標改靠上對齊，名稱 21px。
 
+### 2026-10-14 變更（七十二）：手機候選住宿改成 C「上方相簿＋分段標籤」
+使用者從四個手機樣板（scratchpad `mbmk/all.png`：A 大照片＋手風琴／B 比較表優先／C 上方相簿＋分段標籤／D 一家一張卡左右滑）選 **C**。只改手機，電腦版仍是 `stayHotelHTML`。
+- `stayMobC(S,i)`（`stayCardHTML` 在 `MOB && isHotelCand(S)` 時改用它）：頂部 300px 大相簿（左右滑 `[data-hsw]`／‹ › `[data-hstep]`、右上「n / 全部」、左上「‹ 品川候選 n / N ›」`[data-hc]` 換家、底部漸層疊名稱＋每人每晚＋評分；點大圖開燈箱）
+  → 區域・晚數小字 → **固定分段** `.hc-seg`（sticky）：**總覽**（標籤、價格塊、房型／到車站／早餐／車位／入住／評分、要記得）／**照片**（分類膠囊＋兩欄格子，點開燈箱）／
+  **房型**（每個 `secs` 一列：縮圖＋說明＋「看這類 N 張照片」）／**評論**（優缺點）／**地圖**（小地圖、到車站、地址、Google 地圖）。
+- 狀態 `HT[key]={t,j,v}`（v＝分段）；`htGo(k,t,j,v)` 依卡片 class `.hc` 決定用哪個版面重畫；`hcStep` 跨類換張。滑動後 450ms 內不開燈箱（`window._hcSw`）。
+- 候選比較條（左右滑）照舊在上面。驗證：scratchpad `tt/lv.js`（C：走完 12 張、照片分段 3 類、房間 5 張、評論）、`stay.js`、`sta.js`、`dkst.js`、`check.js`；截圖 `mbmk/c_all.png`。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

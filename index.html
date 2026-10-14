@@ -1163,6 +1163,38 @@ html.app .stc-row{align-items:flex-start}html.app .stc-row>.stc-c{flex:0 0 74%;s
 html.app .stc-row>.stc-c.more{display:none}
 html.app .stc-t b{font-size:14.5px}html.app .stc-p strong{font-size:18px}
 html.app .stc-h small::after{content:"・左右滑看全部"}
+
+/* 手機候選 C 版面 */
+html.app .hc{padding:0;overflow:hidden;border-radius:20px;background:var(--color-surface,#fffaf2)}
+.hc-hero{position:relative;height:300px;background:#2b2420}.hc-hero>img{width:100%;height:100%;object-fit:cover}
+.hc-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.hc-top>*{pointer-events:auto}.hc-sw{display:flex;align-items:center;background:#fffe;border-radius:999px;box-shadow:0 2px 8px #0003}
+.hc-sw button{border:0;background:none;font-size:20px;line-height:1;padding:4px 10px;color:#2b2420}.hc-sw b{font-size:12.5px;white-space:nowrap}
+.hc-cnt{background:#000a;color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+.hc-nav{position:absolute;top:44%;width:34px;height:34px;border-radius:50%;border:0;background:#fffc;font-size:20px;line-height:1;box-shadow:0 1px 5px #0003}.hc-nav.p{left:8px}.hc-nav.n{right:8px}
+.hc-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;background:linear-gradient(#0000,#000c);color:#fff;pointer-events:none}
+.hc-cap b{display:block;font-size:21px;line-height:1.25}.hc-cap span{font-size:13.5px}
+.hc-sub{display:flex;align-items:center;gap:8px;padding:10px 14px 0}.hc-sub .st-n{flex:none}.hc-sub small{font-size:12px;color:#6b5d50;line-height:1.45}
+.hc-seg{position:sticky;top:0;z-index:3;display:flex;gap:3px;margin:10px 12px;padding:3px;background:#e9dcc7;border-radius:12px}
+#mapp .hc-seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px 0;font:700 13.5px inherit;color:#4b4038}
+#mapp .hc-seg button.on{background:#2b2420;color:#fff}.hc-seg small{font-weight:400;opacity:.75;font-size:11px}
+.hc-body{padding:2px 14px 14px}.hc-body .sta-tags{margin:0 0 10px}
+.hc-pz{border-radius:14px;flex-direction:row!important;flex-wrap:wrap;align-items:flex-end;column-gap:18px}.hc-pz small{flex-basis:100%}.hc-pz b{font-size:20px}
+.hc-pz>div+div{margin:0!important;padding:0 0 0 16px!important;border-top:0!important;border-left:1px solid #ffffff40}
+.hc-dl{margin:10px 0 0;padding:0 2px}.hc-dl>div{display:grid;grid-template-columns:84px 1fr;gap:8px;padding:9px 0;border-bottom:1px dashed #e3d6c2;font-size:14.5px}
+.hc-dl dt{color:#7d6f63;font-size:13.5px}.hc-dl dd{margin:0;font-weight:600}.hc-body .sta-must{margin-top:12px}
+.hc-cats{display:flex;gap:6px;overflow-x:auto;margin:0 -14px 10px;padding:0 14px 2px}
+#mapp .hc-cats button{flex:none;border:1.5px solid #dccbb2;background:#fff;border-radius:999px;padding:5px 12px;font:700 13px inherit;color:#4b4038}
+#mapp .hc-cats button.on{background:var(--c);border-color:var(--c);color:#fff}
+.hc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.hc-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;cursor:zoom-in}
+.hc-grid img.on{outline:3px solid var(--c);outline-offset:-3px}
+.hc-note{font-size:13.5px;line-height:1.7;margin:10px 0 0}
+.hc-rm{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-bottom:1px dashed #e3d6c2}.hc-rm:last-child{border-bottom:0}
+.hc-rm>img{width:96px;height:76px;object-fit:cover;border-radius:10px}.hc-rm h4{margin:0 0 4px;font-size:14.5px}
+.hc-rm h4 em{font-style:normal;background:var(--c);color:#fff;border-radius:6px;padding:0 6px;font-size:11px;margin-right:6px;vertical-align:1px}
+.hc-rm p{margin:0;font-size:13px;line-height:1.65}#mapp .hc-more{margin-top:6px;border:0;background:none;color:var(--c);font:700 12.5px inherit;padding:0}
+.hc-pc{grid-template-columns:1fr!important;font-size:14px}.hc-pc b{font-size:14px!important}
+.hc-body .st-mini{margin:0}.hc-body .sta-foot{margin-top:10px}
 </style>
 </head>
 <body>
@@ -2852,7 +2884,7 @@ const stNo=(S,i)=>S.cand?rgHotels(rgOf(S.rg)).indexOf(S)+1:i+1; // 候選用區�
 const stTbd=t=>String(t).replace(/(待確認)/g,'<span class="tbd">$1</span>');
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
 function stayCardHTML(S,i,mini){
-  if(isHotelCand(S))return stayHotelHTML(S,i);
+  if(isHotelCand(S))return MOB?stayMobC(S,i):stayHotelHTML(S,i);
   const login=MOB?'<button class="lnk" data-go="acct">到「記帳」登入</button>':'<a class="lnk" href="#acct">到「花費・記帳」登入</a>';
   const price=S.stays.map(([d,n,m])=>{const v=STP.st==='ok'?stayNight(m):null;
     return `<span class="pz">${d.replace(/（.*）/,'')}・${n} 晚　${STP.st==='ok'?(v?`每人每晚 <b>${v}</b>`:'預算裡還沒有金額'):STP.st==='loading'?'讀取中…':'每人每晚・登入後顯示'}</span>`;}).join('')+(STP.st==='no'?`<span class="st-login">只有這趟的成員看得到價錢・${login}</span>`:'');
@@ -2872,6 +2904,47 @@ function stayCardHTML(S,i,mini){
 /* 飯店候選（使用者選的 B「三個分頁切換」，2026-10-14）：重點數字一列 → 大的分類分頁（縮圖＋張數）→ 大圖＋該類說明與縮圖 → 優缺點。
    手機、電腦共用；照片分類一律「飯店公共設施／房間／其他」（secs），hero 不另外算。HT[key]={t:第幾類,j:該類第幾張} */
 const HT={};
+/* 手機候選住宿（使用者選的 C「上方相簿＋分段標籤」，2026-10-14）：頂部大相簿（疊名稱價格、‹ 候選 n/N › 換家），
+   下面固定分段 總覽／照片／房型／評論／地圖，一次只看一段。HT[key].v＝目前分段 */
+function stayMobC(S,i){
+  const L=[].concat(IMG[S.key]||[]),G=(S.secs||[]).map(g=>[g[0],g[1],g[2].filter(j=>L[j]),g[3]]).filter(g=>g[2].length||g[3]);
+  const PG=G.filter(g=>g[2].length);const st=HT[S.key]||{t:0,j:0,v:'ov'};const v=st.v||'ov';
+  const t=Math.min(st.t,Math.max(0,G.length-1)),g=G[t]||['','',[],''],J=g[2],j=Math.min(st.j,Math.max(0,J.length-1));
+  const all=PG.reduce((a,x)=>a.concat(x[2]),[]),cur=J.length?J[j]:(all[0]??(S.hero||0)),pos=all.indexOf(cur)+1;
+  const R=rgOf(S.rg),HL=rgHotels(R),hi=HL.indexOf(S),nb=d=>HL[(hi+d+HL.length)%HL.length].key;
+  const nums=S.price&&S.price!=='待補'?(S.price.match(/NT\s*[\d,]+/g)||[]).map(x=>+x.replace(/\D/g,'')):[],pz=nums.length?'約 NT '+Math.min(...nums).toLocaleString('en-US')+(nums.length>1?' 起':''):'價格待補';
+  const nm=NAMES[S.key][0],nights=S.stays.reduce((a,x)=>a+x[1],0),tb=v=>v&&v!=='待補'?v:'<span class="tbd">待補</span>';
+  const go=(tt,jj,vv)=>`data-ht="${S.key}" data-t="${tt}" data-j="${jj}"${vv?` data-hv="${vv}"`:''}`;
+  const hero=`<div class="hc-hero" data-hsw="${S.key}">${L[cur]?`<img src="${L[cur]}" alt="" data-ph="${S.key}" data-i="${cur}">`:''}
+    <div class="hc-top">${HL.length>1&&!R.pick?`<span class="hc-sw"><button data-hc="${nb(-1)}" aria-label="上一家">‹</button><b>${R.area.replace(/^東京・/,'')}候選 ${hi+1} / ${HL.length}</b><button data-hc="${nb(1)}" aria-label="下一家">›</button></span>`:'<span></span>'}${all.length?`<span class="hc-cnt">${pos} / ${all.length}</span>`:''}</div>
+    ${all.length>1?`<button class="hc-nav p" data-hstep="${S.key}" data-d="-1" aria-label="上一張">‹</button><button class="hc-nav n" data-hstep="${S.key}" data-d="1" aria-label="下一張">›</button>`:''}
+    <div class="hc-cap"><b>${nm}</b><span>每人每晚 ${pz}${S.rate?'・★ '+S.rate.replace(/（.*?）/,''):''}</span></div></div>`;
+  const segs=[['ov','總覽'],['ph','照片'],['rm','房型'],['rv','評論'],['mp','地圖']];
+  const seg=`<div class="hc-seg">${segs.map(([k,n])=>`<button class="${k===v?'on':''}" ${go(t,j,k)}>${n}${k==='ph'&&all.length?` <small>${all.length}</small>`:''}</button>`).join('')}</div>`;
+  const tags=(S.tags||[]).map(x=>`<span class="${x[0]==='!'?'w':/待確認/.test(x)?'q':''}">${x.replace(/^!/,'')}</span>`).join('');
+  const pzs=S.price&&S.price!=='待補'?S.price.split('／').map(x=>{const m=/^(.*?)（(.*)）$/.exec(x.trim());return m?[m[1],m[2]]:[x.trim(),''];}):null;
+  const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
+  const must=(S.must||[]).length?`<div class="sta-must"><b>要記得</b>${S.must.map(x=>`<div>${x}</div>`).join('')}</div>`:'';
+  let body='';
+  if(v==='ov')body=`<div class="sta-tags">${tags}</div>
+    <div class="ht-pz hc-pz"><small>每人每晚</small>${pzs?pzs.map(([a,b],k)=>`<div class="${k?'s':''}">${b?`<span>${b}</span>`:''}<b>${a}</b></div>`).join(''):'<div><span class="tbd">待補</span></div>'}</div>
+    <dl class="hc-dl">${[['🛏','房型',S.room],['🚉','到車站',S.stn||S.walk],['🍳','早餐',S.bf],['🅿️','車位',S.park],['🕒','入住',S.chk],['⭐','評分',S.rate]].map(([ic,a,x])=>`<div><dt>${ic} ${a}</dt><dd>${tb(x)}</dd></div>`).join('')}</dl>${must}`;
+  else if(v==='ph')body=PG.length?`<div class="hc-cats">${G.map((x,k)=>x[2].length?`<button class="${k===t?'on':''}" ${go(k,0,'ph')}>${x[0].replace(/^房間・/,'')} ${x[2].length}</button>`:'').join('')}</div>
+    <div class="hc-grid">${J.map((x,k)=>`<img src="${L[x]}" alt="" loading="lazy" data-ph="${S.key}" data-i="${x}" class="${k===j?'on':''}">`).join('')}</div>
+    <p class="hc-note"><b>${g[0]}・${g[1]}</b>　${g[3]}</p>`:'<p class="tbd">照片待補</p>';
+  else if(v==='rm')body=G.map((x,k)=>`<section class="hc-rm">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy" ${go(k,0,'ph')}>`:''}<div><h4><em>${x[0]}</em>${x[1]}</h4><p>${x[3]}</p>${x[2].length?`<button class="hc-more" ${go(k,0,'ph')}>看這類 ${x[2].length} 張照片 ›</button>`:''}</div></section>`).join('');
+  else if(v==='rv')body=`<div class="stf-pc ht-pc hc-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>${S.rate?`<p class="hc-note">評分 ${S.rate}</p>`:''}`;
+  else body=`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},340,190,nm+'到車站')}</div>
+    <p class="hc-note">🚉 ${tb(S.stn)}</p><div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div>`;
+  return `<article class="st-card hc" id="st-${S.key}" style="--c:${S.col}">${hero}
+    <div class="hc-sub"><i class="st-n">${stNo(S,i)}</i><small>${S.area}・共 ${nights} 晚・${S.kind||''}・${S.sub||''}</small></div>${seg}<div class="hc-body">${body}</div>${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}</article>`;}
+(function(){let x0=null,y0=0,k0='';document.addEventListener('touchstart',e=>{const h=e.target.closest&&e.target.closest('[data-hsw]');if(!h){x0=null;return;}x0=e.touches[0].clientX;y0=e.touches[0].clientY;k0=h.dataset.hsw;},{passive:true});
+  document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5){hcStep(k0,dx<0?1:-1);window._hcSw=Date.now();}},{passive:true});})();
+function hcStep(k,d){const S=STAYS.find(x=>x.key===k);if(!S)return;const L=[].concat(IMG[k]||[]),G=(S.secs||[]).map(g=>[g[0],g[1],g[2].filter(j=>L[j]),g[3]]).filter(g=>g[2].length||g[3]);
+  const st=HT[k]||{t:0,j:0,v:'ov'};let t=Math.min(st.t,G.length-1),j=st.j+d,n=0;
+  if(!G[t]||!G[t][2].length){t=G.findIndex(x=>x[2].length);j=0;if(t<0)return;}
+  else while(j<0||j>=G[t][2].length){if(++n>G.length*2)return;if(j<0){t=(t-1+G.length)%G.length;j=G[t][2].length-1;}else{t=(t+1)%G.length;j=0;}}
+  htGo(k,t,j,st.v);}
 const isHotelCand=S=>S.cand&&(S.secs||[]).some(g=>g[2].length); // 候選（飯店、民宿、Airbnb）都用分頁版面
 function stayHotelHTML(S,i){
   const L=[].concat(IMG[S.key]||[]),G=(S.secs||[]).map(g=>[g[0],g[1],g[2].filter(j=>L[j]),g[3]]).filter(g=>g[2].length||g[3]);
@@ -2900,8 +2973,8 @@ function stayHotelHTML(S,i){
     <div class="stf-pc ht-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>
     ${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}
     <div class="ht-foot">${must}<div>${map}<div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
-function htGo(k,t,j){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;HT[k]={t,j};
-  art.outerHTML=stayHotelHTML(S,STAY_RG.findIndex(r=>r.id===S.rg));}
+function htGo(k,t,j,v){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;HT[k]={t,j,v:v||(HT[k]&&HT[k].v)||'ov'};
+  art.outerHTML=(MOB&&art.classList.contains('hc')?stayMobC:stayHotelHTML)(S,STAY_RG.findIndex(r=>r.id===S.rg));}
 function htStep(k,d){const S=STAYS.find(x=>x.key===k);if(!S)return;const L=[].concat(IMG[k]||[]),G=(S.secs||[]).map(g=>g[2].filter(j=>L[j])).filter(x=>x.length);
   if(!G.length)return;let {t,j}=HT[k]||{t:0,j:0};j+=d;if(j>=G[t].length){t=(t+1)%G.length;j=0;}else if(j<0){t=(t-1+G.length)%G.length;j=G[t].length-1;}htGo(k,t,j);}
 /* 電腦版住宿（使用者選的 B）：左邊大圖瀏覽器（箭頭、分組、縮圖），右邊各段說明；滑鼠不用左右滑也看得到全部照片 */
@@ -2957,9 +3030,11 @@ function renderStay(){
   const st=document.getElementById('stay');if(st){if(!rgOf(st.dataset.sel))st.dataset.sel=STAY_RG[0].id;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===st.dataset.sel));}
 }
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
-  const ht=t.closest('[data-ht]');if(ht){htGo(ht.dataset.ht,+ht.dataset.t,+ht.dataset.j);return;}
+  const hc=t.closest('[data-hc]');if(hc){const S=STAYS.find(x=>x.key===hc.dataset.hc);if(S){STSEL[S.rg]=S.key;renderStay();const a=document.getElementById('st-'+S.key);if(a)a.scrollIntoView({block:'start'});}return;}
+  const hs=t.closest('[data-hstep]');if(hs){hcStep(hs.dataset.hstep,+hs.dataset.d);return;}
+  const ht=t.closest('[data-ht]');if(ht){htGo(ht.dataset.ht,+ht.dataset.t,+ht.dataset.j,ht.dataset.hv);return;}
   const dv=t.closest('[data-dkv]');if(dv){dkvGo(dv.dataset.dkv,+dv.dataset.n);return;}
-  const ph=t.closest('[data-ph]');if(ph){openPhoto(ph.dataset.ph,+ph.dataset.i);return;}
+  const ph=t.closest('[data-ph]');if(ph){if(window._hcSw&&Date.now()-window._hcSw<450)return;openPhoto(ph.dataset.ph,+ph.dataset.i);return;}
   const sc=t.closest('[data-stc]');if(sc){const S=STAYS.find(x=>x.key===sc.dataset.stc);if(S){STSEL[S.rg]=S.key;renderStay();}return;}
   const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st;
     if(!MOB){const st=document.getElementById('stay');st.dataset.sel=k;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===k));return;} // 電腦版一次只看一家
