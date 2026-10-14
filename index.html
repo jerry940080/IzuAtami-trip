@@ -1120,7 +1120,7 @@ html.dk .dk-off{display:none!important}
 html.app .ht{padding:14px;border-radius:18px}
 html.app .ht-kp{grid-template-columns:1fr 1fr}html.app .ht-kp .w2{grid-column:span 2}
 html.app .ht-tabs{gap:6px}html.app .ht-tab{flex-direction:column;align-items:stretch;gap:5px;padding:5px;text-align:center}
-html.app .ht-tab img,html.app .ht-ni{width:100%;height:54px}html.app .ht-tab b{font-size:13px}
+html.app .ht-tab img,html.app .ht-ni{width:100%;height:54px}html.app .ht-tab b{font-size:13px;white-space:nowrap;letter-spacing:-.02em}html.app .ht-tabs[style*='--n:4'] .ht-tab b{font-size:11.5px}html.app .ht-tab small{font-size:11px}
 html.app .ht-body{grid-template-columns:1fr;gap:10px}html.app .ht-main{height:230px}html.app .ht-th img{width:66px;height:48px}
 html.app .ht-foot{grid-template-columns:1fr}
 
@@ -1576,7 +1576,7 @@ const IMG={lavista:['img/lavista-0-73b533c5.webp','img/lavista-1-c6712c95.webp',
  yume:['img/yume-0-72f9b545.webp','img/yume-1-38afbb44.webp','img/yume-2-94766a49.webp','img/yume-3-3642c4d8.webp'],
  aoba:['img/aoba-0-957fe508.webp','img/aoba-1-c157e4a9.webp','img/aoba-2-30971d2e.webp'],
  miho:['img/miho-0-2d0d316d.webp','img/miho-1-d35469e6.webp','img/miho-2-bc69fc35.webp'],
- prince:['img/prince-0-f46f7049.jpg','img/prince-1-1b6b718b.jpg','img/prince-2-c99e6c02.jpg'],livemax:['img/livemax-0-248866ab.jpg','img/livemax-1-6d08f009.jpg','img/livemax-2-8fac9d18.jpg','img/livemax-3-5481a708.jpg','img/livemax-4-2835fd34.jpg','img/livemax-5-465d2bc3.jpg'],baien:['img/baien-0-952a0279.jpg','img/baien-1-d9599e06.jpg','img/baien-2-3af2cc13.jpg','img/baien-3-da27ffa4.jpg'],kinomiya:['img/kinomiya-0-8058c26d.jpg','img/kinomiya-1-ff5a82d2.jpg'],itogawa:['img/itogawa-0-14aacb07.jpg','img/itogawa-1-385c4d91.jpg','img/itogawa-2-6d0b0df2.jpg'],sakura:['img/sakura-0-df8497b2.jpg','img/sakura-1-05d6f920.jpg','img/sakura-2-cd454ed6.jpg','img/sakura-3-ea672b8e.jpg','img/sakura-4-b29bc7b6.jpg'],shirahama:['img/shirahama-0-83335226.jpg','img/shirahama-1-af82c785.jpg'],minami:'img/minami-0-7bf84af0.jpg',yokocho:'img/yokocho-0-39dfaef2.jpg',katsumoto:['img/katsumoto-0-783b303d.jpg','img/katsumoto-1-4804cf69.jpg'],teddy:['img/teddy-0-b3506eda.jpg','img/teddy-1-7d0d54a0.jpg','img/teddy-2-553c2616.jpg','img/teddy-3-085b2ead.jpg'],shimokita:['img/shimokita-0-704e1bef.jpg','img/shimokita-1-1ac7c675.jpg','img/shimokita-2-edff0f32.jpg']};
+ prince:['img/prince-0-f46f7049.jpg','img/prince-1-1b6b718b.jpg','img/prince-2-c99e6c02.jpg'],livemax:['img/livemax-0-248866ab.jpg','img/livemax-1-6d08f009.jpg','img/livemax-2-8fac9d18.jpg','img/livemax-3-5481a708.jpg','img/livemax-4-2835fd34.jpg','img/livemax-5-465d2bc3.jpg','img/livemax-6-d0f4279e.webp','img/livemax-7-42acd940.webp','img/livemax-8-19d483f2.webp','img/livemax-9-f6f5cbf3.webp'],baien:['img/baien-0-952a0279.jpg','img/baien-1-d9599e06.jpg','img/baien-2-3af2cc13.jpg','img/baien-3-da27ffa4.jpg'],kinomiya:['img/kinomiya-0-8058c26d.jpg','img/kinomiya-1-ff5a82d2.jpg'],itogawa:['img/itogawa-0-14aacb07.jpg','img/itogawa-1-385c4d91.jpg','img/itogawa-2-6d0b0df2.jpg'],sakura:['img/sakura-0-df8497b2.jpg','img/sakura-1-05d6f920.jpg','img/sakura-2-cd454ed6.jpg','img/sakura-3-ea672b8e.jpg','img/sakura-4-b29bc7b6.jpg'],shirahama:['img/shirahama-0-83335226.jpg','img/shirahama-1-af82c785.jpg'],minami:'img/minami-0-7bf84af0.jpg',yokocho:'img/yokocho-0-39dfaef2.jpg',katsumoto:['img/katsumoto-0-783b303d.jpg','img/katsumoto-1-4804cf69.jpg'],teddy:['img/teddy-0-b3506eda.jpg','img/teddy-1-7d0d54a0.jpg','img/teddy-2-553c2616.jpg','img/teddy-3-085b2ead.jpg'],shimokita:['img/shimokita-0-704e1bef.jpg','img/shimokita-1-1ac7c675.jpg','img/shimokita-2-edff0f32.jpg']};
 
 const DAYS=[
  {n:1,date:'2/10',wd:'三',title:'桃園 → 成田 → 品川',sub:'下午飛，晚上住進東京',stay:'品川王子大飯店 北塔',
@@ -2700,18 +2700,25 @@ const STAYS=[
    ['房間','東翼雙床房 31㎡（附露天浴池）',[0,1,2,3,4],'兩張單人床、沙發和小圓桌；陽台是自己的檜木露天浴池，直接放溫泉，泡著就看得到熱海港和海。獨立淋浴間，洗手台在外面，兩個人可以同時梳洗。'],
    ['其他','餐點・價格',[11,10,7],'餐廳是自助式，生魚片、鮭魚、烤牛肉、壽喜燒、煮物都有，照片是住客分享的（生魚片排在船形餐檯上）；評論很推餐點。價格（2 間 × 2 晚、含稅費）：不含早餐 <b>NT 37,822</b>，含早餐 <b>NT 46,242</b>；每人每晚依總價 ÷ 4 人 ÷ 2 晚算。']],
   must:['早餐要不要加購，訂房時就決定','開車到：停車費要先問','入住時間待確認']},
- {key:'livemax',rg:'atami',st:'atami',kind:'飯店',price:'待補',room:'待補',walk:'熱海站計程車 5 分',rate:'',pros:[],cons:[],link:'',
-  addr:'熱海市渚町 22-8',stn:'熱海站，計程車約 5 分；步行時間待確認',mode:'taxi',bf:'待確認',park:'待確認（開車抵達，出發前要問）',chk:'入住／退房時間待確認',
-  hero:3,sub:'面相模灣的溫泉飯店・還沒訂',tags:['熱海站計程車 5 分','停車場待確認','早餐待確認'],
-  secs:[['飯店公共設施','大浴場・三溫暖',[1,5],'大浴場面海，還有看得到海的三溫暖；有些房型陽台有自己的露天浴池（訂房時看房型）。'],
-   ['房間','客房',[3,4,2,0],'海景房、和洋室都有（房型還沒定）。2/13 開車抵達先停車寄行李，連住兩晚，2/14 從這裡出發去河津。']],
-  must:['開車抵達：停車場有沒有、怎麼收費要先問','確認房間或館內有沒有洗衣機']}];
+ {key:'livemax',rg:'atami',st:'atami',kind:'飯店',price:'約 NT 5,535（選項一・含早餐）／約 NT 5,204（選項二・早餐另選）',
+  room:'兩種可選：和美麗小套房／西式現代和洋室，都是 35㎡＋露台露天浴池（2 人一間，訂 2 間）',
+  walk:'熱海站 1.4 km',rate:'8.7（Trip.com）',
+  pros:['每間房都有私人露台和露天溫泉浴池','兩種房型都有 35㎡，比一般飯店房間大','有私人停車場，Day 4 開車直接停','在渚町海邊，熱海銀座、糸川、土曜夜市都走得到','選項一含早餐'],
+  cons:['離熱海站 1.4 km，去車站要計程車或走一段路','評分 8.7，比 La Vista（9.5）低','選項二不含早餐，要另選方案'],link:'',
+  addr:'熱海市渚町 22-8（〒413-0014）',stn:'JR 熱海站約 1.4 km（計程車約 5 分，步行約 18 分）',mode:'taxi',
+  bf:'選項一含；選項二可加購自助餐 ¥1,750（約 NT 355）或套餐（標示免費，待確認）',park:'有私人停車場（費用待確認）',chk:'入住 15:00 後・退房 10:00 前',
+  hero:4,sub:'渚町海邊・房間附露天溫泉・兩種房型挑選中',tags:['熱海站 1.4 km','房間附露天溫泉','私人停車場','35㎡ 大房','入住 15:00・退房 10:00'],
+  secs:[['飯店公共設施','大浴場・三溫暖',[1,5],'大浴場面海，還有看得到海的三溫暖。飯店在渚町海邊，熱海銀座、糸川、土曜夜市都走得到；有私人停車場，Day 4 開車到直接停。'],
+   ['房間・選項一','和美麗小套房 35㎡＋露台 9㎡',[4,6,7,8,9],'榻榻米地板的和洋室：兩張小型雙人床、矮桌和懶骨頭，還有沙發區、冰箱、微波爐。露台 9㎡ 有檜木露天浴池，泡著看得到熱海港；淋浴間在室內。<b>含早餐</b>，2 間 × 2 晚含稅費總價 <b>NT 44,280</b>（網站標示每間每晚 NT 9,936）。'],
+   ['房間・選項二','西式現代和洋室 35㎡＋露台 7㎡',[],'露台 7㎡ 是信樂燒（陶製）露天浴池。<b>不含早餐</b>，可加購自助餐（每人 ¥1,750，約 NT 355）或套餐（網站標示免費，待確認）。2 間 × 2 晚含稅費總價 <b>NT 41,630</b>（每間每晚 NT 9,332）。照片待補。'],
+   ['其他','其他房型照片',[3,2,0],'飯店官方的房間照片，還不確定是哪一種房型；選項二的照片來了之後再分。']],
+  must:['兩種房型選一個：選項一含早餐、2 間 2 晚貴 NT 2,650','選項二的話，早餐套餐是不是真的免費','停車費要先問']}];
 STAYS.forEach(S=>{const R=STAY_RG.find(r=>r.id===S.rg);Object.assign(S,{area:R.area,col:R.col,stays:R.stays,cand:!R.pick});});
 const STSEL={}; // 每區目前看哪一家候選
 const rgOf=id=>STAY_RG.find(r=>r.id===id),rgHotels=R=>STAYS.filter(S=>S.rg===R.id);
 const rgSel=R=>{const L=rgHotels(R);return L.find(S=>S.key===(R.pick||STSEL[R.id]))||L[0];};
 function stayCmpHTML(R){const L=rgHotels(R),sel=rgSel(R);if(R.pick)return '';
-  return `<div class="stc" style="--c:${R.col}"><div class="stc-h"><b>${R.area}還在挑</b><small>${L.length} 家候選・點一家看完整介紹，決定後這裡換成訂好的那一家</small></div><div class="stc-row">${L.map((S,i)=>{const pz=S.price&&S.price!=='待補'?S.price.split('／')[0].replace(/（.*?）/,'').trim():'';
+  return `<div class="stc" style="--c:${R.col}"><div class="stc-h"><b>${R.area}還在挑</b><small>${L.length} 家候選・點一家看完整介紹，決定後這裡換成訂好的那一家</small></div><div class="stc-row">${L.map((S,i)=>{const nums=S.price&&S.price!=='待補'?(S.price.match(/NT\s*[\d,]+/g)||[]).map(x=>+x.replace(/\D/g,'')):[],pz=nums.length?'約 NT '+Math.min(...nums).toLocaleString('en-US'):'';
   return `<button type="button" class="stc-c${S===sel?' on':''}" data-stc="${S.key}"><div class="stc-t"><i>${i+1}</i><b>${NAMES[S.key][0]}</b>${S===sel?'<em>顯示中</em>':''}</div>
   <div class="stc-p">${pz?`<strong>${pz}</strong><small>起・每人每晚</small>`:'<small class="tbd">價格待補</small>'}</div>
   <div class="stc-m">${S.kind?`<span>${S.kind}</span>`:''}${S.rate?`<span>★ ${S.rate.replace(/（.*?）/,'')}</span>`:''}${S.walk?`<span>🚉 ${S.walk}</span>`:''}</div></button>`;}).join('')}<div class="stc-c more"><span><b>更多候選整理中</b><small>照片、評論、價格陸續補上</small></span></div></div></div>`;}
@@ -2779,7 +2786,7 @@ function stayHotelHTML(S,i){
     <dl>${[['🛏','房型',S.room],['🚉','到車站',S.stn||S.walk],['🍳','早餐',S.bf],['⭐','評分',S.rate]].map(([ic,a,v])=>`<div><dt><i>${ic}</i>${a}</dt><dd>${tb(v)}</dd></div>`).join('')}</dl></div>`;
   // 往前／往後到底時跨到上一類／下一類，箭頭本身就會帶人看到其他分類
   const nx=d=>{let tt=t,jj=j+d;if(jj>=J.length){tt=(t+1)%G.length;jj=0;}else if(jj<0){tt=(t-1+G.length)%G.length;jj=Math.max(0,G[tt][2].length-1);}return `data-ht="${S.key}" data-t="${tt}" data-j="${jj}"`;};
-  const tabs=G.map((x,k)=>`<button type="button" class="ht-tab${k===t?' on':''}" data-ht="${S.key}" data-t="${k}" data-j="0">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy">`:'<span class="ht-ni"></span>'}<span><b>${x[0]}</b><small>${x[2].length} 張</small></span></button>`).join('');
+  const tabs=G.map((x,k)=>`<button type="button" class="ht-tab${k===t?' on':''}" data-ht="${S.key}" data-t="${k}" data-j="0">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy">`:'<span class="ht-ni"></span>'}${(()=>{const q=x[0].split('・'),nm=q.length>1?q.slice(1).join('・'):x[0],pre=q.length>1?q[0]+'・':'';return `<span><b>${nm}</b><small>${pre}${x[2].length?x[2].length+' 張':pre?'待補':'照片待補'}</small></span>`;})()}</button>`).join('');
   const main=J.length?`<div class="ht-main"><img src="${L[J[j]]}" alt="" data-ph="${S.key}" data-i="${J[j]}"><button class="ht-nav p" ${nx(-1)} aria-label="上一張">‹</button><button class="ht-nav n" ${nx(1)} aria-label="下一張">›</button><span class="ht-cap">${g[0]}　${j+1} / ${J.length}</span></div>`:'';
   const th=J.length>1?`<div class="ht-th">${J.map((x,k)=>`<img src="${L[x]}" alt="" loading="lazy" data-ht="${S.key}" data-t="${t}" data-j="${k}" class="${k===j?'on':''}">`).join('')}</div>`:'';
   const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
@@ -2791,7 +2798,7 @@ function stayHotelHTML(S,i){
     ${info}
     <div class="ht-hint">📷 照片分 <b>${G.length} 類</b>、共 <b>${tot} 張</b>，點下面切換</div>
     <div class="ht-tabs" style="--n:${G.length}">${tabs}</div>
-    <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length} 張）›</button>`:''}</div></div>
+    <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length?G[t+1][2].length+' 張':'照片待補'}）›</button>`:''}</div></div>
     <div class="stf-pc ht-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>
     ${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}
     <div class="ht-foot">${must}<div>${map}<div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
