@@ -1,11 +1,11 @@
 /* 離線快取（2026-10-05）
    - 網頁本身：先試網路（3 秒沒回應或斷線就用快取），有網路時一定拿到最新版，離線也打得開。
-   - 圖示、說明檔：先用快取。
+   - 圖示、說明檔、img/ 照片：先用快取（照片檔名帶內容雜湊，內容變了檔名就變，不會拿到舊圖）。
    - 維基百科照片、Google 字型：抓過一次就存起來；網頁開啟時也會把所有照片網址送來預存（warm）。
    - YouTube 影片不快取（太大，也無法離線播放）。
    改了這支檔案要把 V 的版本號加一，舊快取才會被清掉。
    網頁的 fetch 加 cache:'no-cache'，否則 GitHub Pages 的 10 分鐘 HTTP 快取會讓使用者一直看到舊版。 */
-const V='izu-v2', PAGE='./', CORE=['./','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
+const V='izu-v3', PAGE='./', CORE=['./','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 const isMedia=u=>/(^|\.)upload\.wikimedia\.org$/.test(u.hostname)||/fonts\.(googleapis|gstatic)\.com$/.test(u.hostname);

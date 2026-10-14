@@ -135,7 +135,7 @@ point-in-polygon，揪出 6 個落在水面的點，修正如下（之後改座�
 > 建物圖示都需要我手上沒有的圖資，硬畫等於捏造地理位置，所以只做了「編號圓標＋卡片對應」
 > 這個不需要新圖資的部分。真要畫道路，得像當初鐵道那樣另外找国土数値情報的道路資料。
 
-### 照片嵌入工具（2026-10-03 起）
+### 照片嵌入工具（2026-10-03 起；2026-10-14 起照片存成 `img/` 獨立檔，見變更（六十））
 `tools/addphotos.py <cardKey> <圖檔...>` —— 使用者在對話中貼圖後，圖檔會落在
 `/tmp/claude-0/<專案>/<session>/images/N.webp`，直接餵給這支就好。
 
@@ -1097,6 +1097,19 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **座標是依地址估的**（35.0995,139.0770，±300 m，已過 LAND 檢查），要 Google 地圖連結才能改準。`GQ` 用「La Vista ATAMI Terrace 熱海市東海岸町8-19」。
 - 驗證：scratchpad `tt/lv.js`（熱海比較條 2 家、大圖瀏覽器 5 張、手機預設 La Vista 且照片全顯示、切 LiVEMAX、無溢出）；`dkst.js` 改成先點 LiVEMAX 再檢查它的 6 張；`stay.js`、`sta.js`、`check.js` 通過。
 
+### 2026-10-14 變更（六十）：照片拆成獨立檔、用到才載入
+使用者說網站開很久：`index.html` 12.55 MB，其中 96% 是 126 張 base64 照片與官方地圖。選了「照片拆成獨立檔、用到才載入」。
+- 全部照片搬到 **`img/`**（`<key>-<序號>-<內容雜湊8碼>.webp|jpg`，官方地圖 `map-<k>-<雜湊>.webp`，共 9.04 MB），`IMG`／`AREAMAPS` 裡改成相對路徑字串。
+  **`index.html` 12.55 → 0.49 MB**。內容變了檔名就變，所以 service worker 用 cache-first 不會拿到舊圖。
+- 卡片封面、彈窗輪播、住宿照片、縮圖列、桌機 8 天一覽的 `<img>` 加 `loading="lazy"`；隱藏的頁面（`.dk-off`、沒打開的分頁）不會下載照片。
+- `thumbSrc()` 改成「`IMG` 有照片就用 canvas 縮 96px 方圖」（原本靠 `data:` 開頭判斷）；`file://` 開啟時畫布算跨來源、`toDataURL` 會丟錯，改用原圖。
+- **離線**：開頁 4 秒後把 `IMG`＋`AREAMAPS` 全部網址 `postMessage({type:'warm'})` 給 SW 預存（實測 126 張全進快取、離線重新整理住宿大圖照常顯示）。`sw.js` 版本 `izu-v3`。
+  第一次開啟會在背景下載約 9 MB 照片，之後都從快取讀。`file://` 不會啟用 SW，本機直接開檔要連同 `img/` 資料夾一起。
+- `tools/addphotos.py` 改成把 WebP 寫進 `img/`、`IMG` 放路徑（重複檢查同時擋 `data:image` 和 `img/`）。**換照片時記得刪掉 `img/` 裡的舊檔**。
+  skill 的 `strip_media.py` 也會把 `img/` 路徑換成灰色佔位圖；參考版 `assets/reference-guide.html` 還沒重產。
+- 驗證：scratchpad `tt/split.js`（load 時間、canvas 縮圖 31 張、SW 預存 126 張、離線住宿大圖、手機時間軸 8/8、地圖縮圖、彈窗照片）、`check.js`（file://）全過；
+  `lv`／`stay`／`sta`／`dkst`／`todo`／`dk`／`txm` 無失敗；`dksub.js` 的「手機交通頁不受影響」改版前就失敗（測試過時）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
@@ -1144,13 +1157,13 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 
 ## index.html 內部結構（改檔前必讀）
 
-單檔約 5.5 MB，兩個 `<script>`：第一個是 `const LAND=[...]`（海岸線多邊形，來自
+單檔約 0.5 MB（照片在 `img/`），兩個 `<script>`：第一個是 `const LAND=[...]`（海岸線多邊形，來自
 dataofjapan/land 簡化，**勿動**）；第二個是主程式，關鍵常數依序為：
 
 - `P`＝地點座標 `{key:[lat,lng]}`；`NAMES`＝`{key:[顯示名,類型]}`，類型 hotel/spot/station/air 決定標記樣式。
 - `RAILS`＝背景鐵路虛線；`MODE`＝交通方式線色（rail 藍/shinkansen 粗藍/izukyu 綠/car 紅/
   taxi 紅虛線/bus 黃虛線/subway 紫/ropeway 紫虛線/walk 灰點）。
-- `IMG`＝`{cardKey:'data:image/jpeg;base64,...' 或 [多張]}`。**照片一律轉 JPEG、寬 ≤1200、
+- `IMG`＝`{cardKey:'img/<key>-<i>-<hash>.webp' 或 [多張]}`（2026-10-14 前是 base64 內嵌）。**照片一律轉 JPEG、寬 ≤1200、
   quality 82 再 base64**；使用者截圖常帶 Google 鏡頭圖示/浮水印/尺寸字樣，嵌入前先裁掉
   （通常裁底部 8–9%）。多張時第一張為卡片封面。
 - `CARDS`＝景點卡 `{key:{name,jp,kind,short,wiki:[維基標題備援圖],text,chips:[],
