@@ -1211,6 +1211,14 @@ html.app .stc-t b{font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-l
 html.app .stc-p{padding:3px 9px 0;display:block}html.app .stc-p strong{font-size:16.5px;display:block}html.app .stc-p small{font-size:10.5px}
 html.app .stc-m{padding:5px 9px 9px;gap:4px}html.app .stc-m span{font-size:10.5px;padding:1px 7px}
 html.app .stc-m span:first-child{display:none}html.app .stc-m span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* 分段按鈕加強（2026-10-14）：圖示＋字、白底卡片按鈕，選中用區域色 */
+.hc-seg{gap:6px!important;padding:8px!important;margin:12px 10px!important;background:color-mix(in srgb,var(--c) 14%,#f3eadc)!important;border-radius:16px!important;box-shadow:0 4px 10px #0000001f}
+#mapp .hc-seg button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 6px!important;background:#fff!important;border:1.5px solid #e2d3bd!important;border-radius:12px!important;color:#3a302a!important;font-size:13.5px!important;box-shadow:0 1px 2px #0000001a}
+#mapp .hc-seg button i{font-style:normal;font-size:18px;line-height:1.1}
+#mapp .hc-seg button span{display:flex;align-items:baseline;gap:2px}
+#mapp .hc-seg button small{font-size:10.5px;opacity:.7}
+#mapp .hc-seg button.on{background:var(--c)!important;border-color:var(--c)!important;color:#fff!important;box-shadow:0 3px 8px color-mix(in srgb,var(--c) 45%,transparent)}
 </style>
 </head>
 <body>
@@ -2936,8 +2944,8 @@ function stayMobC(S,i){
     <div class="hc-top">${HL.length>1&&!R.pick?`<span class="hc-sw"><button data-hc="${nb(-1)}" aria-label="上一家">‹</button><b>${R.area.replace(/^東京・/,'')}候選 ${hi+1} / ${HL.length}</b><button data-hc="${nb(1)}" aria-label="下一家">›</button></span>`:'<span></span>'}${all.length?`<span class="hc-cnt">${pos} / ${all.length}</span>`:''}</div>
     ${all.length>1?`<button class="hc-nav p" data-hstep="${S.key}" data-d="-1" aria-label="上一張">‹</button><button class="hc-nav n" data-hstep="${S.key}" data-d="1" aria-label="下一張">›</button>`:''}
     <div class="hc-cap"><b>${nm}</b><span>每人每晚 ${pz}${S.rate?'・★ '+S.rate.replace(/（.*?）/,''):''}</span></div></div>`;
-  const segs=[['ov','總覽'],['ph','照片'],['rm','房型'],['rv','評論'],['mp','地圖']];
-  const seg=`<div class="hc-seg">${segs.map(([k,n])=>`<button class="${k===v?'on':''}" ${go(t,j,k)}>${n}${k==='ph'&&all.length?` <small>${all.length}</small>`:''}</button>`).join('')}</div>`;
+  const segs=[['ov','總覽','📋'],['ph','照片','📷'],['rm','房型','🛏'],['rv','評論','💬'],['mp','地圖','📍']];
+  const seg=`<div class="hc-seg">${segs.map(([k,n,ic])=>`<button class="${k===v?'on':''}" ${go(t,j,k)}><i>${ic}</i><span>${n}${k==='ph'&&all.length?`<small>${all.length}</small>`:''}</span></button>`).join('')}</div>`;
   const tags=(S.tags||[]).map(x=>`<span class="${x[0]==='!'?'w':/待確認/.test(x)?'q':''}">${x.replace(/^!/,'')}</span>`).join('');
   const pzs=S.price&&S.price!=='待補'?S.price.split('／').map(x=>{const m=/^(.*?)（(.*)）$/.exec(x.trim());return m?[m[1],m[2]]:[x.trim(),''];}):null;
   const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
