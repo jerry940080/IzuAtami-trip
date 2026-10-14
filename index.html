@@ -1120,7 +1120,7 @@ html.dk .dk-off{display:none!important}
 html.app .ht{padding:14px;border-radius:18px}
 html.app .ht-kp{grid-template-columns:1fr 1fr}html.app .ht-kp .w2{grid-column:span 2}
 html.app .ht-tabs{gap:6px}html.app .ht-tab{flex-direction:column;align-items:stretch;gap:5px;padding:5px;text-align:center}
-html.app .ht-tab img,html.app .ht-ni{width:100%;height:54px}html.app .ht-tab b{font-size:13px;white-space:nowrap;letter-spacing:-.02em}html.app .ht-tabs[style*='--n:4'] .ht-tab b{font-size:11.5px}html.app .ht-tab small{font-size:11px}
+html.app .ht-tab img,html.app .ht-ni{width:100%;height:54px}html.app .ht-tab b{font-size:13px;white-space:nowrap;letter-spacing:-.02em}html.app .ht-tabs[style*='--n:4'] .ht-tab b,html.app .ht-tabs[style*='--n:5'] .ht-tab b{font-size:11.5px}html.app .ht-tabs[style*='--n:5']{gap:4px}html.app .ht-tabs[style*='--n:5'] .ht-tab img,html.app .ht-tabs[style*='--n:5'] .ht-ni{height:44px}html.app .ht-tab small{font-size:11px}
 html.app .ht-body{grid-template-columns:1fr;gap:10px}html.app .ht-main{height:230px}html.app .ht-th img{width:66px;height:48px}
 html.app .ht-foot{grid-template-columns:1fr}
 
@@ -1556,7 +1556,7 @@ const CARDS={
 };
 
 /* local photos (base64) */
-const IMG={nishiatami:['img/nishiatami-0-f204c48d.webp','img/nishiatami-1-62c891f2.webp','img/nishiatami-2-7b564ad8.webp','img/nishiatami-3-b9582396.webp','img/nishiatami-4-4aa51f53.webp','img/nishiatami-5-fa11d4f4.webp','img/nishiatami-6-42913511.webp','img/nishiatami-7-e8a5241c.webp','img/nishiatami-8-b8b875b4.webp','img/nishiatami-9-75470c60.webp'],
+const IMG={nishiatami:['img/nishiatami-0-f204c48d.webp','img/nishiatami-1-62c891f2.webp','img/nishiatami-2-7b564ad8.webp','img/nishiatami-3-b9582396.webp','img/nishiatami-4-4aa51f53.webp','img/nishiatami-5-fa11d4f4.webp','img/nishiatami-6-42913511.webp','img/nishiatami-7-e8a5241c.webp','img/nishiatami-8-b8b875b4.webp','img/nishiatami-9-75470c60.webp','img/nishiatami-10-80739db6.webp','img/nishiatami-11-3393bd34.webp','img/nishiatami-12-3ba4086e.webp','img/nishiatami-13-a395eb49.webp'],
  lavista:['img/lavista-0-73b533c5.webp','img/lavista-1-c6712c95.webp','img/lavista-2-919211f1.webp','img/lavista-3-cd35e65b.webp','img/lavista-4-df1d7bb5.webp','img/lavista-5-c6cf7d26.webp','img/lavista-6-3a56e1e1.webp','img/lavista-7-133fa1cb.webp','img/lavista-8-81aeab82.webp','img/lavista-9-d42ac233.webp','img/lavista-10-d528dc98.webp','img/lavista-11-ea7200a1.webp'],
  shizuhotel:['img/shizuhotel-0-a4fbf77a.webp','img/shizuhotel-1-fd6b3344.webp','img/shizuhotel-2-cd99037a.webp','img/shizuhotel-3-25f827ee.webp','img/shizuhotel-4-6c3613c5.webp','img/shizuhotel-5-854f909f.webp','img/shizuhotel-6-e04ac9b8.webp','img/shizuhotel-7-27876642.webp','img/shizuhotel-8-0db9453e.webp','img/shizuhotel-9-fc77cc99.webp','img/shizuhotel-10-1675b675.webp','img/shizuhotel-11-5f88a6b7.webp','img/shizuhotel-12-65324bb8.webp','img/shizuhotel-13-ab2947f2.webp','img/shizuhotel-14-6a361515.webp','img/shizuhotel-15-75258b0d.webp','img/shizuhotel-16-dc12d58a.webp','img/shizuhotel-17-224c4815.webp'],
  moa:['img/moa-0-403bfcb0.webp','img/moa-1-7b5c5a64.webp','img/moa-2-d38148cd.webp','img/moa-3-fbe877ce.webp'],
@@ -2723,7 +2723,8 @@ const STAYS=[
   hero:1,sub:'西熱海山丘上・整棟 5 房・海景與初島',tags:['整棟 150㎡','5 間臥室','海景・初島','免費停車 2 台','入住 15:00・退房 10:00','!附近沒有商店'],
   secs:[['格局','1F 平面圖',[0],'1F 有門廊和 2 個並排的停車位，客廳餐廳區在中間，旁邊是廚房、衛浴和榻榻米房；臥室在樓上（西式臥室＋茶室風格的榻榻米房）。'],
    ['廚房','廚房・家電・餐具',[1,2,3,4,5,6,7,9],'白色系廚房：IH 爐、水槽、鍋具架；洗衣機在廚房旁邊；有熱水壺、電子鍋、小烤箱。碗櫃裡大小盤子、碗都有，抽屜有刀叉湯匙和飯匙，還有一組鍋子、平底鍋、玻璃杯和香檳杯。評論說碗筷不夠、平底鍋會黏（照片裡平底鍋有刮痕），要煮的話可以先問房東。'],
-   ['客廳與臥室','客廳與臥室',[8],'客廳一整面大窗看出去是相模灣和山，有 6 人長餐桌＋吧台椅、和式矮桌與坐墊、電視。評論說客廳寬敞、孩子很開心。臥室照片待補。'],
+   ['客廳','客廳・餐廳',[10,8,11],'客廳轉角兩面都是大窗，看出去是相模灣和山；冬天有暖桌（被爐）和和式坐椅，還有沙發、6 人長餐桌＋吧台椅、電視。拱門後面是廚房和洗衣機，旁邊是上樓的樓梯。評論說客廳寬敞、孩子很開心。'],
+   ['臥室','臥室 1',[12,13],'兩張單人床、深藍色牆配間接照明，大窗看得到山和海，整面收納衣櫃。其他 4 間臥室（含榻榻米房）照片待補。'],
    ['其他','價格與住宿稅',[],'2 晚整棟總價 <b>NT 23,943</b>，4 人分攤每人每晚約 <b>NT 2,993</b>。另有住宿稅每人每晚 ¥200（4 人 2 晚共 ¥1,600），通常現場或另外付。']],
   must:['附近沒有商店：Day 4 從靜岡開車過來時先買好早餐和飲料','山丘上去熱海市區要開車或計程車：Day 4 晚上的熱海銀座、糸川、土曜夜市要重新安排移動方式','詳細地址、到來宮站要走多久，訂房前問清楚','熱水器、浴缸排水的問題入住當下就先試']}];
 STAYS.forEach(S=>{const R=STAY_RG.find(r=>r.id===S.rg);Object.assign(S,{area:R.area,col:R.col,stays:R.stays,cand:!R.pick});});
@@ -2799,7 +2800,7 @@ function stayHotelHTML(S,i){
     <dl>${[['🛏','房型',S.room],['🚉','到車站',S.stn||S.walk],['🍳','早餐',S.bf],['⭐','評分',S.rate]].map(([ic,a,v])=>`<div><dt><i>${ic}</i>${a}</dt><dd>${tb(v)}</dd></div>`).join('')}</dl></div>`;
   // 往前／往後到底時跨到上一類／下一類，箭頭本身就會帶人看到其他分類
   const nx=d=>{let tt=t,jj=j+d;if(jj>=J.length){tt=(t+1)%G.length;jj=0;}else if(jj<0){tt=(t-1+G.length)%G.length;jj=Math.max(0,G[tt][2].length-1);}return `data-ht="${S.key}" data-t="${tt}" data-j="${jj}"`;};
-  const tabs=G.map((x,k)=>`<button type="button" class="ht-tab${k===t?' on':''}" data-ht="${S.key}" data-t="${k}" data-j="0">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy">`:'<span class="ht-ni"></span>'}${(()=>{const q=x[0].split('・'),nm=q.length>1?q.slice(1).join('・'):x[0],pre=q.length>1?q[0]+'・':'';return `<span><b>${nm}</b><small>${pre}${x[2].length?x[2].length+' 張':pre?'待補':'照片待補'}</small></span>`;})()}</button>`).join('');
+  const tabs=G.map((x,k)=>`<button type="button" class="ht-tab${k===t?' on':''}" data-ht="${S.key}" data-t="${k}" data-j="0">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy">`:'<span class="ht-ni"></span>'}${(()=>{const q=x[0].split('・'),nm=q.length>1?q.slice(1).join('・'):x[0],pre=q.length>1?q[0]+'・':'';return `<span><b>${nm}</b><small>${pre}${x[2].length?x[2].length+' 張':'文字說明'}</small></span>`;})()}</button>`).join('');
   const main=J.length?`<div class="ht-main"><img src="${L[J[j]]}" alt="" data-ph="${S.key}" data-i="${J[j]}"><button class="ht-nav p" ${nx(-1)} aria-label="上一張">‹</button><button class="ht-nav n" ${nx(1)} aria-label="下一張">›</button><span class="ht-cap">${g[0]}　${j+1} / ${J.length}</span></div>`:'';
   const th=J.length>1?`<div class="ht-th">${J.map((x,k)=>`<img src="${L[x]}" alt="" loading="lazy" data-ht="${S.key}" data-t="${t}" data-j="${k}" class="${k===j?'on':''}">`).join('')}</div>`:'';
   const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
@@ -2811,7 +2812,7 @@ function stayHotelHTML(S,i){
     ${info}
     <div class="ht-hint">📷 照片分 <b>${G.length} 類</b>、共 <b>${tot} 張</b>，點下面切換</div>
     <div class="ht-tabs" style="--n:${G.length}">${tabs}</div>
-    <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length?G[t+1][2].length+' 張':'照片待補'}）›</button>`:''}</div></div>
+    <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length?G[t+1][2].length+' 張':'文字說明'}）›</button>`:''}</div></div>
     <div class="stf-pc ht-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>
     ${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}
     <div class="ht-foot">${must}<div>${map}<div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
