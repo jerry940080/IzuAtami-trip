@@ -1241,6 +1241,10 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - 狀態 `HT[key]={t,j,v}`（v＝分段）；`htGo(k,t,j,v)` 依卡片 class `.hc` 決定用哪個版面重畫；`hcStep` 跨類換張。滑動後 450ms 內不開燈箱（`window._hcSw`）。
 - 候選比較條（左右滑）照舊在上面。驗證：scratchpad `tt/lv.js`（C：走完 12 張、照片分段 3 類、房間 5 張、評論）、`stay.js`、`sta.js`、`dkst.js`、`check.js`；截圖 `mbmk/c_all.png`。
 
+### 2026-10-14 變更（七十三）：手機候選比較卡改成兩欄卡片
+使用者要求美化、每排兩個（取代七十一的左右滑）。`stayCmpHTML` 每格多一個 `.stc-im`（封面照片＋左上編號＋選中時右上「顯示中」，電腦版藏起來）；
+手機 `.stc-row` 兩欄 grid，卡片＝4:3 照片／名稱（最多兩行）／價格大字／評分與到車站膠囊（一行、超出省略），選中用區域色框；種類膠囊在手機藏起來。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
