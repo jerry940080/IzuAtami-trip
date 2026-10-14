@@ -1136,6 +1136,20 @@ html.app .ht-info{grid-template-columns:1fr}html.app .ht-pz{flex-direction:row;f
 html.app .ht-pz small{flex-basis:100%}html.app .ht-pz b{font-size:20px}
 html.app .ht-info dl{grid-template-columns:1fr;padding:2px 14px}html.app .ht-info dl>div{grid-template-columns:70px 1fr}
 html.app .ht-info dl>div:nth-last-child(2){border-bottom:1px dashed #e3d6c2}
+
+/* 候選比較卡（2026-10-14 改版）：名稱／價格大字／小膠囊三層，選中用區域色框，不再整張黑底 */
+.stc-row{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.stc-c{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:12px 14px;border:2px solid #e4d6c0;border-radius:14px;background:#fff}
+.stc-c:hover{border-color:var(--c)}
+.stc-t{display:flex;align-items:center;gap:8px}.stc-t b{font-size:15.5px;line-height:1.3;flex:1}
+.stc-t em{font-style:normal;font-size:11px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:999px;padding:1px 8px;flex:none}
+.stc-p{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:6px;padding-left:34px}.stc-p strong{font-size:20px;color:var(--c);line-height:1.2;white-space:nowrap}.stc-p small,.stc-c.on .stc-p small{font-size:12px;color:#7d6f63}
+.stc-m{display:flex;flex-wrap:wrap;gap:5px;padding-left:34px}.stc-m span{font-size:12px;background:#f3eadc;border-radius:999px;padding:2px 9px;color:#4b4038}
+.stc-c.on{background:#fff;color:inherit;border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.stc-c.on i{box-shadow:none}#mapp .stc-c.on{color:inherit}
+.stc-c.more{justify-content:center;gap:2px}.stc-c.more b{font-size:14px}.stc-c.more small{font-size:12px;color:#7d6f63}
+.ht-info dl>div{font-size:15.5px;grid-template-columns:96px 1fr;padding:11px 0}.ht-info dt{font-size:14.5px}
+html.app .ht-info dl>div{font-size:15px;grid-template-columns:86px 1fr}html.app .ht-info dt{font-size:14px}
 </style>
 </head>
 <body>
@@ -2697,7 +2711,10 @@ const STSEL={}; // 每區目前看哪一家候選
 const rgOf=id=>STAY_RG.find(r=>r.id===id),rgHotels=R=>STAYS.filter(S=>S.rg===R.id);
 const rgSel=R=>{const L=rgHotels(R);return L.find(S=>S.key===(R.pick||STSEL[R.id]))||L[0];};
 function stayCmpHTML(R){const L=rgHotels(R),sel=rgSel(R);if(R.pick)return '';
-  return `<div class="stc" style="--c:${R.col}"><div class="stc-h"><b>${R.area}還在挑</b><small>${L.length} 家候選・點一家看完整介紹，決定後這裡換成訂好的那一家</small></div><div class="stc-row">${L.map((S,i)=>`<button type="button" class="stc-c${S===sel?' on':''}" data-stc="${S.key}"><i>${i+1}</i><span><b>${NAMES[S.key][0]}</b><small>${[S.kind,S.price&&S.price!=='待補'?S.price:'',S.rate?'★ '+S.rate:'',S.walk].filter(Boolean).join('・')}</small></span></button>`).join('')}<div class="stc-c more"><span><b>更多候選整理中</b><small>照片、評論、價格陸續補上</small></span></div></div></div>`;}
+  return `<div class="stc" style="--c:${R.col}"><div class="stc-h"><b>${R.area}還在挑</b><small>${L.length} 家候選・點一家看完整介紹，決定後這裡換成訂好的那一家</small></div><div class="stc-row">${L.map((S,i)=>{const pz=S.price&&S.price!=='待補'?S.price.split('／')[0].replace(/（.*?）/,'').trim():'';
+  return `<button type="button" class="stc-c${S===sel?' on':''}" data-stc="${S.key}"><div class="stc-t"><i>${i+1}</i><b>${NAMES[S.key][0]}</b>${S===sel?'<em>顯示中</em>':''}</div>
+  <div class="stc-p">${pz?`<strong>${pz}</strong><small>起・每人每晚</small>`:'<small class="tbd">價格待補</small>'}</div>
+  <div class="stc-m">${S.kind?`<span>${S.kind}</span>`:''}${S.rate?`<span>★ ${S.rate.replace(/（.*?）/,'')}</span>`:''}${S.walk?`<span>🚉 ${S.walk}</span>`:''}</div></button>`;}).join('')}<div class="stc-c more"><span><b>更多候選整理中</b><small>照片、評論、價格陸續補上</small></span></div></div></div>`;}
 // 候選才有的「比較重點」：公開報價、房型、到車站、早餐、評分＋優缺點＋訂房連結
 function stayFactsHTML(S){if(!S.cand)return '';const tb=v=>v&&v!=='待補'?v:'<span class="tbd">待補</span>';
   const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
