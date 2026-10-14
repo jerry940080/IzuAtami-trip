@@ -1123,6 +1123,19 @@ html.app .ht-tabs{gap:6px}html.app .ht-tab{flex-direction:column;align-items:str
 html.app .ht-tab img,html.app .ht-ni{width:100%;height:54px}html.app .ht-tab b{font-size:13px}
 html.app .ht-body{grid-template-columns:1fr;gap:10px}html.app .ht-main{height:230px}html.app .ht-th img{width:66px;height:48px}
 html.app .ht-foot{grid-template-columns:1fr}
+
+.ht-info{display:grid;grid-template-columns:230px 1fr;margin:14px 0 4px;background:var(--color-surface,#fffaf2);border-radius:16px;overflow:hidden;box-shadow:0 1px 0 #e3d6c2}
+.ht-pz{background:var(--c);color:#fff;padding:14px 18px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.ht-pz small{font-size:12px;font-weight:700;letter-spacing:.08em}.ht-pz b{font-size:22px;line-height:1.2}.ht-pz span{display:block;font-size:11.5px;opacity:.85}.ht-pz>div+div{margin-top:4px;padding-top:6px;border-top:1px solid #ffffff40}
+.ht-pz .s b{font-size:15px}.ht-pz .s{opacity:.92}
+.ht-info dl{margin:0;padding:6px 18px;display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+.ht-info dl>div{display:grid;grid-template-columns:78px 1fr;gap:8px;padding:9px 0;border-bottom:1px dashed #e3d6c2;font-size:13.5px;line-height:1.5}
+.ht-info dl>div:nth-last-child(-n+2){border-bottom:0}
+.ht-info dt{color:#7d6f63;font-size:12.5px}.ht-info dt i{font-style:normal;margin-right:5px}.ht-info dd{margin:0;font-weight:600}
+html.app .ht-info{grid-template-columns:1fr}html.app .ht-pz{flex-direction:row;flex-wrap:wrap;align-items:flex-end;column-gap:18px;padding:12px 14px}html.app .ht-pz>div+div{margin:0;padding:0 0 0 18px;border-top:0;border-left:1px solid #ffffff40}
+html.app .ht-pz small{flex-basis:100%}html.app .ht-pz b{font-size:20px}
+html.app .ht-info dl{grid-template-columns:1fr;padding:2px 14px}html.app .ht-info dl>div{grid-template-columns:70px 1fr}
+html.app .ht-info dl>div:nth-last-child(2){border-bottom:1px dashed #e3d6c2}
 </style>
 </head>
 <body>
@@ -2743,7 +2756,10 @@ function stayHotelHTML(S,i){
   const st=HT[S.key]||{t:0,j:0},t=Math.min(st.t,G.length-1),g=G[t],J=g[2],j=Math.min(st.j,Math.max(0,J.length-1)),tot=G.reduce((a,x)=>a+x[2].length,0);
   const nights=S.stays.reduce((a,x)=>a+x[1],0),tb=v=>v&&v!=='待補'?v:'<span class="tbd">待補</span>';
   const tags=(S.tags||[]).map(x=>`<span class="${x[0]==='!'?'w':/待確認/.test(x)?'q':''}">${x.replace(/^!/,'')}</span>`).join('');
-  const kp=[['每人每晚',tb(S.price),'w2'],['房型',tb(S.room)],['到車站',tb(S.walk||S.stn)],['早餐',tb(S.bf)],['評分',S.rate?'★ '+S.rate:tb('')]];
+  // 資訊欄：左邊價格（拆成「不含早餐／含早餐」兩行大字），右邊一行一項的清單
+  const pz=S.price&&S.price!=='待補'?S.price.split('／').map(x=>{const m=/^(.*?)（(.*)）$/.exec(x.trim());return m?[m[1],m[2]]:[x.trim(),''];}):null;
+  const info=`<div class="ht-info"><div class="ht-pz"><small>每人每晚</small>${pz?pz.map(([v,l],k)=>`<div class="${k?'s':''}">${l?`<span>${l}</span>`:''}<b>${v}</b></div>`).join(''):'<div><span class="tbd">待補</span></div>'}</div>
+    <dl>${[['🛏','房型',S.room],['🚉','到車站',S.stn||S.walk],['🍳','早餐',S.bf],['⭐','評分',S.rate]].map(([ic,a,v])=>`<div><dt><i>${ic}</i>${a}</dt><dd>${tb(v)}</dd></div>`).join('')}</dl></div>`;
   // 往前／往後到底時跨到上一類／下一類，箭頭本身就會帶人看到其他分類
   const nx=d=>{let tt=t,jj=j+d;if(jj>=J.length){tt=(t+1)%G.length;jj=0;}else if(jj<0){tt=(t-1+G.length)%G.length;jj=Math.max(0,G[tt][2].length-1);}return `data-ht="${S.key}" data-t="${tt}" data-j="${jj}"`;};
   const tabs=G.map((x,k)=>`<button type="button" class="ht-tab${k===t?' on':''}" data-ht="${S.key}" data-t="${k}" data-j="0">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy">`:'<span class="ht-ni"></span>'}<span><b>${x[0]}</b><small>${x[2].length} 張</small></span></button>`).join('');
@@ -2755,7 +2771,7 @@ function stayHotelHTML(S,i){
   return `<article class="st-card ht" id="st-${S.key}" style="--c:${S.col}">
     <div class="dkst-h"><i class="st-n">${stNo(S,i)}</i><div><b>${NAMES[S.key][0]}</b><small>${S.area}・共 ${nights} 晚・候選・${S.sub||''}</small></div></div>
     <div class="sta-tags">${tags}</div>
-    <div class="ht-kp">${kp.map(([a,b,c])=>`<div class="${c||''}"><small>${a}</small><b>${b}</b></div>`).join('')}</div>
+    ${info}
     <div class="ht-hint">📷 照片分 <b>${G.length} 類</b>、共 <b>${tot} 張</b>，點下面切換</div>
     <div class="ht-tabs" style="--n:${G.length}">${tabs}</div>
     <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length} 張）›</button>`:''}</div></div>
