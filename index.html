@@ -934,7 +934,7 @@ html.sa,html.sa body{background:var(--color-neutral-100)}
 html.sa.rainy-ui,html.sa.rainy-ui body{background:#c4cfdb}
 
 
-html.dk #stay[data-sel="prince"] .st-card:not(#st-prince),html.dk #stay[data-sel="shizuhotel"] .st-card:not(#st-shizuhotel),html.dk #stay[data-sel="livemax"] .st-card:not(#st-livemax){display:none}
+html.dk #stay[data-sel="shinagawa"] .st-rgp:not([data-rg="shinagawa"]),html.dk #stay[data-sel="shizuoka"] .st-rgp:not([data-rg="shizuoka"]),html.dk #stay[data-sel="atami"] .st-rgp:not([data-rg="atami"]){display:none}
 html.dk .st-chip.on{background:var(--c);color:#fff}html.dk .st-chip.on small{color:#fffd}html.dk .st-chip.on i{background:#fff;color:var(--c)}
 html.dk #stay .st-map{max-width:860px}
 
@@ -1051,6 +1051,23 @@ html.dk #acct .tt-dk iframe{background:transparent}
 .ag-c a{display:inline-block;font-size:12px;font-weight:700;color:#a4521f;margin-top:3px}
 .ag-r.done{opacity:.55}.ag-r.done .ag-c b{text-decoration:line-through}.ag-r.done .ag-d{background:#a9b38f}
 .ag-h{font-size:12px;font-weight:800;color:var(--color-neutral-700,#645c50);margin:14px 2px 6px}
+/* 住宿候選：比較條＋比較重點 */
+.stc{background:var(--color-surface,#fffaf2);border-radius:16px;padding:12px 14px;margin:0 0 14px;border-left:5px solid var(--c)}
+.stc-h b{font-size:15px}.stc-h small{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);margin-top:2px}
+.stc-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px}
+.stc-c{display:flex;gap:10px;align-items:center;text-align:left;border:1.5px solid var(--rule,#e4d6c0);background:#fff;border-radius:12px;padding:8px 10px;font:inherit;color:inherit;cursor:pointer}
+.stc-c i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;font-style:normal;font-weight:800;display:grid;place-items:center;font-size:13px}
+.stc-c b{display:block;font-size:13.5px;line-height:1.3}.stc-c small{display:block;font-size:11.5px;color:var(--color-neutral-700,#645c50);margin-top:2px}
+.stc-c.on{background:#2a221b;border-color:#2a221b;color:#fff}.stc-c.on small{color:#e8dccb}.stc-c.on i{box-shadow:0 0 0 2px #fff}
+.stc-c.more{border-style:dashed;background:transparent;cursor:default}
+#mapp .stc-c{color:inherit}#mapp .stc-c.on{color:#fff}
+.stf{background:var(--color-surface,#fffaf2);border-radius:14px;padding:12px 14px;margin:10px 0}
+.stf dl{display:grid;grid-template-columns:72px 1fr;gap:5px 10px;font-size:13px;margin:0}.stf dt{color:var(--color-neutral-700,#645c50)}.stf dd{margin:0}
+.stf-pc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
+.stf-pc b{display:block;font-size:12.5px;margin-bottom:2px}.stf-pc .pro b{color:#56633f}.stf-pc .con b{color:#b23a2a}
+.stf-pc .pro div:not(.tbd)::before{content:"＋ ";color:#56633f}.stf-pc .con div:not(.tbd)::before{content:"－ ";color:#b23a2a}
+.stf-lk{margin-top:10px}.stf-lk a{display:inline-block;background:#c67139;color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:13px;text-decoration:none}
+html.app .stc-row{grid-template-columns:1fr}html.app .stf-pc{grid-template-columns:1fr}
 .tx-rail{display:none!important}
 html.app .txm{margin:6px 0 14px}html.app .txm-days{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}html.app .txm-days::-webkit-scrollbar{display:none}
 html.app .txm-days button{flex:none;padding:5px 10px;font-size:13px}
@@ -1247,7 +1264,7 @@ html.dk .dk-off{display:none!important}
 <section class="block" id="stay">
   <div class="wrap">
     <h2>住宿</h2>
-    <p class="lead">三個住宿地點、各自離車站多遠、有沒有早餐與車位。每人每晚的價錢登入後才會顯示。</p>
+    <p class="lead">三個住宿地區。靜岡已訂（每人每晚登入後才顯示）；品川、熱海還在挑，點上面的候選看每一家的照片、優缺點、房型和公開報價。</p>
     <div class="st-body"></div>
   </div>
 </section>
@@ -2592,13 +2609,20 @@ if(!MOB)setTimeout(rsDeskInit,0);
 /* ================= 住宿介紹（資訊 › 住宿、桌機 #stay） =================
    地點以地圖呈現、依住宿分地區；每人每晚從記帳工具的預算讀（要登入且是這趟的成員，網頁原始碼不放金額）；
    不確定的資訊一律寫「待確認」（畫面上灰底標示）。 */
+/* 住宿分三區（變更（五十八））：pick＝已訂的那一家 key；null＝還在挑，區裡每一家都是候選（cand），頁面上方有比較條、點一家看完整介紹。
+   候選欄位：kind 飯店／民宿、price 公開報價文字（每人每晚）、room 房型、walk 到車站（短）、rate 評分文字、pros／cons 優缺點、link 訂房網址。
+   新增候選：在 STAYS 加一筆（rg 指到區），P／NAMES／GQ／IMG 用同一個 key。選定後把該區 pick 設成那一家、其他候選刪掉或留著都行。 */
+const STAY_RG=[
+ {id:'shinagawa',area:'東京・品川',col:'#2b4c7e',stays:[['2/10（三）',1,'2/10'],['2/15–16（一・二）',2,'2/15']],pick:null},
+ {id:'shizuoka',area:'靜岡',col:'#56633f',stays:[['2/11–12（四・五）',2,'Airbnb']],pick:'shizuhotel'},
+ {id:'atami',area:'熱海',col:'#b2622d',stays:[['2/13–14（六・日）',2,'LiVEMAX']],pick:null}];
 const STAYS=[
- {key:'prince',st:'shinagawa',area:'東京・品川',col:'#2b4c7e',stays:[['2/10（三）',1,'2/10'],['2/15–16（一・二）',2,'2/15']],
+ {key:'prince',rg:'shinagawa',st:'shinagawa',kind:'飯店',price:'待補',room:'待補',walk:'品川站步行 3 分',rate:'',pros:[],cons:[],link:'',
   addr:'東京都港區高輪 4-10-30',stn:'品川站高輪口，步行約 3 分',mode:'walk',bf:'待確認',park:'待確認（2/15 到飯店前已在品川還車，用不到）',chk:'入住／退房時間待確認',
   hero:0,sub:'品川站高輪口正對面・還沒訂',tags:['品川站步行 3 分','早餐待確認','入住時間待確認'],
   secs:[['抵達','品川站高輪口',[1],'JR 品川站高輪口過馬路就到。成田特快、新幹線、山手線都在這一站，頭尾兩段東京住宿都選這裡，就是為了不用拖行李換車。'],
    ['房間','客房',[2],'雙床房（房型、早餐還沒定）。館內有水族館、電影院、保齡球館，2/15 晚上不想出門也有得逛。']],must:[]},
- {key:'shizuhotel',st:'shizuoka',area:'靜岡',col:'#56633f',stays:[['2/11–12（四・五）',2,'Airbnb']],
+ {key:'shizuhotel',rg:'shizuoka',st:'shizuoka',
   addr:'靜岡市駿河區馬渕 1-14-15',stn:'JR 靜岡站，步行約 13 分（房源說明）',mode:'walk',bf:'不附（整棟自理；有廚房、電鍋、微波爐）',park:'車庫 1 台免費（要事先聯絡房東）',chk:'入住 16:00・退房 10:00',
   hero:0,sub:'三層獨棟 129㎡・整棟只有我們',tags:['步行靜岡站 13 分','!車庫 1 台・要先說','不附早餐','16:00 入住／10:00 退房'],
   secs:[['抵達','外觀・玄關',[15,14,16],'靜岡站南邊的住宅區，門牌 14-15。玄關右邊就是車庫，進門就是樓梯。'],
@@ -2607,12 +2631,23 @@ const STAYS=[
    ['2F','客廳・廚房',[1,2,7,8,11],'8 人大餐桌、沙發床、電視。廚房有瓦斯爐、電鍋、微波爐、烤箱，可以外帶おでん回來吃。廁所在 2 樓。'],
    ['3F','臥室',[3,4,5,6],'西式房 3 張雙人床，4 人睡這間就夠；和室還有雙人床＋2 組日式床墊。']],
   must:['出發前一週跟房東說要用車位（沒通知不能用）','4 人入住前上傳護照影本（日本法規）','住宿期間不打掃、不換毛巾；垃圾放室內']},
- {key:'livemax',st:'atami',area:'熱海',col:'#b2622d',stays:[['2/13–14（六・日）',2,'LiVEMAX']],
+ {key:'livemax',rg:'atami',st:'atami',kind:'飯店',price:'待補',room:'待補',walk:'熱海站計程車 5 分',rate:'',pros:[],cons:[],link:'',
   addr:'熱海市渚町 22-8',stn:'熱海站，計程車約 5 分；步行時間待確認',mode:'taxi',bf:'待確認',park:'待確認（開車抵達，出發前要問）',chk:'入住／退房時間待確認',
   hero:3,sub:'面相模灣的溫泉飯店・還沒訂',tags:['熱海站計程車 5 分','停車場待確認','早餐待確認'],
   secs:[['溫泉','大浴場・三溫暖',[1,5,2],'大浴場面海，還有看得到海的三溫暖；有些房型陽台有自己的露天浴池（訂房時看房型）。'],
    ['房間','客房',[4,0],'海景房、和洋室都有（房型還沒定）。2/13 開車抵達先停車寄行李，連住兩晚，2/14 從這裡出發去河津。']],
   must:['開車抵達：停車場有沒有、怎麼收費要先問','確認房間或館內有沒有洗衣機']}];
+STAYS.forEach(S=>{const R=STAY_RG.find(r=>r.id===S.rg);Object.assign(S,{area:R.area,col:R.col,stays:R.stays,cand:!R.pick});});
+const STSEL={}; // 每區目前看哪一家候選
+const rgOf=id=>STAY_RG.find(r=>r.id===id),rgHotels=R=>STAYS.filter(S=>S.rg===R.id);
+const rgSel=R=>{const L=rgHotels(R);return L.find(S=>S.key===(R.pick||STSEL[R.id]))||L[0];};
+function stayCmpHTML(R){const L=rgHotels(R),sel=rgSel(R);if(R.pick)return '';
+  return `<div class="stc" style="--c:${R.col}"><div class="stc-h"><b>${R.area}還在挑</b><small>${L.length} 家候選・點一家看完整介紹，決定後這裡換成訂好的那一家</small></div><div class="stc-row">${L.map((S,i)=>`<button type="button" class="stc-c${S===sel?' on':''}" data-stc="${S.key}"><i>${i+1}</i><span><b>${NAMES[S.key][0]}</b><small>${[S.kind,S.price&&S.price!=='待補'?S.price:'',S.rate?'★ '+S.rate:'',S.walk].filter(Boolean).join('・')}</small></span></button>`).join('')}<div class="stc-c more"><span><b>更多候選整理中</b><small>照片、評論、價格陸續補上</small></span></div></div></div>`;}
+// 候選才有的「比較重點」：公開報價、房型、到車站、早餐、評分＋優缺點＋訂房連結
+function stayFactsHTML(S){if(!S.cand)return '';const tb=v=>v&&v!=='待補'?v:'<span class="tbd">待補</span>';
+  const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
+  return `<div class="stf"><dl><dt>每人每晚</dt><dd><b>${tb(S.price)}</b></dd><dt>房型</dt><dd>${tb(S.room)}</dd><dt>到車站</dt><dd>${tb(S.stn)}</dd><dt>早餐</dt><dd>${tb(S.bf)}</dd>${S.rate?`<dt>評分</dt><dd>★ ${S.rate}</dd>`:''}</dl>
+  <div class="stf-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}</div>`;}
 const STP={st:'idle'};
 function ttToken(){return new Promise(res=>{ // 記帳工具（同網域）登入後，Firebase 把憑證存在 IndexedDB；這裡借來讀預算，不載入 Firebase SDK
   try{const rq=indexedDB.open('firebaseLocalStorageDb');rq.onerror=()=>res(null);rq.onupgradeneeded=()=>{try{rq.transaction.abort();}catch(e){}res(null);};
@@ -2636,6 +2671,7 @@ async function stayPrices(force){
 function stayNight(match){const it=(STP.items||[]).find(x=>x.name.includes(match));if(!it||it.amt==null)return null;
   const n=+it.nights||(+((/(\d+)\s*晚/.exec(it.note||'')||[])[1])||0),ppl=STP.ppl,per=it.mode==='pp'?+it.amt:it.mode==='room'?it.amt*(+it.rooms||1)/ppl:it.amt/ppl;
   if(!n)return null;const v=Math.round(per/n);return (it.cur==='NT'?'NT ':'¥')+v.toLocaleString('en-US');}
+const stNo=(S,i)=>S.cand?rgHotels(rgOf(S.rg)).indexOf(S)+1:i+1; // 候選用區內編號（和比較條、地圖一致）
 const stTbd=t=>String(t).replace(/(待確認)/g,'<span class="tbd">$1</span>');
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
 function stayCardHTML(S,i,mini){
@@ -2652,8 +2688,8 @@ function stayCardHTML(S,i,mini){
   const must=(S.must||[]).length?`<div class="sta-must"><b>要記得</b>${S.must.map(x=>`<div>${x}</div>`).join('')}</div>`:'';
   const mm=mini?`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},MOB?340:440,MOB?150:170,nm+'到車站')}</div>`:'';
   return `<article class="st-card sta" id="st-${S.key}" style="--c:${S.col}">
-    <div class="sta-top"><i class="st-n">${i+1}</i><small>${S.area}・共 ${nights} 晚</small></div>${hero}
-    <div class="sta-tags">${tags}</div><div class="sta-price">${price}</div>${mm}${secs}${must}
+    <div class="sta-top"><i class="st-n">${stNo(S,i)}</i><small>${S.area}・共 ${nights} 晚${S.cand?'・候選':''}</small></div>${hero}
+    <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}${mm}${secs}${must}
     <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
 /* 電腦版住宿（使用者選的 B）：左邊大圖瀏覽器（箭頭、分組、縮圖），右邊各段說明；滑鼠不用左右滑也看得到全部照片 */
 const DKV={}; // 每家目前看到第幾張（攤平後的順序）
@@ -2673,44 +2709,46 @@ function stayDeskHTML(S,i){
   const secs=(S.secs||[]).map(([tg,ti,,p],k)=>{const first=F.findIndex(x=>x.gi===k+1);return `<button class="dkv-sec${k+1===gi?' on':''}" ${first>=0?`data-dkv="${S.key}" data-n="${first}"`:''}><h4><em>${tg}</em>${ti}</h4><p>${p}</p></button>`;}).join('');
   const must=(S.must||[]).length?`<div class="sta-must"><b>要記得</b>${S.must.map(x=>`<div>${x}</div>`).join('')}</div>`:'';
   return `<article class="st-card dkst" id="st-${S.key}" style="--c:${S.col}">
-    <div class="dkst-h"><i class="st-n">${i+1}</i><div><b>${NAMES[S.key][0]}</b><small>${S.area}・共 ${nights} 晚・${S.sub||''}</small></div></div>
-    <div class="sta-tags">${tags}</div><div class="sta-price">${price}</div>
+    <div class="dkst-h"><i class="st-n">${stNo(S,i)}</i><div><b>${NAMES[S.key][0]}</b><small>${S.area}・共 ${nights} 晚・${S.cand?'候選・':''}${S.sub||''}</small></div></div>
+    <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}
     <div class="dkst-body"><div class="dkv">${view}</div><div class="dkst-txt">${secs}${must}
       <div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},360,150,NAMES[S.key][0]+'到車站')}</div>
       <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
 function dkvGo(k,n){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;const F=stayFlat(S).F;DKV[k]=(n+F.length)%F.length;
-  art.outerHTML=stayDeskHTML(S,STAYS.indexOf(S));}
+  art.outerHTML=stayDeskHTML(S,STAY_RG.findIndex(r=>r.id===S.rg));}
 // 住宿照片：點了開燈箱（不開景點字卡），左右鍵或按鈕換張
 function openPhoto(k,i){const L=[].concat(IMG[k]||[]);if(!L.length)return;i=(i+L.length)%L.length;
   document.getElementById('lbT').textContent=NAMES[k]?NAMES[k][0]:'';document.getElementById('lbS').textContent=`${i+1} / ${L.length}`;
   document.getElementById('lbScroll').innerHTML=`<img src="${L[i]}" alt=""><button class="lb-nav p" data-ph="${k}" data-i="${i-1}" aria-label="上一張">‹</button><button class="lb-nav n" data-ph="${k}" data-i="${i+1}" aria-label="下一張">›</button>`;
   lb.classList.remove('zoom');lb.classList.add('ph');document.getElementById('lbZ').textContent='放大原尺寸';lb.hidden=false;document.body.style.overflow='hidden';lb._ph=[k,i];}
 /* 手機：住宿也用景點頁的地圖機制（SPOT 的 showSpot），每個住宿一個地區色塊，點進去才在下方列出那一家 */
-function STAY_TREE(){return STAYS.map(S=>({name:S.area,sub:NAMES[S.key][0],col:S.col,lab:S.key==='prince'?'b':'t',keys:[S.key],
-  ct:NAMES[S.key][0].replace(/大飯店|Resort |（.*?）/g,'').replace(' 熱海 Ocean','')+'・'+S.stays.reduce((a,x)=>a+x[1],0)+' 晚'}));}
-function stayLeafMap(node){const S=STAYS.find(x=>x.key===node.keys[0]),nums={[S.key]:STAYS.indexOf(S)+1};
-  const cfg={pts:[S.key,S.st],legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'},nums,minSpan:.012};
-  return {svg:buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:NAMES[S.key][0]+'與車站'}),cfg,nums,focus:null};}
-function stayListHTML(node){if(STP.st==='idle')stayPrices();const S=STAYS.find(x=>x.key===node.keys[0]);return `<div class="st-one">${stayCardHTML(S,STAYS.indexOf(S),false)}</div>`;}
+function STAY_TREE(){return STAY_RG.map(R=>{const L=rgHotels(R),S=rgSel(R);return {name:R.area,sub:R.pick?NAMES[S.key][0]:`挑選中・${L.length} 家候選`,col:R.col,lab:R.id==='shinagawa'?'b':'t',keys:L.map(x=>x.key),rg:R.id,
+  ct:(R.pick?NAMES[S.key][0].replace(/大飯店|Resort |（.*?）/g,'').replace(' 熱海 Ocean',''):'挑選中 '+L.length+' 家')+'・'+R.stays.reduce((a,x)=>a+x[1],0)+' 晚'};});}
+function stayLeafMap(node){const R=rgOf(node.rg),L=rgHotels(R),nums={},labels={},pts=[...new Set(L.map(S=>S.key).concat(L.map(S=>S.st)))];
+  L.forEach((S,i)=>{nums[S.key]=R.pick?STAY_RG.indexOf(R)+1:i+1;labels[S.key]='b';labels[S.st]='t';});
+  const cfg={pts,legs:L.map(S=>({a:S.key,b:S.st,mode:S.mode})),labels,nums,minSpan:.012};
+  return {svg:buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:R.area+'住宿與車站'}),cfg,nums,focus:null};}
+function stayListHTML(node){if(STP.st==='idle')stayPrices();const R=rgOf(node.rg),S=rgSel(R);return `${stayCmpHTML(R)}<div class="st-one">${stayCardHTML(S,STAY_RG.indexOf(R),false)}</div>`;}
 function renderStay(){
   if(MOB){const c=MPN('stay');if(c.path&&c.path.length){const reg=document.querySelector('#stays .sp-reg');if(reg)reg.innerHTML=stayListHTML(spotNode(c.path,c.tree));}return;}
   const boxes=document.querySelectorAll('.st-body');if(!boxes.length)return;
   if(STP.st==='idle')stayPrices();
-  const keys=STAYS.map(x=>x.key),nums={},labels={};keys.forEach((k,i)=>{nums[k]=i+1;labels[k]='b';});labels.prince='l';
-  const OW=760,OH=300;let ov=stayMap(keys,{labels,nums,minSpan:.3},OW,OH,'三個住宿的位置');
-  {const oW=W,oH=H;W=OW;H=OH;const pr=proj(bboxOf(keys,.3)),xy=keys.map(k=>pr.pt(P[k]));W=oW;H=oH; // 每個住宿一個地區色塊
-   const halo=STAYS.map((S,i)=>`<circle class="st-rg" data-st="${S.key}" cx="${xy[i][0].toFixed(1)}" cy="${xy[i][1].toFixed(1)}" r="34" fill="${S.col}" fill-opacity=".16" stroke="${S.col}" stroke-width="1.6" stroke-dasharray="5 4"/>`).join('');
+  const sel=STAY_RG.map(rgSel),keys=sel.map(x=>x.key),nums={},labels={};keys.forEach((k,i)=>{nums[k]=i+1;labels[k]='b';});labels[keys[0]]='l';
+  const OW=760,OH=300;let ov=stayMap(keys,{labels,nums,minSpan:.3},OW,OH,'三個住宿地區的位置');
+  {const oW=W,oH=H;W=OW;H=OH;const pr=proj(bboxOf(keys,.3)),xy=keys.map(k=>pr.pt(P[k]));W=oW;H=oH; // 每區一個色塊
+   const halo=STAY_RG.map((R,i)=>`<circle class="st-rg" data-st="${R.id}" cx="${xy[i][0].toFixed(1)}" cy="${xy[i][1].toFixed(1)}" r="34" fill="${R.col}" fill-opacity=".16" stroke="${R.col}" stroke-width="1.6" stroke-dasharray="5 4"/>`).join('');
    ov=ov.replace('</svg>',halo+'</svg>');}
-  const legend=STAYS.map((S,i)=>`<button class="st-chip" data-stgo="${S.key}" style="--c:${S.col}"><i>${i+1}</i>${S.area}<small>${S.stays.map(x=>x[0].replace(/（.*）/,'')).join('、')}</small></button>`).join('');
-  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAYS.map((S,i)=>stayDeskHTML(S,i)).join('')}</div>`;});
-  const st=document.getElementById('stay');if(st){if(!st.dataset.sel)st.dataset.sel=STAYS[0].key;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===st.dataset.sel));}
+  const legend=STAY_RG.map((R,i)=>`<button class="st-chip" data-stgo="${R.id}" style="--c:${R.col}"><i>${i+1}</i>${R.area}<small>${R.pick?R.stays.map(x=>x[0].replace(/（.*）/,'')).join('、'):'挑選中・'+rgHotels(R).length+' 家'}</small></button>`).join('');
+  boxes.forEach(b=>{b.innerHTML=`<div class="st-map">${ov}</div><div class="st-legend">${legend}</div><div class="st-grid">${STAY_RG.map((R,i)=>`<div class="st-rgp" data-rg="${R.id}">${stayCmpHTML(R)}${stayDeskHTML(rgSel(R),i)}</div>`).join('')}</div>`;});
+  const st=document.getElementById('stay');if(st){if(!rgOf(st.dataset.sel))st.dataset.sel=STAY_RG[0].id;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===st.dataset.sel));}
 }
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   const dv=t.closest('[data-dkv]');if(dv){dkvGo(dv.dataset.dkv,+dv.dataset.n);return;}
   const ph=t.closest('[data-ph]');if(ph){openPhoto(ph.dataset.ph,+ph.dataset.i);return;}
+  const sc=t.closest('[data-stc]');if(sc){const S=STAYS.find(x=>x.key===sc.dataset.stc);if(S){STSEL[S.rg]=S.key;renderStay();}return;}
   const g=t.closest('[data-stgo],.st-rg');if(g){const k=g.dataset.stgo||g.dataset.st;
     if(!MOB){const st=document.getElementById('stay');st.dataset.sel=k;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===k));return;} // 電腦版一次只看一家
-    const c=document.getElementById('st-'+k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return;}
+    const c=document.querySelector(`.st-rgp[data-rg="${k}"]`)||document.getElementById('st-'+k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return;}
 });
 if(!MOB)setTimeout(renderStay,0);
 function rsClick(t){let el;
@@ -3256,7 +3294,7 @@ function appClick(e){
   if(el=t.closest('[data-seg]')){APP.pane=el.dataset.seg;renderSeg();$a('maInfo').scrollTop=0;saveApp();if(APP.pane==='spots')showSpot([],false,MPN('spots'));if(APP.pane==='stay')showSpot([],false,MPN('stay'));if(APP.pane==='resto')renderResto();return true;}
   if(el=t.closest('[data-reg]')){const c=mpOf(el);showSpot((c.path||[]).concat(+el.dataset.reg),true,c);return true;}
   if(el=t.closest('[data-regback]')){const c=mpOf(el);showSpot((c.path||[]).slice(0,-1),false,c);return true;}
-  if(el=t.closest('#stays .sp-map .mk-a[data-k]')){const c=document.getElementById('st-'+el.dataset.k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return true;}
+  if(el=t.closest('#stays .sp-map .mk-a[data-k]')){const S=STAYS.find(x=>x.key===el.dataset.k);if(S&&S.cand&&STSEL[S.rg]!==S.key){STSEL[S.rg]=S.key;renderStay();}const c=document.getElementById('st-'+el.dataset.k);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});return true;}
   if(el=t.closest('.spp .sp-map .mk-a[data-k]')){let k=el.dataset.k;const sc=el.closest('.spp').id;
     if(t.classList.contains('hit')){let best=1e9;document.querySelectorAll('#'+sc+' .sp-map .mk-a').forEach(a=>{const r=a.querySelector('.mk>circle,.mk>rect').getBoundingClientRect(),dd=Math.hypot(r.x+r.width/2-e.clientX,r.y+r.height/2-e.clientY);if(dd<best){best=dd;k=a.dataset.k;}});}
     openCard(k);return true;}
@@ -3392,7 +3430,7 @@ function deskInit(){
   const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));show(h||'home');};
   addEventListener('hashchange',fromHash);fromHash();
   document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(!document.getElementById('modal').hidden||!document.getElementById('lb').hidden)return;
-    if(cur==='stay'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const k=document.getElementById('stay').dataset.sel;dkvGo(k,(DKV[k]||0)+(e.key==='ArrowRight'?1:-1));return;}
+    if(cur==='stay'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const R=rgOf(document.getElementById('stay').dataset.sel),k=R?rgSel(R).key:STAYS[0].key;dkvGo(k,(DKV[k]||0)+(e.key==='ArrowRight'?1:-1));return;}
     const m=/^day(\d)$/.exec(cur||'');if(!m||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight'))return;const n=+m[1]+(e.key==='ArrowRight'?1:-1);if(n>=1&&n<=DAYS.length)location.hash='#day'+n;});
 }
 /* ============ 交通地圖：地區色塊＋逐日點亮（2026-10-13 使用者選的 C；電腦版與手機資訊›交通共用） ============ */

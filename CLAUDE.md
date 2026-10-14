@@ -19,6 +19,7 @@
 **機票已訂（2026-10-13）**：國泰 去 CX450 桃園 T1 12:50→成田 T2 16:50、回 CX451 成田 T2 15:30→桃園 T1 18:35。
 靜岡住宿已訂 Airbnb（駿河區馬渕 1-14-15，整棟 129㎡，免費停車，2/11 16:00 入住、2/13 10:00 退房）。
 **金額不寫在這個 repo**（公開）：花費全部在 trip-tools 的「預算」分頁（Firestore，登入的成員才看得到），見變更（四十三）。其餘住宿尚未購買。
+品川、熱海住宿還在挑，網站上是候選比較頁（變更（五十八）），候選的公開報價可以寫在網站上。
 
 | Day | 日期 | 內容 | 過夜 |
 |---|---|---|---|
@@ -1069,6 +1070,20 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **BOOK** 新增兩項（越早越好，排在租車後面）：`hotel1` 訂品川王子大飯店 北塔（2/10 一晚＋2/15–16 兩晚）、`hotel2` 訂 LiVEMAX Resort 熱海 Ocean（2/13–14 兩晚，順便問停車場）。
   連結只填官方首頁（princehotels.co.jp/shinagawa、hotel-livemax.com），**沒實際點開驗證**。待辦現在 15 項。
 - 驗證：`complete.js`、`legs.js`、`tt/todo.js`（15 項、標記完成後下一件是訂品川王子）、`check.js` 通過；截圖 `tt/txo/fl_*.png`。
+
+### 2026-10-14 變更（五十八）：品川、熱海住宿改成「候選」（使用者從四個樣板選 D「每家一頁＋比較條」）
+使用者還在挑品川、熱海的飯店／民宿，會陸續給每一家的文字（評論優缺、價錢、房型、地點）與照片，**選定前不動行程**。樣板在 scratchpad `htmk/mk_A～D.png`。
+**候選的價錢公開寫在網站上**（使用者選的：訂房網站的公開報價，不是實際花費；已訂的靜岡仍是登入才看得到的每人每晚）。
+- **資料**：新增 `STAY_RG`（三區 `{id,area,col,stays,pick}`；`pick`＝已訂那一家的 key，`null`＝挑選中）。`STAYS` 每一筆加 `rg` 指到區，`area／col／stays／cand` 由區自動補上。
+  候選欄位：`kind` 飯店／民宿、`price` 公開報價文字（每人每晚）、`room` 房型、`walk` 比較條上的短地點、`rate` 評分、`pros`／`cons` 陣列、`link`＝'網址|名稱'；其餘沿用（`stn／bf／park／chk／addr／hero／sub／tags／secs／must`）。
+  品川王子、LiVEMAX 目前是各區唯一的候選，比較欄位都是「待補」。
+- **新增一家候選的步驟**：`STAYS` 加一筆（`rg:'shinagawa'` 或 `'atami'`、`st` 最近車站的 `P` key）＋ `P`／`NAMES`（類型 hotel）／`GQ` 同 key ＋照片用 `addphotos.py <key>`（照片順序要和 `secs` 的索引對上）。座標要過 LAND 檢查。
+- **畫面**：`stayCmpHTML(R)` 比較條（每家一格：編號、名稱、種類・報價・評分・到車站；最後一格虛線「更多候選整理中」），點 `[data-stc]` 換家（`STSEL[區]`）；
+  `stayFactsHTML(S)` 比較重點（每人每晚、房型、到車站、早餐、評分＋優缺點兩欄＋訂房按鈕），候選時取代登入價錢那一列。卡片左上編號＝區內候選編號（`stNo`）。
+  - **電腦**：住宿頁地區膠囊改成三區（`data-stgo`＝`shinagawa／shizuoka／atami`，`#stay[data-sel]` 也是區 id），每區一個 `.st-rgp`＝比較條＋目前那一家的大圖瀏覽器。總覽圖的標記＝各區目前選的那一家。方向鍵換張改讀區的目前那一家。
+  - **手機**：住宿地圖每區一個色塊（`STAY_TREE` 依 `STAY_RG`，`keys`＝區內全部候選）；點進去地圖上每家候選一個編號＋最近車站，下面是比較條＋那一家的完整卡片；點地圖上的候選也會換家。
+- **選定之後**：把該區 `pick` 設成那一家（比較條就消失、恢復登入價錢那一列），其他候選可刪；再依使用者說的改行程與 `BOOK`。
+- 驗證：scratchpad `tt/cand.js`（在瀏覽器裡臨時塞兩家假候選截圖，`htmk/r_*.png`；網站本身沒有假資料）、`stay.js`（品川／熱海改檢查比較條、`data-stgo` 改區 id）、`sta.js`、`dkst.js`、`dk.js`、`check.js` 通過。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
