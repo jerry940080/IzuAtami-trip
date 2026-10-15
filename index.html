@@ -1352,7 +1352,9 @@ svg .legi.riding{opacity:0!important}
 /* 移動時只亮起出發地與目的地，其他地標淺灰 */
 svg.gf .mk:not(.ep){opacity:.55}
 svg.gf .mk:not(.ep)>circle,svg.gf .mk:not(.ep)>rect{fill:#cdc8be!important;stroke:#f4f1ea!important}
-svg.gf .mk:not(.ep)>text{fill:#a29d93!important}
+svg.gf .mk:not(.ep)>text{fill:#a29d93!important;font-weight:500!important}
+/* 沒被選中的地標不顯示照片縮圖，縮回淺灰小圓點，選中的那張照片才不會被蓋住（變更（八十四）） */
+svg.gf .mk.th-on:not(.ep) .mth{display:none}svg.gf .mk.th-on:not(.ep)>circle,svg.gf .mk.th-on:not(.ep)>text:first-of-type{opacity:1}
 svg.gf .mk:not(.ep) .mth image{opacity:.28}
 svg.gf .mk:not(.ep) .mth .rg,svg.gf .mk:not(.ep) .mth circle{stroke:#cdc8be!important}
 svg.gf .mk:not(.ep) .mth g circle{fill:#bdb8ae!important}
@@ -3553,6 +3555,8 @@ function applyThumbs(svg){
     g.classList.toggle('th-on',on);
   });
 }
+// 縮圖有沒有真的顯示：移動／選站時沒被選中的地標縮回小點（變更（八十四）），標籤要貼著小點排
+function thOn(g){return g.classList.contains('th-on')&&!(g.ownerSVGElement&&g.ownerSVGElement.classList.contains('gf')&&!g.classList.contains('ep'));}
 function layoutLabels(svg){
   const cfg=svg._cfg||{};
   svg.querySelectorAll('.mk text').forEach(t=>t.style.display='');
@@ -3560,7 +3564,7 @@ function layoutLabels(svg){
   try{applyThumbs(svg);}catch(e){}
   const bx=svg.closest('.ma-map,.sp-map'),pl=bx?bx.querySelector('.mm-pill'):null,top=pl?pl.getBoundingClientRect().bottom+2:sb.top;
   const ov=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
-  const dots=[...svg.querySelectorAll('.mk')].map(g=>g.querySelector(g.classList.contains('th-on')?'.mth>circle':':scope>circle,:scope>rect')).filter(Boolean).map(c=>c.getBoundingClientRect());
+  const dots=[...svg.querySelectorAll('.mk')].map(g=>g.querySelector(thOn(g)?'.mth>circle':':scope>circle,:scope>rect')).filter(Boolean).map(c=>c.getBoundingClientRect());
   if(!svg.closest('.zoomed'))svg.querySelectorAll('.mz-zone rect,.wxb rect').forEach(r=>dots.push(r.getBoundingClientRect())); // 地圖分頁的區域色塊標籤也要避開
   svg.querySelectorAll('.legi circle').forEach(r=>dots.push(r.getBoundingClientRect())); // 路線中間的交通小圖示
   const placed=[],OPP={l:'r',r:'l',t:'b',b:'t'};
@@ -3572,7 +3576,7 @@ function layoutLabels(svg){
   const bot=(bx&&bx.id==='maMap'&&MOB)?sb.bottom-(MC_H+26):sb.bottom; // 地圖分頁：下方是卡片列
   [...svg.querySelectorAll('.mk[data-key]')].filter(lab).sort((a,b)=>pri(a)-pri(b)).forEach(g=>{
     const t=lab(g),hotel=pri(g)===0;
-    const dot=g.querySelector(':scope>circle,:scope>rect'),r=g.classList.contains('th-on')?27:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
+    const dot=g.querySelector(':scope>circle,:scope>rect'),r=thOn(g)?27:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
     const cur=((cfg.labels||{})[g.dataset.key]||'b').charAt(0);
     const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]),['tr','tl','br','bl']);
     let best=null;
@@ -3758,15 +3762,21 @@ function mapFocus(Z,d,S,i,gi,o={}){
     Z.anim(z,(x0+x1)/2,(y0+y1)/2,()=>{Z.relayout();ride();},o.D||Math.round(420+120*Math.log(Math.max(1,Math.max(Z.z/z,z/Z.z)))),o.fy,o.fx);
   }else{
     const k=stopLoc(d,S,i);if(!k)return;
-    // 開車、計程車這種短程移動已經併進這一站（foldGos），滑到這站時就當作「抵達」：路線亮起、起訖地標亮起、小動畫跑一趟（變更（八十三））
+    // 一站＝只聚焦這一站（變更（八十四））：只有它亮著，其他地標變淺灰小點、路線全部變淡。
+    // 開車、計程車這種短程移動已經併進這一站（foldGos）時，那段路線亮起、車子跑一趟，但出發地不亮。
+    let arr=null;
     if(locOf(s)&&!o.noInc){let inc=null;for(let j=i-1;j>=0;j--){const G=S[j].go||[];if(G.length){inc={j,g:G.length-1};break;}if(isMainStop(S[j])&&locOf(S[j]))break;}
-      if(inc&&foldGos(S).has(inc.j,inc.g)&&GO_MODE[S[inc.j].go[inc.g].i]&&GO_MODE[S[inc.j].go[inc.g].i]!=='walk'){const e=goEnds(d,S,inc.j,inc.g);
-        if(e&&e.b===k&&e.a&&e.a!==k&&svg.querySelector(`.leg[data-b="${k}"]`))return mapFocus(Z,d,S,inc.j,inc.g,o);}}
-    const g=mapSel(svg,k);if(!g)return;mapFront(g);svg.classList.add('gf');g.classList.add('ep'); // 只亮起這一站，其他變淺灰（變更（八十四））
-    if(o.noMove||s.nz){Z.apply();Z.relayout();return;} // nz：這站不放大（Day 1 成田降落，停在飛機航線的畫面）
-    const r=regOfKey(k);if(r&&regViewTo(Z,r,o))return;
+      const md=inc&&GO_MODE[S[inc.j].go[inc.g].i];
+      if(inc&&md&&md!=='walk'&&foldGos(S).has(inc.j,inc.g)){const e=goEnds(d,S,inc.j,inc.g);
+        if(e&&e.b===k&&e.a&&e.a!==k){let L=[...svg.querySelectorAll('.leg:not(.opt)')].filter(l=>l.dataset.b===k);if(L.some(l=>l.dataset.m===md))L=L.filter(l=>l.dataset.m===md);arr=L[0]||null;}}}
+    const g=mapSel(svg,k);if(!g)return;mapFront(g);svg.classList.add('gf');g.classList.add('ep');
+    svg.querySelectorAll('.leg,.legx,.legi').forEach(x=>x.classList.add('dim'));
+    if(arr){arr.classList.remove('dim');arr.classList.add('hi');svg.querySelectorAll(`.legx[data-i="${arr.dataset.i}"],.legi[data-i="${arr.dataset.i}"]`).forEach(x=>x.classList.remove('dim'));}
+    const ride=()=>{if(arr)rideLeg(Z,arr);};
+    if(o.noMove||s.nz){Z.apply();Z.relayout();ride();return;} // nz：這站不放大（Day 1 成田降落，停在飛機航線的畫面）
+    const r=regOfKey(k);if(r&&regViewTo(Z,r,o,ride))return;
     const ppk=Z.sbar?Z.sbar.ppk:20;let z=Math.max(1,Math.min(Z.zmax,(o.ppk||70)/ppk));if(Z.z>z)z=Z.z;Z._reg=null;
-    Z.anim(z,+g.dataset.bx,+g.dataset.by,()=>Z.relayout(),o.D||420,o.fy,o.fx);
+    Z.anim(z,+g.dataset.bx,+g.dataset.by,()=>{Z.relayout();ride();},o.D||420,o.fy,o.fx);
   }
 }
 /* ===== 手機地圖分頁：整張地圖＋下方一站一張卡（2026-10-15 使用者選 M3＋C2，取代原本的路線列表） ===== */
