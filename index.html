@@ -1315,6 +1315,10 @@ html.app .ma-stj{cursor:pointer;text-decoration:underline;text-decoration-color:
 .stb.dk{max-width:560px}
 .tl li .stb.dk{margin:8px 0 2px}
 html.dk .dk-tl .day-head .stay.stay-b{flex-basis:100%}
+/* 收進目的地說明的短程移動（變更（七十九）） */
+.xgo{display:block;color:var(--color-accent-2-800,#4a5a35);font-size:.95em}
+.ma-row .xd p.xgo{margin:0 0 4px}
+.tl li .x .xgo{margin-bottom:3px}
 </style>
 </head>
 <body>
@@ -1939,7 +1943,18 @@ const RAIN_STOPS={
 ]};
 DAYS.forEach(d=>{if(RAIN_STOPS[d.n])d.rainStops=RAIN_STOPS[d.n];});
 /* 桌機時刻表：一站一列（名稱＋說明），每段交通一列 move */
-function stopsToTl(S){const o=[];S.forEach((s,si)=>{o.push({t:s.t,i:s.i||'📍',h:s.n,x:s.d||'',card:s.card&&CARDS[s.card]?s.card:'',si,ci:!!(s.card&&/check-in/i.test(s.n))});(s.go||[]).forEach((g,gi)=>o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi}));});return o;}
+/* 短程步行／開車／計程車不單獨列一行，寫進「要前往的那一站」的說明（變更（七十九））；
+   開 1 小時以上的（靜岡 → 熱海、熱海 → 品川）照樣列出來。資料不動（地圖路線、對焦都還靠這些 go）。 */
+const FOLD_I=['🚶','🚗','🚕'];
+function foldGos(S){const hide=new Set(),notes={};let pend=[];
+  const isLong=g=>/(\d+)\s*小時/.test((g.gd||'')+' '+g.t);
+  S.forEach((s,i)=>{
+    if(pend.length&&s.k!=='選項'&&s.k!=='提醒'){(notes[i]=notes[i]||[]).push(...pend.map(x=>x.txt));pend.forEach(x=>hide.add(x.k));pend=[];}
+    (s.go||[]).forEach((g,gi)=>{if(FOLD_I.includes(g.i)&&!isLong(g))pend.push({k:i+':'+gi,txt:`${g.i} ${g.at?g.at+' 出發・':''}${g.gd||g.t}`});
+      else if(pend.length){pend=[];}});});
+  pend.forEach(x=>{const o=+x.k.split(':')[0];(notes[o]=notes[o]||[]).push('之後 '+x.txt);hide.add(x.k);}); // 一天最後一段（例如開回住宿）沒有下一站，寫在出發的那一站
+  return {hide,notes,has:(i,gi)=>hide.has(i+':'+gi)};}
+function stopsToTl(S){const o=[],F=foldGos(S);S.forEach((s,si)=>{const nt=(F.notes[si]||[]).map(t=>`<span class="xgo">${t}</span>`).join('');o.push({t:s.t,i:s.i||'📍',h:s.n,x:nt+(s.d||''),card:s.card&&CARDS[s.card]?s.card:'',si,ci:!!(s.card&&/check-in/i.test(s.n))});(s.go||[]).forEach((g,gi)=>{if(!F.has(si,gi))o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi});});});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
 /* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
@@ -3421,15 +3436,16 @@ function renderPlan(){
   const isCur=(i,gi)=>!!(NT&&NT.cur&&NT.cur.i===i&&(NT.cur.gi==null?gi==null:NT.cur.gi===gi));
   const isNx=(i,gi)=>!!(NT&&NT.nxt&&NT.nxt.i===i&&(NT.nxt.gi==null?gi==null:NT.nxt.gi===gi));
   const nxTag=()=>`<span class="nxc">下一個・${leftTxt(NT.nxt.m-NT.n)}</span>`;
+  const FG=foldGos(S);
   const rows=S.map((s,i)=>{
-    const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,G=s.go||[],hasGo=G.length>0,isT=/^\d/.test(s.t);
+    const c=KSTY[s.k]||KSTY['景點'],last=i===S.length-1,G=s.go||[],hasGo=G.some((g,gi)=>!FG.has(i,gi)),isT=/^\d/.test(s.t),gn=FG.notes[i]||[];
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
-    const xc=s.card&&CARDS[s.card]?s.card:'',hx=!!(s.d||xc),xk=xpKey(i),xo=hx&&APP.xp.has(xk),gu=xc?gUrl(xc):'';
+    const xc=s.card&&CARDS[s.card]?s.card:'',hx=!!(s.d||xc||gn.length),xk=xpKey(i),xo=hx&&APP.xp.has(xk),gu=xc?gUrl(xc):'';
     return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}${hx?' hx':''}${xo?' xo':''}" data-stop="${i}" role="button" tabindex="0"${hx?` aria-expanded="${xo}"`:''}>
       <div class="ma-r${s.card&&CARDS[s.card]&&!isCheckin(s)?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!isCheckin(s)?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)?'':stopThumb(s)}</div>
-      ${G.map((g,gi)=>{const gk=xpKey(i,gi),go=g.gd&&APP.xp.has(gk);return `<div class="ma-go${isCur(i,gi)?' now':''}${g.gd?' hx':''}${go?' xo':''}"${g.gd?` data-gx="${i}:${gi}" role="button" tabindex="0" aria-expanded="${go}"`:''}><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}${g.gd?'<i class="xv">⌄</i>':''}${g.gd?`<span class="gdx">${g.gd}</span>`:''}</span>${isNx(i,gi)?nxTag():''}</div></div>`;}).join('')}
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!isCheckin(s)?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${gn.map(t=>`<p class="xgo">${t}</p>`).join('')}${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)?'':stopThumb(s)}</div>
+      ${G.map((g,gi)=>{if(FG.has(i,gi))return '';const gk=xpKey(i,gi),go=g.gd&&APP.xp.has(gk);return `<div class="ma-go${isCur(i,gi)?' now':''}${g.gd?' hx':''}${go?' xo':''}"${g.gd?` data-gx="${i}:${gi}" role="button" tabindex="0" aria-expanded="${go}"`:''}><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}${g.gd?'<i class="xv">⌄</i>':''}${g.gd?`<span class="gdx">${g.gd}</span>`:''}</span>${isNx(i,gi)?nxTag():''}</div></div>`;}).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
   <div class="ma-area"><div><b>${d.title}${RN&&d.rainStops?'<em class="rn-tag">雨備版</em>':''}</b>${DAY_RG[d.n]?`<span class="ma-stj" data-stj="${DAY_RG[d.n]}" role="button">${ico('bed',14)}今晚住 ${stayName(DAY_RG[d.n])} ›</span>`:`<span>${ico('bed',14)}${d.stay}</span>`}</div><button class="wts" data-wxtog data-wxt="${d.n}" aria-label="天氣，點一下看降雨機率">${wxTiles(d)}</button></div>
@@ -3676,7 +3692,7 @@ function renderMap(){
   const cfg=dayMapCfg(d,AS),bw=box.clientWidth||390,bh=box.clientHeight||640,MH=Math.round(390*bh/bw),sc=MH/bh;
   const sv=box.querySelector('.mm-svg');sv.innerHTML=buildMap(cfg,{W:390,H:MH,big:true,aria:'第'+d.n+'天路線圖',padT:60,padB:Math.round((MC_H+20)*sc)});
   const svg=sv.querySelector('svg');if(!svg)return;svg._cfg=cfg;layoutLabels(svg);animateMap(svg);MZ.init(svg,390,MH);if(MZ.sbar){MZ.sbar.y-=(MC_H+14)*sc;MZ.apply();}addZones(svg,d);addWxBadges(svg,d);
-  const items=[{ov:1}];AS.forEach((s,i)=>{if(s.k==='提醒')return;items.push({s,i});(s.go||[]).forEach((g,gi)=>items.push({s,i,gi,g}));});
+  const items=[{ov:1}],FG=foldGos(AS);AS.forEach((s,i)=>{if(s.k==='提醒')return;items.push({s,i});(s.go||[]).forEach((g,gi)=>{if(!FG.has(i,gi))items.push({s,i,gi,g});});});
   $a('maRoute').innerHTML=items.map(it=>{
     if(it.ov)return `<div class="mc-card ov on" data-ov="1"><div class="mc-ov"><small>DAY ${d.n} · ${d.date} 週${d.wd}</small><b>${d.title}</b><span>${Object.keys(R.nums).length} 個地點 · 全天路線</span><em>往左滑，一站一站看 ›</em></div></div>`;
     if(it.g){const g=it.g;return `<div class="mc-card go" data-i="${it.i}" data-gi="${it.gi}"><span class="mc-gi">${g.i}</span><div><b>${g.t}</b><small>${g.at||''}${g.gd?'　'+g.gd:''}</small></div></div>`;}
@@ -3940,7 +3956,7 @@ function deskInit(){
     mapFocus(Z,d,S,si,gi,{ppk:110,vw:Z.BW-340,vh:Z.BH-80,fx:.56,fy:.46,noMove:o.noMove,D:o.noAnim?1:460});
     const fc=sec.querySelector('.dk-fcard');if(!fc)return;
     if(gi!=null){const g=(st.go||[])[gi];fc.hidden=false;fc.innerHTML=`<div class="dk-fc-go"><span>${g.i}</span><div><small>${g.at||''}</small><b>${g.t}</b>${g.gd?`<p>${g.gd}</p>`:''}</div></div>`;return;}
-    const c=st.card&&CARDS[st.card],img=c?cardImg(st.card):'',gu=st.card?gUrl(st.card):'',tx=st.d||(c&&c.short)||'';
+    const c=st.card&&CARDS[st.card],img=c?cardImg(st.card):'',gu=st.card?gUrl(st.card):'',gn=(foldGos(S).notes[si]||[]).map(t=>`<span class="xgo">${t}</span>`).join(''),tx=gn+(st.d||(c&&c.short)||'');
     fc.hidden=false;fc.innerHTML=`${img?`<img src="${img}" alt="" loading="lazy">`:''}<div><small>${/^\d/.test(st.t)?st.t+(st.dur?' · 停留 '+st.dur:''):st.t}</small><b>${st.n}</b>${tx?`<p>${tx}</p>`:''}${(c||gu)?`<div class="dk-fc-act">${stayRgOfCard(st.card)?`<button type="button" data-stj="${stayRgOfCard(st.card)}">看住宿頁 ›</button>`:c?`<button type="button" data-xcard="${st.card}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`;}
   document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let el;
     if(el=t.closest('[data-stj]')){e.stopPropagation();stayJump(el.dataset.stj);return;}
