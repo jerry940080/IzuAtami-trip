@@ -1805,7 +1805,7 @@ const DAYS=[
   rain:'<b>雨備</b>　富士山看不到，夢テラス 就只進館內展示室與咖啡座看一下（戶外迴廊撐傘不好逛）；久能山東照宮的社殿與博物館照去，纜車照開。時間會多出來，提早下山改去日本平飯店露台酒廊喝下午茶，或回市區逛 Hobby Square，晚上一樣是青葉橫丁。'},
  {n:3,date:'2/12',wd:'五',title:'租車一日：久能・清水',sub:'上午現採石垣草莓，中午河岸の市鮪魚丼，下午清水，傍晚三保松原看夕陽',stay:'靜岡 Airbnb（續住）',
   map:{pts:['shizuoka','ichigo','shimizu','maruko','miho','yunoki'],legs:[{a:'shizuoka',b:'ichigo',mode:'car'},{a:'ichigo',b:'shimizu',mode:'car'},{a:'shimizu',b:'maruko',mode:'car'},{a:'maruko',b:'miho',mode:'car'},{a:'miho',b:'yunoki',mode:'car',curve:.25},{a:'yunoki',b:'shizuoka',mode:'car'}],labels:{shizuoka:'l',ichigo:'b',shimizu:'t',maruko:'r',miho:'r',yunoki:'t'},minSpan:.1},
-  cards:['ichigo','shimizu','maruko','miho','mihoshrine','yunoki'],
+  cards:['ichigo','shimizu','maruko','miho','yunoki'],
   rain:'<b>雨備</b>　上午到下午幾乎都在室內，照跑：草莓園是溫室、河岸の市 與ドリームプラザ 都有屋頂。會泡湯的只有傍晚的三保夕陽 —— 看不到就跳過，提早開去柚木の郷 多泡一小時。不租車的話：JR 到清水站，走路 5 分到河岸の市，再搭東口的免費接駁巴士去ドリームプラザ（約 10 分）。'},
  {n:4,date:'2/13',wd:'六',title:'靜岡 → 熱海',sub:'上午開車去日本平動物園看小熊貓，午後開到熱海先逛起雲閣，check-in 後走熱海銀座，晚上糸川夜櫻、土曜夜市晚餐，回飯店後想出門再去來宮神社看點燈',stay:'LiVEMAX Resort 熱海 Ocean',
   map:{pts:['shizuoka','zoo','kiunkaku','livemax','ginza','itogawa','yoichi','kinomiya'],legs:[{a:'shizuoka',b:'zoo',mode:'car',line:'租車'},{a:'zoo',b:'shizuoka',mode:'car',line:'租車',curve:.3},{a:'shizuoka',b:'kiunkaku',mode:'car',line:'租車',via:['shimizu','satta','numazuStn','mishima']},{a:'kiunkaku',b:'livemax',mode:'car',line:'租車'},{a:'livemax',b:'ginza',mode:'walk'},{a:'ginza',b:'itogawa',mode:'walk'},{a:'itogawa',b:'yoichi',mode:'walk'},{a:'yoichi',b:'livemax',mode:'walk',curve:.3},{a:'livemax',b:'kinomiya',mode:'taxi',line:'夜晚選項'}],labels:{shizuoka:'l',zoo:'b',kiunkaku:'l',livemax:'b',ginza:'t',itogawa:'r',yoichi:'b',kinomiya:'t'},minSpan:.16},
@@ -1835,14 +1835,14 @@ const STOPS={
  {t:'09:00',i:'🏠',n:'開車出發前往桃園機場',k:'交通',at:'taipei',go:[{at:'09:00',i:'🚗',t:'開車前往桃園機場',gd:'台北 → 桃園機場 T1　約 40–50 分（看路況）'}]},
  {t:'10:20',i:'🛄',n:'桃園機場 T1 check-in',k:'交通',at:'tpe',d:'國泰櫃台報到、託運行李；起飛前約 2.5 小時到'},
  {t:'12:50',i:'✈',n:'桃園 T1 12:50 → 成田 T2 16:50　國泰 CX450',k:'交通',d:'國泰 CX450・12:50 桃園第一航廈起飛 → 16:50（日本時間）成田第二航廈降落・飛行約 3 小時',dur:'3 小時'},
- {t:'16:50',i:'🛬',n:'成田機場 T2 降落',k:'交通',d:'日本時間比台灣快 1 小時；入境、領行李。Visit Japan Web 先填好，通關＋領行李抓約 1 小時 15 分',at:'nrt',go:[{at:'18:15',i:'🚆',t:'通關並領取完行李，買點東西吃，搭乘 JR 成田特快',gd:'成田 T2 → 品川　JR 成田特快 約 18:15 前後發・約 1 小時 10 分・¥3,330（班次以えきねっと為準）'}]},
+ {t:'16:50',i:'🛬',n:'成田機場 T2 降落',k:'交通',nz:1,d:'日本時間比台灣快 1 小時；入境、領行李。Visit Japan Web 先填好，通關＋領行李抓約 1 小時 15 分',at:'nrt',go:[{at:'18:15',i:'🚆',t:'通關並領取完行李，買點東西吃，搭乘 JR 成田特快',gd:'成田 T2 → 品川　JR 成田特快 約 18:15 前後發・約 1 小時 10 分・¥3,330（班次以えきねっと為準）'}]},
  {t:'19:30',i:'🛏',n:'抵達品川站，前往飯店 check-in',k:'住宿',d:'飯店還在挑，候選看「住宿」頁；晚餐在品川站內覓食',card:'prince'},
  {t:'20:30',i:'🌙',n:'自由時間',k:'體驗'}
 ],
 2:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
  {t:'09:00',i:'🧳',n:'Check-out，前往品川站',k:'住宿',at:'shinagawa',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
- {t:'11:20',i:'🚗',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
+ {t:'11:20',i:'🔑',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
  {t:'11:40',i:'🍽',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車前往日本平',gd:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
  {t:'13:10',i:'🗻',n:'日本平夢テラス',k:'景點',d:'富士山與駿河灣展望迴廊，屋外迴廊 24 小時開放',card:'yume',dur:'55 分',go:[{at:'14:05',i:'🚡',t:'搭纜車前往久能山',gd:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
  {t:'14:15',i:'⛩',n:'久能山東照宮',k:'景點',d:'國寶社殿與博物館，冬季 16:00 截止拜觀',card:'toshogu',dur:'1 小時 10 分',go:[{at:'15:25',i:'🚡',t:'搭纜車回日本平',to:'yume'}]},
@@ -1853,12 +1853,9 @@ const STOPS={
 3:[
  {t:'08:30',i:'🍳',n:'早餐（Airbnb）',k:'美食',d:'Airbnb 整棟自理，前一晚在站前超商或麵包店買好',go:[{at:'09:30',i:'🚗',t:'開車出發',gd:'開車出發（2/11 起續租中）　約 30 分'}]},
  {t:'10:00',i:'🍓',n:'石垣草莓 吃到飽（10:00 場）',k:'體驗',d:'預約 10:00 場・30 分吃到飽',card:'ichigo',dur:'40 分',go:[{at:'10:40',i:'🚗',t:'開車前往清水',gd:'開車 → 清水　約 25 分'}]},
- {t:'11:05',i:'🦐',n:'清水 河岸の市',k:'景點',d:'先逛いちば館買干物與櫻花蝦',card:'shimizu',dur:'55 分'},
- {t:'12:00',i:'🍽',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:[{at:'13:15',i:'🚗',t:'開車約 5 分',gd:'開車 → エスパルスドリームプラザ　約 5 分'}]},
- {t:'13:20',i:'🎪',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時 10 分'},
- {t:'14:30',i:'🎡',n:'ドリームプラザ',k:'景點',d:'摩天輪、海側平台看富士山、清水壽司橫丁',card:'maruko',dur:'1 小時',go:[{at:'15:30',i:'🚗',t:'開車前往三保松原',gd:'開車 → 三保松原　約 20 分'}]},
- {t:'15:50',i:'🌲',n:'三保松原・御穗神社',k:'景點',d:'500 公尺松林參道散步',card:'mihoshrine',dur:'1 小時'},
- {t:'16:50',i:'🌅',n:'羽衣の松 看夕陽（日沒 17:25）',k:'景點',d:'2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',dur:'55 分',go:[{at:'17:45',i:'🚗',t:'開車前往柚木の郷',gd:'三保 → 柚木の郷　開車約 35 分（車續租到 2/15，不用還）'}]},
+ {t:'11:05',i:'🦐',n:'清水 河岸の市・まぐろ館午餐',k:'景點',d:'先逛いちば館買干物與櫻花蝦；12:00 左右到まぐろ館吃鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'2 小時 10 分',go:[{at:'13:15',i:'🚗',t:'開車約 5 分',gd:'開車 → エスパルスドリームプラザ　約 5 分'}]},
+ {t:'13:20',i:'🎪',n:'小丸子樂園・ドリームプラザ',k:'景點',d:'小丸子樂園在エスパルスドリームプラザ 3F；逛完坐摩天輪、到海側平台看富士山、清水壽司橫丁',card:'maruko',dur:'2 小時 10 分',go:[{at:'15:30',i:'🚗',t:'開車前往三保松原',gd:'開車 → 三保松原　約 20 分'}]},
+ {t:'15:50',i:'🌲',n:'三保松原・看夕陽（日沒 17:25）',k:'景點',d:'先走御穗神社的神の道（500 公尺松林參道），再到羽衣の松看夕陽：2/12 日沒約 17:25，富士山會被夕照染色',card:'miho',cx:['mihoshrine'],dur:'1 小時 55 分',go:[{at:'17:45',i:'🚗',t:'開車前往柚木の郷',gd:'三保 → 柚木の郷　開車約 35 分（車續租到 2/15，不用還）'}]},
  {t:'18:20',i:'♨',n:'柚木の郷 泡湯、晚餐',k:'溫泉',d:'天然溫泉＋三溫暖，館內食事處吃晚餐（LO 21:30）；開車的人別喝酒',card:'yunoki',dur:'3 小時',go:[{at:'21:20',i:'🚗',t:'開車回 Airbnb',gd:'柚木の郷 → Airbnb　開車約 15 分'}]}
 ],
 4:[
@@ -1927,7 +1924,7 @@ const RAIN_STOPS={
 2:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
  {t:'09:00',i:'🧳',n:'Check-out，前往品川站',k:'住宿',at:'shinagawa',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
- {t:'11:20',i:'🚗',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
+ {t:'11:20',i:'🔑',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
  {t:'11:40',i:'🍽',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車前往日本平',gd:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
  {t:'13:10',i:'🗻',n:'日本平夢テラス（只逛館內）',k:'景點',d:'富士山看不到，只進館內展示室與咖啡座；戶外迴廊撐傘不好逛',card:'yume',dur:'30 分',go:[{at:'13:40',i:'🚡',t:'搭纜車前往久能山',gd:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
  {t:'13:50',i:'⛩',n:'久能山東照宮',k:'景點',d:'社殿與博物館照去，纜車照開',card:'toshogu',dur:'1 小時 10 分',go:[{at:'15:00',i:'🚡',t:'搭纜車回日本平',to:'yume'}]},
@@ -1939,10 +1936,8 @@ const RAIN_STOPS={
 3:[
  {t:'08:30',i:'🍳',n:'早餐（Airbnb）',k:'美食',d:'Airbnb 整棟自理，前一晚在站前超商或麵包店買好',go:[{at:'09:30',i:'🚗',t:'開車出發',gd:'開車出發（2/11 起續租中）　約 30 分'}]},
  {t:'10:00',i:'🍓',n:'石垣草莓 吃到飽（溫室，下雨照去）',k:'體驗',d:'溫室採果，下雨照跑・預約 10:00 場',card:'ichigo',dur:'40 分',go:[{at:'10:40',i:'🚗',t:'開車前往清水',gd:'開車 → 清水　約 25 分'}]},
- {t:'11:05',i:'🦐',n:'清水 河岸の市',k:'景點',d:'有屋頂，先逛いちば館買干物與櫻花蝦',card:'shimizu',dur:'55 分'},
- {t:'12:00',i:'🍽',n:'まぐろ館 午餐',k:'美食',d:'鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'1 小時 15 分',go:[{at:'13:15',i:'🚗',t:'開車約 5 分',gd:'開車 → エスパルスドリームプラザ　約 5 分'}]},
- {t:'13:20',i:'🎪',n:'小丸子樂園',k:'景點',d:'エスパルスドリームプラザ 3F',card:'maruko',dur:'1 小時 10 分'},
- {t:'14:30',i:'🎡',n:'ドリームプラザ（多待一會）',k:'景點',d:'室內逛街、清水壽司橫丁、摩天輪，雨天多待一會',card:'maruko',dur:'2 小時 30 分',go:[{at:'17:00',i:'🚗',t:'開車前往柚木の郷',gd:'ドリームプラザ → 柚木の郷　開車約 30 分'}]},
+ {t:'11:05',i:'🦐',n:'清水 河岸の市・まぐろ館午餐',k:'景點',d:'有屋頂，先逛いちば館買干物與櫻花蝦；12:00 左右到まぐろ館吃鮪魚丼，12 點前後進場幾乎不用排隊',card:'shimizu',dur:'2 小時 10 分',go:[{at:'13:15',i:'🚗',t:'開車約 5 分',gd:'開車 → エスパルスドリームプラザ　約 5 分'}]},
+ {t:'13:20',i:'🎪',n:'小丸子樂園・ドリームプラザ',k:'景點',d:'小丸子樂園在エスパルスドリームプラザ 3F；雨天在ドリームプラザ多待一會：室內逛街、清水壽司橫丁、摩天輪',card:'maruko',dur:'3 小時 40 分',go:[{at:'17:00',i:'🚗',t:'開車前往柚木の郷',gd:'ドリームプラザ → 柚木の郷　開車約 30 分'}]},
  {t:'選項',i:'🌲',n:'三保松原（雨停再去）',k:'選項',d:'看不到夕陽就跳過',card:'miho'},
  {t:'17:30',i:'♨',n:'柚木の郷 泡湯、晚餐',k:'溫泉',d:'比晴天早約一小時到，多泡一會；館內食事處吃晚餐（LO 21:30），開車的人別喝酒',card:'yunoki',dur:'4 小時',go:[{at:'21:30',i:'🚗',t:'開車回 Airbnb',gd:'柚木の郷 → Airbnb　開車約 15 分'}]}
 ],
@@ -3262,7 +3257,7 @@ function rsClick(t){let el;
 /* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
    已排入＝晴天版行程裡有時間的站；其餘（只有「選項」、只在雨天版、或完全沒排）＝候選。 */
 function spotStatus(k){let sched=null,opt=null,rain=null;
-  DAYS.forEach(d=>{(d.stops||[]).forEach(s=>{if(s.card!==k)return;if(/^\d|^途中/.test(s.t)){if(!sched)sched={d,s};}else if(s.k==='選項'&&!opt)opt={d,s};});
+  DAYS.forEach(d=>{(d.stops||[]).forEach(s=>{if(s.card!==k&&!(s.cx||[]).includes(k))return;if(/^\d|^途中/.test(s.t)){if(!sched)sched={d,s};}else if(s.k==='選項'&&!opt)opt={d,s};});
     (d.rainStops||[]).forEach(s=>{if(s.card===k&&!rain)rain={d,s};});});
   if(sched)return {in:true,tag:`Day ${sched.d.n}${/^\d/.test(sched.s.t)?' · '+sched.s.t:''}`};
   if(opt)return {in:false,tag:`Day ${opt.d.n} 選項`};
@@ -3767,8 +3762,8 @@ function mapFocus(Z,d,S,i,gi,o={}){
     if(locOf(s)&&!o.noInc){let inc=null;for(let j=i-1;j>=0;j--){const G=S[j].go||[];if(G.length){inc={j,g:G.length-1};break;}if(isMainStop(S[j])&&locOf(S[j]))break;}
       if(inc&&foldGos(S).has(inc.j,inc.g)&&GO_MODE[S[inc.j].go[inc.g].i]&&GO_MODE[S[inc.j].go[inc.g].i]!=='walk'){const e=goEnds(d,S,inc.j,inc.g);
         if(e&&e.b===k&&e.a&&e.a!==k&&svg.querySelector(`.leg[data-b="${k}"]`))return mapFocus(Z,d,S,inc.j,inc.g,o);}}
-    const g=mapSel(svg,k);if(!g)return;mapFront(g);
-    if(o.noMove){Z.apply();Z.relayout();return;}
+    const g=mapSel(svg,k);if(!g)return;mapFront(g);svg.classList.add('gf');g.classList.add('ep'); // 只亮起這一站，其他變淺灰（變更（八十四））
+    if(o.noMove||s.nz){Z.apply();Z.relayout();return;} // nz：這站不放大（Day 1 成田降落，停在飛機航線的畫面）
     const r=regOfKey(k);if(r&&regViewTo(Z,r,o))return;
     const ppk=Z.sbar?Z.sbar.ppk:20;let z=Math.max(1,Math.min(Z.zmax,(o.ppk||70)/ppk));if(Z.z>z)z=Z.z;Z._reg=null;
     Z.anim(z,+g.dataset.bx,+g.dataset.by,()=>Z.relayout(),o.D||420,o.fy,o.fx);
