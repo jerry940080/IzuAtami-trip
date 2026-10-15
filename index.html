@@ -1348,6 +1348,16 @@ html.app #maRoute{align-items:stretch;height:224px}
 .mc-card.nav.on{box-shadow:0 18px 40px -8px rgba(0,0,0,.45),inset 0 0 0 3px rgba(255,255,255,.55)}
 /* 飛機動畫＋選中地標（變更（八十二）） */
 svg .plane{pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+svg .legi.riding{opacity:0!important}
+/* 移動時只亮起出發地與目的地，其他地標淺灰 */
+svg.gf .mk:not(.ep){opacity:.55}
+svg.gf .mk:not(.ep)>circle,svg.gf .mk:not(.ep)>rect{fill:#cdc8be!important;stroke:#f4f1ea!important}
+svg.gf .mk:not(.ep)>text{fill:#a29d93!important}
+svg.gf .mk:not(.ep) .mth image{opacity:.28}
+svg.gf .mk:not(.ep) .mth .rg,svg.gf .mk:not(.ep) .mth circle{stroke:#cdc8be!important}
+svg.gf .mk:not(.ep) .mth g circle{fill:#bdb8ae!important}
+.reg-chip{position:absolute;left:50%;top:76px;transform:translate(-50%,-6px);background:rgba(38,41,46,.82);color:#fff;font:600 12.5px/1 Figtree,'Noto Sans TC',sans-serif;padding:7px 12px;border-radius:99px;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;z-index:3}
+.reg-chip.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
@@ -2289,24 +2299,28 @@ function railBg(pr,bbox){
 }
 /* 自動路線的畫法：鐵道類＝色線＋白色間隔（像鐵軌）、開車＝實線、計程車／巴士＝虛線、步行＝點；
    和前面的路線重疊（例如來回同一條路、同一段鐵軌）就平移幾 px 並排；夠長的線段中間放交通方式小圖示 */
+function legOffs(p,o){const n=p.length;return p.map((q,i)=>{const a=p[Math.max(0,i-2)],b=p[Math.min(n-1,i+2)],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1;return [q[0]-dy/L*o,q[1]+dx/L*o];});}
 function autoLegSvg(legs,pr,big){
   const px=legs.map(lg=>lg.geo.map(q=>pr.pt(q))),out=[],ics=[];
   const len=p=>{let L=0;for(let i=1;i<p.length;i++)L+=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);return L;};
   const samp=(p,st)=>{const o=[p[0]];for(let i=1;i<p.length;i++){const a=p[i-1],b=p[i],L=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.ceil(L/st));for(let k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);}return o;};
   const dseg=(q,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((q[0]-a[0])*dx+(q[1]-a[1])*dy)/L));return Math.hypot(q[0]-a[0]-t*dx,q[1]-a[1]-t*dy);};
-  const near=(q,p)=>{for(let i=1;i<p.length;i++)if(dseg(q,p[i-1],p[i])<3)return true;return false;};
-  const offs=(p,o)=>p.map((q,i)=>{const a=p[Math.max(0,i-1)],b=p[Math.min(p.length-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1;return [q[0]-dy/L*o,q[1]+dx/L*o];});
+  const near=(q,p,th)=>{for(let i=1;i<p.length;i++)if(dseg(q,p[i-1],p[i])<th)return true;return false;};
+  // 只有同一類交通（鐵道／道路／步行／纜車）來回重疊才並排；門檻依線段長度算，避免總覽圖上一小段路線被誤判（Day 1 成田特快曾因此畫成鋸齒）
+  const FAM={rail:'r',shinkansen:'r',izukyu:'r',subway:'r',car:'c',taxi:'c',bus:'c',walk:'w',ropeway:'p',air:'a'},base=px.map(p=>p.slice()),OFF=big?4.5:3.5;
   const sh=px.map(()=>0);
-  px.forEach((p,i)=>{const S=samp(p,6).slice(1,-1);if(S.length<2)return;let n=0;
-    for(let j=0;j<i;j++){const hit=S.filter(q=>near(q,px[j])).length;if(hit/S.length>.5)n++;}
-    if(n){sh[i]=n;px[i]=offs(p,(n%2?1:-1)*Math.ceil(n/2)*(big?4.5:3.5));}});
-  legs.forEach((lg,i)=>{const M=MODE[lg.mode],p=px[i],d=lg.geo.smooth&&p.length>2?smooth(p):'M'+p.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join('L');
-    const w=M.w+(M.trk?1.4:lg.mode==='car'?.8:0),op=lg.opt?' stroke-opacity=".5"':'',da=`data-i="${i}" data-b="${lg.b}" data-m="${lg.mode}"`;
+  px.forEach((p,i)=>{const L=len(p);if(L<.3)return;const S=samp(p,Math.min(6,L/10)).slice(1,-1),th=Math.min(3,Math.max(.03,L*.05));if(S.length<2)return;let n=0;
+    for(let j=0;j<i;j++){if(FAM[legs[j].mode]!==FAM[legs[i].mode])continue;const hit=S.filter(q=>near(q,base[j],th)).length;if(hit/S.length>.5)n++;}
+    if(n){sh[i]=(n%2?1:-1)*Math.ceil(n/2);px[i]=legOffs(p,sh[i]*OFF);}});
+  legs.forEach((lg,i)=>{const M=MODE[lg.mode],p=px[i],sm=lg.geo.smooth&&p.length>2,d=sm?smooth(p):'M'+p.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join('L');
+    // 並排的位移是螢幕上的固定 px：記下原始座標，縮放時 Z.apply 依倍率重算（不然放大 20 倍位移也跟著變 20 倍）
+    const ofa=sh[i]?` data-off="${sh[i]*OFF}" data-p="${base[i].map(q=>q[0].toFixed(2)+','+q[1].toFixed(2)).join(' ')}"${sm?' data-sm="1"':''}`:'';
+    const w=M.w+(M.trk?1.4:lg.mode==='car'?.8:0),op=lg.opt?' stroke-opacity=".5"':'',da=`data-i="${i}" data-b="${lg.b}" data-m="${lg.mode}"${ofa}`;
     out.push(`<path class="leg${lg.opt?' opt':''}" ${da} d="${d}" fill="none" stroke="${M.c}" stroke-width="${w}"${op} ${M.d?`stroke-dasharray="${M.d}"`:''} stroke-linecap="${M.cap||'round'}" stroke-linejoin="round"/>`);
-    if(M.trk)out.push(`<path class="legx" data-i="${i}" d="${d}" fill="none" stroke="#fff" stroke-width="${(w*.42).toFixed(1)}" stroke-dasharray="5 5"${lg.opt?' stroke-opacity=".7"':''} stroke-linejoin="round"/>`);
-    const L=len(p);if(!M.ic||L<(big?50:42))return;
-    let t=L*(sh[i]?.64:.5),k=1;for(;k<p.length;k++){const s=Math.hypot(p[k][0]-p[k-1][0],p[k][1]-p[k-1][1]);if(t<=s){t/=s||1;break;}t-=s;}
-    k=Math.min(k,p.length-1);const x=p[k-1][0]+(p[k][0]-p[k-1][0])*Math.min(1,t),y=p[k-1][1]+(p[k][1]-p[k-1][1])*Math.min(1,t),R=big?11:8.5;
+    if(M.trk)out.push(`<path class="legx" data-i="${i}"${ofa} d="${d}" fill="none" stroke="#fff" stroke-width="${(w*.42).toFixed(1)}" stroke-dasharray="5 5"${lg.opt?' stroke-opacity=".7"':''} stroke-linejoin="round"/>`);
+    const bp=base[i],L=len(bp);if(!M.ic||L<(big?50:42))return; // 小圖示放在原始線上（並排的兩條線中間）
+    let t=L*(sh[i]?.64:.5),k=1;for(;k<bp.length;k++){const s=Math.hypot(bp[k][0]-bp[k-1][0],bp[k][1]-bp[k-1][1]);if(t<=s){t/=s||1;break;}t-=s;}
+    k=Math.min(k,bp.length-1);const x=bp[k-1][0]+(bp[k][0]-bp[k-1][0])*Math.min(1,t),y=bp[k-1][1]+(bp[k][1]-bp[k-1][1])*Math.min(1,t),R=big?11:8.5;
     ics.push(`<g class="legi zs" data-i="${i}" data-bx="${x.toFixed(1)}" data-by="${y.toFixed(1)}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"${lg.opt?' opacity=".6"':''}><circle r="${R}" fill="#fff" stroke="${M.c}" stroke-width="1.6"/><text y="${(R*.38).toFixed(1)}" text-anchor="middle" font-size="${(R*1.15).toFixed(1)}">${M.ic}</text></g>`);});
   return out.join('')+ics.join('');
 }
@@ -3600,6 +3614,8 @@ Z.apply=function(){
   svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
   svg.querySelectorAll('.mk[data-bx],.zs[data-bx]').forEach(g=>{const sc=iz*(g.classList.contains('sel')?1.4:1);g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${(z>1.001||sc!==1)?` scale(${sc.toFixed(4)})`:''}`);});
   svg.querySelectorAll('circle[data-r]').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
+  svg.querySelectorAll('path[data-off]').forEach(el=>{const o=+el.dataset.off*iz;if(el._oz===o)return;el._oz=o; // 並排路線：位移固定為螢幕上幾 px
+    const p=el._p||(el._p=el.dataset.p.split(' ').map(t=>t.split(',').map(Number))),q=legOffs(p,o);el.setAttribute('d',el.dataset.sm?smooth(q):'M'+q.map(v=>v[0].toFixed(2)+','+v[1].toFixed(2)).join('L'));});
   const S=Z.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
     const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=Z.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
     ls[0].setAttribute('x2',L.toFixed(1));ls[2].setAttribute('x1',L.toFixed(1));ls[2].setAttribute('x2',L.toFixed(1));
@@ -3607,7 +3623,7 @@ Z.apply=function(){
     S.g.setAttribute('transform',`translate(${(x+(Z.BW-L-16)*iz).toFixed(2)},${(y+S.y*iz).toFixed(2)}) scale(${iz.toFixed(4)})`);}
   const box=svg.closest('.ma-map,.sp-map');if(box)box.classList.toggle('zoomed',z>1.01);
 };
-Z.set=function(z,px,py,fx,fy){if(!Z._anim)Z._reg=null; // 讓 viewBox 上的點 (px,py) 落在畫面比例位置 (fx,fy)
+Z.set=function(z,px,py,fx,fy){if(!Z._anim){Z._reg=null;if(Z.svg)regChip(Z.svg,'');} // 讓 viewBox 上的點 (px,py) 落在畫面比例位置 (fx,fy)
   z=Math.max(1,Math.min(Z.zmax,z));const w=Z.BW/z,h=Z.BH/z;
   Z.z=z;Z.vb=[Math.max(0,Math.min(Z.BW-w,px-fx*w)),Math.max(0,Math.min(Z.BH-h,py-fy*h)),w,h];Z.apply();
 };
@@ -3693,46 +3709,65 @@ function goEnds(d,S,i,gi){let cur=lodgingAt(d.n);
     const G=s.go||[];for(let g=0;g<G.length;g++){const gg=G[g];if(j===i&&g===gi)return {a:cur,b:gg.to||nextLoc()};if(gg.to)cur=gg.to;}}
   return null;}
 function mapClearSel(svg){svg.querySelectorAll('.mk.sel').forEach(g=>g.classList.remove('sel'));svg.querySelectorAll('text.sel-l').forEach(t=>t.classList.remove('sel-l'));
-  svg.querySelectorAll('.hi,.dim').forEach(e=>e.classList.remove('hi','dim'));}
+  svg.querySelectorAll('.hi,.dim').forEach(e=>e.classList.remove('hi','dim'));svg.classList.remove('gf');svg.querySelectorAll('.mk.ep').forEach(g=>g.classList.remove('ep'));}
 function mapSel(svg,k){const g=svg.querySelector(`.mk[data-key="${k}"]`);if(!g)return null;g.classList.add('sel');const ts=g.querySelectorAll(':scope>text'),t=ts[ts.length-1];if(t&&!/^\d+$/.test(t.textContent)){t.classList.add('sel-l');t.style.display='';}return g;}
 /* 地區固定視角（變更（八十二））：同一區裡換站只把地標亮起來、地圖不動；跨區的移動（成田特快、新幹線、踊子、靜岡 → 熱海、飛機…）才縮放到整段路線 */
 const MAP_REG=[{n:'台北・桃園',la:[24.9,25.2],lo:[121.1,121.7]},{n:'成田',la:[35.70,35.86],lo:[140.28,140.46]},{n:'東京',la:[35.52,35.78],lo:[139.55,139.90]},
-  {n:'靜岡',la:[34.90,35.08],lo:[138.30,138.60]},{n:'熱海',la:[35.04,35.14],lo:[139.02,139.12]},{n:'河津',la:[34.72,34.80],lo:[138.94,139.02]}];
+  {n:'日本平',la:[34.955,34.985],lo:[138.42,138.48],chip:'日本平 局部放大'},{n:'靜岡',la:[34.90,35.08],lo:[138.30,138.60],chip:'靜岡・清水'},{n:'熱海',la:[35.04,35.14],lo:[139.02,139.12]},{n:'河津',la:[34.72,34.80],lo:[138.94,139.02]}];
 function regOfKey(k){const p=P[k];return p?MAP_REG.find(r=>p[0]>=r.la[0]&&p[0]<=r.la[1]&&p[1]>=r.lo[0]&&p[1]<=r.lo[1])||null:null;}
 function stopLoc(d,S,i){const L=locOf(S[i]);if(L)return L;for(let j=i-1;j>=0;j--){const s=S[j];if(isMainStop(s)&&locOf(s))return locOf(s);}return lodgingAt(d.n)||null;} // 沒地點的站（早餐、午餐）＝還在上一個地點／早上的住宿
-function regViewTo(Z,reg,o){const svg=Z.svg;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+function regChip(svg,txt){const host=svg.parentElement;if(!host)return;let c=host.querySelector(':scope>.reg-chip');
+  if(!c){if(!txt)return;c=document.createElement('div');c.className='reg-chip';host.appendChild(c);}
+  if(txt)c.textContent='📍 '+txt;c.classList.toggle('on',!!txt);}
+function regViewTo(Z,reg,o,cb){const svg=Z.svg;regChip(svg,reg.chip||reg.n);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
   svg.querySelectorAll('.mk[data-key]').forEach(g=>{if(regOfKey(g.dataset.key)!==reg)return;const x=+g.dataset.bx,y=+g.dataset.by;x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);});
   if(x0>x1)return false;const ppk=Z.sbar?Z.sbar.ppk:20,mn=ppk*2.2,vw=o.vw||Z.BW,vh=o.vh||Z.BH; // 最小 2.2 km 寬，免得只有一個點時放到太大
   const z=Math.max(1,Math.min(Z.zmax,(vw-110)/Math.max(x1-x0,mn),(vh-120)/Math.max(y1-y0,mn*.7))),cx=(x0+x1)/2,cy=(y0+y1)/2;
-  const key=reg.n+'|'+Z.BW+'|'+Z.BH;if(Z._reg===key&&Math.abs(Math.log(Z.z/z))<.08){Z.apply();Z.relayout();return true;} // 已經在這一區：不動，只亮起
-  Z._reg=key;Z.anim(z,cx,cy,()=>Z.relayout(),o.D||520,o.fy,o.fx);return true;}
+  const key=reg.n+'|'+Z.BW+'|'+Z.BH;if(Z._reg===key&&Math.abs(Math.log(Z.z/z))<.08){Z.apply();Z.relayout();if(cb)cb();return true;} // 已經在這一區：不動，只亮起
+  Z._reg=key;Z.anim(z,cx,cy,()=>{Z.relayout();if(cb)cb();},o.D||520,o.fy,o.fx);return true;}
 function mapFront(g){const a=g&&(g.closest('.mk-a')||g);if(a&&a.parentNode)a.parentNode.appendChild(a);} // 選中的地標畫在最上層
-function flyPlane(Z,leg){const svg=Z.svg;svg.querySelectorAll('.plane').forEach(x=>x.remove());if(!leg)return;
-  const L=leg.getTotalLength(),ns='http://www.w3.org/2000/svg',g=document.createElementNS(ns,'g');g.setAttribute('class','plane');
-  g.innerHTML='<circle r="15" fill="#fff" stroke="#4b6584" stroke-width="1.6"/><path d="M-1.2-9.5c.7-.6 1.7-.6 2.4 0 .5.4.8 1 .8 1.7V-3l7.5 4.2v2.4L2 1.3v4.6l2.6 2v1.9L0 8.6l-4.6 1.2V7.9l2.6-2V1.3l-7.5 2.3V1.2L-2-3v-4.8c0-.7.3-1.3.8-1.7z" fill="#26292e"/>';
-  svg.appendChild(g);const t0=performance.now(),D=Math.min(3200,Math.max(1600,L/Z.z*6)),gen=Z.gen;
-  const step=now=>{if(Z.gen!==gen||!g.isConnected)return;const k=Math.min(1,(now-t0)/D),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,p=leg.getPointAtLength(e*L),q=leg.getPointAtLength(Math.min(L,e*L+2));
-    const ang=Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI+90;g.setAttribute('transform',`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) scale(${(1/Z.z).toFixed(4)}) rotate(${ang.toFixed(1)})`);
-    if(k<1)requestAnimationFrame(step);else setTimeout(()=>g.isConnected&&g.remove(),900);};requestAnimationFrame(step);}
+/* 交通小動畫（變更（八十三））：飛機以外的非步行移動（開車、計程車、巴士、纜車、新幹線、JR、伊豆急、地鐵）也有一個小圖示沿著亮起的路線跑一趟 */
+const PLANE_SVG='<path d="M-1.2-9.5c.7-.6 1.7-.6 2.4 0 .5.4.8 1 .8 1.7V-3l7.5 4.2v2.4L2 1.3v4.6l2.6 2v1.9L0 8.6l-4.6 1.2V7.9l2.6-2V1.3l-7.5 2.3V1.2L-2-3v-4.8c0-.7.3-1.3.8-1.7z" fill="#26292e"/>';
+function rideLeg(Z,leg){const svg=Z.svg;svg.querySelectorAll('.plane').forEach(x=>x.remove());svg.querySelectorAll('.legi.riding').forEach(x=>x.classList.remove('riding'));if(!leg)return;
+  const m=leg.dataset.m,M=MODE[m];if(!M||m==='walk')return;let L;try{L=leg.getTotalLength();}catch(_){return;}if(!(L>0))return;
+  const ns='http://www.w3.org/2000/svg',g=document.createElementNS(ns,'g'),air=m==='air',ic=svg.querySelector(`.legi[data-i="${leg.dataset.i}"]`);g.setAttribute('class','plane ride-'+m);
+  g.innerHTML=`<circle r="15" fill="#fff" stroke="${M.c}" stroke-width="2"/>`+(air?PLANE_SVG:`<text y="6" text-anchor="middle" font-size="17">${M.ic}</text>`);
+  svg.appendChild(g);if(ic)ic.classList.add('riding'); // 跑的時候把線中間的靜態小圖示藏起來
+  const D=Math.min(3200,Math.max(air?1800:1300,L*Z.z*(air?6:7))),t0=performance.now(),gen=Z.gen;
+  const end=()=>{if(ic)ic.classList.remove('riding');};
+  const step=now=>{if(Z.gen!==gen||!g.isConnected){end();return;}const k=Math.min(1,(now-t0)/D),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;let len;try{len=leg.getTotalLength();}catch(_){end();return;}
+    const p=leg.getPointAtLength(e*len);let tr=`translate(${p.x.toFixed(2)},${p.y.toFixed(2)}) scale(${(1/Z.z).toFixed(4)})`;
+    if(air){const q=leg.getPointAtLength(Math.min(len,e*len+2/Z.z));tr+=` rotate(${(Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI+90).toFixed(1)})`;}
+    g.setAttribute('transform',tr);if(k<1)requestAnimationFrame(step);else setTimeout(()=>{if(g.isConnected)g.remove();end();},air?900:1200);};
+  requestAnimationFrame(step);}
+const flyPlane=rideLeg;
 function mapFocus(Z,d,S,i,gi,o={}){
-  const svg=Z.svg,s=S[i];if(!svg||!s)return;mapClearSel(svg);svg.querySelectorAll('.plane').forEach(x=>x.remove());
+  const svg=Z.svg,s=S[i];if(!svg||!s)return;mapClearSel(svg);rideLeg(Z,null);regChip(svg,'');
   const isGo=gi!=null&&gi>=0,transit=!isGo&&s.k==='交通'&&!(s.go||[]).length&&!!GO_MODE[s.i];
-  if(o.overview){Z._reg=null;Z.anim(1,Z.BW/2,Z.BH/2,()=>Z.relayout(),o.D||420);return;}
+  if(o.overview){Z._reg=null;regChip(svg,'');Z.anim(1,Z.BW/2,Z.BH/2,()=>Z.relayout(),o.D||420);return;}
   if(isGo||transit){
     const e=goEnds(d,S,i,isGo?gi:-1);if(!e)return;const md=GO_MODE[isGo?(s.go[gi]||{}).i:s.i];
     let legs=[...svg.querySelectorAll('.leg:not(.opt)')].filter(l=>l.dataset.b===e.b);if(md&&legs.some(l=>l.dataset.m===md))legs=legs.filter(l=>l.dataset.m===md);if(legs.length>1)legs=[legs[0]];
     if(legs.length){svg.querySelectorAll('.leg,.legx,.legi').forEach(x=>x.classList.add('dim'));legs.forEach(l=>{l.classList.remove('dim');l.classList.add('hi');svg.querySelectorAll(`.legx[data-i="${l.dataset.i}"],.legi[data-i="${l.dataset.i}"]`).forEach(x=>x.classList.remove('dim'));});}
-    const ra=regOfKey(e.a),rb=regOfKey(e.b);mapFront(mapSel(svg,e.b));
-    if(ra&&ra===rb&&!o.noMove){regViewTo(Z,rb,o);return;} // 同一區裡的短程移動：地圖不動，路線亮起
+    // 只亮起出發地與目的地，其他地標變淺灰（變更（八十三）：靜岡、熱海那種點擠在一起的地方才看得出從哪到哪）
+    svg.classList.add('gf');[e.a,e.b].forEach(k=>{const g=mapSel(svg,k);if(g)g.classList.add('ep');});mapFront(svg.querySelector(`.mk[data-key="${e.a}"]`));mapFront(svg.querySelector(`.mk[data-key="${e.b}"]`));
+    const ride=()=>{if(legs[0])rideLeg(Z,legs[0]);};
+    const ra=regOfKey(e.a),rb=regOfKey(e.b);
+    if(ra&&ra===rb&&!o.noMove){regViewTo(Z,rb,o,ride);return;} // 同一區裡的短程移動：地圖不動，路線亮起
     let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const add=(x,y)=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);};
     legs.forEach(l=>{try{const bb=l.getBBox();add(bb.x,bb.y);add(bb.x+bb.width,bb.y+bb.height);}catch(_){}});
     [e.a,e.b].forEach(k=>{const g=svg.querySelector(`.mk[data-key="${k}"]`);if(g)add(+g.dataset.bx,+g.dataset.by);});
     if(x0>x1)return;x0=Math.max(0,x0);y0=Math.max(0,y0);x1=Math.min(Z.BW,x1);y1=Math.min(Z.BH,y1);
-    const vw=o.vw||Z.BW,vh=o.vh||Z.BH,z=Math.max(1,Math.min(Z.zmax,(vw-100)/Math.max(x1-x0,1),(vh-100)/Math.max(y1-y0,1)));
-    Z._reg=null;const air=legs[0]&&legs[0].dataset.m==='air';
-    Z.anim(z,(x0+x1)/2,(y0+y1)/2,()=>{Z.relayout();if(air)flyPlane(Z,legs[0]);},o.D||Math.round(420+120*Math.log(Math.max(1,Math.max(Z.z/z,z/Z.z)))),o.fy,o.fx);
+    const vw=o.vw||Z.BW,vh=o.vh||Z.BH,z=Math.max(1,Math.min(Z.zmax,(vw-150)/Math.max(x1-x0,1),(vh-110)/Math.max(y1-y0,1))); // 左右多留一點，起訖的照片縮圖才不會被切到
+    Z._reg=null;
+    Z.anim(z,(x0+x1)/2,(y0+y1)/2,()=>{Z.relayout();ride();},o.D||Math.round(420+120*Math.log(Math.max(1,Math.max(Z.z/z,z/Z.z)))),o.fy,o.fx);
   }else{
-    const k=stopLoc(d,S,i);if(!k)return;const g=mapSel(svg,k);if(!g)return;mapFront(g);
+    const k=stopLoc(d,S,i);if(!k)return;
+    // 開車、計程車這種短程移動已經併進這一站（foldGos），滑到這站時就當作「抵達」：路線亮起、起訖地標亮起、小動畫跑一趟（變更（八十三））
+    if(locOf(s)&&!o.noInc){let inc=null;for(let j=i-1;j>=0;j--){const G=S[j].go||[];if(G.length){inc={j,g:G.length-1};break;}if(isMainStop(S[j])&&locOf(S[j]))break;}
+      if(inc&&foldGos(S).has(inc.j,inc.g)&&GO_MODE[S[inc.j].go[inc.g].i]&&GO_MODE[S[inc.j].go[inc.g].i]!=='walk'){const e=goEnds(d,S,inc.j,inc.g);
+        if(e&&e.b===k&&e.a&&e.a!==k&&svg.querySelector(`.leg[data-b="${k}"]`))return mapFocus(Z,d,S,inc.j,inc.g,o);}}
+    const g=mapSel(svg,k);if(!g)return;mapFront(g);
     if(o.noMove){Z.apply();Z.relayout();return;}
     const r=regOfKey(k);if(r&&regViewTo(Z,r,o))return;
     const ppk=Z.sbar?Z.sbar.ppk:20;let z=Math.max(1,Math.min(Z.zmax,(o.ppk||70)/ppk));if(Z.z>z)z=Z.z;Z._reg=null;
