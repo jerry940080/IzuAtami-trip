@@ -1238,6 +1238,67 @@ html.app .stc-m span:first-child{display:none}html.app .stc-m span{white-space:n
 .tl li .x{display:none;font-size:13.5px;line-height:1.6;color:var(--ink2,#5b5047);margin-top:4px}
 .tl li.xo .x{display:block}
 .tl li .xl{display:inline-block;margin-left:8px;color:var(--color-accent,#c67139);cursor:pointer;text-decoration:underline}
+/* 手機地圖分頁：整張地圖＋下方卡片列（變更（七十七）） */
+html.app .ma-scr[data-tab="map"]{position:absolute}
+html.app .ma-scr[data-tab="map"] .ma-map{flex:1;min-height:0;height:auto;border-radius:0}
+html.app #maMap .mm-svg{position:absolute;inset:0}html.app #maMap .mm-svg svg{display:block;width:100%;height:100%}
+html.app #maRoute{position:absolute;left:0;right:0;bottom:14px;height:236px;flex:none;overflow-x:auto;overflow-y:hidden;display:flex;gap:12px;align-items:flex-end;padding:0 calc(50% - 150px) 0 calc(50% - 150px);scroll-snap-type:x mandatory;scrollbar-width:none;z-index:5;-webkit-overflow-scrolling:touch}
+html.app #maRoute::-webkit-scrollbar{display:none}
+html.app #maMap .mm-zoom{left:auto;right:12px;bottom:266px}
+.mc-card{flex:none;width:300px;scroll-snap-align:center;background:var(--color-neutral-100,#fffdf9);border-radius:24px;overflow:hidden;box-shadow:0 14px 34px -8px rgba(0,0,0,.35);cursor:pointer;transition:transform .25s,box-shadow .25s}
+.mc-card:not(.on){transform:scale(.95);opacity:.92}
+.mc-card.on{box-shadow:0 18px 40px -8px rgba(0,0,0,.45)}
+.mc-im{position:relative;height:160px;background:color-mix(in srgb,var(--c) 18%,#fff)}
+.mc-im img{width:100%;height:100%;object-fit:cover;display:block}
+.mc-ph{position:absolute;inset:0;display:grid;place-items:center;font:800 34px/1 var(--font-heading);color:var(--c);opacity:.55;letter-spacing:.1em}
+.mc-num{position:absolute;left:12px;top:12px;width:30px;height:30px;border-radius:50%;color:#fff;display:grid;place-items:center;font-size:14.5px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.mc-tm{position:absolute;right:12px;top:12px;background:rgba(255,253,249,.94);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:800;color:var(--color-text);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.mc-bar{display:flex;align-items:center;gap:8px;padding:11px 12px 12px 14px}
+.mc-bar>div{flex:1;min-width:0}.mc-bar b{display:block;font-size:17px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mc-bar small{display:block;color:var(--color-neutral-700);font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mapp .mc-ic{flex:none;width:36px;height:36px;border-radius:50%;background:var(--color-neutral-900,#2a2420);color:#fff;display:grid;place-items:center;border:0;padding:0;text-decoration:none}
+#mapp a.mc-ic{background:#fff;color:var(--color-neutral-900,#2a2420);box-shadow:inset 0 0 0 1.5px var(--color-neutral-300,#e4d6c0)}
+.mc-card.go{width:190px;background:var(--color-accent-2-100,#e9efd9);padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;min-height:118px}
+.mc-gi{font-size:28px;line-height:1}
+.mc-card.go b{display:block;font-size:14.5px;line-height:1.3;color:var(--color-accent-2-900,#3d4b2a)}.mc-card.go small{display:block;font-size:11.5px;color:var(--color-accent-2-800,#5b6b3a);margin-top:3px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc-card.ov{width:230px;background:var(--color-neutral-900,#2a2420);color:#fff;padding:18px 18px 16px;min-height:150px;display:flex}
+.mc-ov small{display:block;font-size:11px;letter-spacing:.08em;opacity:.7}.mc-ov b{display:block;font:800 22px/1.2 var(--font-heading);margin:6px 0 4px}.mc-ov span{display:block;font-size:12.5px;opacity:.8}.mc-ov em{display:block;font-style:normal;font-size:12px;margin-top:14px;color:var(--color-accent-300,#e8b48c)}
+/* 地圖對焦：選中的標記與路線 */
+.mk.sel>circle,.mk.sel>rect{fill:#b8532a!important;stroke:#fff!important;stroke-width:3px!important}
+.mk.sel .mth .rg{stroke:#b8532a!important;stroke-width:4px!important}
+.mk text.sel-l{font-weight:900!important;fill:#8c3d1c!important;paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
+svg .leg.hi{stroke-width:7px!important;stroke-opacity:1!important}
+svg .leg.dim,svg .legx.dim,svg .legi.dim{opacity:.22!important}
+/* 電腦版每日頁 R1（變更（七十七）） */
+html.dk .day{padding:0;border-top:0}
+html.dk .day>.wrap{max-width:none;padding:0;margin:0}
+html.dk .dk-dayl{display:flex;height:100vh}
+html.dk .dk-map{flex:1;min-width:0;position:relative;overflow:hidden;background:#d7e3ea;cursor:grab}html.dk .dk-map:active{cursor:grabbing}
+html.dk .dk-msvg{position:absolute;inset:0}html.dk .dk-msvg svg{display:block;width:100%;height:100%}
+html.dk .dk-map svg path,html.dk .dk-map svg line,html.dk .dk-map svg polyline{vector-effect:non-scaling-stroke}
+html.dk .dk-map .mm-zoom{position:absolute;right:16px;bottom:16px;left:auto;display:flex;flex-direction:column;border-radius:22px;background:#fffdf9;box-shadow:0 6px 18px rgba(0,0,0,.18);overflow:hidden;z-index:5}
+html.dk .dk-map .mm-zoom button{width:42px;height:40px;display:grid;place-items:center;border:0;background:transparent;cursor:pointer;color:#2a2420}html.dk .dk-map .mm-zoom button+button{border-top:1px solid var(--rule)}html.dk .dk-map .mm-zoom .rs{display:grid}
+html.dk .dk-leg{position:absolute;left:16px;top:14px;background:rgba(255,253,249,.92);border-radius:12px;padding:6px 12px;font-size:12px;display:flex;gap:12px;align-items:center;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.08)}html.dk .dk-leg:empty{display:none}
+html.dk .dk-leg .lg{display:inline-flex;align-items:center;gap:5px}html.dk .dk-leg svg.msw{width:30px;height:10px}
+html.dk .dk-fcard{position:absolute;left:16px;bottom:16px;width:320px;background:#fffdf9;border-radius:20px;box-shadow:0 14px 34px rgba(0,0,0,.25);overflow:hidden;z-index:5}
+html.dk .dk-fcard img{width:100%;height:150px;object-fit:cover;display:block}
+html.dk .dk-fcard>div{padding:12px 14px 14px}html.dk .dk-fcard small{display:block;font-size:11.5px;letter-spacing:.06em;font-weight:800;color:#c67139}
+html.dk .dk-fcard b{display:block;font-size:17px;margin:3px 0 4px}html.dk .dk-fcard p{margin:0;font-size:13px;line-height:1.55;color:#4a4038}
+html.dk .dk-fc-act{display:flex;gap:8px;margin-top:10px}html.dk .dk-fc-act button,html.dk .dk-fc-act a{font:inherit;font-size:12.5px;border-radius:999px;padding:6px 12px;cursor:pointer;text-decoration:none;white-space:nowrap}
+html.dk .dk-fc-act button{background:#2a2420;color:#fff;border:0}html.dk .dk-fc-act a{background:#fff;color:#2a2420;border:1px solid var(--rule)}
+html.dk .dk-fc-go{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}html.dk .dk-fc-go>span{font-size:30px;line-height:1}html.dk .dk-fc-go>div{flex:1;padding:0}html.dk .dk-fc-go small{color:#5b6b3a}
+html.dk .dk-tl{width:440px;flex:none;height:100vh;overflow-y:auto;padding:22px 26px 30px;border-left:1px solid var(--rule);background:var(--paper,#f5ead8);scrollbar-width:thin}
+html.dk .dk-tl .day-head{margin-bottom:14px}html.dk .dk-tl .day-head .num{font-size:48px}html.dk .dk-tl .day-head h2{font-size:21px}html.dk .dk-tl .day-head .stay{margin-left:0;flex-basis:100%}
+html.dk .dk-tl .tl li{cursor:pointer}html.dk .dk-tl .tl li:hover{background:rgba(198,113,57,.06)}
+html.dk .dk-tl .tl li.sel{background:#fff7ec;box-shadow:inset 3px 0 0 #c67139}
+html.dk .dk-tl .dk-pn{margin-top:18px}
+/* 看每日行程時目錄收起，滑到最左邊才浮現 */
+html.dk #dkSide{transition:transform .25s ease}
+html.dk.dk-dayv body{padding-left:0}
+html.dk.dk-dayv #dkSide{transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.35)}
+html.dk.dk-dayv.dk-peek #dkSide{transform:none}
+#dkEdge{display:none;position:fixed;left:0;top:0;bottom:0;width:14px;z-index:29}
+html.dk.dk-dayv #dkEdge{display:block}
+html.dk.dk-dayv #dkEdge:after{content:"";position:absolute;left:0;top:50%;width:4px;height:48px;margin-top:-24px;border-radius:0 4px 4px 0;background:rgba(42,34,27,.35)}
 </style>
 </head>
 <body>
@@ -1862,7 +1923,7 @@ const RAIN_STOPS={
 ]};
 DAYS.forEach(d=>{if(RAIN_STOPS[d.n])d.rainStops=RAIN_STOPS[d.n];});
 /* 桌機時刻表：一站一列（名稱＋說明），每段交通一列 move */
-function stopsToTl(S){const o=[];S.forEach(s=>{o.push({t:s.t,i:s.i||'📍',h:s.n,x:s.d||'',card:s.card&&CARDS[s.card]?s.card:''});(s.go||[]).forEach(g=>o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1}));});return o;}
+function stopsToTl(S){const o=[];S.forEach((s,si)=>{o.push({t:s.t,i:s.i||'📍',h:s.n,x:s.d||'',card:s.card&&CARDS[s.card]?s.card:'',si});(s.go||[]).forEach((g,gi)=>o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi}));});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
 /* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
@@ -2068,13 +2129,13 @@ let W=600,H=440;
 const MOB=matchMedia('(max-width:640px)').matches;
 KIND.spot.c='#201e1d';KIND.hotel.c='#56633f';KIND.station.s='#201e1d'; // 與手機 App 同一套標記色
 if(MOB){W=380;H=280;}
-let PADT=0,PADS=34;
+let PADT=0,PADS=34,PADB=0;
 function proj(bbox){ // bbox {la0,la1,lo0,lo1}
   const k=Math.cos((bbox.la0+bbox.la1)/2*Math.PI/180);
-  const pad=PADS,ex=PADT; // PADT：上方額外留白（手機 App 地圖頂端有浮動膠囊），桌機為 0
-  const s=Math.min((W-2*pad)/((bbox.lo1-bbox.lo0)*k),(H-2*pad-ex)/(bbox.la1-bbox.la0));
+  const pad=PADS,ex=PADT,exb=PADB; // PADT：上方額外留白（手機 App 地圖頂端有浮動膠囊）、PADB：下方留白（地圖分頁的卡片列），桌機為 0
+  const s=Math.min((W-2*pad)/((bbox.lo1-bbox.lo0)*k),(H-2*pad-ex-exb)/(bbox.la1-bbox.la0));
   const cx=(bbox.lo0+bbox.lo1)/2, cy=(bbox.la0+bbox.la1)/2;
-  return {s,k,pt:(p)=>[W/2+(p[1]-cx)*k*s, H/2+ex/2-(p[0]-cy)*s]};
+  return {s,k,pt:(p)=>[W/2+(p[1]-cx)*k*s, H/2+(ex-exb)/2-(p[0]-cy)*s]};
 }
 function bboxOf(keys,minSpan){
   let la0=90,la1=-90,lo0=180,lo1=-180;
@@ -2176,7 +2237,7 @@ function autoLegSvg(legs,pr,big){
     for(let j=0;j<i;j++){const hit=S.filter(q=>near(q,px[j])).length;if(hit/S.length>.5)n++;}
     if(n){sh[i]=n;px[i]=offs(p,(n%2?1:-1)*Math.ceil(n/2)*(big?4.5:3.5));}});
   legs.forEach((lg,i)=>{const M=MODE[lg.mode],p=px[i],d=lg.geo.smooth&&p.length>2?smooth(p):'M'+p.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join('L');
-    const w=M.w+(M.trk?1.4:lg.mode==='car'?.8:0),op=lg.opt?' stroke-opacity=".5"':'',da=`data-i="${i}" data-b="${lg.b}"`;
+    const w=M.w+(M.trk?1.4:lg.mode==='car'?.8:0),op=lg.opt?' stroke-opacity=".5"':'',da=`data-i="${i}" data-b="${lg.b}" data-m="${lg.mode}"`;
     out.push(`<path class="leg${lg.opt?' opt':''}" ${da} d="${d}" fill="none" stroke="${M.c}" stroke-width="${w}"${op} ${M.d?`stroke-dasharray="${M.d}"`:''} stroke-linecap="${M.cap||'round'}" stroke-linejoin="round"/>`);
     if(M.trk)out.push(`<path class="legx" data-i="${i}" d="${d}" fill="none" stroke="#fff" stroke-width="${(w*.42).toFixed(1)}" stroke-dasharray="5 5"${lg.opt?' stroke-opacity=".7"':''} stroke-linejoin="round"/>`);
     const L=len(p);if(!M.ic||L<(big?50:42))return;
@@ -2191,7 +2252,7 @@ function modeSwatch(m){const M=MODE[m],w=M.w+(M.trk?1.4:m==='car'?.8:0);
 function legendRows(legs){const seen=[];legs.forEach(l=>{if(!seen.includes(l.mode))seen.push(l.mode);});
   const ord=Object.keys(MODE);return seen.sort((a,b)=>ord.indexOf(a)-ord.indexOf(b));}
 function buildMap(cfg,opts={}){
-  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;} PADT=opts.padT||0;PADS=opts.pad||34;
+  const oW=W,oH=H; if(opts.W){W=opts.W;H=opts.H;} PADT=opts.padT||0;PADB=opts.padB||0;PADS=opts.pad||34;
   const bbox=cfg.bbox||bboxOf(cfg.pts,cfg.minSpan||.05);
   const pr=proj(bbox);
   const legs=cfg.auto?autoLegSvg(cfg.legs,pr,opts.big):cfg.legs.map((lg,i)=>{const M=MODE[lg.mode];return `<path class="leg" data-i="${i}" d="${legPath(lg,pr)}" fill="none" stroke="${M.c}" stroke-width="${M.w}" ${M.d?`stroke-dasharray="${M.d}"`:''} stroke-linecap="${M.cap||'round'}" stroke-linejoin="round"/>`;}).join('');
@@ -2207,7 +2268,7 @@ ${railBg(pr,bbox)}
 <g class="mks">${mks}</g>
 ${scaleBar(pr)}
 </svg>`;
-  W=oW;H=oH;PADT=0;PADS=34;
+  W=oW;H=oH;PADT=0;PADB=0;PADS=34;
   return out;
 }
 function animateMap(svg){
@@ -2369,7 +2430,7 @@ const dayBlocks=DAYS.map(d=>{
     <div class="day-body">
       <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(mcfg,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
-        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}"${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
+        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}" data-si="${r.si}"${r.gi!=null?` data-gi="${r.gi}"`:''}${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
@@ -3412,7 +3473,8 @@ function layoutLabels(svg){
     tr:['start',q,-(r+5)],tl:['end',-q,-(r+5)],br:['start',q,r+14],bl:['end',-q,r+14]}[sd];
     t.setAttribute('text-anchor',A[0]);t.setAttribute('x',A[1]);t.setAttribute('y',A[2]);};
   const lab=g=>{const ts=g.querySelectorAll(':scope>text'),t=ts[ts.length-1];return t&&!/^\d+$/.test(t.textContent)?t:null;};
-  const pri=g=>{const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll(':scope>text').length>1?1:2;};
+  const pri=g=>{if(g.classList.contains('sel'))return -1;const t=lab(g);return /^🛏/.test(t.textContent)?0:g.querySelectorAll(':scope>text').length>1?1:2;};
+  const bot=(bx&&bx.id==='maMap'&&MOB)?sb.bottom-(MC_H+26):sb.bottom; // 地圖分頁：下方是卡片列
   [...svg.querySelectorAll('.mk[data-key]')].filter(lab).sort((a,b)=>pri(a)-pri(b)).forEach(g=>{
     const t=lab(g),hotel=pri(g)===0;
     const dot=g.querySelector(':scope>circle,:scope>rect'),r=g.classList.contains('th-on')?27:dot?(+dot.getAttribute('r')||+dot.getAttribute('width')/2||6):6;
@@ -3420,10 +3482,10 @@ function layoutLabels(svg){
     const cands=[cur,OPP[cur]].concat(['r','l','b','t'].filter(x=>x!==cur&&x!==OPP[cur]),['tr','tl','br','bl']);
     let best=null;
     for(const sd of cands){put(t,sd,r);const b=t.getBoundingClientRect();
-      const out=Math.max(0,sb.left+2-b.left)+Math.max(0,b.right-sb.right+2)+Math.max(0,top-b.top)+Math.max(0,b.bottom-sb.bottom+2);
+      const out=Math.max(0,sb.left+2-b.left)+Math.max(0,b.right-sb.right+2)+Math.max(0,top-b.top)+Math.max(0,b.bottom-bot+2);
       const hit=placed.reduce((n,p)=>n+ov(b,p),0)+dots.reduce((n,d)=>n+3*ov(b,d),0);
       const score=out*1000+hit;if(!best||score<best.score)best={sd,score,b};if(score===0)break;}
-    if(best.score>0){t.style.display='none';return;} // 飯店也一樣：放不下先藏，放大後重排就會出現
+    if(best.score>0&&!g.classList.contains('sel')){t.style.display='none';return;} // 飯店也一樣：放不下先藏，放大後重排就會出現；選中的一律顯示
     put(t,best.sd,r);placed.push(best.b);
   });
 }
@@ -3450,7 +3512,7 @@ Z.apply=function(){
     svg.querySelectorAll('.leg').forEach(l=>{l.style.transition='none';if(!l.getAttribute('stroke-dasharray')){l.style.strokeDasharray='none';l.style.strokeDashoffset='0';}l.style.opacity=1;});
     svg.querySelectorAll('.mk,.legx,.legi').forEach(m=>{m.style.transition='none';m.style.opacity=1;});}
   svg.setAttribute('viewBox',`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)}`);
-  svg.querySelectorAll('.mk[data-bx],.zs[data-bx]').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${z>1.001?` scale(${iz.toFixed(4)})`:''}`));
+  svg.querySelectorAll('.mk[data-bx],.zs[data-bx]').forEach(g=>{const sc=iz*(g.classList.contains('sel')?1.4:1);g.setAttribute('transform',`translate(${g.dataset.bx},${g.dataset.by})${(z>1.001||sc!==1)?` scale(${sc.toFixed(4)})`:''}`);});
   svg.querySelectorAll('circle[data-r]').forEach(c=>c.setAttribute('r',(c.dataset.r*iz).toFixed(2)));
   const S=Z.sbar;if(S){ // 比例尺固定在右下角，長度依目前倍率挑整數公里
     const ppk=S.ppk*z,C=[.1,.2,.5,1,2,5,10,20,50,100];let km=C[0];C.forEach(c=>{if(c*ppk<=Z.BW*.26)km=c;});const L=km*ppk,ls=S.g.querySelectorAll('line'),tx=S.g.querySelector('text');
@@ -3536,25 +3598,70 @@ function addZones(svg,d){
       <g transform="translate(${lx.toFixed(1)},${ly.toFixed(1)})"><rect x="${(-lw/2).toFixed(1)}" y="-12" width="${lw.toFixed(1)}" height="24" rx="12" fill="${Zn.c}"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">${lab}</text></g></g>`;});
   if(out){svg.insertAdjacentHTML('beforeend',out);layoutLabels(svg);} // 重排一次，讓地名避開色塊標籤
 }
+/* ===== 地圖對焦（變更（七十七））：點一站 → 放大到那一帶、標記放大加深；點一段交通 → 縮到起訖都看得到、那段路線加粗其餘變淡 =====
+   手機地圖分頁的卡片列與電腦版的時刻表共用。goEnds 和 autoLegs 用同一套規則找「第 i 站第 gi 段交通」的起訖（gi=-1：交通站本身，例如踊子）。 */
+function goEnds(d,S,i,gi){let cur=lodgingAt(d.n);
+  for(let j=0;j<S.length;j++){const s=S[j],L=locOf(s);if(isMainStop(s)&&L)cur=L;
+    const nextLoc=()=>{for(let q=j+1;q<S.length;q++){const s2=S[q];if(isMainStop(s2)&&locOf(s2))return locOf(s2);}return lodgingAt(d.n+1);};
+    if(j===i&&gi===-1)return {a:cur,b:nextLoc()};
+    const G=s.go||[];for(let g=0;g<G.length;g++){const gg=G[g];if(j===i&&g===gi)return {a:cur,b:gg.to||nextLoc()};if(gg.to)cur=gg.to;}}
+  return null;}
+function mapClearSel(svg){svg.querySelectorAll('.mk.sel').forEach(g=>g.classList.remove('sel'));svg.querySelectorAll('text.sel-l').forEach(t=>t.classList.remove('sel-l'));
+  svg.querySelectorAll('.hi,.dim').forEach(e=>e.classList.remove('hi','dim'));}
+function mapSel(svg,k){const g=svg.querySelector(`.mk[data-key="${k}"]`);if(!g)return null;g.classList.add('sel');const ts=g.querySelectorAll(':scope>text'),t=ts[ts.length-1];if(t&&!/^\d+$/.test(t.textContent)){t.classList.add('sel-l');t.style.display='';}return g;}
+function mapFocus(Z,d,S,i,gi,o={}){
+  const svg=Z.svg,s=S[i];if(!svg||!s)return;mapClearSel(svg);
+  const isGo=gi!=null&&gi>=0,transit=!isGo&&s.k==='交通'&&!(s.go||[]).length&&!!GO_MODE[s.i];
+  if(o.overview){Z.anim(1,Z.BW/2,Z.BH/2,()=>Z.relayout(),o.D||420);return;}
+  if(isGo||transit){
+    const e=goEnds(d,S,i,isGo?gi:-1);if(!e)return;const md=GO_MODE[isGo?(s.go[gi]||{}).i:s.i];
+    let legs=[...svg.querySelectorAll('.leg:not(.opt)')].filter(l=>l.dataset.b===e.b);if(md&&legs.some(l=>l.dataset.m===md))legs=legs.filter(l=>l.dataset.m===md);if(legs.length>1)legs=[legs[0]];
+    if(legs.length){svg.querySelectorAll('.leg,.legx,.legi').forEach(x=>x.classList.add('dim'));legs.forEach(l=>{l.classList.remove('dim');l.classList.add('hi');svg.querySelectorAll(`.legx[data-i="${l.dataset.i}"],.legi[data-i="${l.dataset.i}"]`).forEach(x=>x.classList.remove('dim'));});}
+    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const add=(x,y)=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);};
+    legs.forEach(l=>{try{const bb=l.getBBox();add(bb.x,bb.y);add(bb.x+bb.width,bb.y+bb.height);}catch(_){}});
+    [e.a,e.b].forEach(k=>{const g=svg.querySelector(`.mk[data-key="${k}"]`);if(g)add(+g.dataset.bx,+g.dataset.by);});
+    if(x0>x1)return;x0=Math.max(0,x0);y0=Math.max(0,y0);x1=Math.min(Z.BW,x1);y1=Math.min(Z.BH,y1);
+    const vw=o.vw||Z.BW,vh=o.vh||Z.BH,z=Math.max(1,Math.min(Z.zmax,(vw-100)/Math.max(x1-x0,1),(vh-100)/Math.max(y1-y0,1)));
+    mapSel(svg,e.b);Z.anim(z,(x0+x1)/2,(y0+y1)/2,()=>Z.relayout(),o.D||420,o.fy,o.fx);
+  }else{
+    const k=locOf(s);if(!k)return;const g=mapSel(svg,k);if(!g)return;
+    if(o.noMove){Z.apply();Z.relayout();return;}
+    const ppk=Z.sbar?Z.sbar.ppk:20;let z=Math.max(1,Math.min(Z.zmax,(o.ppk||70)/ppk));if(Z.z>z)z=Z.z; // 已經放得更大就只平移
+    Z.anim(z,+g.dataset.bx,+g.dataset.by,()=>Z.relayout(),o.D||420,o.fy,o.fx);
+  }
+}
+/* ===== 手機地圖分頁：整張地圖＋下方一站一張卡（2026-10-15 使用者選 M3＋C2，取代原本的路線列表） ===== */
+const MC_H=236; // 卡片列高度（px）
 function renderMap(){
-  const d=DAYS[APP.day],AS=actStops(d),R=routeInfo(d,AS),keys=Object.keys(R.nums);
-  $a('maMap').innerHTML=`<div class="mm-svg"></div>
+  const d=DAYS[APP.day],AS=actStops(d),R=routeInfo(d,AS),box=$a('maMap');
+  box.innerHTML=`<div class="mm-svg"></div>
   <div class="mm-pill"><button data-prev ${APP.day===0?'disabled':''} aria-label="前一天">${ico('left')}</button><div><b>Day ${d.n} · ${d.title}</b><span>${d.date} 週${d.wd}</span></div><button data-next ${APP.day===DAYS.length-1?'disabled':''} aria-label="後一天">${ico('right')}</button></div>
-  <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>`;
-  const cfg=dayMapCfg(d,AS);
-  fitLabels(cfg,$a('maMap').querySelector('.mm-svg'),'第'+d.n+'天路線圖');
-  const svg=$a('maMap').querySelector('svg');if(svg){animateMap(svg);mzInit(svg);addZones(svg,d);addWxBadges(svg,d);}
-  const lgs=cfg.legs,leg=legendRows(lgs).map(m=>`<span>${modeSwatch(m)}${MODE[m].label}</span>`).join('')+(lgs.some(l=>l.opt)?'<span class="o">淡色＝選項</span>':'');
-  $a('maRoute').innerHTML=`<div class="mr-h"><b>路線順序</b><span>${keys.length} 個地點 · 雙指可縮放</span></div>${leg?`<div class="mr-leg">${leg}</div>`:''}`+R.rows.map(({s,i,k})=>{
-    const opt=!/^\d/.test(s.t),sub=(opt?s.t:s.t+' · ')+(opt&&s.k==='選項'?'':s.k);
-    return `<div class="mr-row${k&&APP.pin===k?' on':''}" data-pin="${k}" data-sidx="${i}"><span class="mr-n${k&&!opt?'':' off'}">${k?R.nums[k]:'–'}</span><div class="mr-tx"><b>${s.n}</b><span>${sub}${k?'':' · 地點未定'}</span></div><button class="mr-btn" data-detail="${i}">詳情</button></div>`;}).join('');
+  <div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button></div>`;
+  const cfg=dayMapCfg(d,AS),bw=box.clientWidth||390,bh=box.clientHeight||640,MH=Math.round(390*bh/bw),sc=MH/bh;
+  const sv=box.querySelector('.mm-svg');sv.innerHTML=buildMap(cfg,{W:390,H:MH,big:true,aria:'第'+d.n+'天路線圖',padT:60,padB:Math.round((MC_H+20)*sc)});
+  const svg=sv.querySelector('svg');if(!svg)return;svg._cfg=cfg;layoutLabels(svg);animateMap(svg);MZ.init(svg,390,MH);if(MZ.sbar){MZ.sbar.y-=(MC_H+14)*sc;MZ.apply();}addZones(svg,d);addWxBadges(svg,d);
+  const items=[{ov:1}];AS.forEach((s,i)=>{if(s.k==='提醒')return;items.push({s,i});(s.go||[]).forEach((g,gi)=>items.push({s,i,gi,g}));});
+  $a('maRoute').innerHTML=items.map(it=>{
+    if(it.ov)return `<div class="mc-card ov on" data-ov="1"><div class="mc-ov"><small>DAY ${d.n} · ${d.date} 週${d.wd}</small><b>${d.title}</b><span>${Object.keys(R.nums).length} 個地點 · 全天路線</span><em>往左滑，一站一站看 ›</em></div></div>`;
+    if(it.g){const g=it.g;return `<div class="mc-card go" data-i="${it.i}" data-gi="${it.gi}"><span class="mc-gi">${g.i}</span><div><b>${g.t}</b><small>${g.at||''}${g.gd?'　'+g.gd:''}</small></div></div>`;}
+    const s=it.s,k=locOf(s),c=s.card&&CARDS[s.card],img=c?cardImg(s.card):'',num=k?R.nums[k]:'',col=(KSTY[s.k]||KSTY['景點'])[2],opt=!/^\d/.test(s.t),gu=s.card?gUrl(s.card):'';
+    return `<div class="mc-card" data-i="${it.i}"><div class="mc-im" style="--c:${col}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="mc-ph">${s.n.replace(/[（(].*$/,'').slice(0,2)}</span>`}${num?`<b class="mc-num" style="background:${col}">${num}</b>`:''}<span class="mc-tm">${opt?s.t:s.t+(s.dur?' · '+s.dur:'')}</span></div><div class="mc-bar"><div><b>${s.n}</b><small>${s.k}${c&&c.jp&&c.jp!==s.n?' · '+c.jp:''}</small></div><button class="mc-ic" data-detail="${it.i}" aria-label="詳情">${ico('right',18)}</button>${gu?`<a class="mc-ic" href="${gu}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('nav',16)}</a>`:''}</div></div>`;}).join('');
+  $a('maRoute').scrollLeft=0;APP._mc=$a('maRoute').querySelector('.mc-card');
   if(APP.pin)focusPin(APP.pin,true);
 }
+function mcSettle(){const tr=$a('maRoute');if(!tr||APP.tab!=='map')return;const cx=tr.getBoundingClientRect().left+tr.clientWidth/2;let best=null,bd=1e9;
+  tr.querySelectorAll('.mc-card').forEach(c=>{const r=c.getBoundingClientRect(),dd=Math.abs(r.left+r.width/2-cx);if(dd<bd){bd=dd;best=c;}});
+  if(best&&best!==APP._mc){APP._mc=best;mcFocus(best);}}
+function mcFocus(c,o){const d=DAYS[APP.day],S=actStops(d);$a('maRoute').querySelectorAll('.mc-card.on').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+  const bh=$a('maMap').clientHeight||640,MH=MZ.BH,k=MH/bh; // 可見區＝扣掉上方膠囊與下方卡片列；對焦點落在可見區中央
+  const top=76*k,bot=(MC_H+20)*k,vh=MH-top-bot,fy=(top+vh/2)/MH;
+  if(c.dataset.ov){APP.pin=null;mapFocus(MZ,d,S,0,null,{overview:1});return;}
+  const i=+c.dataset.i,gi=c.dataset.gi==null?null:+c.dataset.gi;
+  mapFocus(MZ,d,S,i,gi,Object.assign({vw:390,vh,fy},o||{}));APP.pin=gi==null?(locOf(S[i])||null):null;}
 function focusPin(k,quiet,fromMap){
-  APP.pin=k;if(k&&!fromMap&&MZ.svg&&MZ.z>1.01){const g=MZ.svg.querySelector(`.mk[data-key="${k}"]`);if(g)mzCenter(+g.dataset.bx,+g.dataset.by);}
-  document.querySelectorAll('#maMap .mk[data-key]').forEach(a=>a.classList.toggle('on',a.dataset.key===k));
-  document.querySelectorAll('#maRoute .mr-row').forEach(r=>r.classList.toggle('on',!!k&&r.dataset.pin===k));
-  if(!quiet&&k){const r=document.querySelector(`#maRoute .mr-row[data-pin="${k}"]`);if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  APP.pin=k;const tr=$a('maRoute'),S=actStops(DAYS[APP.day]);
+  const c=k&&[...tr.querySelectorAll('.mc-card[data-i]:not([data-gi])')].find(x=>locOf(S[+x.dataset.i])===k);
+  if(!c)return;APP._mc=c;mcFocus(c,{noMove:!!fromMap});c.scrollIntoView({inline:'center',block:'nearest',behavior:quiet?'auto':'smooth'});
 }
 /* 時間軸說明預設收起，點一下展開（變更（七十六））；APP.xp 記住哪些列展開，30 秒重繪也不會收回去 */
 const xpKey=(i,gi)=>`${APP.day}:${rainOn(DAYS[APP.day])&&DAYS[APP.day].rainStops?'r':''}:${i}${gi==null?'':':'+gi}`;
@@ -3628,7 +3735,10 @@ function appClick(e){
   if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
   if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#stays')?TZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
-  if(el=t.closest('#maRoute [data-detail]')){openSheet(actStops(DAYS[APP.day])[+el.dataset.detail]);return true;}
+  if(el=t.closest('#maRoute .mc-card')){if(t.closest('a'))return true;const S=actStops(DAYS[APP.day]);
+    if(t.closest('[data-detail]')){const st=S[+el.dataset.i];if(st.card&&CARDS[st.card])openCard(st.card);else openSheet(st);return true;}
+    if(APP._mc!==el){APP._mc=el;mcFocus(el);el.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}
+    else if(el.dataset.gi==null&&!el.dataset.ov)openSheet(S[+el.dataset.i]);return true;}
   if(el=t.closest('[data-wxtog]')){const dd=$a('maPlan').querySelector('.wxd');if(dd)dd.hidden=!dd.hidden;return true;}
   if(el=t.closest('#maMap .mz-zone')){ // 放大到讓區內的點攤在畫面中間（左右留縮圖寬、上方留日期膠囊）
     const w=Math.max(1,+el.dataset.w),h=Math.max(1,+el.dataset.h);const z1=Math.min(MZ.zmax,(MZ.BW-140)/w,(MZ.BH-190)/h);MZ.anim(z1,+el.dataset.cx,+el.dataset.cy,null,Math.round(380+140*Math.log(Math.max(1,z1/MZ.z))),.59,.57);return true;} // 放大越多跑越久；(.57,.59)＝扣掉頂端日期膠囊與左下縮放鈕後的畫面中心
@@ -3685,7 +3795,7 @@ function appInit(){
   const plan=$a('maPlan');let sx=null;
   plan.addEventListener('touchstart',e=>{const p=e.touches[0];sx={x:p.clientX,y:p.clientY};},{passive:true});
   plan.addEventListener('touchend',e=>{if(!sx)return;const p=e.changedTouches[0],dx=p.clientX-sx.x,dy=p.clientY-sx.y;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setDay(APP.day+(dx<0?1:-1));},{passive:true});
-  mzBind($a('maMap'));sheetSwipe();
+  mzBind($a('maMap'));sheetSwipe();{const tr=$a('maRoute');let tm=0;if(tr)tr.addEventListener('scroll',()=>{clearTimeout(tm);tm=setTimeout(mcSettle,120);},{passive:true});}
   {const sb=document.querySelector('#spots .sp-map');if(sb){SZ.bind(sb);const sv=sb.querySelector('svg');if(sv)SZ.init(sv,SPOT_OV.W,SPOT_OV.H);}}
   {const tb=document.querySelector('#stays .sp-map');if(tb){TZ.bind(tb);const tv=tb.querySelector('svg');if(tv)TZ.init(tv,SPOT_OV.W,SPOT_OV.H);}}
   {const fb=document.querySelector('#foods .sp-map');if(fb){FZ.bind(fb);const fv=fb.querySelector('svg');if(fv)FZ.init(fv,SPOT_OV.W,SPOT_OV.H);}}
@@ -3768,10 +3878,51 @@ function deskInit(){
       if(t&&SUB[id]){const k=SUB[id].findIndex(([,els])=>els.some(e=>e.contains(t)));if(k>=0)setSub(id,k);}} // 頁內錨點：切到含它的分頁
     const on=el(id).filter(Boolean);all.forEach(e=>e.classList.toggle('dk-off',!on.includes(e)));
     side.querySelectorAll('[data-pg]').forEach(a=>a.classList.toggle('on',a.dataset.pg===id));cur=id;
+    const dm=/^day(\d)$/.exec(id);document.documentElement.classList.toggle('dk-dayv',!!dm);document.documentElement.classList.remove('dk-peek');
+    if(dm)requestAnimationFrame(()=>{const n=+dm[1],box=document.querySelector(`.dk-map[data-day="${n}"]`);if(box&&DKW[n]!==box.clientWidth+'x'+box.clientHeight)dkMapBuild(n);});
     if(scroll!==false)window.scrollTo(0,0);
     // 剛顯示的地圖重新排標籤（隱藏時量不到文字大小）
     requestAnimationFrame(()=>on.forEach(e=>e.querySelectorAll('svg').forEach(v=>{if(v._cfg)try{layoutLabels(v);}catch(_){}})));
   }
+  /* ===== 每日頁 R1（變更（七十七））：地圖在左鋪滿、時間軸靠右一欄；看行程時左側目錄自動收起，滑鼠移到最左邊才浮現 ===== */
+  const DZ={},DKW={};
+  DAYS.forEach(d=>{const sec=document.getElementById('day'+d.n);if(!sec)return;const wrap=sec.querySelector('.wrap'),head=sec.querySelector('.day-head'),body=sec.querySelector('.day-body'),tlw=body.children[1],cards=sec.querySelector('.cards'),pn=sec.querySelector('.dk-pn');
+    const legend=sec.querySelector('.mapfoot');const lg=legend?[...legend.querySelectorAll('.lg')].map(e=>e.outerHTML).join(''):'';
+    const lay=document.createElement('div');lay.className='dk-dayl';
+    lay.innerHTML=`<div class="dk-map" data-day="${d.n}"><div class="dk-msvg"></div><div class="dk-leg">${lg}</div><div class="mm-zoom"><button data-mz="in" aria-label="放大">${ico('plus',18)}</button><button data-mz="out" aria-label="縮小"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 12h14"/></svg></button><button data-mz="reset" aria-label="還原" class="rs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button></div><div class="dk-fcard" hidden></div></div><aside class="dk-tl"></aside>`;
+    const col=lay.querySelector('.dk-tl');col.append(head,tlw);if(pn)col.append(pn);
+    body.remove();if(cards)cards.classList.add('dk-old');wrap.prepend(lay);});
+  function dkMapBuild(n){const d=DAYS[n-1],box=document.querySelector(`.dk-map[data-day="${n}"]`);if(!box)return;const Wd=box.clientWidth,Hd=box.clientHeight;if(!Wd||!Hd)return;
+    const cfg=dayMapCfg(d);d._mcfg=cfg;const sv=box.querySelector('.dk-msvg');sv.innerHTML=buildMap(cfg,{W:Wd,H:Hd,aria:'第'+n+'天路線圖',pad:60});
+    const svg=sv.querySelector('svg');if(!svg)return;svg._cfg=cfg;try{layoutLabels(svg);}catch(_){}animateMap(svg);
+    const Z=DZ[n]||(DZ[n]=makeZoom(Wd,Hd));Z.zmax=80;Z.init(svg,Wd,Hd);DKW[n]=Wd+'x'+Hd;
+    const sel=box.closest('.dk-dayl').querySelector('.tl li.sel');if(sel)dkFocus(sel,{noAnim:1});}
+  function dkFocus(li,o={}){const sec=li.closest('.day'),n=+sec.id.slice(3),d=DAYS[n-1],Z=DZ[n];if(!Z||!Z.svg)return;
+    sec.querySelectorAll('.tl li.sel').forEach(x=>x.classList.remove('sel'));li.classList.add('sel');
+    const si=+li.dataset.si,gi=li.dataset.gi==null?null:+li.dataset.gi,S=d.stops,st=S[si];
+    mapFocus(Z,d,S,si,gi,{ppk:110,vw:Z.BW-340,vh:Z.BH-80,fx:.56,fy:.46,noMove:o.noMove,D:o.noAnim?1:460});
+    const fc=sec.querySelector('.dk-fcard');if(!fc)return;
+    if(gi!=null){const g=(st.go||[])[gi];fc.hidden=false;fc.innerHTML=`<div class="dk-fc-go"><span>${g.i}</span><div><small>${g.at||''}</small><b>${g.t}</b>${g.gd?`<p>${g.gd}</p>`:''}</div></div>`;return;}
+    const c=st.card&&CARDS[st.card],img=c?cardImg(st.card):'',gu=st.card?gUrl(st.card):'',tx=st.d||(c&&c.short)||'';
+    fc.hidden=false;fc.innerHTML=`${img?`<img src="${img}" alt="" loading="lazy">`:''}<div><small>${/^\d/.test(st.t)?st.t+(st.dur?' · 停留 '+st.dur:''):st.t}</small><b>${st.n}</b>${tx?`<p>${tx}</p>`:''}${(c||gu)?`<div class="dk-fc-act">${c?`<button type="button" data-xcard="${st.card}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`;}
+  document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let el;
+    if(el=t.closest('.dk-fcard [data-xcard]')){openCard(el.dataset.xcard);return;}
+    if(el=t.closest('.dk-map [data-mz]')){const n=+el.closest('.dk-map').dataset.day,Z=DZ[n];if(!Z||!Z.svg)return;const a=el.dataset.mz;if(a==='reset'){const sec=el.closest('.day');sec.querySelectorAll('.tl li.sel').forEach(x=>x.classList.remove('sel'));mapClearSel(Z.svg);const fc=sec.querySelector('.dk-fcard');if(fc)fc.hidden=true;Z.anim(1,Z.BW/2,Z.BH/2,()=>Z.relayout());}else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1],()=>Z.relayout());}return;}
+    if(el=t.closest('.dk-dayl .tl li[data-si]')){if(t.closest('.xl'))return;dkFocus(el);return;}
+    if(el=t.closest('.dk-map .mk-a[data-k]')){const k=el.dataset.k,sec=el.closest('.day'),d=DAYS[+sec.id.slice(3)-1];const si=d.stops.findIndex(x=>locOf(x)===k);if(si<0)return;const li=sec.querySelector(`.tl li[data-si="${si}"]:not([data-gi])`);if(li){dkFocus(li,{noMove:1});li.scrollIntoView({block:'nearest',behavior:'smooth'});}}});
+  // 滑鼠：滾輪縮放、拖曳平移（拖過就吃掉接下來的 click）
+  document.querySelectorAll('.dk-map').forEach(box=>{const n=+box.dataset.day;let drag=null;
+    box.addEventListener('wheel',e=>{const Z=DZ[n];if(!Z||!Z.svg)return;e.preventDefault();const [fx,fy]=Z.frac(e.clientX,e.clientY),px=Z.vb[0]+fx*Z.vb[2],py=Z.vb[1]+fy*Z.vb[3];Z.set(Z.z*(e.deltaY<0?1.18:1/1.18),px,py,fx,fy);Z.relayout();},{passive:false});
+    box.addEventListener('mousedown',e=>{const Z=DZ[n];if(!Z||!Z.svg||e.button!==0||e.target.closest('.mm-zoom,.dk-fcard,.dk-leg'))return;drag={x:e.clientX,y:e.clientY,vb:Z.vb.slice(),moved:0};e.preventDefault();});
+    addEventListener('mousemove',e=>{if(!drag)return;const Z=DZ[n],[,,dw,dh]=Z.frac(0,0),dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>3)drag.moved=1;if(!drag.moved)return;Z.set(Z.z,drag.vb[0]-dx*Z.vb[2]/dw,drag.vb[1]-dy*Z.vb[3]/dh,0,0);});
+    addEventListener('mouseup',()=>{if(!drag)return;const m=drag.moved;drag=null;if(m){DZ[n].relayout();box.classList.add('dragged');setTimeout(()=>box.classList.remove('dragged'),300);}});
+    box.addEventListener('click',e=>{if(box.classList.contains('dragged')){e.stopPropagation();e.preventDefault();}},true);});
+  const edge=document.createElement('div');edge.id='dkEdge';document.body.appendChild(edge);
+  edge.addEventListener('mouseenter',()=>document.documentElement.classList.add('dk-peek'));
+  side.addEventListener('mouseleave',()=>document.documentElement.classList.remove('dk-peek'));
+  addEventListener('mousemove',e=>{if(e.clientX>262)document.documentElement.classList.remove('dk-peek');});
+  side.addEventListener('click',e=>{if(e.target.closest('a'))document.documentElement.classList.remove('dk-peek');});
+  let rsT=0;addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>{const m=/^day(\d)$/.exec(cur||'');if(m)dkMapBuild(+m[1]);},200);});
   const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));show(h||'home');};
   addEventListener('hashchange',fromHash);fromHash();
   document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(!document.getElementById('modal').hidden||!document.getElementById('lb').hidden)return;

@@ -1270,6 +1270,24 @@ CSS 的手機規則全部集中在樣式表**最末尾**的 `@media (max-width:6
 - **桌機**：`stopsToTl` 輸出 `x`（說明）與 `card`，時刻表 `li.hx` 點了展開 `.x`（含「看完整介紹 ›」`.xl[data-xcard]` → `openCard`），Enter／Space 也可以。
 - 驗證：scratchpad `conc/xp.js`（預設收起、點開、交通列展開、重繪後仍展開、看完整介紹開卡片、再點收起、桌機點開）、`check.js` 全過；截圖 `conc/xp_m.png`、`xp_d.png`。
 
+### 2026-10-15 變更（七十七）：行程與地圖連動——手機地圖分頁改 M3＋C2、電腦每日頁改 R1
+使用者要「點到該時段時地圖放大到那一帶；有移動就縮小並顯示路線」。看過樣板（scratchpad `mapmk2/mob.png`、`desk.png`、`mob2.png`、`desk2.png`，用真實地圖與照片做的）後選：
+手機**保留行程分頁**、把**地圖分頁**換成 M3（整張地圖＋一站一張卡）＋卡片 C2（大照片＋一條資訊列）；電腦**R1**（地圖在左鋪滿、時間軸靠右一欄），看每日頁時左側目錄自動收起、滑鼠移到最左邊才浮現。
+- **共用對焦引擎**（`goEnds`／`mapClearSel`／`mapSel`／`mapFocus(Z,d,S,i,gi,o)`，放在 `renderMap` 前）：
+  點一站 → `.mk.sel`（`Z.apply` 給它 `scale(1/z×1.4)`，CSS 換深橘＋白邊；標籤 `text.sel-l` 粗體深橘、`layoutLabels` 永不隱藏並優先排）並放大到「約 70 px/km」（`o.ppk`，桌機 110），已放更大就只平移；
+  點一段交通 → `goEnds` 用和 `autoLegs` 同一套規則找起訖（`gi=-1`＝交通站本身，例如踊子），`.leg[data-b=訖][data-m=方式]` 加 `.hi`（7px）、其餘 `.leg/.legx/.legi` 加 `.dim`，縮到起訖與路線的 bbox 都看得到。
+  `autoLegSvg` 的 `.leg` 多了 `data-m`（交通方式）。`proj()` 多了全域 `PADB`（下方留白，`buildMap` 的 `opts.padB`）。
+- **手機地圖分頁**：`#maMap` 撐滿分頁（`buildMap` 用 390×依容器比例的高、`padT:60`、`padB` 留給卡片列），比例尺往上挪；`#maRoute` 改成底部 236px 的橫向卡片列（scroll-snap，`MC_H`）：
+  第一張是黑色「全天路線」總覽卡（回到全圖），之後每站一張（照片／號碼／時間膠囊／名稱＋分類／「›」開完整卡片或抽屜／📍 Google 地圖），每段 `go` 一張綠色小卡。
+  捲動停下 120ms 後 `mcSettle` 取最靠中間的卡 → `mcFocus` → `mapFocus`（可見區扣掉上方膠囊與卡片列、對焦點落在可見區中央）。點標記 → `focusPin` 把卡片捲到中間（不移動地圖）；再點同一張卡開抽屜。
+  `選項` 站也有卡（時間膠囊顯示「選項」）。原本的路線順序列表、「詳情」鈕都拿掉；區域色塊、天氣徽章、＋／－／還原照舊（縮放鈕移到右側卡片列上方）。
+- **電腦每日頁**（`deskInit`）：DOM 重排成 `.dk-dayl`＝`.dk-map`（左，`buildMap` 用容器實際像素、`pad:60`，每天一個 `DZ[n]=makeZoom`，`zmax 80`，顯示那一頁時才建、視窗大小變了重建）＋`.dk-tl`（右 440px，`day-head`＋時刻表＋上一天／下一天）。
+  `.cards` 卡片牆加 `.dk-old` 藏起來。時刻表 `li` 帶 `data-si`／`data-gi`（`stopsToTl` 輸出 `si／gi`），點了 `dkFocus`：列加 `.sel`、地圖對焦、左下 `.dk-fcard` 照片卡（照片、時間、名稱、說明、看完整介紹、Google 地圖；交通列則是圖示＋細節）。
+  地圖：滾輪縮放、拖曳平移（拖過 3px 就吃掉 click）、右下 ＋／－／還原（還原同時清掉選取與照片卡）；點標記 → 對應的時刻表列亮起並捲到。
+  **目錄**：`<html>` 在每日頁加 `.dk-dayv`（不能叫 `dk-day`，首頁 8 天一覽的卡片已用這個 class）→ `body` 不留左邊距、`#dkSide` 平移出去；`#dkEdge`（最左 14px，中央一條小把手）滑入加 `.dk-peek` 浮現，滑離目錄或滑鼠 x>262 就收。
+- 驗證：scratchpad `m3/t.js`（手機：卡片數、總覽 z=1、滑到夢テラス放大且標記放大、交通卡路線加粗、› 開卡片、點標記換卡、八天無錯）、`m3/d.js`（電腦：目錄收起、地圖 1000×900、點列選中與照片卡、交通列、滾輪拖曳、還原、目錄浮現與收起、換天、其他頁目錄照常）；
+  `tt/dk.js` 改成點時間軸→照片卡開景點卡、標籤檢查改 `.dk-map svg`；`check.js`、`complete.js` 全過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
