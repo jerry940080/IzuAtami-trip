@@ -1420,6 +1420,12 @@ Day 1 加入台北 → 桃園機場；搭飛機時加飛機飛過的動畫。手
 trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`），花費頁的每人金額也改成依每一項的人數加總（細節見 trip-tools CLAUDE.md「人數改成每一項自己填」）。
 本站住宿頁 `stayNight` 讀 REST 時多帶 `ppl`，有填就用它，沒填才用行程的預設人數。
 
+### 2026-10-15 變更（九十）：COMPASS STAY 入住守則連結
+使用者給了房東的線上入住手冊（FlipHTML5：https://online.fliphtml5.com/murac/dvkz/#p=1），說「放在住宿的靜岡頁面」，但 COMPASS STAY 在東京・品川，所以放在**品川**那一區。
+- `STAYS` 多一個欄位 **`guide`＝'網址|名稱'**（目前只有 `compass`），`stGuide(S)` 畫成黑底大按鈕「📖 入住守則（房東的線上手冊）↗」，手機（`stayCardHTML`）放在每人每晚下面、電腦（`stayDeskHTML`）放在右欄最上面。
+- 待辦 `hotel1`（COMPASS 入住前要做的事）加上同一個連結。手冊內容是翻頁電子書，這個環境打不開，**內容沒看過**。
+- 驗證 scratchpad `gd.js`（電腦品川有、靜岡沒有、手機品川有）；唯一錯誤是嵌入的記帳頁連不到 Firebase（既有）。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，

@@ -702,6 +702,7 @@ button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
 .sta-strip img{flex:none;height:190px;width:auto;border-radius:14px;scroll-snap-align:start}
 .sta-one img{width:100%;height:auto;border-radius:14px;background:#fff}
 .sta-sec p{margin:8px 2px 0;font-size:13.5px;line-height:1.65}
+.sta-guide{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-radius:16px;background:#2a221b;color:#fff;text-decoration:none}.sta-guide i{font-style:normal;font-size:22px}.sta-guide b{display:block;font-size:15px}.sta-guide small{display:block;font-size:11.5px;opacity:.75;margin-top:2px}.sta-guide em{font-style:normal;font-weight:800}
 .sta-must{margin-top:16px;background:#fbeadb;border-radius:16px;padding:11px 14px;font-size:13px;line-height:1.65}.sta-must b{display:block;color:#8c491a;margin-bottom:2px}
 .sta-must div:before{content:"•";color:#8c491a;margin-right:6px}
 .sta-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:10px;border-top:1px dashed var(--color-neutral-300,#e4d6c0);font-size:12px;color:var(--color-neutral-700,#645c50)}
@@ -2146,7 +2147,7 @@ function wxFetch(force){
 /* 「待辦事項」：依截止日排序，打勾存 localStorage izu-book；截止日用日本時間算剩幾天 */
 const BOOK=[
  ['car',null,'越早越好','tabirai 預約租車','2/11 中午靜岡站前取車 → 2/13 中午同一家還車（3 天）；確認 4 人＋4 個 28 吋行李箱的車型','https://www.tabirai.net/car/|tabirai'],
- ['hotel1','2027-02-03','出發前一週','COMPASS STAY 高輪：登記住客資料、確認入住說明','無人管理、自助入住，入住前要登記所有人的資料；2/10 約 19:30 到、2/15 13:00 起可先放行李。用 Airbnb 訊息聯絡房東',''],
+ ['hotel1','2027-02-03','出發前一週','COMPASS STAY 高輪：登記住客資料、確認入住說明','無人管理、自助入住，入住前要登記所有人的資料；2/10 約 19:30 到、2/15 13:00 起可先放行李。用 Airbnb 訊息聯絡房東；入住守則先看一遍','https://online.fliphtml5.com/murac/dvkz/#p=1|入住守則'],
  ['hotel2','2027-02-03','出發前一週','La Vista 熱海：確認入住時間、早餐、接駁車','2/13 約 14:35 到熱海站附近想先寄放行李；早餐有沒有含看訂房方案；免費接駁車的時刻',''],
  ['ichigo',null,'越早越好','預約石垣草莓 2/12 上午 10:00 場','2 月是旺季，週末常滿',''],
  ['lic','2027-01-29','1 月底前','監理站申請駕照日文譯本','NT 100，可線上申請郵寄；開車的人每位都要','https://www.mvdis.gov.tw/|監理服務網'],
@@ -2961,7 +2962,7 @@ const STAYS=[
    ['衛浴','浴室・洗手台・廁所・洗衣',[19,12,13,15,14,18],'<b>浴室在 1F 廚房旁邊</b>：從廚房、噪音感測器旁邊拉一道深藍色簾子，後面才是浴室的門，洗澡時其他人就在廚房和餐桌，感覺怪怪的。浴室有浴缸和淋浴，備品有洗髮精、潤髮乳、沐浴乳；洗手台有吹風機；廁所有兩間，一間免治馬桶、一間一般馬桶。直立式洗衣機在簾子旁邊。'],
    ['其他','樓梯・噪音感測器・規定',[10,4],'樓梯很陡、是轉角樓梯，有扶手，拿大行李上下要小心。客廳牆上有噪音感測器（顯示分貝，超過會響警報）和收音麥克風，晚上 9 點後要安靜。入口有監視器。入住前要交每個人的姓名、地址、職業、國籍和護照照片。退房晚於 10:00 每 30 分收 ¥1,500，丟大型垃圾（例如行李箱）¥3,000 起。']],
   must:['浴室在廚房旁邊、只隔一道簾子和門：洗澡要輪流、先講好','報價是整棟每晚 NT 8,284，品川要住 3 晚（2/10、2/15、2/16），每晚價格要分別查','入住 16:00 起：Day 6 下午 14:15 還車後要等一下才能進去（又不能寄放行李）','不能寄放行李：Day 8 退房 10:00 後直接去品川站搭成田特快','每個人的護照照片要先交','冬天暖氣評論說不夠暖，可以多帶保暖衣物']},
- {key:'compass',rg:'shinagawa',st:'takanawadaiSt',kind:'Airbnb（公寓 2LDK）',room:'2LDK 59㎡・2 間臥室，各 1 張 140 cm＋1 張 97 cm 床，另有 1 套日式床墊（最多 7 人）',walk:'高輪台站步行 6 分',rate:'5.0／5（Airbnb，4 則・新房源）',
+ {key:'compass',rg:'shinagawa',guide:'https://online.fliphtml5.com/murac/dvkz/#p=1|入住守則（房東的線上手冊）',st:'takanawadaiSt',kind:'Airbnb（公寓 2LDK）',room:'2LDK 59㎡・2 間臥室，各 1 張 140 cm＋1 張 97 cm 床，另有 1 套日式床墊（最多 7 人）',walk:'高輪台站步行 6 分',rate:'5.0／5（Airbnb，4 則・新房源）',
   pros:['2026/9/14 才開幕，翻新過很乾淨','兩間臥室中間可以打開併成一間，也可以關起來分開','有洗衣機和浴室烘乾機，可以洗衣服','ReFa 吹風機和蓮蓬頭','廚房家電、鍋具、碗盤餐具、吸塵器都有','下午 1 點後可以先把行李放進房間（Day 6 還車後方便）'],
   cons:['兩間臥室中間其實只是一道隔板（拉門），隔音好不好不確定，一間講話另一間可能聽得到','沒有電梯，要走樓梯上 2 樓','評論只有 4 則，新房東','沒有停車位','房源只寫高輪台站步行 6 分，走到 JR 品川站（成田特快）要多久沒寫，看位置估約 10 分、是上坡路，帶大行李可能要坐計程車','住宿期間不打掃，毛巾一人一套不更換','無人管理、自助入住；入住前要登記所有人的資料'],link:'',
   addr:'東京都港區高輪 3 丁目（三井リパーク高輪３丁目第１４附近，詳細地址訂房後才知道）',stn:'都營淺草線高輪台站步行約 6 分（房源寫的）；在高輪 3 丁目，和新高輪王子同一區，走到 JR 品川站估計 10 分左右（待確認）',mode:'walk',
@@ -3101,6 +3102,8 @@ function stayNight(match){const ms=String(match).split('|');let it=null;for(cons
 const stNo=(S,i)=>S.cand?rgHotels(rgOf(S.rg)).indexOf(S)+1:i+1; // 候選用區內編號（和比較條、地圖一致）
 const stTbd=t=>String(t).replace(/(待確認)/g,'<span class="tbd">$1</span>');
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
+// 房東給的入住守則等文件（guide＝'網址|名稱'）
+const stGuide=S=>S.guide?`<a class="sta-guide" href="${S.guide.split('|')[0]}" target="_blank" rel="noopener noreferrer"><i>📖</i><span><b>${S.guide.split('|')[1]||'入住守則'}</b><small>入住方式、門鎖、垃圾、注意事項都在這裡・開新視窗</small></span><em>↗</em></a>`:'';
 function stayCardHTML(S,i,mini){
   if(isHotelCand(S))return MOB?stayMobC(S,i):stayHotelHTML(S,i);
   const login=MOB?'<button class="lnk" data-go="acct">到「記帳」登入</button>':'<a class="lnk" href="#acct">到「花費・記帳」登入</a>';
@@ -3117,7 +3120,7 @@ function stayCardHTML(S,i,mini){
   const mm=mini?`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},MOB?340:440,MOB?150:170,nm+'到車站')}</div>`:'';
   return `<article class="st-card sta" id="st-${S.key}" style="--c:${S.col}">
     <div class="sta-top"><i class="st-n">${stNo(S,i)}</i><small>${S.area}・共 ${nights} 晚${S.cand?'・候選':''}</small></div>${hero}
-    <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}${mm}${secs}${must}
+    <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}${mm}${stGuide(S)}${secs}${must}
     <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
 /* 飯店候選（使用者選的 B「三個分頁切換」，2026-10-14）：重點數字一列 → 大的分類分頁（縮圖＋張數）→ 大圖＋該類說明與縮圖 → 優缺點。
    手機、電腦共用；照片分類一律「飯店公共設施／房間／其他」（secs），hero 不另外算。HT[key]={t:第幾類,j:該類第幾張} */
@@ -3216,7 +3219,7 @@ function stayDeskHTML(S,i){
   return `<article class="st-card dkst" id="st-${S.key}" style="--c:${S.col}">
     <div class="dkst-h"><i class="st-n">${stNo(S,i)}</i><div><b>${NAMES[S.key][0]}</b><small>${S.area}・共 ${nights} 晚・${S.cand?'候選・':''}${S.sub||''}</small></div></div>
     <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}
-    <div class="dkst-body"><div class="dkv">${view}</div><div class="dkst-txt">${secs}${must}
+    <div class="dkst-body"><div class="dkv">${view}</div><div class="dkst-txt">${stGuide(S)}${secs}${must}
       <div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},360,150,NAMES[S.key][0]+'到車站')}</div>
       <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
 function dkvGo(k,n){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;const F=stayFlat(S).F;DKV[k]=(n+F.length)%F.length;
