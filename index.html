@@ -1299,6 +1299,22 @@ html.dk.dk-dayv.dk-peek #dkSide{transform:none}
 #dkEdge{display:none;position:fixed;left:0;top:0;bottom:0;width:14px;z-index:29}
 html.dk.dk-dayv #dkEdge{display:block}
 html.dk.dk-dayv #dkEdge:after{content:"";position:absolute;left:0;top:50%;width:4px;height:48px;margin-top:-24px;border-radius:0 4px 4px 0;background:rgba(42,34,27,.35)}
+/* 行程裡的住宿小卡（變更（七十八）） */
+.stb{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 11px;align-items:center;width:100%;margin-top:9px;padding:8px;border:0;border-radius:16px;background:#fffdf9;box-shadow:0 4px 14px -6px rgba(0,0,0,.25),inset 0 0 0 1.5px color-mix(in srgb,var(--c) 35%,transparent);text-align:left;font:inherit;color:inherit;cursor:pointer;position:relative}
+.stb>img,.stb-ph{grid-row:1/3;width:72px;height:72px;border-radius:12px;object-fit:cover;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 15%,#fff);font-size:26px}
+.stb-tx{min-width:0;display:block;padding-right:4px}
+.stb small{display:flex;gap:6px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--c)}.stb small em{font-style:normal;background:color-mix(in srgb,var(--c) 16%,#fff);border-radius:999px;padding:0 7px;font-weight:700;letter-spacing:0}
+.stb b{display:block;font-size:15px;line-height:1.3;margin:2px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stb-sub{display:block;font-size:12px;color:var(--color-neutral-700,#645c50);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stb-ch{display:flex;gap:5px;margin-top:5px;overflow:hidden}.stb-ch i{font-style:normal;flex:none;font-size:11px;background:var(--color-surface,#f3eadb);border-radius:999px;padding:2px 8px;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.stb-go{position:absolute;right:10px;top:8px;font-size:11.5px;font-weight:800;color:var(--c)}
+.stb:hover{box-shadow:0 6px 18px -6px rgba(0,0,0,.3),inset 0 0 0 2px var(--c)}
+html.app .ma-row .stb{margin-right:2px}
+html.app .ma-stj{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(0,0,0,.25);text-underline-offset:3px}
+.day-head .stay.stay-b{padding:0;border:0;background:none;flex-basis:100%}
+.stb.dk{max-width:560px}
+.tl li .stb.dk{margin:8px 0 2px}
+html.dk .dk-tl .day-head .stay.stay-b{flex-basis:100%}
 </style>
 </head>
 <body>
@@ -1779,7 +1795,7 @@ const STOPS={
 ],
 2:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
- {t:'09:00',i:'🧳',n:'Check-out',k:'住宿',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
+ {t:'09:00',i:'🧳',n:'Check-out，前往品川站',k:'住宿',at:'shinagawa',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
  {t:'11:20',i:'🚗',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
  {t:'11:40',i:'🍽',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車前往日本平',gd:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
  {t:'13:10',i:'🗻',n:'日本平夢テラス',k:'景點',d:'富士山與駿河灣展望迴廊，屋外迴廊 24 小時開放',card:'yume',dur:'55 分',go:[{at:'14:05',i:'🚡',t:'搭纜車前往久能山',gd:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
@@ -1864,7 +1880,7 @@ DAYS.forEach(d=>{if(STOPS[d.n])d.stops=STOPS[d.n];});
 const RAIN_STOPS={
 2:[
  {t:'08:00',i:'🍳',n:'飯店早餐',k:'美食'},
- {t:'09:00',i:'🧳',n:'Check-out',k:'住宿',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
+ {t:'09:00',i:'🧳',n:'Check-out，前往品川站',k:'住宿',at:'shinagawa',go:[{at:'10:00',i:'🚄',t:'搭新幹線前往靜岡',gd:'品川 → 靜岡　東海道新幹線 ひかり・約 1 小時・¥6,470'}]},
  {t:'11:20',i:'🚗',n:'靜岡站前取車',k:'交通',d:'tabirai 預約，行李直接放後車廂',at:'shizuoka'},
  {t:'11:40',i:'🍽',n:'靜岡市區午餐',k:'美食',dur:'1 小時',go:[{at:'12:40',i:'🚗',t:'開車前往日本平',gd:'開車 → 日本平山頂　約 25 分・パークウェイ免費・山頂免費停車'}]},
  {t:'13:10',i:'🗻',n:'日本平夢テラス（只逛館內）',k:'景點',d:'富士山看不到，只進館內展示室與咖啡座；戶外迴廊撐傘不好逛',card:'yume',dur:'30 分',go:[{at:'13:40',i:'🚡',t:'搭纜車前往久能山',gd:'日本平纜車 → 久能山東照宮　約 5 分・來回 ¥1,400'}]},
@@ -1923,7 +1939,7 @@ const RAIN_STOPS={
 ]};
 DAYS.forEach(d=>{if(RAIN_STOPS[d.n])d.rainStops=RAIN_STOPS[d.n];});
 /* 桌機時刻表：一站一列（名稱＋說明），每段交通一列 move */
-function stopsToTl(S){const o=[];S.forEach((s,si)=>{o.push({t:s.t,i:s.i||'📍',h:s.n,x:s.d||'',card:s.card&&CARDS[s.card]?s.card:'',si});(s.go||[]).forEach((g,gi)=>o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi}));});return o;}
+function stopsToTl(S){const o=[];S.forEach((s,si)=>{o.push({t:s.t,i:s.i||'📍',h:s.n,x:s.d||'',card:s.card&&CARDS[s.card]?s.card:'',si,ci:!!(s.card&&/check-in/i.test(s.n))});(s.go||[]).forEach((g,gi)=>o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi}));});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
 /* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
@@ -1996,7 +2012,7 @@ function dayCards(d){const R=routeInfo(d),first=k=>{const i=(d.stops||[]).findIn
    預報存 localStorage izu-wx，3 小時內不重抓；離線時顯示最後抓到的資料。 */
 const WX_LOC={narita:['成田',35.77,140.39,10,-1,'nrt'],tokyo:['東京',35.68,139.76,11,2,'shinagawa'],shizuoka:['靜岡',34.97,138.39,13,3,'shizuoka'],
   atami:['熱海',35.10,139.07,12,4,'livemax'],kawazu:['河津',34.75,138.99,12,4,'kawazu']}; // 第 6 欄＝地圖徽章的錨點（P 的 key）
-const WX_DAY={1:['narita','tokyo'],2:['shizuoka'],3:['shizuoka'],4:['shizuoka','atami'],5:['kawazu','atami'],6:['atami','tokyo'],7:['tokyo'],8:['tokyo','narita']};
+const WX_DAY={1:['narita','tokyo'],2:['tokyo','shizuoka'],3:['shizuoka'],4:['shizuoka','atami'],5:['kawazu','atami'],6:['atami','tokyo'],7:['tokyo'],8:['tokyo','narita']};
 let WX=null;try{WX=JSON.parse(localStorage.getItem('izu-wx')||'null');}catch(e){}
 const wxIso=d=>{const [m,dd]=d.date.split('/');return `2027-${m.padStart(2,'0')}-${dd.padStart(2,'0')}`;};
 function wxIcon(c){return c==null?'':c===0?['☀','晴']:c<=2?['🌤','晴時多雲']:c===3?['☁','陰']:c<=48?['🌫','霧']:c<=57?['🌦','毛毛雨']:c<=67?['🌧','雨']:c<=77?['🌨','雪']:c<=82?['🌧','陣雨']:c<=86?['🌨','陣雪']:['⛈','雷雨'];}
@@ -2423,14 +2439,14 @@ const dayBlocks=DAYS.map(d=>{
     <div class="day-head">
       <div class="num"><small>Day</small>${d.n}</div>
       <div class="t"><h2>${d.date}（${d.wd}）${d.title}</h2><div class="sub">${d.sub}</div></div>
-      <div class="stay"><div class="lab">今晚住</div>${d.stay}</div>
+      <div class="stay stay-b" data-stbday="${d.n}"><div class="lab">今晚住</div>${d.stay}</div>
       <div class="wts dk" data-wxt="${d.n}" title="天氣">${wxTiles(d)}</div>
       <div class="wxd dk" data-wxd="${d.n}">${wxDetail(d)}</div>
     </div>
     <div class="day-body">
       <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(mcfg,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
-        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}" data-si="${r.si}"${r.gi!=null?` data-gi="${r.gi}"`:''}${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
+        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}" data-si="${r.si}"${r.gi!=null?` data-gi="${r.gi}"`:''}${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${r.ci?`<span class="stbf" data-card="${r.card}"></span>`:''}${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
@@ -2956,6 +2972,26 @@ function stayCmpHTML(R){const L=rgHotels(R),sel=rgSel(R);if(R.pick)return '';
   return `<button type="button" class="stc-c${S===sel?' on':''}" data-stc="${S.key}"><span class="stc-im">${cv?`<img src="${cv}" alt="" loading="lazy">`:''}<i>${i+1}</i>${S===sel?'<em>顯示中</em>':''}</span><div class="stc-t"><i>${i+1}</i><b>${NAMES[S.key][0]}</b>${S===sel?'<em>顯示中</em>':''}</div>
   <div class="stc-p">${pz?`<strong>${pz}</strong><small>起・每人每晚</small>`:'<small class="tbd">價格待補</small>'}</div>
   <div class="stc-m">${S.kind?`<span>${S.kind}</span>`:''}${S.rate?`<span>★ ${S.rate.replace(/（.*?）/,'')}</span>`:''}${S.walk?`<span>🚉 ${S.walk}</span>`:''}</div></button>`;}).join('')}<div class="stc-c more"><span><b>更多候選整理中</b><small>照片、評論、價格陸續補上</small></span></div></div></div>`;}
+/* ===== 行程裡的住宿小卡（變更（七十八））：代表照片＋基本資訊，點了跳到住宿頁的那一區 ===== */
+const DAY_RG={1:'shinagawa',2:'shizuoka',3:'shizuoka',4:'atami',5:'atami',6:'shinagawa',7:'shinagawa'};
+function stayRgOfCard(k){const S=STAYS.find(x=>x.key===k);return S?S.rg:null;}
+function stayName(rg){const R=rgOf(rg);if(!R)return '';const S=rgSel(R);return R.pick?NAMES[S.key][0]:`${R.area}（挑選中）`;}
+function stayBriefHTML(rg,o={}){const R=rgOf(rg);if(!R)return '';const L=rgHotels(R),S=rgSel(R),im=[].concat(IMG[S.key]||[]),cv=im[S.hero||0]||im[0];
+  const pz=L.map(x=>(x.price&&x.price!=='待補'?(x.price.match(/NT\s*[\d,]+/g)||[]):[]).map(v=>+v.replace(/\D/g,''))).flat(),lo=pz.length?Math.min(...pz):0;
+  const nights=R.stays.map(x=>x[0].replace(/（.*）/,'')).join('、');
+  const title=R.pick?NAMES[S.key][0]:`${R.area}住宿`;
+  const sub=R.pick?`${nights} · ${(S.chk||'').replace('入住 ','').split('・')[0]} 入住`:`${L.length} 家候選${lo?` · NT ${lo.toLocaleString('en-US')} 起／人晚`:''}`;
+  const chips=R.pick?[S.stn&&('🚉 '+S.stn.replace(/（.*?）/g,'').replace(/^JR /,'')),S.park&&('🅿 '+S.park.replace(/（.*?）/g,'')),S.bf&&('🍳 '+S.bf.replace(/（.*?）/g,''))].filter(Boolean)
+    :[`目前看：${NAMES[S.key][0]}`,nights];
+  return `<button type="button" class="stb${o.dk?' dk':''}" data-stj="${rg}" style="--c:${R.col}" aria-label="看${R.area}的住宿">${cv?`<img src="${cv}" alt="" loading="lazy">`:'<span class="stb-ph">🛏</span>'}<span class="stb-tx"><small>${o.lab||'今晚住'}${R.pick?'':'<em>挑選中</em>'}</small><b>${title}</b><span class="stb-sub">${sub}</span><span class="stb-ch">${chips.map(c=>`<i>${c}</i>`).join('')}</span></span><span class="stb-go">看住宿 ›</span></button>`;}
+function stayJump(rg){const i=STAY_RG.findIndex(R=>R.id===rg);if(i<0)return;
+  if(MOB){if(typeof closeSheet==='function')closeSheet();APP.pane='stay';go('info');renderSeg();$a('maInfo').scrollTop=0;saveApp();showSpot([i],false,MPN('stay'));return;}
+  const st=document.getElementById('stay');if(st){st.dataset.sel=rg;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===rg));}
+  if(location.hash==='#stay')window.scrollTo(0,0);else location.hash='#stay';}
+function isCheckin(s){return !!(s&&s.card&&/check-in/i.test(s.n)&&stayRgOfCard(s.card));}
+// 桌機每日頁在 STAYS 定義之前就畫好了：先放佔位，這裡再換成住宿小卡
+if(!MOB){document.querySelectorAll('[data-stbday]').forEach(e=>{const rg=DAY_RG[e.dataset.stbday];if(rg)e.innerHTML=stayBriefHTML(rg,{dk:1});else e.classList.remove('stay-b');});
+  document.querySelectorAll('.tl .stbf[data-card]').forEach(e=>{const rg=stayRgOfCard(e.dataset.card);e.outerHTML=rg?stayBriefHTML(rg,{dk:1,lab:'住這裡'}):'';});}
 // 候選才有的「比較重點」：公開報價、房型、到車站、早餐、評分＋優缺點＋訂房連結
 function stayFactsHTML(S){if(!S.cand)return '';const tb=v=>v&&v!=='待補'?v:'<span class="tbd">待補</span>';
   const li=a=>a&&a.length?a.map(x=>`<div>${x}</div>`).join(''):'<div class="tbd">等評論資料補上</div>';
@@ -3390,13 +3426,13 @@ function renderPlan(){
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
     const xc=s.card&&CARDS[s.card]?s.card:'',hx=!!(s.d||xc),xk=xpKey(i),xo=hx&&APP.xp.has(xk),gu=xc?gUrl(xc):'';
     return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}${hx?' hx':''}${xo?' xo':''}" data-stop="${i}" role="button" tabindex="0"${hx?` aria-expanded="${xo}"`:''}>
-      <div class="ma-r${s.card&&CARDS[s.card]?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
+      <div class="ma-r${s.card&&CARDS[s.card]&&!isCheckin(s)?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp?`<span class="jp">${jp}</span>`:''}</div>${hx?`<div class="xd">${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${stopThumb(s)}</div>
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!isCheckin(s)?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)?'':stopThumb(s)}</div>
       ${G.map((g,gi)=>{const gk=xpKey(i,gi),go=g.gd&&APP.xp.has(gk);return `<div class="ma-go${isCur(i,gi)?' now':''}${g.gd?' hx':''}${go?' xo':''}"${g.gd?` data-gx="${i}:${gi}" role="button" tabindex="0" aria-expanded="${go}"`:''}><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}${g.gd?'<i class="xv">⌄</i>':''}${g.gd?`<span class="gdx">${g.gd}</span>`:''}</span>${isNx(i,gi)?nxTag():''}</div></div>`;}).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
-  <div class="ma-area"><div><b>${d.title}${RN&&d.rainStops?'<em class="rn-tag">雨備版</em>':''}</b><span>${ico('bed',14)}今晚住 ${d.stay}</span></div><button class="wts" data-wxtog data-wxt="${d.n}" aria-label="天氣，點一下看降雨機率">${wxTiles(d)}</button></div>
+  <div class="ma-area"><div><b>${d.title}${RN&&d.rainStops?'<em class="rn-tag">雨備版</em>':''}</b>${DAY_RG[d.n]?`<span class="ma-stj" data-stj="${DAY_RG[d.n]}" role="button">${ico('bed',14)}今晚住 ${stayName(DAY_RG[d.n])} ›</span>`:`<span>${ico('bed',14)}${d.stay}</span>`}</div><button class="wts" data-wxtog data-wxt="${d.n}" aria-label="天氣，點一下看降雨機率">${wxTiles(d)}</button></div>
   <div class="wxd" data-wxd="${d.n}" hidden>${wxDetail(d)}</div>
   ${RN?(d.rain?`<div class="ma-rainnote">${d.rain}</div>`:`<div class="ma-rainnote"><b>雨備</b>　這天沒有另外的雨天版，照原行程走。</div>`):''}
   ${rows}
@@ -3729,6 +3765,7 @@ function appClick(e){
   if(el=t.closest('[data-go]')){go(el.dataset.go);return true;}
   if(t.closest('[data-prev]')){setDay(APP.day-1);return true;}
   if(t.closest('[data-next]')){setDay(APP.day+1);return true;}
+  if(el=t.closest('[data-stj]')){stayJump(el.dataset.stj);return true;}
   if(t.closest('.ma-row .xd a'))return true;
   if(el=t.closest('.ma-go[data-gx]')){const [a,b]=el.dataset.gx.split(':');xpToggle(el,xpKey(+a,+b));return true;}
   if(el=t.closest('.ma-row[data-stop]')){if(el.classList.contains('hx'))xpToggle(el,xpKey(+el.dataset.stop));return true;}
@@ -3736,7 +3773,7 @@ function appClick(e){
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
   if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#stays')?TZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
   if(el=t.closest('#maRoute .mc-card')){if(t.closest('a'))return true;const S=actStops(DAYS[APP.day]);
-    if(t.closest('[data-detail]')){const st=S[+el.dataset.i];if(st.card&&CARDS[st.card])openCard(st.card);else openSheet(st);return true;}
+    if(t.closest('[data-detail]')){const st=S[+el.dataset.i],rg=st.card&&stayRgOfCard(st.card);if(rg){stayJump(rg);return true;}if(st.card&&CARDS[st.card])openCard(st.card);else openSheet(st);return true;}
     if(APP._mc!==el){APP._mc=el;mcFocus(el);el.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}
     else if(el.dataset.gi==null&&!el.dataset.ov)openSheet(S[+el.dataset.i]);return true;}
   if(el=t.closest('[data-wxtog]')){const dd=$a('maPlan').querySelector('.wxd');if(dd)dd.hidden=!dd.hidden;return true;}
@@ -3904,8 +3941,9 @@ function deskInit(){
     const fc=sec.querySelector('.dk-fcard');if(!fc)return;
     if(gi!=null){const g=(st.go||[])[gi];fc.hidden=false;fc.innerHTML=`<div class="dk-fc-go"><span>${g.i}</span><div><small>${g.at||''}</small><b>${g.t}</b>${g.gd?`<p>${g.gd}</p>`:''}</div></div>`;return;}
     const c=st.card&&CARDS[st.card],img=c?cardImg(st.card):'',gu=st.card?gUrl(st.card):'',tx=st.d||(c&&c.short)||'';
-    fc.hidden=false;fc.innerHTML=`${img?`<img src="${img}" alt="" loading="lazy">`:''}<div><small>${/^\d/.test(st.t)?st.t+(st.dur?' · 停留 '+st.dur:''):st.t}</small><b>${st.n}</b>${tx?`<p>${tx}</p>`:''}${(c||gu)?`<div class="dk-fc-act">${c?`<button type="button" data-xcard="${st.card}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`;}
+    fc.hidden=false;fc.innerHTML=`${img?`<img src="${img}" alt="" loading="lazy">`:''}<div><small>${/^\d/.test(st.t)?st.t+(st.dur?' · 停留 '+st.dur:''):st.t}</small><b>${st.n}</b>${tx?`<p>${tx}</p>`:''}${(c||gu)?`<div class="dk-fc-act">${stayRgOfCard(st.card)?`<button type="button" data-stj="${stayRgOfCard(st.card)}">看住宿頁 ›</button>`:c?`<button type="button" data-xcard="${st.card}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`;}
   document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let el;
+    if(el=t.closest('[data-stj]')){e.stopPropagation();stayJump(el.dataset.stj);return;}
     if(el=t.closest('.dk-fcard [data-xcard]')){openCard(el.dataset.xcard);return;}
     if(el=t.closest('.dk-map [data-mz]')){const n=+el.closest('.dk-map').dataset.day,Z=DZ[n];if(!Z||!Z.svg)return;const a=el.dataset.mz;if(a==='reset'){const sec=el.closest('.day');sec.querySelectorAll('.tl li.sel').forEach(x=>x.classList.remove('sel'));mapClearSel(Z.svg);const fc=sec.querySelector('.dk-fcard');if(fc)fc.hidden=true;Z.anim(1,Z.BW/2,Z.BH/2,()=>Z.relayout());}else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1],()=>Z.relayout());}return;}
     if(el=t.closest('.dk-dayl .tl li[data-si]')){if(t.closest('.xl'))return;dkFocus(el);return;}
