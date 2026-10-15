@@ -1319,6 +1319,19 @@ html.dk .dk-tl .day-head .stay.stay-b{flex-basis:100%}
 .xgo{display:block;color:var(--color-accent-2-800,#4a5a35);font-size:.95em}
 .ma-row .xd p.xgo{margin:0 0 4px}
 .tl li .x .xgo{margin-bottom:3px}
+/* 地圖分頁卡片列修正（變更（八十）） */
+html.app #maMap .mm-zoom{left:12px;right:auto;bottom:266px}
+.mc-ph{display:grid!important;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 28%,#fff),color-mix(in srgb,var(--c) 10%,#fff))!important;opacity:1!important}
+.mc-ph i{font-style:normal;font-size:58px;line-height:1;filter:saturate(.9)}
+.mc-card.mini{width:180px;min-height:96px;background:var(--color-neutral-100,#fffdf9);padding:14px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 26px -10px rgba(0,0,0,.35),inset 0 0 0 1.5px color-mix(in srgb,var(--c) 30%,transparent)}
+.mc-mi{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--c) 16%,#fff)}
+.mc-card.mini>div{min-width:0}.mc-card.mini small{display:block;font-size:11.5px;font-weight:800;color:var(--c)}
+.mc-card.mini b{display:block;font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.mc-card.mini span{display:block;font-size:11px;color:var(--color-neutral-700)}
+.mc-card.nav{width:150px;min-height:150px;background:var(--color-accent,#c67139);color:#fff;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
+.mc-card.nav.prev{background:var(--color-neutral-700,#645c50)}
+.mc-na{position:absolute;right:14px;top:8px;font-size:40px;line-height:1;opacity:.85}.mc-card.nav.prev .mc-na{right:auto;left:14px}
+.mc-card.nav small{font-size:11px;letter-spacing:.08em;opacity:.85}.mc-card.nav b{font:800 22px/1.15 var(--font-heading)}.mc-card.nav span{font-size:12px;opacity:.9}
+.mc-card.nav em{font-style:normal;font-size:12.5px;margin-top:6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
 </head>
 <body>
@@ -3003,6 +3016,7 @@ function stayJump(rg){const i=STAY_RG.findIndex(R=>R.id===rg);if(i<0)return;
   if(MOB){if(typeof closeSheet==='function')closeSheet();APP.pane='stay';go('info');renderSeg();$a('maInfo').scrollTop=0;saveApp();showSpot([i],false,MPN('stay'));return;}
   const st=document.getElementById('stay');if(st){st.dataset.sel=rg;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===rg));}
   if(location.hash==='#stay')window.scrollTo(0,0);else location.hash='#stay';}
+function stayTBD(k){const rg=k&&stayRgOfCard(k),R=rg&&rgOf(rg);return !!(R&&!R.pick);} // 這張卡片是還沒選定的住宿（熱海、品川）
 function isCheckin(s){return !!(s&&s.card&&/check-in/i.test(s.n)&&stayRgOfCard(s.card));}
 // 桌機每日頁在 STAYS 定義之前就畫好了：先放佔位，這裡再換成住宿小卡
 if(!MOB){document.querySelectorAll('[data-stbday]').forEach(e=>{const rg=DAY_RG[e.dataset.stbday];if(rg)e.innerHTML=stayBriefHTML(rg,{dk:1});else e.classList.remove('stay-b');});
@@ -3442,9 +3456,9 @@ function renderPlan(){
     const jp=s.card&&CARDS[s.card]&&CARDS[s.card].jp&&CARDS[s.card].jp!==s.n?CARDS[s.card].jp:'';
     const xc=s.card&&CARDS[s.card]?s.card:'',hx=!!(s.d||xc||gn.length),xk=xpKey(i),xo=hx&&APP.xp.has(xk),gu=xc?gUrl(xc):'';
     return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}${hx?' hx':''}${xo?' xo':''}" data-stop="${i}" role="button" tabindex="0"${hx?` aria-expanded="${xo}"`:''}>
-      <div class="ma-r${s.card&&CARDS[s.card]&&!isCheckin(s)?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
+      <div class="ma-r${s.card&&CARDS[s.card]&&!isCheckin(s)&&!stayTBD(s.card)?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!isCheckin(s)?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${gn.map(t=>`<p class="xgo">${t}</p>`).join('')}${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)?'':stopThumb(s)}</div>
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!(s.card&&stayRgOfCard(s.card))?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${gn.map(t=>`<p class="xgo">${t}</p>`).join('')}${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)||stayTBD(s.card)?'':stopThumb(s)}</div>
       ${G.map((g,gi)=>{if(FG.has(i,gi))return '';const gk=xpKey(i,gi),go=g.gd&&APP.xp.has(gk);return `<div class="ma-go${isCur(i,gi)?' now':''}${g.gd?' hx':''}${go?' xo':''}"${g.gd?` data-gx="${i}:${gi}" role="button" tabindex="0" aria-expanded="${go}"`:''}><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}${g.gd?'<i class="xv">⌄</i>':''}${g.gd?`<span class="gdx">${g.gd}</span>`:''}</span>${isNx(i,gi)?nxTag():''}</div></div>`;}).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`
@@ -3692,17 +3706,22 @@ function renderMap(){
   const cfg=dayMapCfg(d,AS),bw=box.clientWidth||390,bh=box.clientHeight||640,MH=Math.round(390*bh/bw),sc=MH/bh;
   const sv=box.querySelector('.mm-svg');sv.innerHTML=buildMap(cfg,{W:390,H:MH,big:true,aria:'第'+d.n+'天路線圖',padT:60,padB:Math.round((MC_H+20)*sc)});
   const svg=sv.querySelector('svg');if(!svg)return;svg._cfg=cfg;layoutLabels(svg);animateMap(svg);MZ.init(svg,390,MH);if(MZ.sbar){MZ.sbar.y-=(MC_H+14)*sc;MZ.apply();}addZones(svg,d);addWxBadges(svg,d);
-  const items=[{ov:1}],FG=foldGos(AS);AS.forEach((s,i)=>{if(s.k==='提醒')return;items.push({s,i});(s.go||[]).forEach((g,gi)=>{if(!FG.has(i,gi))items.push({s,i,gi,g});});});
+  const items=[],FG=foldGos(AS),pv=DAYS[APP.day-1],nx=DAYS[APP.day+1];if(pv)items.push({nav:-1,d:pv});items.push({ov:1});
+  AS.forEach((s,i)=>{if(s.k==='提醒')return;items.push({s,i});(s.go||[]).forEach((g,gi)=>{if(!FG.has(i,gi))items.push({s,i,gi,g});});});if(nx)items.push({nav:1,d:nx});
   $a('maRoute').innerHTML=items.map(it=>{
-    if(it.ov)return `<div class="mc-card ov on" data-ov="1"><div class="mc-ov"><small>DAY ${d.n} · ${d.date} 週${d.wd}</small><b>${d.title}</b><span>${Object.keys(R.nums).length} 個地點 · 全天路線</span><em>往左滑，一站一站看 ›</em></div></div>`;
+    if(it.nav)return `<div class="mc-card nav${it.nav<0?' prev':''}" data-nav="${it.nav}"><span class="mc-na">${it.nav<0?'‹':'›'}</span><small>${it.nav<0?'前一天':'下一天'}</small><b>Day ${it.d.n}</b><span>${it.d.date} 週${it.d.wd}</span><em>${it.d.title}</em></div>`;
+    if(it.ov)return `<div class="mc-card ov on" data-ov="1"><div class="mc-ov"><small>DAY ${d.n} · ${d.date} 週${d.wd}</small><b>${d.title}</b><span>${Object.keys(R.nums).length} 個地點 · 全天路線</span><em>${nx?'往左滑一站一站看，滑到底換下一天 ›':'往左滑，一站一站看 ›'}</em></div></div>`;
     if(it.g){const g=it.g;return `<div class="mc-card go" data-i="${it.i}" data-gi="${it.gi}"><span class="mc-gi">${g.i}</span><div><b>${g.t}</b><small>${g.at||''}${g.gd?'　'+g.gd:''}</small></div></div>`;}
-    const s=it.s,k=locOf(s),c=s.card&&CARDS[s.card],img=c?cardImg(s.card):'',num=k?R.nums[k]:'',col=(KSTY[s.k]||KSTY['景點'])[2],opt=!/^\d/.test(s.t),gu=s.card?gUrl(s.card):'';
-    return `<div class="mc-card" data-i="${it.i}"><div class="mc-im" style="--c:${col}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="mc-ph">${s.n.replace(/[（(].*$/,'').slice(0,2)}</span>`}${num?`<b class="mc-num" style="background:${col}">${num}</b>`:''}<span class="mc-tm">${opt?s.t:s.t+(s.dur?' · '+s.dur:'')}</span></div><div class="mc-bar"><div><b>${s.n}</b><small>${s.k}${c&&c.jp&&c.jp!==s.n?' · '+c.jp:''}</small></div><button class="mc-ic" data-detail="${it.i}" aria-label="詳情">${ico('right',18)}</button>${gu?`<a class="mc-ic" href="${gu}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('nav',16)}</a>`:''}</div></div>`;}).join('');
-  $a('maRoute').scrollLeft=0;APP._mc=$a('maRoute').querySelector('.mc-card');
+    const s=it.s,k=locOf(s),tbd=stayTBD(s.card),c=s.card&&CARDS[s.card],img=c&&!tbd?cardImg(s.card):'',num=k?R.nums[k]:'',col=(KSTY[s.k]||KSTY['景點'])[2],opt=!/^\d/.test(s.t),gu=s.card?gUrl(s.card):'',tm=opt?s.t:s.t+(s.dur?' · '+s.dur:'');
+    if(!k&&!img)return `<div class="mc-card mini" data-i="${it.i}" style="--c:${col}"><span class="mc-mi">${s.i||'📍'}</span><div><small>${tm}</small><b>${s.n}</b><span>${s.k}</span></div></div>`; // 沒有地點也沒有照片：小卡，不佔一整張
+    return `<div class="mc-card" data-i="${it.i}"><div class="mc-im" style="--c:${col}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="mc-ph"><i>${s.i||'📍'}</i></span>`}${num?`<b class="mc-num" style="background:${col}">${num}</b>`:''}<span class="mc-tm">${tm}</span></div><div class="mc-bar"><div><b>${s.n}</b><small>${s.k}${c&&c.jp&&c.jp!==s.n&&!stayRgOfCard(s.card)?' · '+c.jp:''}</small></div><button class="mc-ic" data-detail="${it.i}" aria-label="詳情">${ico('right',18)}</button>${gu?`<a class="mc-ic" href="${gu}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('nav',16)}</a>`:''}</div></div>`;}).join('');
+  const tr=$a('maRoute'),cards=[...tr.querySelectorAll('.mc-card:not(.nav)')],st=APP._mcEnd?cards[cards.length-1]:tr.querySelector('.mc-card.ov');APP._mcEnd=0;
+  APP._mc=st;requestAnimationFrame(()=>{tr.scrollLeft=st.offsetLeft-(tr.clientWidth-st.offsetWidth)/2;if(!st.dataset.ov)mcFocus(st);});
   if(APP.pin)focusPin(APP.pin,true);
 }
 function mcSettle(){const tr=$a('maRoute');if(!tr||APP.tab!=='map')return;const cx=tr.getBoundingClientRect().left+tr.clientWidth/2;let best=null,bd=1e9;
   tr.querySelectorAll('.mc-card').forEach(c=>{const r=c.getBoundingClientRect(),dd=Math.abs(r.left+r.width/2-cx);if(dd<bd){bd=dd;best=c;}});
+  if(best&&best.dataset.nav){const dn=+best.dataset.nav;APP._mcEnd=dn<0;APP._mc=best;setDay(APP.day+dn);return;}
   if(best&&best!==APP._mc){APP._mc=best;mcFocus(best);}}
 function mcFocus(c,o){const d=DAYS[APP.day],S=actStops(d);$a('maRoute').querySelectorAll('.mc-card.on').forEach(x=>x.classList.remove('on'));c.classList.add('on');
   const bh=$a('maMap').clientHeight||640,MH=MZ.BH,k=MH/bh; // 可見區＝扣掉上方膠囊與下方卡片列；對焦點落在可見區中央
@@ -3788,6 +3807,7 @@ function appClick(e){
   if(el=t.closest('[data-rainbtn]')){APP.rain=!APP.rain;lsSet('izu-rain',APP.rain);APP.pin=null;APP.nowScrolled=-1;
     applyTheme(true);renderPlan();renderHome();if(APP.tab==='map')renderMap();return true;}
   if(el=t.closest('[data-mz]')){const Z=el.closest('#foods')?FZ:el.closest('#stays')?TZ:el.closest('#spots')?SZ:MZ,a=el.dataset.mz;if(a==='reset')Z.anim(1,Z.BW/2,Z.BH/2);else{const c=Z.mid();Z.anim(Z.z*(a==='in'?1.8:1/1.8),c[0],c[1]);}return true;}
+  if(el=t.closest('#maRoute .mc-card[data-nav]')){const dn=+el.dataset.nav;APP._mcEnd=dn<0;setDay(APP.day+dn);return true;}
   if(el=t.closest('#maRoute .mc-card')){if(t.closest('a'))return true;const S=actStops(DAYS[APP.day]);
     if(t.closest('[data-detail]')){const st=S[+el.dataset.i],rg=st.card&&stayRgOfCard(st.card);if(rg){stayJump(rg);return true;}if(st.card&&CARDS[st.card])openCard(st.card);else openSheet(st);return true;}
     if(APP._mc!==el){APP._mc=el;mcFocus(el);el.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}
