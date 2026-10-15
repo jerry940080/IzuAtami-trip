@@ -1267,7 +1267,8 @@ html.app #maMap .mm-zoom{left:auto;right:12px;bottom:266px}
 .mk.sel .mth .rg{stroke:#b8532a!important;stroke-width:4px!important}
 .mk text.sel-l{font-weight:900!important;fill:#8c3d1c!important;paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
 svg .leg.hi{stroke-width:7px!important;stroke-opacity:1!important}
-svg .leg.dim,svg .legx.dim,svg .legi.dim{opacity:.22!important}
+/* 沒亮起的路線一律換成淺灰（變更（八十四）），不只是變淡：顏色還在的話看起來像也被選中 */
+svg .leg.dim{stroke:#bdb6aa!important;opacity:.6!important}svg .legx.dim,svg .legi.dim{opacity:0!important}
 /* 電腦版每日頁 R1（變更（七十七）） */
 html.dk .day{padding:0;border-top:0}
 html.dk .day>.wrap{max-width:none;padding:0;margin:0}
