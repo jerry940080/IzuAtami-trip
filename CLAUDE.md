@@ -1500,6 +1500,10 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 使用者從樣板（scratchpad `expmk/mob_all.png`、`desk_all.png`）選：手機 **M4 依人帳本**（上方兩兩抵完的淨額＋每人卡，「依人」每人一張卡列影響彼此的帳、「只有我」一張，可切依日期）、
 電腦 **D1 三欄**（左日期、中那天的帳、右摘要＋常駐的記一筆表單）。行程網站沒動，細節見 trip-tools CLAUDE.md「記帳頁：手機『依人帳本』、電腦『三欄』」。
 
+### 2026-10-16 變更（一百）：記帳頁第二版（只改 trip-tools）
+使用者嫌（九十九）的記帳頁醜（黑色大卡太重、像表單）。問過偏好後出樣板（scratchpad `expmk/mob2_all.png`、`desk2_all.png`），選手機 **N3 色塊磚＋選日期**（整趟／今天兩塊淡色磚、Day 1–8 小長條點了看那天）、
+電腦 **E3 三欄換成淡色**；記帳頁拿掉「依人」（跟誰的帳在結算頁）。細節見 trip-tools CLAUDE.md「記帳頁：手機『色塊磚＋選日期』、電腦『三欄（淡色）』」。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
