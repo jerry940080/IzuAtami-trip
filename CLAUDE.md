@@ -1442,6 +1442,13 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 - 沒加的：サウナしきじ（24 小時、女性 ¥1,000 起，資料不一致）、縣廳別館展望台（週末假日 10:00–18:00，晚上不開）。
 - 驗證：`check.js`、`complete.js` 通過；scratchpad `d2n.js`（手機 Day 2 時間軸）。
 
+### 2026-10-16 變更（九十三）：Day 1 晚上加「品川站周邊晚餐」選項
+使用者問 COMPASS STAY 附近晚上能逛什麼，選擇只加 Day 1（Day 7 不加）。
+- Day 1 `選項`「品川站周邊吃晚餐、逛一下」（`at:'shinagawa'`）：atre 品川、ウィング高輪、港南口居酒屋拉麵；Maxell Aqua Park 一般 20:00 前停止入場（網路資料、會變動），Day 1 來不及。
+- 另外做了一張標好車站的東京地鐵圖（使用者給的都營／Tokyo Metro 繁中路線圖 PDF，標 10 站：高輪台、品川、泉岳寺、高輪Gateway、白金台、大門、六本木、神保町、秋葉原、下北澤＋右側說明），
+  只傳給使用者，**沒放進網站**；產生腳本在 scratchpad `metro/draw.py`。
+- 驗證：`check.js` 通過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
