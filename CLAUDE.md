@@ -1525,6 +1525,13 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 - 驗證：scratchpad `izu/t.js`（電腦：頁面、目錄位置、4 個分頁、2 色塊 16 列、點列開卡、官方地圖 3 張與燈箱、位置圖 3 張、靜岡照舊、Day 4 不顯示；手機：熱海・河津層附加區、兩組手風琴、葉節點仍顯示、3 張官方地圖、回總覽藏起、靜岡層顯示靜岡的、無溢出、無錯誤）、
   `tt/dk.js`（目錄改 17 項）、`tt/dksub.js`、`tt/txm.js`、`check.js`、`complete.js` 通過（`dk.js`／`dksub.js` 的 fb.js 與「手機交通頁」兩個失敗是既有的）。截圖 `izu/d_*.png`、`m_all.png`。
 
+### 2026-10-18 變更（一百零三）：景點介紹不放住宿
+使用者：「景點介紹就不用飯店或旅館了」。住宿有自己的「住宿」頁。
+- 靜岡總覽拿掉 `shizuhotel`（卡片 16 → **15**、電腦版三欄的靜岡市區 4 個、副標改「晚上吃おでん、泡湯」）；熱海・河津總覽拿掉 `lavista`（`IZU_CARDS` 16 → **15**，號碼全部前移一號、熱海市區放大圖的說明跟著改）。
+  位置圖上仍畫 Airbnb／La Vista 的標記當位置參考，只是**沒有號碼**。
+- 手機景點頁 `SPOT_TREE` 的 `shizuhotel`、`lavista`、`compass` 也拿掉（靜岡市區 4、熱海 8、東京 7）。`check.js` 會多警告這三個「沒放進 SPOT_TREE」，是預期的（和 `prince`／`livemax` 一樣）。
+- 驗證：`izu/t.js`、`tt/txm.js`（改成 15 列）、`check.js`、`pick5.js` 通過。`tt/stay.js` 的 4 個失敗是變更（八十六）住宿定案後測試過時（仍在檢查候選比較條），改前就失敗，不是這次造成。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
