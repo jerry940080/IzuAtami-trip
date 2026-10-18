@@ -1508,6 +1508,23 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 使用者：日期上面的長條圖拿掉；「只有我／跟別人分」和「實際／預計」看起來像四選一；名稱下面的圖示拿掉。樣板（scratchpad `expmk/mob3_all.png`、`mob4_all.png`、`mob5_all.png`）選
 日期 **G2 日期方塊**、表單 **G3 兩張大卡**、主辦人的「預計要花」入口 **H3 表單最上面一條提示列**（一般成員看不到）。行程網站沒動，細節見 trip-tools CLAUDE.md「記一筆表單與手機日期列」。
 
+### 2026-10-18 變更（一百零二）：新增「熱海・河津總覽」（和靜岡總覽同一套）
+使用者：「現在有靜岡總覽，可以幫我多加一個熱海＋河津總覽嗎」。做法完全比照靜岡總覽，兩邊共用程式。
+- **區塊** `#izu`（`izuHTML()`，放在 `areaHTML()` 後面；頁面上插在 **Day 3 與 Day 4 之間**，導覽列 `.strip` 在 Day 3 後多「熱海・河津總覽」）：
+  標題「熱海・河津 有什麼」、導言（熱海陡坡、伊豆急往南、這三天沒有車）、**位置圖 3 張**（全域 熱海→南伊豆／熱海市區放大／河津站周邊放大，`minSpan .12／.02／.024`）、
+  **官方觀光地圖 3 張**、**16 張卡片**（`IZU_CARDS`：熱海 11＝lavista／ginza／itogawa／yoichi／kiunkaku／kinomiya／baien／asaichi／fruitking／ekimae／moa，河津 5＝sakura／kinmedai／teddy／shirahama／minami，號碼 1–16 三張地圖共用）、
+  **2 月活動與票券**（河津櫻まつり、梅まつり、糸川あたみ桜、南伊豆、土曜夜市／日曜朝市、來宮點燈、花火；沒有車怎麼移動：踊子、接駁車、湯〜遊〜バス、河津七滝巴士、下田巴士、天城 Free Pass）、洽詢電話與資料來源。
+  「湯〜遊〜バス」票價、天城 Road Free Pass（2016 年價）、La Vista 接駁班次都**沒查證**，頁面標「待確認」。
+- **官方地圖**：`AREAMAPS` 多三筆並加 `rg:'izu'`（舊的四張沒有 `rg`＝靜岡）：`map-atami-31dd9801.webp`（《Atami Insight vol.04》第 1 頁左半，150 dpi 裁 (30,30,1585,2235)）、
+  `map-kawazu-sakura-2ede3f6c.webp`（河津櫻祭繁中傳單第 2 頁的英文會場圖）、`map-kawazu-town-3283c64c.webp`（河津町繁中示意圖）。原檔在 `/root/.claude/uploads/…/7b78f8bb-atami_tourism.pdf`、`6abbdf22-KawazutraditionalChinese.pdf`、`2df95cb1-map.pdf`。
+  兩個總覽的 `.offmaps` 依 `rg` 過濾，但 `data-lb` 仍用 `AREAMAPS` 的全域索引（燈箱 `openLb(i)` 不用改）；SW 預存會自動含新圖。`img/` 多 735 KB。
+- **電腦版**（`deskInit`）：目錄「資訊」多一項 `['izu','🌸','熱海・河津總覽']`（目錄 17 項）。原本只給靜岡用的「地圖畫色塊＋分欄」那段改成函式 **`ovBuild(sec,ORD,SHR,MW,MH,aria)`**，靜岡（3 欄，1000×400）與熱海・河津（**2 欄** `.shzb-cols.c2`，1000×520：熱海／河津・南伊豆）各呼叫一次；
+  頁內分頁 `SUB` 改成 `for(const pg of ['shizuoka','izu'])` 同一套（景點／位置圖／官方觀光地圖／2 月活動與票券）。各分頁高度 2.3／2.2／1.0／1.0 個螢幕。
+- **手機**：景點頁的附加區 `#spExtra` 改成裡面兩個 `<div data-ex="0|1">`（靜岡、熱海・河津），各自收進該區塊「位置圖」以外的 `details.acc`；`exShow` 改 `p[0]===0||p[0]===1`，`showSpot` 依 `path[0]` 只顯示那一份。
+  手機資訊›景點›熱海・河津（含熱海、河津葉節點）下面現在有「官方觀光地圖」「2 月活動與票券」兩組手風琴，和靜岡一樣。
+- 驗證：scratchpad `izu/t.js`（電腦：頁面、目錄位置、4 個分頁、2 色塊 16 列、點列開卡、官方地圖 3 張與燈箱、位置圖 3 張、靜岡照舊、Day 4 不顯示；手機：熱海・河津層附加區、兩組手風琴、葉節點仍顯示、3 張官方地圖、回總覽藏起、靜岡層顯示靜岡的、無溢出、無錯誤）、
+  `tt/dk.js`（目錄改 17 項）、`tt/dksub.js`、`tt/txm.js`、`check.js`、`complete.js` 通過（`dk.js`／`dksub.js` 的 fb.js 與「手機交通頁」兩個失敗是既有的）。截圖 `izu/d_*.png`、`m_all.png`。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
@@ -1569,6 +1586,7 @@ dataofjapan/land 簡化，**勿動**）；第二個是主程式，關鍵常數�
 - `DAYS`＝八天陣列 `{n,date,wd,title,sub,stay,map:{pts,legs,labels,minSpan},cards:[cardKey],rain:'雨備HTML'}`。
   每日地圖的路線已改由 `STOPS` 自動產生（見變更（三十）），`map.legs` 不再用於每日地圖。
   時刻表 `tl` 已改由 `STOPS` 產生（見 2026-10-05 變更二），**不要再手寫 `tl`**。
+- `areaHTML()`＝靜岡總覽 `#shizuoka`、`izuHTML()`＝熱海・河津總覽 `#izu`（變更（一百零二）），結構相同；電腦版的色塊地圖＋分欄由 `deskInit` 的 `ovBuild()` 產生。
 - 地圖引擎 `buildMap()` 自動算 bbox 投影；`labels` 值 t/b/l/r 是標籤方位；`curve` 讓重複
   路段彎開。首頁總覽圖在 IIFE 內另有 `cfg`。
 

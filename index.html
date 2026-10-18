@@ -981,7 +981,7 @@ html.dk .dk-old{display:none!important}
 .txp-bk{background:#fbeadb;border-radius:14px;padding:10px 12px;margin-top:10px;font-size:13.5px}.txp-bk>b{display:block;color:#8c491a;margin-bottom:4px}
 .txk{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dashed #ecc9ad}.txk:last-child{border-bottom:0}.txk b{color:#a3421a;background:none;padding:0}.txk.done span{color:#7a8a5e;text-decoration:line-through}
 .txp-n{font-size:12.5px;color:var(--color-neutral-700,#645c50);margin:8px 2px 0;line-height:1.6}
-.shzb{margin:6px 0 16px}.shzb-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.shzb{margin:6px 0 16px}.shzb-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.shzb-cols.c2{grid-template-columns:1fr 1fr}
 .shzb-col{background:var(--color-surface,#fffaf2);border-radius:16px;overflow:hidden;padding-bottom:6px}
 .shzb-h{color:#fff;padding:10px 14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 8px}.shzb-h b{font-size:17px}.shzb-h span{font-size:12px;opacity:.92}.shzb-h small{flex-basis:100%;font-size:12px;opacity:.85}
 .shz-row{position:relative;display:grid;grid-template-columns:96px 1fr;gap:10px;padding:7px 10px;align-items:center;cursor:pointer;border-radius:12px}.shz-row:hover{background:rgba(198,113,57,.08)}
@@ -2252,7 +2252,10 @@ const AREAMAPS=[
  {k:'shizuoka-city',name:'靜岡市區 街道圖',en:'SHIZUOKA CITY AREA MAP',d:'駿府城公園、淺間神社、青葉橫丁、Hobby Square 全在這張；右上角附靜岡市歷史博物館資訊',src:'img/map-shizuoka-city-ab8668f6.webp'},
  {k:'nihondaira',name:'日本平 全域圖',en:'NIHONDAIRA MAP',d:'動物園、夢テラス、纜車、久能山東照宮、石垣草莓與停車場位置；上方附日本平夜景與夜市說明',src:'img/map-nihondaira-d4ba8d19.webp'},
  {k:'shimizu-city',name:'清水區 市區圖',en:'SHIMIZU CITY AREA MAP',d:'河岸の市、夢幻廣場、遊覽船乘船處、金之字本店、水上巴士航線都標在上面',src:'img/map-shimizu-city-6132145c.webp'},
- {k:'miho',name:'三保 半島圖',en:'MIHO MAP',d:'三保松原、羽衣の松、御穗神社、神の道、Miho Shirube 與停車場；虛線是單車路線',src:'img/map-miho-00dfab7d.webp'}
+ {k:'miho',name:'三保 半島圖',en:'MIHO MAP',d:'三保松原、羽衣の松、御穗神社、神の道、Miho Shirube 與停車場；虛線是單車路線',src:'img/map-miho-00dfab7d.webp'},
+ {k:'atami',rg:'izu',name:'熱海 分區地圖',en:'ATAMI INSIGHT MAP',d:'來宮地區（來宮神社、梅園）、熱海站前（商店街、サンビーチ、起雲閣）、伊豆山、多賀・網代四張小圖＋交通導覽，右下有觀光協會電話',src:'img/map-atami-31dd9801.webp'},
+ {k:'kawazu-sakura',rg:'izu',name:'河津櫻祭 地圖',en:'KAWAZU CHERRY BLOSSOM FESTIVAL MAP',d:'河津川兩岸的櫻花步道、三處足湯、原木、來宮神社大楠、交流館、停車場與洗手間，右側是活動表（英文，2012 年版）',src:'img/map-kawazu-sakura-2ede3f6c.webp'},
+ {k:'kawazu-town',rg:'izu',name:'河津町 示意圖',en:'KAWAZU TOWN MAP',d:'從河津站往上游到河津七滝、天城的全町示意圖（繁中），溫泉區、峰溫泉大噴湯、iZOO、今井濱都在上面',src:'img/map-kawazu-town-3283c64c.webp'}
 ];
 
 /* ================= MAP ENGINE ================= */
@@ -2455,7 +2458,7 @@ function ttLoad(fr,pg){ // 第一次打開才載入，平常不碰 Firebase；�
   if(note)note.remove();fr.src=ttEmbed(pg,!!fr.closest('#acct')&&!MOB);}
 // strip nav
 const strip=document.getElementById('strip');
-strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#todo">待辦事項</a><a href="#resto">餐廳</a><a href="#food">美食</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
+strip.innerHTML=DAYS.map(d=>`<a href="#day${d.n}"><span class="n">${d.n}</span>${d.date} ${d.title.replace(/ → /g,'→')}</a>`+(d.n===1?'<a href="#shizuoka">靜岡總覽</a>':d.n===3?'<a href="#izu">熱海・河津總覽</a>':'')).join('')+'<a href="#tickets">交通・訂票</a><a href="#todo">待辦事項</a><a href="#resto">餐廳</a><a href="#food">美食</a><a href="#stay">住宿</a><a href="#acct">花費・記帳</a>';
 if(!MOB){const fr=document.querySelector('#acct .tt-fr'),sub=document.querySelector('#acct .tt-sub');ttLoad(fr,'budget');
   // 電腦版：分頁按鈕在這頁（記帳工具 wide 模式不畫分頁列），iframe 撐滿畫面剩下的高度、只在 iframe 裡捲動
   const mark=pg=>sub.querySelectorAll('[data-ttpg]').forEach(b=>b.classList.toggle('on',b.dataset.ttpg===pg));
@@ -2508,7 +2511,7 @@ function areaHTML(){
     <details class="acc"${MOB?'':' open'}><summary>官方觀光地圖 <span class="s">靜岡市區・日本平・清水・三保，共 4 張</span></summary><div class="in">
     <h3 class="sub-h">官方觀光地圖</h3>
     <p class="mute" style="margin-top:8px">上面兩張是我們自己畫的位置圖，只標了候選點。下面四張是<b>靜岡市觀光局的官方手繪地圖</b>，巷弄、停車場、巴士站、洗手間、公車路線、單車道全都有，到了現場比我們的圖好用。點開可以放大到原尺寸。</p>
-    <div class="offmaps">${AREAMAPS.map((m,i)=>`<button type="button" class="offmap" data-lb="${i}"><div class="thumb"><img src="${m.src}" alt="${m.name}" loading="lazy"></div><div class="bd"><h4>${m.name}<span>${m.en}</span></h4><p>${m.d}</p></div></button>`).join('')}</div>
+    <div class="offmaps">${AREAMAPS.map((m,i)=>[m,i]).filter(([m])=>!m.rg).map(([m,i])=>`<button type="button" class="offmap" data-lb="${i}"><div class="thumb"><img src="${m.src}" alt="${m.name}" loading="lazy"></div><div class="bd"><h4>${m.name}<span>${m.en}</span></h4><p>${m.d}</p></div></button>`).join('')}</div>
     <p class="mute" style="margin-top:10px">圖片出自 公益財團法人 駿河企劃觀光局《靜岡探索之旅》觀光指南（2025 年 9 月版）與清水區市區觀光地圖（2025 年 11 月版），僅供本團同行者行程參考。</p>
     </div></details>
     <div class="cards">${cards.map((k,i)=>cardHTML(k,i+1)).join('')}</div>
@@ -2545,6 +2548,72 @@ function areaHTML(){
   </div>
 </section>`;
 }
+/* 熱海・河津總覽：和靜岡總覽同一套結構（位置圖／官方地圖／卡片／2 月活動與票券），放在 Day 3 與 Day 4 之間 */
+const IZU_CARDS=['lavista','ginza','itogawa','yoichi','kiunkaku','kinomiya','baien','asaichi','fruitking','ekimae','moa','sakura','kinmedai','teddy','shirahama','minami'];
+function izuHTML(){
+  const NUM={};IZU_CARDS.forEach((k,i)=>NUM[k]=i+1);
+  const cfg={pts:['atami','lavista','moa','kinomiya','baien','izukogen','teddy','atagawa','inatori','kawazu','sakura','shimoda','shirahama','minami'],legs:[],
+    labels:{atami:'r',lavista:'r',moa:'t',kinomiya:'l',baien:'l',izukogen:'l',teddy:'r',atagawa:'r',inatori:'r',kawazu:'r',sakura:'l',shimoda:'b',shirahama:'r',minami:'l'},minSpan:.12,nums:NUM};
+  const mp=buildMap(cfg,{aria:'熱海・河津 景點位置圖',W:MOB?380:760,H:MOB?300:560,big:MOB});
+  const bg1=bgRow(bgLines);
+  const cfg2={pts:['atami','lavista','ekimae','moa','kinomiyaSt','kinomiya','baien','kiunkaku','ginza','itogawa','yoichi','asaichi','fruitking'],legs:[],
+    labels:{atami:'r',lavista:'r',ekimae:'t',moa:'t',kinomiyaSt:'l',kinomiya:'l',baien:'l',kiunkaku:'l',ginza:'l',itogawa:'r',yoichi:'b',asaichi:'r',fruitking:'r'},minSpan:.02,nums:NUM};
+  const mp2=buildMap(cfg2,{aria:'熱海市區放大圖',W:MOB?380:760,H:MOB?260:470,big:MOB});
+  const cfg3={pts:['kawazu','sakura','sasahara','kzcenter','genboku','kzkinomiya','funto','kinmedai'],legs:[],
+    labels:{kawazu:'r',sakura:'l',sasahara:'l',kzcenter:'r',genboku:'r',kzkinomiya:'r',funto:'t',kinmedai:'b'},minSpan:.024,nums:NUM};
+  const mp3=buildMap(cfg3,{aria:'河津站周邊放大圖',W:MOB?380:760,H:MOB?260:470,big:MOB});
+  return `<section class="block" id="izu">
+  <div class="wrap">
+    <h2>熱海・河津 有什麼</h2>
+    ${MOB?'<p class="lead">熱海與河津這一帶的所有候選點都在下面。<b>地圖上的號碼＝卡片的號碼</b>；點標記先看簡略字卡、再點看完整介紹；Google 地圖連結在完整介紹裡。</p>':`<p class="lead">熱海在伊豆半島的根部、相模灣邊，整座城蓋在從海邊往上爬的陡坡上：<b>車站在高處、飯店與商店街在海邊</b>，走下坡輕鬆、走上坡要有心理準備（或叫計程車）。從熱海站搭伊豆急沿東海岸往南，經伊豆高原、熱川、稻取，踊子號約 1 小時 10 分到<b>河津</b>——河津川兩岸 4 公里的河津櫻是這趟的重頭戲，2/14 當天來回。再往南是下田與南伊豆（白濱神社、青野川的櫻花與油菜花），只排成選項。這三天<b>沒有車</b>，全靠電車、接駁車和走路。</p>`}
+    <details class="acc"${MOB?'':' open'}><summary>位置圖 <span class="s">全域＋熱海市區＋河津站周邊，共 3 張</span></summary><div class="in">
+    <div class="areamap">${mp}${bg1}</div>
+    <div class="areamap"><div class="mapcap">熱海市區放大（上圖最北端那一團；銀座②、糸川③、夜市④、起雲閣⑤、朝市⑧、フルーツキング⑨、站前甜點⑩ 只畫在這張）</div>${mp2}${bgRow(bgLines)}</div>
+    <div class="areamap"><div class="mapcap">河津站周邊放大（櫻花步道沿河津川往上游：足湯、原木、來宮神社大楠、交流館、峰溫泉大噴湯）</div>${mp3}${bgRow(bgLines)}</div>
+    </div></details>
+
+    <details class="acc"${MOB?'':' open'}><summary>官方觀光地圖 <span class="s">熱海分區圖・河津櫻祭地圖・河津町示意圖，共 3 張</span></summary><div class="in">
+    <h3 class="sub-h">官方觀光地圖</h3>
+    <p class="mute" style="margin-top:8px">上面是我們自己畫的位置圖，只標了候選點。下面三張是<b>熱海市與河津町觀光協會的官方地圖</b>：熱海那張把來宮、站前、伊豆山、多賀・網代分成四個小區，附巴士與步行時間；河津兩張一張是櫻祭會場圖（足湯、停車場、洗手間、點燈地點都有），一張是全町示意圖。點開可以放大到原尺寸。</p>
+    <div class="offmaps">${AREAMAPS.map((m,i)=>[m,i]).filter(([m])=>m.rg==='izu').map(([m,i])=>`<button type="button" class="offmap" data-lb="${i}"><div class="thumb"><img src="${m.src}" alt="${m.name}" loading="lazy"></div><div class="bd"><h4>${m.name}<span>${m.en}</span></h4><p>${m.d}</p></div></button>`).join('')}</div>
+    <p class="mute" style="margin-top:10px">圖片出自 熱海市《Atami Insight vol.04》（2026 年 3 月版）、河津町觀光協會《河津櫻祭》傳單（2012 年版）與河津町示意地圖（2015 年版），僅供本團同行者行程參考。河津那兩張年代較舊，店家、價格、營業時間以現場為準。</p>
+    </div></details>
+    <div class="cards">${IZU_CARDS.map((k,i)=>cardHTML(k,i+1)).join('')}</div>
+    <p class="mute" style="margin-top:14px">以上 16 個是候選清單，<b>不是全都要去</b>。熱海那 11 個離飯店都在走路 15 分內（梅園、MOA 要搭一站電車或巴士），2/13 下午到晚上、2/15 早上分兩段逛；河津 2/14 一整天，泰迪熊博物館、白濱神社、南伊豆是「取代下午步道」的選項，去了就看不完河津。另外還有熱海城、ロープウェイ、伊豆山神社、湯前神社、遊覽船、河津七滝、iZOO、バガテル公園，這次都沒排。</p>
+
+    <details class="acc"${MOB?'':' open'}><summary>2 月活動與票券 <span class="s">花期・夜市朝市・沒有車的這三天怎麼移動</span></summary><div class="in">
+    <div class="two" style="margin-top:26px">
+      <div>
+        <h3>2 月的熱海・河津有什麼</h3>
+        <ul class="one">
+          <li><b>河津櫻まつり</b>　約 2 月上旬–3 月上旬（2026 年是 2/7–3/8）。河津川沿岸夜間點燈 18:00–21:00；さくらの足湯週六日假日 10:00–16:00 有「伊豆の踊子」裝扮可合照。2/14 開花進度五五波偏樂觀，<b>出發前一週看河津町開花情報</b>。</li>
+          <li><b>熱海梅園 梅まつり</b>　約 1 月上旬–3 月上旬，8:30–16:00、¥300。2 月中正是中咲品種見頃，這趟最穩的一片花，2/15 上午可去可不去。</li>
+          <li><b>糸川桜まつり・あたみ桜</b>　約 1 月中–2 月中。2/13 傍晚點燈還看得到，2/15 已近尾聲。</li>
+          <li><b>みなみの桜と菜の花まつり</b>（南伊豆）　約 2/1–3/10，下田站東海巴士 25 分。2/14 想避開河津人潮時的選項。</li>
+          <li><b>土曜夜市</b>　每週六 17:30–19:30，熱海魚市場內 → <b>2/13 剛好是週六</b>，排成晚餐。<b>日曜朝市</b>　每月第 2・4 週日 07:00 起，渚小公園 → <b>2/14 剛好有市</b>，排成選項。</li>
+          <li><b>來宮神社大楠點燈</b>　每天 17:00–23:00，2/13 晚上的選項。</li>
+          <li><b>熱海海上花火大会</b>　一年 10 次以上，2027 年日期未公布；若落在 2/13 或 2/14 晚上，飯店前的海邊就是觀賞點。</li>
+        </ul>
+        <p class="mute" style="margin-top:8px">以上依熱海市《Atami Insight vol.04》（2026/3）與河津町資料，<b>2027 年的確切日期出發前要再查一次</b>。</p>
+      </div>
+      <div>
+        <h3>這三天沒有車，怎麼移動</h3>
+        <ul class="one">
+          <li><b>踊子號</b>（熱海 ⇄ 河津約 1 小時 10 分）　2/14 來回都要在えきねっと劃位，步驟在「待辦事項」。伊豆急普通車刷 Suica 就能搭、約 1 小時 30 分，但連假花季很可能要站。</li>
+          <li><b>熱海市內</b>　La Vista 有免費接駁車（班次待確認）；熱海站 ⇄ 飯店計程車約 5 分；來宮神社、梅園搭 JR 一站到來宮站再走；市區另有觀光周遊巴士「湯〜遊〜バス」（票價待確認）。</li>
+          <li><b>河津</b>　站前走出去就是櫻花步道，到豐泉橋 1.5 km、到峰溫泉大噴湯 2.6 km，全程走路。河津七滝搭東海巴士約 30 分；バガテル公園站前有免費接駁 8 分。</li>
+          <li><b>下田・南伊豆</b>　伊豆急下田站轉東海巴士：白濱神社約 10 分、下賀茂（南伊豆）約 25 分。「天城 Road Free Pass」2 日 ¥1,900（2016 年價，待確認）。</li>
+        </ul>
+        <p class="mute" style="margin-top:8px">2/13 中午在靜岡還車後就沒有車了，熱海的坡很陡、停車位少，本來就不適合開車。</p>
+      </div>
+    </div>
+
+    <p class="mute" style="margin-top:16px">在地洽詢：熱海市觀光協會 0557-85-2222（9:00–17:00，12/29–1/3 為 10:00–15:00）／熱海市役所觀光經濟課 0557-86-6195（平日 8:30–17:15）／河津町觀光協會 0558-32-0290／熱海觀光官網 ataminews.gr.jp（有日文）。<br>本區資料來源：熱海市《Atami Insight vol.04》（2026/3）、河津町觀光協會英文觀光手冊（2016/3）、《Kawazu Gourmet Map》（2018）、《河津櫻祭》傳單（2012）與河津町示意地圖（2015）。河津的價格、公休與營業時間都是舊資料，出發前再確認。</p>
+    </div></details>
+    <div class="areanote">↓ 以下 <b>2/13（六）、2/14（日）、2/15（一）</b> 三天，是從上面這些點挑出來、排得進時間的<b>推薦路線</b>。不是全部都去。</div>
+  </div>
+</section>`;
+}
 function bgRow(ls){
   if(!ls.length) return '';
   return '<div class="mapbg"><b>圖中鐵道</b>'+ls.map(L=>'<span class="lg"><i style="border-color:'+L.c+'"></i>'+L.n+'</span>').join('')+'</div>';
@@ -2573,7 +2642,7 @@ const dayBlocks=DAYS.map(d=>{
   </div>
 </section>`;
 });
-daysEl.innerHTML=dayBlocks[0]+areaHTML()+dayBlocks.slice(1).join('');
+daysEl.innerHTML=dayBlocks[0]+areaHTML()+dayBlocks.slice(1,3).join('')+izuHTML()+dayBlocks.slice(3).join('');
 if(!MOB)DAYS.forEach(d=>{const svg=document.querySelector(`#day${d.n} .mapcard svg`);if(svg){svg._cfg=d._mcfg;try{layoutLabels(svg);}catch(e){}}});
 
 // animate day maps on scroll + replay
@@ -3406,7 +3475,7 @@ function spotLeafMap(node){
 let _MP=null;
 function MPN(k){ // 兩個地圖頁：景點、美食；共用 spotGroupMap／spotLeafMap／showSpot
   if(!_MP)_MP={
-    spots:{id:'spots',tree:SPOT_TREE,Z:SZ,path:null,h:'景點',lead:'要看哪一個地區？點地圖上的色塊。',ex:'spExtra',exShow:p=>p[0]===0},
+    spots:{id:'spots',tree:SPOT_TREE,Z:SZ,path:null,h:'景點',lead:'要看哪一個地區？點地圖上的色塊。',ex:'spExtra',exShow:p=>p[0]===0||p[0]===1},
     food:{id:'foods',tree:FOOD_TREE,Z:FZ,path:null,h:'美食',lead:'要吃哪一區？點地圖上的色塊。',ex:'fdExtra',exShow:p=>p.length===0},
     stay:{id:'stays',tree:STAY_TREE(),Z:TZ,path:null,h:'住宿',lead:'三個住宿在哪裡？點地圖上的色塊，下面會列出那一家的詳細資訊。',ex:'stExtra',exShow:()=>false,
       leaf:stayLeafMap,list:stayListHTML,hint:'地圖上是住宿和最近的車站；往下捲看照片和介紹，點照片可以放大。'}};
@@ -3449,7 +3518,7 @@ function showSpot(path,anim,ctx){
     else{const rm=(ctx.leaf||spotLeafMap)(node);Z._ell=null;spotSwap(ctx,rm.svg,W0,H0,rm.cfg);focus=rm.focus;
       root.querySelector('.sp-hint').textContent=ctx.hint||'地圖可雙指縮放、拖曳；點標記看完整介紹。號碼和下面的名單一致。';reg.classList.add('on');reg.innerHTML=(ctx.list||spotLists)(node);}
     if(focus&&focus.z>1.05)setTimeout(()=>{if(ctx.path===path)Z.anim(focus.z,focus.cx,focus.cy,null,420);},380);
-    root.querySelector('#'+ctx.ex).hidden=!ctx.exShow(path);if(b)b.scrollTop=0;};
+    root.querySelector('#'+ctx.ex).hidden=!ctx.exShow(path);root.querySelectorAll('#'+ctx.ex+' [data-ex]').forEach(d=>d.hidden=d.dataset.ex!==String(path[0]));if(b)b.scrollTop=0;};
   const e=anim&&Z._ell&&Z._ell[path[path.length-1]];
   if(e&&Z.svg){const z=Math.max(Z.z*1.6,Math.min(8,Math.min(Z.BW/(2*e.rx+30),Z.BH/(2*e.ry+30))));Z.anim(z,e.cx,e.cy,enter,480);}else enter();}
 
@@ -3996,7 +4065,8 @@ function appInit(){
       <details class="rs-must"><summary>必吃料理一覽<small>不分店家的特色料理與伴手禮</small></summary></details><button class="rs-fab" data-rsadd>＋ 新增餐廳</button></div>`;
       const f=document.querySelector('#food');if(f)p.querySelector('.rs-must').appendChild(f);}
     if(k==='stay')p.innerHTML=spotsHTML(MPN('stay'));
-    if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;[...document.querySelectorAll('#shizuoka details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>ex.appendChild(a));} // 靜岡的官方地圖／2 月活動搬進靜岡子頁（位置圖由可縮放的區域圖取代）
+    if(k==='spots'){p.innerHTML=spotsHTML(MPN('spots'));const ex=p.querySelector('#spExtra');ex.hidden=true;
+      [['shizuoka',0],['izu',1]].forEach(([id,i])=>{const d=document.createElement('div');d.dataset.ex=i;d.hidden=true;[...document.querySelectorAll('#'+id+' details.acc')].filter(a=>!/位置圖/.test(a.querySelector('summary').textContent)).forEach(a=>d.appendChild(a));ex.appendChild(d);});} // 靜岡／熱海・河津的官方地圖、2 月活動搬進各自的地區子頁（位置圖由可縮放的區域圖取代）
     info.appendChild(p);});
   const sv=lsGet('izu-app',{}),ti=todayIdx();
   APP.day=ti>=0?ti:Math.max(0,Math.min(DAYS.length-1,sv.day|0));
@@ -4040,7 +4110,7 @@ function deskInit(){
      box.addEventListener('click',e=>{let el;if(el=e.target.closest('[data-pk]')){const id=el.dataset.pk;APP.pack.packed[id]=!APP.pack.packed[id];savePack();R();}
        else if(el=e.target.closest('[data-pf]')){APP.pack.filter=el.dataset.pf;savePack();R();}else if(e.target.closest('#pkAdd'))add();});
      box.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pkIn')add();});}}
-  const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['tickets','🚆','交通・訂票'],['todo','✅','待辦事項'],['resto','🍽','餐廳'],['food','🍜','美食'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
+  const PG=[['home','🏠','首頁總覽']].concat(DAYS.map(d=>['day'+d.n,d.n,d.title.replace(/ → /g,'→'),d.date])).concat([['shizuoka','🗾','靜岡總覽'],['izu','🌸','熱海・河津總覽'],['tickets','🚆','交通・訂票'],['todo','✅','待辦事項'],['resto','🍽','餐廳'],['food','🍜','美食'],['stay','🛏','住宿'],['acct','💴','花費・記帳']]);
   const el=id=>id==='home'?[document.querySelector('header.hero'),document.getElementById('dkHome'),document.querySelector('body>footer')]:[document.getElementById(id)];
   // 首頁：hero 下面加 8 天一覽
   const hero=document.querySelector('header.hero'),home=document.createElement('section');home.id='dkHome';home.className='block';
@@ -4058,16 +4128,15 @@ function deskInit(){
     ${item(PG[0])}<div class="dk-g">行程</div>${PG.slice(1,9).map(item).join('')}<div class="dk-g">資訊</div>${PG.slice(9).map(item).join('')}`;
   document.body.prepend(side);
   const all=PG.flatMap(([id])=>el(id)).filter(Boolean);
-  // ---- 靜岡總覽（電腦版）：地圖畫三個地區＋各景點，下面依地區分三欄（使用者選的 B） ----
-  {const cardsEl=document.querySelector('#shizuoka .wrap>.cards');if(cardsEl){
-    const ORD=['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','hobby','sengen','yunoki','shizuhotel'],NUMS={};ORD.forEach((k,i)=>NUMS[k]=i+1);
-    const SHR=[['靜岡市區','#56633f',['aoba','sengen','hobby','yunoki','shizuhotel'],'住的地方、晚上吃おでん'],['日本平・久能','#b2622d',['zoo','yume','ndhotel','toshogu','ichigo'],'山上看富士山、草莓、動物園'],['清水・三保','#2b4c7e',['shimizu','kinnoji','maruko','cruise','miho','mihoshrine'],'港口吃鮪魚、海邊看夕陽']];
-    const pts=ORD.filter(k=>P[k]),MW=1000,MH=400,labels={};pts.forEach(k=>labels[k]='b');
+  // ---- 靜岡總覽／熱海・河津總覽（電腦版）：地圖畫各地區＋景點，下面依地區分欄（使用者選的 B） ----
+  function ovBuild(sec,ORD,SHR,MW,MH,aria){const cardsEl=document.querySelector('#'+sec+' .wrap>.cards');if(!cardsEl)return;
+    const NUMS={};ORD.forEach((k,i)=>NUMS[k]=i+1);
+    const pts=ORD.filter(k=>P[k]),labels={};pts.forEach(k=>labels[k]='b');
     const cfg={pts,legs:[],labels,nums:NUMS,minSpan:.03};
     const box=document.createElement('div');box.className='shzb';
     const row=(k,c)=>{const st=spotStatus(k),img=cardImg(k);return `<div class="shz-row" data-card="${k}" role="button" tabindex="0">${img?`<img src="${img}" alt="" loading="lazy">`:'<span class="ni"></span>'}<i style="background:${c}">${NUMS[k]}</i><div><b>${CARDS[k].name}</b><small>${CARDS[k].short||''}</small><span class="tg${st.in?'':' cd'}">${st.tag}</span></div></div>`;};
-    box.innerHTML=`<div class="shzb-map">${buildMap(cfg,{W:MW,H:MH,aria:'靜岡三個地區與景點'})}</div>
-      <div class="shzb-cols">${SHR.map(([n,c,ks,sub])=>`<div class="shzb-col" data-r="${n}"><div class="shzb-h" style="background:${c}"><b>${n}</b><span>${ks.length} 個・已排入 ${ks.filter(k=>spotStatus(k).in).length}</span><small>${sub}</small></div>${ks.map(k=>row(k,c)).join('')}</div>`).join('')}</div>`;
+    box.innerHTML=`<div class="shzb-map">${buildMap(cfg,{W:MW,H:MH,aria})}</div>
+      <div class="shzb-cols${SHR.length===2?' c2':''}">${SHR.map(([n,c,ks,sub])=>`<div class="shzb-col" data-r="${n}"><div class="shzb-h" style="background:${c}"><b>${n}</b><span>${ks.length} 個・已排入 ${ks.filter(k=>spotStatus(k).in).length}</span><small>${sub}</small></div>${ks.map(k=>row(k,c)).join('')}</div>`).join('')}</div>`;
     cardsEl.before(box);cardsEl.classList.add('dk-old');
     const svg=box.querySelector('svg');svg._cfg=cfg;svg._nothumb=1;
     {const oW=W,oH=H;W=MW;H=MH;PADS=34;PADT=0;const pr=proj(bboxOf(cfg.pts,cfg.minSpan)),PT=k=>pr.pt(P[k]);
@@ -4078,15 +4147,19 @@ function deskInit(){
     box.addEventListener('click',e=>{const r=e.target.closest('.shz-row');if(r)openCard(r.dataset.card);});
     box.addEventListener('keydown',e=>{const r=e.target.closest('.shz-row');if(r&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openCard(r.dataset.card);}});
     // 滑過某一欄，地圖上那一區亮起來
-    box.querySelectorAll('.shzb-col').forEach(c=>{c.addEventListener('mouseenter',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.toggle('txdim',g.dataset.r!==c.dataset.r)));c.addEventListener('mouseleave',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.remove('txdim')));});}}
+    box.querySelectorAll('.shzb-col').forEach(c=>{c.addEventListener('mouseenter',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.toggle('txdim',g.dataset.r!==c.dataset.r)));c.addEventListener('mouseleave',()=>svg.querySelectorAll('.txr').forEach(g=>g.classList.remove('txdim')));});}
+  ovBuild('shizuoka',['zoo','yume','ndhotel','toshogu','ichigo','miho','mihoshrine','shimizu','kinnoji','cruise','maruko','aoba','hobby','sengen','yunoki','shizuhotel'],
+    [['靜岡市區','#56633f',['aoba','sengen','hobby','yunoki','shizuhotel'],'住的地方、晚上吃おでん'],['日本平・久能','#b2622d',['zoo','yume','ndhotel','toshogu','ichigo'],'山上看富士山、草莓、動物園'],['清水・三保','#2b4c7e',['shimizu','kinnoji','maruko','cruise','miho','mihoshrine'],'港口吃鮪魚、海邊看夕陽']],1000,400,'靜岡三個地區與景點');
+  ovBuild('izu',IZU_CARDS,
+    [['熱海','#b2622d',['lavista','ginza','itogawa','yoichi','kiunkaku','kinomiya','baien','asaichi','fruitking','ekimae','moa'],'住兩晚：商店街、夜市、梅園都在走路範圍'],['河津・南伊豆','#c9923e',['sakura','kinmedai','teddy','shirahama','minami'],'2/14 河津櫻一日遊；其他是取代下午的選項']],1000,520,'熱海與河津兩個地區與景點');
   // 太長的兩頁拆成頁內分頁：交通依小標（h3）切；靜岡總覽依內容切。沒分到組的（標題、導言）一律顯示
   const SUB={};
   {const w=document.querySelector('#tickets .wrap');if(w){const G=[];[...w.children].forEach(c=>{if(c.matches('h3.sub-h'))G.push([c.textContent.trim().replace(/[（(].*$/,''),[c]]);else if(G.length)G[G.length-1][1].push(c);});
     const rm=G.findIndex(g=>/^線路圖/.test(g[0]));if(rm>=0)G.splice(rm,1); // 改用交通地圖（.tx-rail 已藏）
     const txm=w.querySelector(':scope>.txm');if(txm)G.unshift(['交通地圖',[txm]]);
     SUB.tickets=G;}}
-  {const w=document.querySelector('#shizuoka .wrap');if(w){const acc=[...w.querySelectorAll(':scope>details.acc')],q=x=>[...w.querySelectorAll(':scope>'+x)];
-    SUB.shizuoka=[['景點',[...q('p.lead'),...q('.shzb'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
+  for(const pg of ['shizuoka','izu']){const w=document.querySelector('#'+pg+' .wrap');if(w){const acc=[...w.querySelectorAll(':scope>details.acc')],q=x=>[...w.querySelectorAll(':scope>'+x)];
+    SUB[pg]=[['景點',[...q('p.lead'),...q('.shzb'),...q('p.mute'),...q('.areanote')]],['位置圖',[acc[0]]],['官方觀光地圖',[acc[1]]],['2 月活動與票券',[acc[2]]]].filter(g=>g[1].every(Boolean)&&g[1].length);}}
   const subOn={};
   function setSub(pg,i){const G=SUB[pg];if(!G)return;subOn[pg]=i;G.forEach(([,els],k)=>els.forEach(e=>e.classList.toggle('dk-off',k!==i)));
     document.querySelectorAll(`.dk-sub[data-pg="${pg}"] button`).forEach((b,k)=>b.classList.toggle('on',k===i));
