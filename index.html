@@ -3695,7 +3695,7 @@ function thumbSrc(k){
   im.onerror=()=>{THB[k]=null;};im.src=src;return 0;
 }
 function applyThumbs(svg){
-  if(svg._nothumb)return; // 交通總覽、靜岡總覽的大圖點太密，維持號碼圓標
+  if(svg._nothumb){svg.querySelectorAll('.mk.th-on').forEach(g=>g.classList.remove('th-on'));return;} // 交通總覽、總覽全圖點太密，維持號碼圓標（總覽放大到某一區後才換成照片）
   const R=25.5,mks=[...svg.querySelectorAll('.mk[data-key]')];
   mks.forEach((g,i)=>{
     const k=g.dataset.key,nt=g.querySelector(':scope>text');let on=false;
@@ -4177,9 +4177,9 @@ function deskInit(){
     const back=mb.querySelector('.ovz-back');
     const mark=n=>{box.dataset.on=n;box.querySelectorAll('.shzb-col').forEach(c=>{c.classList.toggle('on',c.dataset.r===n);c.classList.toggle('off',!!n&&c.dataset.r!==n);});};
     function zoomTo(n){const b=RB[n];if(!b)return;const w=Math.max(b[2]-b[0],24),h=Math.max(b[3]-b[1],24),z=Math.min(Z.zmax,MW*.8/w,MH*.74/h);
-      box.classList.add('ovz');back.hidden=false;back.textContent='← 看全部地區（目前：'+n+'）';mark(n);
+      box.classList.add('ovz');svg._nothumb=0;back.hidden=false;back.textContent='← 看全部地區（目前：'+n+'）';mark(n);
       Z.anim(z,(b[0]+b[2])/2,(b[1]+b[3])/2,()=>Z.relayout(),Math.round(420+140*Math.log(Math.max(1,z))));}
-    function zoomOut(){box.classList.remove('ovz');back.hidden=true;mark('');Z.anim(1,MW/2,MH/2,()=>Z.relayout(),480);}
+    function zoomOut(){box.classList.remove('ovz');svg._nothumb=1;back.hidden=true;mark('');Z.anim(1,MW/2,MH/2,()=>Z.relayout(),480);}
     // 還沒放大時點到色塊裡的標記，也是先放大到那一區（熱海那團標記把色塊蓋滿了）
     const RK={};SHR.forEach(([n,,ks])=>ks.forEach(k=>RK[k]=n));
     mb.addEventListener('click',e=>{if(box.classList.contains('ovz'))return;const m=e.target.closest('.mk-a[data-k]');if(!m||!RK[m.dataset.k])return;e.stopPropagation();e.preventDefault();try{unpinTip();hideTip();}catch(_){}zoomTo(RK[m.dataset.k]);},true);
