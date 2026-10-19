@@ -1544,6 +1544,14 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
   待辦新增 `sauna`（訂位組，截止 2026-11-01「11/1 00:00 開放」，連到 coubic）。
 - 驗證：`check.js`、`complete.js`（Day 3 無缺漏；20 km 圖上泉サウナ與靜岡站標籤被藏是正常的，放大才分得開）、scratchpad `sauna.js`（手機 Day 3 時間軸、無錯誤）。
 
+### 2026-10-19 變更（一百零五）：刪除南伊豆櫻花祭、白濱神社；靜岡總覽車站旁標記重疊修正
+- 使用者要求刪除 `minami`（南伊豆 櫻花與油菜花祭）、`shirahama`（白濱神社）：卡片、`P／NAMES／GQ`、`IMG` 與 `img/` 三張照片、Day 5 晴天兩個 `選項` 列、`DAYS[4]` 的 pts／legs／cards、
+  首頁總覽圖、熱海・河津總覽（`IZU_CARDS` 15 → **13**、位置圖、2 月活動與交通說明、電腦版第二欄改名「河津」）、`SPOT_TREE` 河津葉節點、舊線路圖的「白濱・南伊豆」小字、待辦 `sakura` 說明都清掉，**勿再加回**。
+  `shimoda` 座標留在 `P`（沒有地圖再畫它）。
+- 「靜岡總覽位置怪怪的」：截圖發現泉サウナ⑮ 離靜岡站／Hobby Square⑬ 只有一兩百公尺，在 5 km 比例尺的圖上圓標疊在一起、蓋住號碼。
+  全域位置圖拿掉泉サウナ（市區放大圖照畫，說明註明）；電腦版色塊圖 `ovBuild` 多一個 `skip` 參數，靜岡傳 `['izumisauna']`（不畫標記、不算進色塊，下面欄位照列）。
+- 驗證：`check.js`、`complete.js`、scratchpad `izu/t.js`（改成 13 列）通過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
