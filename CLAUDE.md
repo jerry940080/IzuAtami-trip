@@ -1598,6 +1598,7 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
    **`toshogu` 已於 2026-10-05 補上 2 張**（境內手繪導覽圖當封面、纜車〔裁掉底部 FUN! JAPAN 浮水印〕）；使用者另給的「紅色社殿＋櫻花＋富士山」那張看起來是**富士山本宮浅間大社**（富士宮）而不是久能山，沒有放，待使用者確認。
    **`yume` 已於 2026-10-05 補上 4 張**（富士山展望迴廊當封面、茶園遠眺富士、櫻花外觀〔4 月景色，2 月沒有〕、館內木構樓梯）。
    **`aoba` 已於 2026-10-05 補上 3 張**（使用者提供：おでん街燈籠巷弄當封面、櫻花裝飾巷弄、おでん鍋）。
+   **`izumisauna` 已於 2026-10-20 補上 3 張**（三溫暖室與水風呂當封面、外氣浴露台躺椅、外觀）；使用者同批第一張是木造老式石磚浴池，和泉サウナ的現代裝潢不像，沒放，待使用者確認。
    `minami` 目前是低解析 2024 海報待換。**`miho` 已於 2026-10-03 補上 3 張。**
    缺影片的卡片：`shizuhotel`、`yakiniku`、`roppongi`、`yokocho`、`souvenir`、`mihoshrine`、`kinmedai`、`asaichi`、`moa`、`cruise`、`fruitking`、`ekimae`
    （2026-10-05 已補：`ginza` ZKFLQpWv0Wk、`yoichi` tTb1MG5qnLc（熱海魚市場）、`prince` fReu3hI4R9I 從 4:11、`kiunkaku` 3FKCN8QfeCs、`livemax` IdDyEtAexHo 從 2:24、`kinnoji`、`ndhotel`）
