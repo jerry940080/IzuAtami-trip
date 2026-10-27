@@ -3218,15 +3218,17 @@ function ttToken(){return new Promise(res=>{ // 記帳工具（同網域）登�
 async function stayPrices(force){
   if(STP.st==='loading'||(STP.st==='ok'&&!force))return;STP.st='loading';
   const val=v=>!v?null:'stringValue' in v?v.stringValue:'doubleValue' in v?+v.doubleValue:'integerValue' in v?+v.integerValue:'booleanValue' in v?v.booleanValue:null;
-  try{const tok=await ttToken();if(!tok)throw 0;const H={Authorization:'Bearer '+tok,'Content-Type':'application/json'};
-    const [tr,qr]=await Promise.all([fetch(TT.db+'trips/'+TT.trip+'?key='+TT.key,{headers:H}),
-      fetch(TT.db+'trips/'+TT.trip+':runQuery?key='+TT.key,{method:'POST',headers:H,body:JSON.stringify({structuredQuery:{from:[{collectionId:'budget'}],where:{fieldFilter:{field:{fieldPath:'g'},op:'EQUAL',value:{stringValue:'住宿'}}}}})})]);
+  const to=(p,ms)=>Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(0),ms))]); // 讀不到就放棄，不要一直「讀取中」
+  try{const tok=await to(ttToken(),8000);if(!tok)throw 0;const H={Authorization:'Bearer '+tok,'Content-Type':'application/json'};
+    const [tr,qr]=await to(Promise.all([fetch(TT.db+'trips/'+TT.trip+'?key='+TT.key,{headers:H}),
+      fetch(TT.db+'trips/'+TT.trip+':runQuery?key='+TT.key,{method:'POST',headers:H,body:JSON.stringify({structuredQuery:{from:[{collectionId:'budget'}],where:{fieldFilter:{field:{fieldPath:'g'},op:'EQUAL',value:{stringValue:'住宿'}}}}})})]),12000);
     if(!tr.ok||!qr.ok)throw 0;const t=await tr.json(),rows=await qr.json();
     STP.ppl=Math.max(1,val((t.fields||{}).ppl)||4);
     STP.items=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);return {name:g('name')||'',note:g('note')||'',amt:g('amt'),cur:g('cur')||'NT',mode:g('mode')||'pp',rooms:g('rooms')||1,nights:g('nights')||0,ppl:g('ppl')||0};});
     STP.st='ok';}catch(e){STP.st='no';}
   renderStay();}
-function stayNight(match){const ms=String(match).split('|');let it=null;for(const m of ms){it=(STP.items||[]).find(x=>x.name.includes(m));if(it)break;} // 預算名稱關鍵字，可用 | 列多個if(!it||it.amt==null)return null;
+function stayNight(match){const ms=String(match).split('|');let it=null;for(const m of ms){it=(STP.items||[]).find(x=>x.name.includes(m));if(it)break;} // 預算名稱關鍵字，可用 | 列多個
+  if(!it||it.amt==null)return null;
   const n=+it.nights||(+((/(\d+)\s*晚/.exec(it.note||'')||[])[1])||0),ppl=+it.ppl||STP.ppl,per=it.mode==='pp'?+it.amt:it.mode==='room'?it.amt*(+it.rooms||1)/ppl:it.amt/ppl;
   if(!n)return null;const v=Math.round(per/n);return (it.cur==='NT'?'NT ':'¥')+v.toLocaleString('en-US');}
 const stNo=(S,i)=>S.cand?rgHotels(rgOf(S.rg)).indexOf(S)+1:i+1; // 候選用區內編號（和比較條、地圖一致）
