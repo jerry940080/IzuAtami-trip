@@ -1635,6 +1635,9 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 - 之後新增私人住宿：`STAYS` 加 `priv:1`、地址只寫到町名，完整地址加進 Firestore 的 `addr`。
 - **Google 地圖按鈕定位**（同日追加）：使用者填的英文地址（「15 Minamichō, Suruga Ward…」）搜尋會跳到錯的位置。`addr` map 裡可以另外加 `<key>_map`（例如 `shizuhotel_map`）：
   填 Google 地圖分享連結（`https://maps.app.goo.gl/…`）就直接開它，填「緯度,經度」就用座標搜尋；`stMapURL(S)` 處理，沒填就照舊用完整地址搜尋。
+- **登入後仍顯示 🔒**（使用者回報）：`stayPrices` 一個頁面只讀一次，開頁時還沒登入（`STP.st='no'`）之後在記帳頁登入，住宿頁要重新整理才會讀到。
+  改成 `stayRetry()`：讀不到的話，之後再進住宿頁（手機點地區、電腦切到住宿頁或 `stayJump`）距上次超過 4 秒就重讀。
+  已登入但 `addr` 沒有這一家時，鎖頭文字改「已登入，但主辦人還沒填完整地址」，和沒登入分得出來。驗證 scratchpad `sec/late.js`。
 - 驗證：scratchpad `sec/addr.js`（假憑證＋假 Firestore：未登入只看到町名與鎖頭、Google 地圖搜車站或飯店名；登入後電腦與手機都顯示完整地址），`check.js` 全過。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）

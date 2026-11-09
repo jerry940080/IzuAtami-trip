@@ -3196,7 +3196,7 @@ function stayBriefHTML(rg,o={}){const R=rgOf(rg);if(!R)return '';const L=rgHotel
 function stayJump(rg){const i=STAY_RG.findIndex(R=>R.id===rg);if(i<0)return;
   if(MOB){if(typeof closeSheet==='function')closeSheet();APP.pane='stay';go('info');renderSeg();$a('maInfo').scrollTop=0;saveApp();showSpot([i],false,MPN('stay'));return;}
   const st=document.getElementById('stay');if(st){st.dataset.sel=rg;st.querySelectorAll('[data-stgo]').forEach(b=>b.classList.toggle('on',b.dataset.stgo===rg));}
-  if(location.hash==='#stay')window.scrollTo(0,0);else location.hash='#stay';}
+  stayRetry();if(location.hash==='#stay')window.scrollTo(0,0);else location.hash='#stay';}
 function stayTBD(k){const rg=k&&stayRgOfCard(k),R=rg&&rgOf(rg);return !!(R&&!R.pick);} // 這張卡片是還沒選定的住宿（熱海、品川）
 function isCheckin(s){return !!(s&&s.card&&/check-in/i.test(s.n)&&stayRgOfCard(s.card));}
 // 桌機每日頁在 STAYS 定義之前就畫好了：先放佔位，這裡再換成住宿小卡
@@ -3216,6 +3216,7 @@ function ttToken(){return new Promise(res=>{ // 記帳工具（同網域）登�
         if(m.accessToken&&m.expirationTime>Date.now()+60000)return res(m.accessToken);
         try{const r=await fetch('https://securetoken.googleapis.com/v1/token?key='+TT.key,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(m.refreshToken)});const j=await r.json();res(j.id_token||null);}catch(e){res(null);}};
     }catch(e){db.close();res(null);}};}catch(e){res(null);}});}
+const stayRetry=()=>{if(STP.st==='idle'||(STP.st==='no'&&Date.now()-(STP.t||0)>4000))stayPrices();}; // 沒登入時讀不到；之後在記帳頁登入了，再進住宿頁就重讀
 async function stayPrices(force){
   if(STP.st==='loading'||(STP.st==='ok'&&!force))return;STP.st='loading';
   const val=v=>!v?null:'stringValue' in v?v.stringValue:'doubleValue' in v?+v.doubleValue:'integerValue' in v?+v.integerValue:'booleanValue' in v?v.booleanValue:null;
@@ -3231,6 +3232,7 @@ async function stayPrices(force){
     STP.addr={};const am=(((t.fields||{}).addr||{}).mapValue||{}).fields||{};for(const k in am){const v=val(am[k]);if(v)STP.addr[k]=String(v);}
     STP.items=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);return {id:(x.document.name||'').split('/').pop(),name:g('name')||'',note:g('note')||'',amt:g('amt'),cur:g('cur')||'NT',mode:g('mode')||'pp',rooms:g('rooms')||1,nights:g('nights')||0,ppl:g('ppl')||0};});
     STP.st='ok';}catch(e){STP.st='no';}
+  STP.t=Date.now();
   renderStay();}
 function stayNight(match,nn){const ms=String(match).split('|');let it=null;for(const m of ms){it=(STP.items||[]).find(x=>x.name.includes(m));if(it)break;} // 預算名稱關鍵字，可用 | 列多個
   // 先看記帳：對到這個預算項目的、或分類是住宿且名稱含關鍵字的（記帳金額是總價，依人數分攤）
@@ -3251,7 +3253,7 @@ function stMapURL(S){const m=String((STP.addr&&STP.addr[S.key+'_map'])||'').trim
   const ll=/(-?\d{1,3}\.\d+)\s*[,，]\s*(-?\d{1,3}\.\d+)/.exec(m);
   return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ll?ll[1]+','+ll[2]:stAddrQ(S));}
 function stAddrHTML(S){const a=STP.addr&&STP.addr[S.key];if(a)return `${a} <small class="st-lock">🔓 只有登入的成員看得到</small>`;
-  return S.priv?`${S.addr} <small class="st-lock">🔒 ${STP.st==='loading'?'完整地址讀取中…':'完整地址：登入記帳後顯示'}</small>`:S.addr;}
+  return S.priv?`${S.addr} <small class="st-lock">🔒 ${STP.st==='loading'?'完整地址讀取中…':STP.st==='ok'?'已登入，但主辦人還沒填完整地址':'完整地址：登入記帳後顯示'}</small>`:S.addr;}
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
 // 房東給的入住守則等文件（guide＝'網址|名稱'）
 const stGuide=S=>S.guide?`<a class="sta-guide" href="${S.guide.split('|')[0]}" target="_blank" rel="noopener noreferrer"><i>📖</i><span><b>${S.guide.split('|')[1]||'入住守則'}</b><small>入住方式、門鎖、垃圾、注意事項都在這裡・開新視窗</small></span><em>↗</em></a>`:'';
@@ -3387,11 +3389,11 @@ function stayLeafMap(node){const R=rgOf(node.rg),L=rgHotels(R),nums={},labels={}
   L.forEach((S,i)=>{nums[S.key]=R.pick?STAY_RG.indexOf(R)+1:i+1;labels[S.key]='b';labels[S.st]='t';});
   const cfg={pts,legs:L.map(S=>({a:S.key,b:S.st,mode:S.mode})),labels,nums,minSpan:.012};
   return {svg:buildMap(cfg,{W:SPOT_RG.W,H:SPOT_RG.H,big:true,aria:R.area+'住宿與車站'}),cfg,nums,focus:null};}
-function stayListHTML(node){if(STP.st==='idle')stayPrices();const R=rgOf(node.rg),S=rgSel(R);return `${stayCmpHTML(R)}<div class="st-one">${stayCardHTML(S,STAY_RG.indexOf(R),false)}</div>`;}
+function stayListHTML(node){stayRetry();const R=rgOf(node.rg),S=rgSel(R);return `${stayCmpHTML(R)}<div class="st-one">${stayCardHTML(S,STAY_RG.indexOf(R),false)}</div>`;}
 function renderStay(){
   if(MOB){const c=MPN('stay');if(c.path&&c.path.length){const reg=document.querySelector('#stays .sp-reg');if(reg)reg.innerHTML=stayListHTML(spotNode(c.path,c.tree));}return;}
   const boxes=document.querySelectorAll('.st-body');if(!boxes.length)return;
-  if(STP.st==='idle')stayPrices();
+  stayRetry();
   const sel=STAY_RG.map(rgSel),keys=sel.map(x=>x.key),nums={},labels={};keys.forEach((k,i)=>{nums[k]=i+1;labels[k]='b';});labels[keys[0]]='l';
   const OW=760,OH=300;let ov=stayMap(keys,{labels,nums,minSpan:.3},OW,OH,'三個住宿地區的位置');
   {const oW=W,oH=H;W=OW;H=OH;const pr=proj(bboxOf(keys,.3)),xy=keys.map(k=>pr.pt(P[k]));W=oW;H=oH; // 每區一個色塊
@@ -4231,7 +4233,7 @@ function deskInit(){
     if(!PG.some(p=>p[0]===id)){const t=document.getElementById(id),pg=t&&PG.find(([p])=>el(p).some(e=>e&&e.contains(t)));id=pg?pg[0]:'home';
       if(t&&SUB[id]){const k=SUB[id].findIndex(([,els])=>els.some(e=>e.contains(t)));if(k>=0)setSub(id,k);}} // 頁內錨點：切到含它的分頁
     const on=el(id).filter(Boolean);all.forEach(e=>e.classList.toggle('dk-off',!on.includes(e)));
-    side.querySelectorAll('[data-pg]').forEach(a=>a.classList.toggle('on',a.dataset.pg===id));cur=id;
+    side.querySelectorAll('[data-pg]').forEach(a=>a.classList.toggle('on',a.dataset.pg===id));cur=id;if(id==='stay')stayRetry();
     const dm=/^day(\d)$/.exec(id);document.documentElement.classList.toggle('dk-dayv',!!dm);document.documentElement.classList.remove('dk-peek');
     if(dm)requestAnimationFrame(()=>{const n=+dm[1],sec=document.getElementById('day'+n);if(!sec)return; // 換天＝回到一進來的預設畫面（變更（八十六））
       sec.querySelectorAll('.tl li.sel,.tl li.xo').forEach(x=>x.classList.remove('sel','xo'));const fc=sec.querySelector('.dk-fcard');if(fc)fc.hidden=true;const tl=sec.querySelector('.dk-tl');if(tl)tl.scrollTop=0;
