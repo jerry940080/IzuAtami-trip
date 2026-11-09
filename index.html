@@ -705,6 +705,7 @@ button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
 .sta-guide{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-radius:16px;background:#2a221b;color:#fff;text-decoration:none}.sta-guide i{font-style:normal;font-size:22px}.sta-guide b{display:block;font-size:15px}.sta-guide small{display:block;font-size:11.5px;opacity:.75;margin-top:2px}.sta-guide em{font-style:normal;font-weight:800}
 .sta-must{margin-top:16px;background:#fbeadb;border-radius:16px;padding:11px 14px;font-size:13px;line-height:1.65}.sta-must b{display:block;color:#8c491a;margin-bottom:2px}
 .sta-must div:before{content:"•";color:#8c491a;margin-right:6px}
+.st-lock{display:inline-block;font-size:.85em;opacity:.75;margin-left:4px}
 .sta-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:10px;border-top:1px dashed var(--color-neutral-300,#e4d6c0);font-size:12px;color:var(--color-neutral-700,#645c50)}
 .sta-foot a{flex:none;font-weight:700;font-size:13px;color:var(--color-accent-600,#a85a2a);text-decoration:none;border:1.5px solid currentColor;border-radius:999px;padding:5px 12px}
 html:not(.app) #stay .st-grid{grid-template-columns:1fr;max-width:860px}
@@ -1580,10 +1581,10 @@ LAND.push([[138.4960,35.0141],[138.5009,35.0141],[138.5011,35.0106],[138.4964,35
 const P={ // [lat,lng]
  taipei:[25.0478,121.5170], tpe:[25.0797,121.2342], nrt:[35.7726,140.3878], chiba:[35.6130,140.1130], tokyo:[35.6812,139.7671], shinagawa:[35.6285,139.7387], prince:[35.6305,139.7345],
  shinyoko:[35.5075,139.6167], yokohama:[35.4658,139.6223], ofuna:[35.3540,139.5310], odawara:[35.2564,139.1554], funabashi:[35.7015,139.9850], kinshicho:[35.6967,139.8140],
- shizuoka:[34.9718,138.3886], shizuhotel:[34.9688,138.3838], hobby:[34.9702,138.3891], izumisauna:[34.9691,138.3897], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ndhotel:[34.9752,138.4713], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818],ryogae:[34.9738,138.3848], yunoki:[34.9780,138.4110],
+ shizuoka:[34.9718,138.3886], shizuhotel:[34.9700,138.3855], hobby:[34.9702,138.3891], izumisauna:[34.9691,138.3897], zoo:[34.9741,138.4258], yume:[34.9700,138.4661], ndhotel:[34.9752,138.4713], toshogu:[34.9639,138.4694], aoba:[34.9755,138.3818],ryogae:[34.9738,138.3848], yunoki:[34.9780,138.4110],
  ichigo:[34.9650,138.4500], miho:[34.9992,138.5225], mihoshrine:[35.0040,138.5235], shimizu:[35.0158,138.4900], kinnoji:[35.0180,138.4878], maruko:[35.0122,138.4994], cruise:[35.0121,138.5076], satta:[35.0975,138.5350],
  mishima:[35.1265,138.9112], numazuStn:[35.1017,138.8590],
- atami:[35.1036,139.0780], livemax:[35.0946,139.0738], lavista:[35.0995,139.0770], nishiatami:[35.1045,139.0615], nagisa:[35.0948,139.0742], classshn:[35.6205,139.7445], shintaka:[35.6290,139.7312], shinbaba:[35.6186,139.7424], compass:[35.6350,139.7324], takanawadaiSt:[35.6318,139.7302], shinbabaSt:[35.6174,139.7416], kinomiyaSt:[35.1026,139.0690], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], ginza:[35.0957,139.0716], kiunkaku:[35.0931,139.0690], yoichi:[35.0937,139.0702], kinmedai:[34.7560,138.9895], katsumoto:[35.6962,139.7590], fruitking:[35.0958,139.0730], ekimae:[35.1028,139.0773], moa:[35.1063,139.0738],
+ atami:[35.1036,139.0780], livemax:[35.0946,139.0738], lavista:[35.0995,139.0770], nishiatami:[35.1045,139.0615], nagisa:[35.0948,139.0742], classshn:[35.6205,139.7445], shintaka:[35.6290,139.7312], shinbaba:[35.6186,139.7424], compass:[35.6328,139.7306], takanawadaiSt:[35.6318,139.7302], shinbabaSt:[35.6174,139.7416], kinomiyaSt:[35.1026,139.0690], baien:[35.0973,139.0605], kinomiya:[35.1005,139.0678], itogawa:[35.0939,139.0731], ginza:[35.0957,139.0716], kiunkaku:[35.0931,139.0690], yoichi:[35.0937,139.0702], kinmedai:[34.7560,138.9895], katsumoto:[35.6962,139.7590], fruitking:[35.0958,139.0730], ekimae:[35.1028,139.0773], moa:[35.1063,139.0738],
  ito:[34.9713,139.0880], izukogen:[34.8750,139.1030], teddy:[34.8790,139.1000], atagawa:[34.8151,139.0714], inatori:[34.7780,139.0340], kawazu:[34.7542,138.9911], sakura:[34.7625,138.9835], sasahara:[34.7580,138.9876], kzcenter:[34.7578,138.9898], genboku:[34.7633,138.9935], kzkinomiya:[34.7612,138.9906], funto:[34.7713,138.9832], shimoda:[34.6764,138.9447],
  jimbocho:[35.6958,139.7580], shimokita:[35.6613,139.6681], akiba:[35.6984,139.7731], roppongi:[35.6627,139.7314], yokocho:[35.6749,139.7628]
 };
@@ -1614,7 +1615,7 @@ const NAMES={
    沒列的自動退回用經緯度落針 */
 const GQ={
  taipei:'台北車站', tpe:'桃園國際機場第一航廈', nrt:'成田空港第2ターミナル', shinagawa:'品川駅', prince:'品川プリンスホテル', tokyo:'東京駅', odawara:'小田原駅',
- shizuoka:'静岡駅', shizuhotel:'静岡市駿河区馬渕1丁目14-15', hobby:'静岡ホビースクエア', zoo:'静岡市立日本平動物園', yume:'日本平夢テラス',
+ shizuoka:'静岡駅', shizuhotel:'静岡駅 南口', hobby:'静岡ホビースクエア', zoo:'静岡市立日本平動物園', yume:'日本平夢テラス',
  toshogu:'久能山東照宮', aoba:'青葉横丁 静岡市', ryogae:'両替町 静岡市', ichigo:'久能 石垣いちご', miho:'三保の松原',
  shimizu:'清水魚市場 河岸の市', maruko:'ちびまる子ちゃんランド', yunoki:'東静岡天然温泉 柚木の郷', izumisauna:'泉サウナ 静岡市駿河区泉町3-22',
  mishima:'三島駅', numazuStn:'沼津駅',
@@ -1638,7 +1639,7 @@ function gUrl(k){
 const CARDS={
  compass:{name:'COMPASS STAY 高輪',jp:'COMPASS STAY 高輪 201',kind:'住宿',short:'高輪台站步行 6 分的 2LDK 公寓',
   text:'品川這三晚（2/10、2/15–16）住的整間公寓：2026 年 9 月才開幕，2LDK 59㎡，兩間臥室中間的拉門打開就能併成一間，客廳有大餐桌和廚房，有洗衣機和浴室烘乾機。在港區高輪 3 丁目，都營淺草線<b>高輪台站走路約 6 分</b>，走到 JR 品川站約 15 分（上坡），帶大行李建議搭計程車。無人管理、自助入住；<b>15:00 入住（13:00 起可先放行李）、10:00 退房不能晚退</b>。沒有電梯、住宿期間不打掃。',
-  info:[['地址','東京都港區高輪 3 丁目（詳細地址看訂房確認）'],['交通','都營淺草線高輪台站步行約 6 分；JR 品川站步行約 15 分或計程車約 5 分'],['入住','15:00 後（13:00 起可先放行李）'],['退房','10:00 前（不能晚退）'],['注意','沒有電梯、沒有停車位；入住前要登記所有人的資料']],
+  info:[['地址','東京都港區高輪 3 丁目（高輪台站附近）。完整地址：登入記帳後在「住宿」頁看'],['交通','都營淺草線高輪台站步行約 6 分；JR 品川站步行約 15 分或計程車約 5 分'],['入住','15:00 後（13:00 起可先放行李）'],['退房','10:00 前（不能晚退）'],['注意','沒有電梯、沒有停車位；入住前要登記所有人的資料']],
   chips:['2LDK 59㎡','高輪台站 6 分','15:00 入住／10:00 退房','洗衣機＋烘乾','不附早餐']},
  lavista:{name:'La Vista 熱海 Terrace',jp:'ラビスタ熱海テラス',kind:'住宿',short:'房間陽台附露天溫泉，看得到海',
   text:'熱海這兩晚（2/13–14）住的飯店，共立リゾート 2026 年 3 月 31 日新開幕。訂的是東翼雙床房 31㎡（2 人一間、訂兩間），<b>每間陽台都有自己的露天溫泉浴池</b>，泡著就看得到熱海港和海；頂樓還有露天大浴場、室內岩石大浴場和三溫暖，都免費，消夜有免費拉麵。離 JR 熱海站約 600 m，有<b>免費接駁車</b>；熱海銀座、糸川、土曜夜市都走得到。',
@@ -1666,10 +1667,10 @@ const CARDS={
   text:'從駿河灣海面回頭看富士山，前景是清水港的國際貨櫃碼頭、大型起重機與停泊的油輪，跟陸地上完全不同的視角。乘船處就在清水夢幻廣場走路 3 分鐘，<b>同一個碼頭也是「水上巴士 三保羽衣線」的日之出乘船處</b>——想省掉繞半圈的車程，可以從這裡坐 15 分鐘的船直接到三保。冬天空氣乾淨時富士山最清楚，但<b>海況不好會停駛</b>，當天先打電話確認。',
   info:[['地址','清水區日之出町 10-80'],['電話','054-353-2222'],['交通','清水夢幻廣場步行約 3 分；JR清水站東口搭免費接駁巴士約 10 分'],['水上巴士','日之出 ⇄ 江尻 ⇄ 三保，各約 15 分・9:00–17:00'],['備註','依當日天氣與海況可能臨時停駛']],
   chips:['054-353-2222','水上巴士 9:00–17:00','夢幻廣場步行 3 分','海況差會停駛']},
- shizuhotel:{name:'靜岡 Airbnb（馬渕・整棟）',jp:'静岡市駿河区馬渕 1-14-15',kind:'住宿',short:'2/11–13 兩晚・三層獨棟 129㎡・車庫 1 台免費',wiki:['静岡駅'],
+ shizuhotel:{name:'靜岡 Airbnb（馬渕・整棟）',jp:'静岡市駿河区馬渕',kind:'住宿',short:'2/11–13 兩晚・三層獨棟 129㎡・車庫 1 台免費',wiki:['静岡駅'],
   text:'2/11–13 兩晚包下一整棟三層樓（129㎡，最多可住 12 人），在靜岡站南邊安靜的住宅區，<b>走到 JR 靜岡站約 13 分鐘</b>（房源說明）。<b>1 樓</b>是車庫和浴室、洗衣機；<b>2 樓</b>是客廳＋廚房＋大餐桌和廁所；<b>3 樓</b>兩間臥室：西式房 3 張雙人床、和室 1 張雙人床＋2 組日式床墊，客廳另有沙發床。4 個人睡 3 樓西式房就很寬。<br><br>最大的好處是<b>車庫可免費停 1 台</b>：2/11 取車後車就停這裡，2/12 租車日、2/13 早上開去動物園都從這裡出發。<b>但要事先跟房東說要用車位，沒通知不能用</b>（已列進訂票清單）。<br><br>整棟自理、不附早餐：廚房有瓦斯爐、電鍋、微波爐、烤箱、冰箱、鍋具餐具，早餐可以前一晚在站前超商買好，晚上也可以外帶おでん回來吃。浴室有洗髮精、潤髮乳、沐浴乳，毛巾依人數提供；<b>住宿期間不打掃、不換毛巾</b>，可以用房內洗衣機。垃圾放室內，退房留下大型垃圾（例如壞掉的行李箱）要收 ¥10,000。自來水是井水（定期檢驗合格）。<br><br>入住前每位都要<b>上傳護照影本</b>完成登記（日本法規），沒交不能入住。晚上去青葉橫丁走路約 20 分鐘，喝了酒回程可以搭計程車。',
   chips:['2/11–13 兩晚','16:00 入住','10:00 退房','車庫 1 台免費（要先說）','步行靜岡站 13 分','不附早餐・有廚房'],
-  info:[['地址','〒422-8063 靜岡市駿河區馬渕 1-14-15'],['入住','2/11（四）16:00 起；提早入住要先問'],['退房','2/13（六）10:00 前'],['交通','JR 靜岡站步行約 13 分；靜岡機場巴士到靜岡站'],
+  info:[['地址','靜岡市駿河區馬渕（靜岡站南邊）。完整地址：登入記帳後在「住宿」頁看'],['入住','2/11（四）16:00 起；提早入住要先問'],['退房','2/13（六）10:00 前'],['交通','JR 靜岡站步行約 13 分；靜岡機場巴士到靜岡站'],
    ['停車','車庫 1 台免費，<b>要事先聯絡房東</b>'],['房間','3F 西式：雙人床 ×3／3F 和室：雙人床 ×1＋日式床墊 ×2／客廳沙發床'],['衛浴','浴室 1、廁所 1（2F）、洗手台 1'],
    ['設備','Wi-Fi、廚房（瓦斯爐、電鍋、微波爐、烤箱、冰箱、鍋具餐具）、洗衣機、吹風機、熨斗、電視（Netflix／YouTube 要用自己的帳號）'],['注意','入住前上傳護照影本；期間不打掃不換毛巾；禁止寵物'],['登記','旅館業法・静保環第1310210号']]},
  zoo:{url:'https://www.nhdzoo.jp/',name:'日本平動物園',jp:'静岡市立日本平動物園',kind:'景點',video:[{u:'https://www.youtube.com/watch?v=0Sut_T4PbWs',l:''}],short:'小熊貓的家，猛獸館與空中步道',wiki:['静岡市立日本平動物園'],
@@ -3095,7 +3096,7 @@ const STAYS=[
  {key:'compass',rg:'shinagawa',guide:'https://online.fliphtml5.com/murac/dvkz/#p=1|入住守則（房東的線上手冊）',st:'takanawadaiSt',kind:'Airbnb（公寓 2LDK）',room:'2LDK 59㎡・2 間臥室，各 1 張 140 cm＋1 張 97 cm 床，另有 1 套日式床墊（最多 7 人）',walk:'高輪台站步行 6 分',rate:'5.0／5（Airbnb，4 則・新房源）',
   pros:['2026/9/14 才開幕，翻新過很乾淨','兩間臥室中間可以打開併成一間，也可以關起來分開','有洗衣機和浴室烘乾機，可以洗衣服','ReFa 吹風機和蓮蓬頭','廚房家電、鍋具、碗盤餐具、吸塵器都有','下午 1 點後可以先把行李放進房間（Day 6 還車後方便）'],
   cons:['兩間臥室中間其實只是一道隔板（拉門），隔音好不好不確定，一間講話另一間可能聽得到','沒有電梯，要走樓梯上 2 樓','評論只有 4 則，新房東','沒有停車位','房源只寫高輪台站步行 6 分，走到 JR 品川站（成田特快）要多久沒寫，看位置估約 10 分、是上坡路，帶大行李可能要坐計程車','住宿期間不打掃，毛巾一人一套不更換','無人管理、自助入住；入住前要登記所有人的資料'],link:'',
-  addr:'東京都港區高輪 3 丁目（三井リパーク高輪３丁目第１４附近，詳細地址訂房後才知道）',stn:'都營淺草線高輪台站步行約 6 分（房源寫的）；在高輪 3 丁目，和新高輪王子同一區，走到 JR 品川站估計 10 分左右（待確認）',mode:'walk',
+  addr:'東京都港區高輪 3 丁目（高輪台站附近）',priv:1,stn:'都營淺草線高輪台站步行約 6 分（房源寫的）；在高輪 3 丁目，和新高輪王子同一區，走到 JR 品川站估計 10 分左右（待確認）',mode:'walk',
   bf:'不含（有廚房）',park:'沒有車位（這次不需要）',chk:'入住 15:00 後（13:00 起可先放行李）・退房 10:00 前（不能晚退）',
   hero:3,sub:'2026/9 新開幕・2LDK 59㎡・高輪台站 6 分',tags:['2026/9 新開幕','2LDK 59㎡','洗衣機＋烘乾','13:00 可放行李','!沒有電梯','!臥室只隔隔板','!離 JR 品川站較遠'],
   secs:[['外觀','外觀・玄關・格局',[18,20,19,0,17],'白色磁磚的 4 層小公寓，門口有幾階樓梯，沒有電梯。玄關有拖鞋架和自助入住的平板。陽台很窄，放著冷氣室外機，有曬衣桿，看出去是隔壁的房子。格局：入口進去是廚房，接著是有橢圓餐桌（4 張椅子）和電視的客廳；浴室、洗手台、廁所在同一側。兩間臥室並排，各有 1 張 140 cm 和 1 張 97 cm 的床、衣櫃，中間的門打開可以併成一間，外面是陽台。另有 1 套單人日式床墊自己鋪。'],
@@ -3114,7 +3115,7 @@ const STAYS=[
    ['其他','簡單早點',[8,9],'住客分享的商務休息室早點：培根、炒蛋、拿坡里義大利麵、沙拉、可頌和巧克力麵包、優格、果汁；用紙盤紙杯。評論說種類只有約 5 種、很快就沒了。']],
   must:['房間 16㎡ 沒有窗：和新高輪 29㎡、CLASS 品川 45–54㎡ 比要考慮','早餐評價很差：可以考慮在外面吃','2 人一間，4 人要訂 2 間']},
  {key:'shizuhotel',rg:'shizuoka',st:'shizuoka',
-  addr:'靜岡市駿河區馬渕 1-14-15',stn:'JR 靜岡站，步行約 13 分（房源說明）',mode:'walk',bf:'不附（整棟自理；有廚房、電鍋、微波爐）',park:'車庫 1 台免費（要事先聯絡房東）',chk:'入住 16:00・退房 10:00',
+  addr:'靜岡市駿河區馬渕（靜岡站南邊）',priv:1,stn:'JR 靜岡站，步行約 13 分（房源說明）',mode:'walk',bf:'不附（整棟自理；有廚房、電鍋、微波爐）',park:'車庫 1 台免費（要事先聯絡房東）',chk:'入住 16:00・退房 10:00',
   hero:0,sub:'三層獨棟 129㎡・整棟只有我們',tags:['步行靜岡站 13 分','!車庫 1 台・要先說','不附早餐','16:00 入住／10:00 退房'],
   secs:[['抵達','外觀・玄關',[15,14,16],'靜岡站南邊的住宅區，門牌 14-15。玄關右邊就是車庫，進門就是樓梯。'],
    ['格局','平面圖',[17],'1F 車庫・浴室・洗衣機，2F 客廳・廚房・廁所，3F 西式房和和室。點圖可以放大。'],
@@ -3227,6 +3228,7 @@ async function stayPrices(force){
     STP.exp=[];if(uid)try{const er=await to(fetch(TT.db+'trips/'+TT.trip+':runQuery?key='+TT.key,{method:'POST',headers:H,body:JSON.stringify({structuredQuery:{from:[{collectionId:'expenses'}],where:{fieldFilter:{field:{fieldPath:'vis'},op:'ARRAY_CONTAINS',value:{stringValue:uid}}}}})}),12000); // 記帳：只讀得到自己看得到的那幾筆
       if(er.ok)STP.exp=((await er.json())||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);return {title:g('title')||'',amt:+g('amount')||0,cur:g('cur')||'TWD',bg:g('bg')||'',bid:g('bid')||''};});}catch(e){}
     STP.ppl=Math.max(1,val((t.fields||{}).ppl)||4);
+    STP.addr={};const am=(((t.fields||{}).addr||{}).mapValue||{}).fields||{};for(const k in am){const v=val(am[k]);if(v)STP.addr[k]=String(v);}
     STP.items=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);return {id:(x.document.name||'').split('/').pop(),name:g('name')||'',note:g('note')||'',amt:g('amt'),cur:g('cur')||'NT',mode:g('mode')||'pp',rooms:g('rooms')||1,nights:g('nights')||0,ppl:g('ppl')||0};});
     STP.st='ok';}catch(e){STP.st='no';}
   renderStay();}
@@ -3241,6 +3243,10 @@ function stayNight(match,nn){const ms=String(match).split('|');let it=null;for(c
   return (it.cur==='NT'?'NT ':'¥')+Math.round(per/n).toLocaleString('en-US');}
 const stNo=(S,i)=>S.cand?rgHotels(rgOf(S.rg)).indexOf(S)+1:i+1; // 候選用區內編號（和比較條、地圖一致）
 const stTbd=t=>String(t).replace(/(待確認)/g,'<span class="tbd">$1</span>');
+// 住宿地址：完整地址不放在公開的網頁裡，登入記帳的成員才從 trip-tools 行程文件的 addr 欄位讀到（priv:1 的住宿）
+const stAddrQ=S=>(STP.addr&&STP.addr[S.key])||GQ[S.key]||S.addr;
+function stAddrHTML(S){const a=STP.addr&&STP.addr[S.key];if(a)return `${a} <small class="st-lock">🔓 只有登入的成員看得到</small>`;
+  return S.priv?`${S.addr} <small class="st-lock">🔒 ${STP.st==='loading'?'完整地址讀取中…':'完整地址：登入記帳後顯示'}</small>`:S.addr;}
 function stayMap(pts,cfg,w,h,aria){return buildMap(Object.assign({pts,legs:[],minSpan:.01},cfg),{W:w,H:h,big:MOB,aria});}
 // 房東給的入住守則等文件（guide＝'網址|名稱'）
 const stGuide=S=>S.guide?`<a class="sta-guide" href="${S.guide.split('|')[0]}" target="_blank" rel="noopener noreferrer"><i>📖</i><span><b>${S.guide.split('|')[1]||'入住守則'}</b><small>入住方式、門鎖、垃圾、注意事項都在這裡・開新視窗</small></span><em>↗</em></a>`:'';
@@ -3261,7 +3267,7 @@ function stayCardHTML(S,i,mini){
   return `<article class="st-card sta" id="st-${S.key}" style="--c:${S.col}">
     <div class="sta-top"><i class="st-n">${stNo(S,i)}</i><small>${S.area}・共 ${nights} 晚${S.cand?'・候選':''}</small></div>${hero}
     <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}${mm}${stGuide(S)}${secs}${must}
-    <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
+    <div class="sta-foot"><span>${stAddrHTML(S)}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stAddrQ(S))}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></article>`;}
 /* 飯店候選（使用者選的 B「三個分頁切換」，2026-10-14）：重點數字一列 → 大的分類分頁（縮圖＋張數）→ 大圖＋該類說明與縮圖 → 優缺點。
    手機、電腦共用；照片分類一律「飯店公共設施／房間／其他」（secs），hero 不另外算。HT[key]={t:第幾類,j:該類第幾張} */
 const HT={};
@@ -3296,7 +3302,7 @@ function stayMobC(S,i){
   else if(v==='rm')body=G.map((x,k)=>`<section class="hc-rm">${x[2].length?`<img src="${L[x[2][0]]}" alt="" loading="lazy" ${go(k,0,'ph')}>`:''}<div><h4><em>${x[0]}</em>${x[1]}</h4><p>${x[3]}</p>${x[2].length?`<button class="hc-more" ${go(k,0,'ph')}>看這類 ${x[2].length} 張照片 ›</button>`:''}</div></section>`).join('');
   else if(v==='rv')body=`<div class="stf-pc ht-pc hc-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>${S.rate?`<p class="hc-note">評分 ${S.rate}</p>`:''}`;
   else body=`<div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},340,190,nm+'到車站')}</div>
-    <p class="hc-note">🚉 ${tb(S.stn)}</p><div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div>`;
+    <p class="hc-note">🚉 ${tb(S.stn)}</p><div class="sta-foot"><span>${stAddrHTML(S)}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stAddrQ(S))}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div>`;
   return `<article class="st-card hc" id="st-${S.key}" style="--c:${S.col}">${hero}
     <div class="hc-sub"><i class="st-n">${stNo(S,i)}</i><small>${S.area}・共 ${nights} 晚・${S.kind||''}・${S.sub||''}</small></div>${seg}<div class="hc-body">${body}</div>${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}</article>`;}
 (function(){let x0=null,y0=0,k0='';document.addEventListener('touchstart',e=>{const h=e.target.closest&&e.target.closest('[data-hsw]');if(!h){x0=null;return;}x0=e.touches[0].clientX;y0=e.touches[0].clientY;k0=h.dataset.hsw;},{passive:true});
@@ -3333,7 +3339,7 @@ function stayHotelHTML(S,i){
     <div class="ht-body"><div class="ht-ph">${main}${th}</div><div class="ht-txt"><h4><em>${g[0]}</em>${g[1]}</h4><p>${g[3]}</p>${t<G.length-1?`<button class="ht-next" data-ht="${S.key}" data-t="${t+1}" data-j="0">下一類：${G[t+1][0]}（${G[t+1][2].length?G[t+1][2].length+' 張':'文字說明'}）›</button>`:''}</div></div>
     <div class="stf-pc ht-pc"><div class="pro"><b>優點</b>${li(S.pros)}</div><div class="con"><b>缺點</b>${li(S.cons)}</div></div>
     ${S.link?`<div class="stf-lk"><a href="${S.link.split('|')[0]}" target="_blank" rel="noopener noreferrer">${S.link.split('|')[1]||'訂房網站'} ↗</a></div>`:''}
-    <div class="ht-foot">${must}<div>${map}<div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
+    <div class="ht-foot">${must}<div>${map}<div class="sta-foot"><span>${stAddrHTML(S)}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stAddrQ(S))}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
 function htGo(k,t,j,v){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;HT[k]={t,j,v:v||(HT[k]&&HT[k].v)||'ov'};
   art.outerHTML=(MOB&&art.classList.contains('hc')?stayMobC:stayHotelHTML)(S,STAY_RG.findIndex(r=>r.id===S.rg));}
 function htStep(k,d){const S=STAYS.find(x=>x.key===k);if(!S)return;const L=[].concat(IMG[k]||[]),G=(S.secs||[]).map(g=>g[2].filter(j=>L[j])).filter(x=>x.length);
@@ -3361,7 +3367,7 @@ function stayDeskHTML(S,i){
     <div class="sta-tags">${tags}</div>${S.cand?stayFactsHTML(S):`<div class="sta-price">${price}</div>`}
     <div class="dkst-body"><div class="dkv">${view}</div><div class="dkst-txt">${stGuide(S)}${secs}${must}
       <div class="st-mini">${stayMap([S.key,S.st],{legs:[{a:S.key,b:S.st,mode:S.mode}],labels:{[S.key]:'b',[S.st]:'t'}},360,150,NAMES[S.key][0]+'到車站')}</div>
-      <div class="sta-foot"><span>${S.addr}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GQ[S.key]||S.addr)}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
+      <div class="sta-foot"><span>${stAddrHTML(S)}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stAddrQ(S))}" target="_blank" rel="noopener noreferrer">Google 地圖 ↗</a></div></div></div></article>`;}
 function dkvGo(k,n){const S=STAYS.find(x=>x.key===k),art=document.getElementById('st-'+k);if(!S||!art)return;const F=stayFlat(S).F;DKV[k]=(n+F.length)%F.length;
   art.outerHTML=stayDeskHTML(S,STAY_RG.findIndex(r=>r.id===S.rg));}
 // 住宿照片：點了開燈箱（不開景點字卡），左右鍵或按鈕換張
