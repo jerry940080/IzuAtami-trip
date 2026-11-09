@@ -1633,6 +1633,8 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 - **使用者要做**：Firebase 主控台 → Firestore → `trips` → `IzuAtami-trip` → 新增欄位 `addr`（map），裡面加 `shizuhotel`、`compass` 兩個字串欄位填完整地址。
 - **git 歷史裡仍有舊門牌與座標**（repo 公開）。CLAUDE.md 舊段落已改寫，但沒有重寫歷史。
 - 之後新增私人住宿：`STAYS` 加 `priv:1`、地址只寫到町名，完整地址加進 Firestore 的 `addr`。
+- **Google 地圖按鈕定位**（同日追加）：使用者填的英文地址（「15 Minamichō, Suruga Ward…」）搜尋會跳到錯的位置。`addr` map 裡可以另外加 `<key>_map`（例如 `shizuhotel_map`）：
+  填 Google 地圖分享連結（`https://maps.app.goo.gl/…`）就直接開它，填「緯度,經度」就用座標搜尋；`stMapURL(S)` 處理，沒填就照舊用完整地址搜尋。
 - 驗證：scratchpad `sec/addr.js`（假憑證＋假 Firestore：未登入只看到町名與鎖頭、Google 地圖搜車站或飯店名；登入後電腦與手機都顯示完整地址），`check.js` 全過。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
