@@ -1517,7 +1517,7 @@ svg.gf .mk:not(.ep) .mth g circle{fill:#bdb8ae!important}
     <h2>餐廳</h2>
     <div class="rs rs-dk"><div class="rs-dtop"><small class="rs-ver"></small><button class="rs-add" data-rsadd>＋ 新增餐廳</button></div>
       <p class="rs-lead">依日期看每天的早、午、點心、晚餐，或依地區看全部候選。想推薦店家按「新增餐廳」或切到「家人推薦」，貼 Google 地圖連結（要登入）；主辦人收錄後會出現在名單裡，標「家人推薦」。</p>
-      <div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-write"></iframe></div></div></div>
+      <div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-read; clipboard-write"></iframe></div></div></div>
   </div>
 </section>
 <section class="block" id="food">
@@ -1578,7 +1578,7 @@ svg.gf .mk:not(.ep) .mth g circle{fill:#bdb8ae!important}
     <h2>花費・記帳</h2>
     <p class="lead tt-lead">出發前的預算（花費）與旅途中的記帳、結算。用 Google 登入，只有同行的人看得到；預算由主辦人填寫與修改。</p>
     <div class="dk-sub tt-sub"><button data-ttpg="budget" class="on">花費</button><button data-ttpg="exp">記帳</button><button data-ttpg="settle">結算</button><button data-ttpg="mem">成員</button></div>
-    <div class="tt-dk"><iframe class="tt-fr" title="記帳" allow="clipboard-write"></iframe></div>
+    <div class="tt-dk"><iframe class="tt-fr" title="記帳" allow="clipboard-read; clipboard-write"></iframe></div>
   </div>
 </section>
 <footer><div class="wrap">
@@ -4169,14 +4169,14 @@ function appInit(){
   <section class="ma-scr" data-tab="plan"><div class="ma-phead" id="maPhead"></div><div class="ma-body" id="maPlan"></div></section>
   <section class="ma-scr" data-tab="map"><div class="ma-map" id="maMap"></div><div class="ma-body" id="maRoute"></div></section>
   <section class="ma-scr" data-tab="pack"><div class="ma-body pad" id="maPack"></div></section>
-  <section class="ma-scr" data-tab="acct"><div class="ma-body tt-tab"><iframe class="tt-fr" title="記帳" allow="clipboard-write"></iframe></div></section>
+  <section class="ma-scr" data-tab="acct"><div class="ma-body tt-tab"><iframe class="tt-fr" title="記帳" allow="clipboard-read; clipboard-write"></iframe></div></section>
   <section class="ma-scr" data-tab="info"><div class="ma-seg" id="maSeg"></div><div class="ma-body" id="maInfo"></div></section>
   <nav class="ma-tabs" id="maTabs" aria-label="分頁"></nav>
   <div class="ma-back" id="maBack"></div><div class="ma-sheet" id="maSheet" role="dialog" aria-modal="true" aria-label="景點詳情"></div>`;
   document.body.appendChild(root);
   const info=$a('maInfo');
   INFO_PANES.forEach(([k,,sels])=>{const p=document.createElement('div');p.className='ma-pane';p.dataset.pane=k;sels.forEach(q=>{const el=document.querySelector(q);if(el)p.appendChild(el);});
-    if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-write"></iframe></div></div>
+    if(k==='resto'){p.innerHTML=`<div class="rs"><div class="rs-top"><h2>餐廳</h2><small>餐廳選項 v${RESTO.v} · ${RESTO.date} 更新</small></div><div class="rs-body"></div><div class="rs-fam" hidden><div class="tt-dk"><iframe class="tt-fr" title="家人推薦・收錄" allow="clipboard-read; clipboard-write"></iframe></div></div>
       <details class="rs-must"><summary>必吃料理一覽<small>不分店家的特色料理與伴手禮</small></summary></details><button class="rs-fab" data-rsadd>＋ 新增餐廳</button></div>`;
       const f=document.querySelector('#food');if(f)p.querySelector('.rs-must').appendChild(f);}
     if(k==='stay')p.innerHTML=spotsHTML(MPN('stay'));
