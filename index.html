@@ -388,7 +388,7 @@ footer p{max-width:70ch}
 html.app{--tabh:66px}
 html.app,html.app body{height:100%;overflow:hidden;background:var(--color-bg)}
 html.app body{font-family:var(--font-body)}
-html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip){display:none!important}
+html.app body>*:not(#mapp):not(.modal):not(.lb):not(.mktip):not(.rsd):not(#rsToast){display:none!important}
 #mapp{position:fixed;inset:0;z-index:30;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent;font-synthesis:none}
 #mapp button{font-family:inherit;color:inherit}
 #mapp :focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
@@ -663,7 +663,23 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .rs-tx{min-width:0}.rs-tx b{display:block;font-size:14px;line-height:1.35}.rs-tx small{display:block;font-size:11.5px;color:var(--color-neutral-500);line-height:1.4}
 .rs-nt{margin:4px 0 0;font-size:12px;color:var(--color-neutral-700)}
 .rp{font-style:normal;font-size:10.5px;border-radius:99px;padding:1px 7px;font-weight:700;margin-left:5px;vertical-align:2px}
-.p-ok{background:#dfe6cf;color:#4d5a33}.p-fam{background:#e3e6f3;color:#3f4f8a}
+.p-ok{background:#dfe6cf;color:#4d5a33}.p-fam{background:#e3e6f3;color:#3f4f8a}.p-pri{background:#fde7c8;color:#9a4f14}
+.rs-pri,.rs-vd{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--color-surface);color:var(--color-neutral-700);border:0;font-size:17px;line-height:1;cursor:pointer;text-decoration:none}
+.rs-pri.on{background:#fde7c8;color:#c67139}.rs-vd{font-size:13px;color:#b23a2a}
+.rs-slot.flash{box-shadow:0 0 0 3px #c67139;transition:box-shadow .3s}
+.rs-tl{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;margin-top:6px;padding:5px 11px;border-radius:99px;border:1px solid #e9c9a3;background:#fff6ea;color:#9a4f14;font:inherit;font-size:12.5px;cursor:pointer;text-align:left;max-width:100%}
+.rs-tl b{font-weight:700;overflow:hidden;text-overflow:ellipsis;min-width:0}.rs-tl span{flex:none}
+.tl .rsl{display:block}.tl .rsl:empty{display:none} 
+.rsd{position:fixed;inset:0;z-index:110;background:rgba(28,22,16,.55);display:flex;align-items:center;justify-content:center;padding:20px}.rsd[hidden]{display:none}
+.rsd-box{position:relative;width:min(560px,100%);max-height:calc(100% - env(safe-area-inset-top));overflow:auto;background:var(--color-bg-elevated,#fffaf2);border-radius:22px;padding:18px 18px 16px}
+.rsd-box h3{margin:0 40px 8px 0;font-size:19px}.rsd-x{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:var(--color-surface,#f1e6d4);font-size:22px;line-height:1;cursor:pointer}
+.rsd-ch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.rsd-ch span{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--color-surface,#f1e6d4)}
+.rsd .yt{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin:6px 0 10px}.rsd iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.rsd-note{margin:6px 0 10px;font-size:14px;line-height:1.6}
+.rsd-vlink{display:block;text-align:center;margin:6px 0 10px;padding:12px;border-radius:14px;background:#b23a2a;color:#fff;font-weight:700;text-decoration:none}
+.rsd-act{display:flex;gap:8px;flex-wrap:wrap}.rsd-act a,.rsd-act button{flex:1;min-width:130px;text-align:center;padding:10px;border-radius:12px;border:1px solid var(--rule,#e2d3bb);background:#fff;font:inherit;font-size:14px;color:inherit;text-decoration:none;cursor:pointer}
+html.app .rsd{align-items:flex-end;padding:0}html.app .rsd-box{border-radius:22px 22px 0 0;width:100%;padding-bottom:max(env(safe-area-inset-bottom),18px)}
+#rsToast{position:fixed;left:50%;bottom:calc(var(--tabh,0px) + 24px);transform:translate(-50%,20px);background:#2a221b;color:#fff;padding:9px 16px;border-radius:99px;font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:120;max-width:90vw}
+#rsToast.on{opacity:1;transform:translate(-50%,0)}
 .tt-go{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--color-surface,#fffaf2);border:1.5px solid var(--color-accent-500,#c67139);border-radius:20px;padding:12px 16px;margin:12px 0 18px}
 .tt-go .i{font-size:24px}
 button.tt-go{width:100%;font:inherit;text-align:left;cursor:pointer}
@@ -2046,7 +2062,7 @@ function foldGos(S){const hide=new Set(),notes={};let pend=[];
       else if(pend.length){pend=[];}});});
   pend.forEach(x=>{const o=+x.k.split(':')[0];(notes[o]=notes[o]||[]).push('之後 '+x.txt);hide.add(x.k);}); // 一天最後一段（例如開回住宿）沒有下一站，寫在出發的那一站
   return {hide,notes,has:(i,gi)=>hide.has(i+':'+gi)};}
-function stopsToTl(S){const o=[],F=foldGos(S);S.forEach((s,si)=>{const nt=(F.notes[si]||[]).map(t=>`<span class="xgo">${t}</span>`).join('');o.push({t:s.t,i:s.i||'📍',h:s.n,x:nt+(s.d||''),card:s.card&&CARDS[s.card]?s.card:'',si,ci:!!(s.card&&/check-in/i.test(s.n))});(s.go||[]).forEach((g,gi)=>{if(!F.has(si,gi))o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi});});});return o;}
+function stopsToTl(S){const o=[],F=foldGos(S);S.forEach((s,si)=>{const nt=(F.notes[si]||[]).map(t=>`<span class="xgo">${t}</span>`).join('');o.push({t:s.t,i:s.i||'📍',h:s.n,x:nt+(s.d||''),card:s.card&&CARDS[s.card]?s.card:'',si,ci:!!(s.card&&/check-in/i.test(s.n)),fm:s.k==='美食'?rsMealOf(s.t):''});(s.go||[]).forEach((g,gi)=>{if(!F.has(si,gi))o.push({t:g.at||'',i:g.i,h:g.t,x:g.gd||'',move:1,si,gi});});});return o;}
 DAYS.forEach(d=>{if(d.stops)d.tl=stopsToTl(d.stops);});
 /* 地圖編號（桌機與手機共用）：每站的位置＝at 或 card 座標，同一地點一個號碼，依第一次出現的時間編 */
 const locOf=s=>s.at||(s.card&&P[s.card]?s.card:'');
@@ -2657,7 +2673,7 @@ const dayBlocks=DAYS.map(d=>{
     <div class="day-body">
       <div class="mapcard" data-day="${d.n}"><div class="maphead"><span class="n">${d.n}</span><span class="t"><b>${d.date}（${d.wd}）</b>${d.title}</span><i class="chev" aria-hidden="true"></i></div>${buildMap(mcfg,{aria:'第'+d.n+'天路線圖',big:MOB})}<div class="mapfoot">${legend}<button type="button" class="replay">重播路線</button></div>${bgRow(bgLines)}</div>
       <div>
-        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}" data-si="${r.si}"${r.gi!=null?` data-gi="${r.gi}"`:''}${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${r.ci?`<span class="stbf" data-card="${r.card}"></span>`:''}${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
+        <ul class="tl">${d.tl.map(r=>{const hx=r.x||r.card;return `<li class="${r.move?'move':''}${hx?' hx':''}" data-si="${r.si}"${r.gi!=null?` data-gi="${r.gi}"`:''}${hx?' tabindex="0"':''}><span class="t">${r.t}</span><span class="i">${r.i}</span><span><div class="h">${r.h}${hx?'<i class="xv">⌄</i>':''}</div>${r.ci?`<span class="stbf" data-card="${r.card}"></span>`:''}${r.fm?`<span class="rsl" data-rsl="${d.n}|${r.fm}"></span>`:''}${hx?`<div class="x">${r.x}${r.card?`<a class="xl" data-xcard="${r.card}">看完整介紹 ›</a>`:''}</div>`:''}</span></li>`;}).join('')}</ul>
         ${d.rain?`<div class="rain">${d.rain}</div>`:''}
       </div>
     </div>
@@ -2941,11 +2957,63 @@ function rsFetchFam(){
     const t0=new Date('2027-02-10T12:00:00');
     const list=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);const day=g('day'),ll=g('ll');
       const d=day?Math.round((new Date(day+'T12:00:00')-t0)/864e5)+1:0,okll=Array.isArray(ll)&&ll.length===2?ll:null;
-      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:'',note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
+      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:g('cuisine')||'',p:g('price')||'',v:g('video')||'',note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
     const old=JSON.stringify((lsGet('izu-fsresto',{})||{}).list||[]);lsSet('izu-fsresto',{ts:Date.now(),list});
-    if(JSON.stringify(list)!==old)renderResto();
+    if(JSON.stringify(list)!==old)rsRefresh();
   }).catch(()=>{});}
 setTimeout(rsFetchFam,1200);setInterval(rsFetchFam,10*60*1000);
+/* 候選裡的「優先」：每一天每一餐可以挑一家優先考慮（存在記帳工具的行程文件 rpri 欄位，{d5l:候選 id}，成員都能改）。
+   登入記帳的成員才讀得到、才能改；讀到後存一份在 localStorage izu-rpri，離線或沒登入時沿用上次的。 */
+const RS_MK={早餐:'b',午餐:'l',點心:'s',晚餐:'d'},rsKey=(dn,m)=>'d'+dn+(RS_MK[m]||'x');
+const RSP={map:lsGet('izu-rpri',{})||{},can:false,st:'idle',t:0};
+const rsCands=(dn,m)=>rsOff().filter(r=>r.d===dn&&r.m===m&&r.st!=='in');
+const rsPriOf=(dn,m)=>{const id=RSP.map[rsKey(dn,m)];return id?rsCands(dn,m).find(r=>r.id===id)||null:null;};
+const rsIsPri=r=>!!(r.d&&r.st!=='in'&&RSP.map[rsKey(r.d,r.m)]===r.id);
+async function rsPriLoad(){if(RSP.st==='loading')return;RSP.st='loading';
+  try{const tok=await Promise.race([ttToken(),new Promise((_,j)=>setTimeout(()=>j(0),8000))]);if(!tok)throw 0;
+    const res=await fetch(TT.db+'trips/'+TT.trip+'?key='+TT.key+'&mask.fieldPaths=rpri',{headers:{Authorization:'Bearer '+tok}});if(!res.ok)throw 0;
+    const j=await res.json(),f=(((j.fields||{}).rpri||{}).mapValue||{}).fields||{},map={};for(const k in f)if(f[k].stringValue)map[k]=f[k].stringValue;
+    RSP.map=map;RSP.can=true;RSP.st='ok';lsSet('izu-rpri',map);}catch(e){RSP.can=false;RSP.st='no';}
+  RSP.t=Date.now();rsRefresh();}
+async function rsPriSet(dn,m,id){const k=rsKey(dn,m),was=RSP.map[k],nv=was===id?'':id;
+  if(nv)RSP.map[k]=nv;else delete RSP.map[k];rsRefresh();
+  try{const tok=await ttToken();if(!tok)throw 0;
+    const res=await fetch(TT.db+'trips/'+TT.trip+'?key='+TT.key+'&updateMask.fieldPaths=rpri.'+k+'&currentDocument.exists=true',{method:'PATCH',headers:{Authorization:'Bearer '+tok,'Content-Type':'application/json'},
+      body:JSON.stringify({fields:{rpri:{mapValue:{fields:nv?{[k]:{stringValue:nv}}:{}}}}})});if(!res.ok)throw res.status;
+    lsSet('izu-rpri',RSP.map);rsToast(nv?'已設為優先，大家都看得到':'已取消優先');}
+  catch(e){if(was)RSP.map[k]=was;else delete RSP.map[k];rsRefresh();rsToast(e===403?'沒有權限：要先把最新的 firestore.rules 貼到 Firebase':'沒有存成功，確認有登入記帳、網路正常後再試一次');}}
+/* 餐廳小視窗：點名單上沒有景點卡的店（家人推薦、河津午餐、熱海晚餐候選…）打開；有影片就直接播（YouTube 內嵌，其他平台給按鈕開新視窗） */
+function rsDetail(r){const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let el=document.getElementById('rsDet');if(!el){el=document.createElement('div');el.id='rsDet';el.className='rsd';el.hidden=true;document.body.appendChild(el);
+    el.addEventListener('click',e=>{if(e.target===el||e.target.closest('[data-rsdx]'))rsDetClose();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)rsDetClose();});}
+  const v=/^https:\/\/[^\s"<>]+$/.test(r.v||'')?r.v:'',yid=v?ytId(v):'',st=yid?ytStart(v):0,pri=rsIsPri(r);
+  const chips=[r.d?`Day ${r.d}・${r.m}`:'日期未定',r.c?esc(r.c):'',r.p?'💴 '+esc(r.p):'',r.fam&&r.by?esc(r.by)+' 推薦':'',r.st==='in'?'已排入':''].filter(Boolean);
+  const vid=yid?`<div class="yt"><div class="yt-ld" aria-hidden="true"><i></i><span>影片載入中…</span></div><iframe onload="this.parentNode.classList.add('ok')" src="https://www.youtube.com/embed/${yid}?rel=0${st?'&start='+st:''}" title="${esc(r.n)} 推薦影片" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+    :v?`<a class="rsd-vlink" href="${esc(v)}" target="_blank" rel="noopener noreferrer">▶ 看推薦影片（開新視窗）</a>`:'';
+  el.innerHTML=`<div class="rsd-box" role="dialog" aria-modal="true" aria-label="${esc(r.n)}"><button class="rsd-x" data-rsdx aria-label="關閉">×</button>
+    <h3>${pri?'<em class="rp p-pri">★ 優先</em> ':''}${esc(r.n)}</h3><div class="rsd-ch">${chips.map(c=>`<span>${c}</span>`).join('')}</div>
+    ${vid}${r.note?`<p class="rsd-note">${esc(r.note)}</p>`:''}
+    <div class="rsd-act"><a href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>${RSP.can&&r.d&&r.st!=='in'?`<button data-rspri="${r.d}|${r.m}|${r.id}" data-rsdx>${pri?'★ 取消優先':'☆ 設為優先'}</button>`:''}</div></div>`;
+  el.hidden=false;document.body.style.overflow='hidden';el.querySelector('.rsd-x').focus();}
+function rsDetClose(){const el=document.getElementById('rsDet');if(!el)return;el.hidden=true;el.innerHTML='';document.body.style.overflow='';} // 清掉 iframe，影片才會停
+function rsToast(t){let el=document.getElementById('rsToast');if(!el){el=document.createElement('div');el.id='rsToast';document.body.appendChild(el);}
+  el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2600);}
+// 時間軸上每個用餐時段下面的「🍽 N 家候選 ›」：點了跳到餐廳頁那一天那一餐
+function rsTlInner(dn,m){const C=rsCands(dn,m);if(!C.length)return '';const p=rsPriOf(dn,m);
+  return `<button class="rs-tl" data-rsgo="${dn}|${m}"><span>🍽</span>${p?`<b>優先：${p.fam?String(p.n).replace(/[&<>"]/g,''):p.n}</b><span>${C.length>1?` ＋${C.length-1} 家`:''} ›</span>`:`<span>${C.length} 家候選 ›</span>`}</button>`;}
+function rsTlLink(dn,s){if(!s||s.k!=='美食')return '';const m=rsMealOf(s.t);return m?rsTlInner(dn,m):'';}
+function rsTlPaint(){document.querySelectorAll('[data-rsl]').forEach(e=>{const [dn,m]=e.dataset.rsl.split('|');e.innerHTML=rsTlInner(+dn,m);});}
+function rsRefresh(){renderResto();if(MOB&&typeof APP!=='undefined'&&APP.tab==='plan')renderPlan();rsTlPaint();}
+function rsGo(dn,m){APP.rview='day';APP.rday=dn;
+  if(MOB){if(typeof closeSheet==='function')closeSheet();APP.pane='resto';go('info');renderSeg();saveApp();renderResto();}
+  else{if(location.hash!=='#resto')location.hash='#resto';renderResto();}
+  setTimeout(()=>{const el=document.querySelector((MOB?'#maInfo':'#resto')+` .rs-slot[data-rsm="${m}"]`);if(!el)return;
+    el.scrollIntoView({block:MOB?'center':'start',behavior:'smooth'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1800);},MOB?90:260);}
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let b;
+  if(b=t.closest('[data-rsgo]')){e.preventDefault();e.stopPropagation();const [dn,m]=b.dataset.rsgo.split('|');rsGo(+dn,m);}
+  else if(b=t.closest('[data-rspri]')){e.preventDefault();e.stopPropagation();const [dn,m,id]=b.dataset.rspri.split('|');rsPriSet(+dn,m,id);}},true);
+setTimeout(rsPriLoad,1600);
 const RS_MEALS=['早餐','午餐','點心','晚餐'],RS_REGS=['靜岡','熱海・河津','東京'];
 const rsNorm=t=>(t||'').replace(/[\s・·（）()「」]/g,'').toLowerCase();
 function rsMealOf(t){const m=/^(\d\d):(\d\d)/.exec(t||'');if(!m)return '';const h=+m[1]+m[2]/60;return h<10.5?'早餐':h<14.5?'午餐':h<17?'點心':'晚餐';}
@@ -2962,14 +3030,15 @@ const RS_COL={早餐:'#7a8a5e',點心:'#7a8a5e',午餐:'#d9822b',晚餐:'#3f4f8a
 const rsLL=r=>r.ll||(r.card&&P[r.card])||null;
 function rsRow(r,withDay,num){
   const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const pill=r.fam?'<em class="rp p-fam">家人推薦</em>':(r.st==='in'?'<em class="rp p-ok">已排入</em>':'');
-  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',esc(r.c),r.fam?(r.by?esc(r.by)+' 推薦':''):r.note,r.fam?esc(r.note):'',num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
+  const pri=rsIsPri(r),pill=(pri?'<em class="rp p-pri">★ 優先</em>':'')+(r.fam?'<em class="rp p-fam">家人推薦</em>':(r.st==='in'?'<em class="rp p-ok">已排入</em>':''));
+  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',esc(r.c),r.p?'💴 '+esc(r.p):'',r.fam?(r.by?esc(r.by)+' 推薦':''):r.note,r.fam?esc(r.note):'',num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
   const act=r.card&&CARDS[r.card]?` data-full="${r.card}"`:` data-rsx="${r.fam?'f':'o'}:${r.id}"`;
   return `<div class="rs-it"${num?` data-rsn="${num}"`:''}><div class="rs-main"${act}><div class="rs-thw">${rsThumb(r)}${num?`<i class="rs-n" style="background:${RS_COL[r.m]||'#2a221b'}">${num}</i>`:''}</div><div class="rs-tx"><b>${r.fam?esc(r.n):r.n}${pill}</b><small>${sub}</small></div></div>
-    <a class="rs-gm" href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('pin',17)}</a></div>`;}
+    ${RSP.can&&r.d&&r.st!=='in'?`<button class="rs-pri${pri?' on':''}" data-rspri="${r.d}|${r.m}|${r.id}" aria-pressed="${pri}" title="${pri?'取消優先':'設為優先考慮'}">${pri?'★':'☆'}</button>`:''}${/^https:\/\/[^\s"<>]+$/.test(r.v||'')?`<button class="rs-vd" data-rsx="${r.fam?'f':'o'}:${r.id}" aria-label="看推薦影片">▶</button>`:''}<a class="rs-gm" href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('pin',17)}</a></div>`;}
 function renderResto(){
   const ps=document.querySelectorAll(MOB?'#maInfo .rs-body':'#resto .rs-body');if(!ps.length)return;
-  const V=APP.rview||'day',groups=[];
+  const V=APP.rview||'day',groups=[],rsOrd=r=>r.st==='in'?0:rsIsPri(r)?1:r.fam?3:2;
+  if(RSP.st!=='loading'&&!RSP.can&&Date.now()-RSP.t>5000)setTimeout(rsPriLoad,0);
   let h=`<div class="ma-segc rs-seg"><button data-rsv="day" class="${V==='day'?'on':''}">依日期</button><button data-rsv="reg" class="${V==='reg'?'on':''}">依地區</button><button data-rsv="fam" class="${V==='fam'?'on':''}">家人推薦</button></div>`;
   ps.forEach(p=>{const rs=p.closest('.rs');rs.classList.toggle('fam',V==='fam');rs.querySelector('.rs-fam').hidden=V!=='fam';}); // 家人推薦＝嵌入記帳工具的推薦・收錄頁
   if(V==='fam'){ps.forEach(p=>{p.innerHTML=h;ttLoad(p.closest('.rs').querySelector('.rs-fam .tt-fr'),APP._rsAdd?'resto/add':'resto');});APP._rsAdd=0;return;}
@@ -2978,7 +3047,7 @@ function renderResto(){
     h+=`<div class="rs-days">${DAYS.map(d=>`<button data-rsday="${d.n}" class="${d.n===dn?'on':''}"><small>週${d.wd}</small><b>${d.date.split('/')[1]}</b></button>`).join('')}</div>`;
     const OFF=rsOff(),all=OFF.filter(r=>r.d===dn);
     rsSlots(dn).forEach(x=>groups.push({m:x.m,head:`${x.m}${/^\d/.test(x.t||'')?' · '+x.t:''}${x.n&&!all.some(r=>r.m===x.m&&r.st==='in')?' · '+x.n:''}`,
-      A:all.filter(r=>r.m===x.m).sort((a,b)=>(a.st==='in'?0:a.fam?2:1)-(b.st==='in'?0:b.fam?2:1)),wd:0,empty:1}));
+      A:all.filter(r=>r.m===x.m).sort((a,b)=>rsOrd(a)-rsOrd(b)),wd:0,empty:1}));
     const undF=OFF.filter(r=>r.fam&&!r.d);if(undF.length)groups.push({m:'',head:'日期未定',A:undF,wd:1});
   }else{
     const R=APP.rreg||'熱海・河津',regs=RS_REGS.concat(rsFam().some(r=>(r.reg||'其他')==='其他')?['其他']:[]);
@@ -2990,7 +3059,7 @@ function renderResto(){
   }
   let n=0;const pts=[];
   const body=groups.map(g=>{const rows=g.A.map(r=>{const ll=rsLL(r);let num=0;if(ll){num=++n;pts.push({num,ll,m:r.m,n:r.n,card:r.card&&CARDS[r.card]?r.card:''});}return rsRow(r,g.wd,num);}).join('');
-    return `<div class="rs-slot"><h4><span><i class="rs-dot" style="background:${RS_COL[g.m]||'#9a8b7a'}"></i>${g.head}</span>${g.A.length?`<em>${g.A.length} 家</em>`:''}</h4>${rows}${g.A.length?'':'<p class="rs-empty">還沒有候選，按「＋ 新增餐廳」推薦一家</p>'}</div>`;}).join('');
+    return `<div class="rs-slot"${g.m?` data-rsm="${g.m}"`:''}><h4><span><i class="rs-dot" style="background:${RS_COL[g.m]||'#9a8b7a'}"></i>${g.head}</span>${g.A.length?`<em>${g.A.length} 家</em>`:''}</h4>${rows}${g.A.length?'':'<p class="rs-empty">還沒有候選，按「＋ 新增餐廳」推薦一家</p>'}</div>`;}).join('');
   h+=`<div class="rs-split"><div class="rs-mapw"><div class="rs-map"></div><div class="rs-zm"><button data-rsz="in" aria-label="放大">＋</button><button data-rsz="out" aria-label="縮小">－</button><button data-rsz="reset" aria-label="還原">↺</button></div>
     <div class="rs-leg"><span><i style="background:${RS_COL.午餐}"></i>午餐</span><span><i style="background:${RS_COL.晚餐}"></i>晚餐</span><span><i style="background:${RS_COL.早餐}"></i>早餐・點心</span></div></div>
     <div class="rs-lst"><div class="rs-grid">${body||'<p class="rs-empty">這天沒有安排在外用餐（移動日／機場）。</p>'}</div></div></div>`;
@@ -3427,7 +3496,7 @@ function rsClick(t){let el;
   if(el=t.closest('[data-rsday]')){APP.rday=+el.dataset.rsday;renderResto();return true;}
   if(el=t.closest('[data-rsreg]')){APP.rreg=el.dataset.rsreg;renderResto();return true;}
   if(t.closest('[data-rsadd]')){APP.rview='fam';APP._rsAdd=1;renderResto();return true;} // 直接在餐廳頁裡打開推薦表單
-  if(el=t.closest('[data-rsx]')){{const [k,id]=el.dataset.rsx.split(':'),r=(k==='f'?rsFam():RESTO.list).find(x=>x.id===id);if(r)window.open(rsGmap(r),'_blank','noopener');}return true;}
+  if(el=t.closest('[data-rsx]')){{const [k,id]=el.dataset.rsx.split(':'),r=(k==='f'?rsFam():RESTO.list).find(x=>x.id===id);if(r)rsDetail(r);}return true;}
   return false;}
 
 /* ===== 資訊 › 景點：三區（靜岡／熱海河津／東京），各區上半「已排入」、下半「候選名單」 =====
@@ -3663,7 +3732,7 @@ function renderPlan(){
     return `<div class="ma-row${isT?'':' opt'}${isCur(i)?' now':''}${hx?' hx':''}${xo?' xo':''}" data-stop="${i}" role="button" tabindex="0"${hx?` aria-expanded="${xo}"`:''}>
       <div class="ma-r${s.card&&CARDS[s.card]&&!isCheckin(s)&&!stayTBD(s.card)?' th':''}"><div class="ma-tm"><b class="${isT?'':'tx'}">${s.t}</b>${s.dur?`<span>${s.dur}</span>`:''}</div>
       <div class="ma-ax"><i class="ln" style="top:${i===0?'24px':'0'};bottom:${last&&!hasGo?'calc(100% - 24px)':'0'}"></i><i class="dt" style="background:${c[2]}"></i></div>
-      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!(s.card&&stayRgOfCard(s.card))?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${hx?`<div class="xd">${gn.map(t=>`<p class="xgo">${t}</p>`).join('')}${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)||stayTBD(s.card)?'':stopThumb(s)}</div>
+      <div class="ma-tx"><div class="nm">${isCur(i)?'<span class="nowtag">現在</span>':''}${s.n}${hx?'<i class="xv">⌄</i>':''}</div>${isNx(i)?nxTag():''}<div class="mt">${kpill(s.k)}${jp&&!(s.card&&stayRgOfCard(s.card))?`<span class="jp">${jp}</span>`:''}</div>${isCheckin(s)?stayBriefHTML(stayRgOfCard(s.card),{lab:i===S.length-1||!/^\d/.test(s.t)?'住宿':'今晚住'}):''}${rsTlLink(d.n,s)}${hx?`<div class="xd">${gn.map(t=>`<p class="xgo">${t}</p>`).join('')}${s.d?`<p>${s.d}</p>`:''}${xc||gu?`<div class="xa">${xc?`<button data-full="${xc}">看完整介紹 ›</button>`:''}${gu?`<a href="${gu}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>`:''}</div>`:''}</div>`:''}</div>${isCheckin(s)||stayTBD(s.card)?'':stopThumb(s)}</div>
       ${G.map((g,gi)=>{if(FG.has(i,gi))return '';const gk=xpKey(i,gi),go=g.gd&&APP.xp.has(gk);return `<div class="ma-go${isCur(i,gi)?' now':''}${g.gd?' hx':''}${go?' xo':''}"${g.gd?` data-gx="${i}:${gi}" role="button" tabindex="0" aria-expanded="${go}"`:''}><div class="ma-gt">${g.at||''}</div><div class="ma-ax"><i class="dash"></i></div><div><span class="gp">${isCur(i,gi)?'<span class="nowtag">現在</span>':''}${g.i} ${g.t}${g.gd?'<i class="xv">⌄</i>':''}${g.gd?`<span class="gdx">${g.gd}</span>`:''}</span>${isNx(i,gi)?nxTag():''}</div></div>`;}).join('')}
     </div>`;}).join('');
   $a('maPlan').innerHTML=`

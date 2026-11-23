@@ -1640,6 +1640,21 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
   已登入但 `addr` 沒有這一家時，鎖頭文字改「已登入，但主辦人還沒填完整地址」，和沒登入分得出來。驗證 scratchpad `sec/late.js`。
 - 驗證：scratchpad `sec/addr.js`（假憑證＋假 Firestore：未登入只看到町名與鎖頭、Google 地圖搜車站或飯店名；登入後電腦與手機都顯示完整地址），`check.js` 全過。
 
+### 2026-11-23 變更（一百一十七）：時間軸連到餐廳候選、候選可設「優先」、推薦餐廳的料理／價格／影片
+使用者要求：已訂的餐廳排進行程，其他維持候選；時間軸要能直接看到候選；候選裡可以挑一家「優先」；推薦時要填料理類型、價格、影片（主辦人可編輯），點餐廳要能直接看影片。
+- **時間軸連結**：`k:'美食'` 的站（依時間 `rsMealOf` 判斷早／午／點心／晚）底下，如果那天那一餐有候選（`rsCands`＝`RESTO` 與家人推薦裡 `st!=='in'` 的），顯示 `.rs-tl`「🍽 N 家候選 ›」；
+  有優先時顯示「🍽 優先：店名 ＋N 家 ›」。手機直接畫在 `renderPlan`（`rsTlLink`）；電腦時刻表在 `RESTO` 定義前就畫好，先放 `.rsl[data-rsl="天|餐"]` 佔位，`rsTlPaint()` 再填。
+  點了 `rsGo(天,餐)`：切到餐廳頁「依日期」那一天、捲到那一餐的 `.rs-slot[data-rsm]` 並閃一下。點擊用 document 捕獲階段處理（`[data-rsgo]`、`[data-rspri]`），不會觸發時間軸列的展開或電腦版的地圖對焦。
+- **優先**（`RSP`）：存在記帳工具行程文件的 `rpri` 欄位（`{d5l:候選 id}`，`rsKey`），登入記帳的成員才讀得到（`rsPriLoad`，同 `stayPrices` 用 `ttToken`），讀到後快取在 localStorage `izu-rpri`。
+  餐廳頁每家候選旁 ☆／★（`.rs-pri`，只有讀得到 `rpri` 的人看得到按鈕），`rsPriSet` 用 REST PATCH `updateMask.fieldPaths=rpri.d5l` 寫入（再按一次＝取消）；優先的店標「★ 優先」並排在已排入之後。
+  失敗會跳提示 `#rsToast`（403＝規則還沒更新）。**需要 trip-tools 新的 firestore.rules**（成員可以改 `rpri`），見 trip-tools CLAUDE.md。
+- **料理・價格・影片**：記帳工具推薦表單多 `cuisine`／`price`／`video`，`rsFetchFam` 讀成 `c`／`p`／`v`，名單列顯示「料理 · 💴 價格」與 ▶ 按鈕。
+- **餐廳小視窗** `rsDetail(r)`：點名單上沒有景點卡的店（家人推薦、河津午餐、熱海晚餐候選…）不再直接開 Google 地圖，改開 `#rsDet`：店名、日期餐別、料理、價格、推薦人、
+  推薦原因、YouTube 影片內嵌（`ytId`／`ytStart`，可帶開始秒數；其他平台給「看推薦影片（開新視窗）」按鈕）、Google 地圖、設為優先。Esc／點背景關閉，關閉時清掉 iframe 讓影片停止。
+  手機版 `html.app body>*:not(#mapp)…{display:none}` 那條規則要放行 `.rsd`、`#rsToast`，否則小視窗被藏起來（測試抓到的）。
+- 驗證：scratchpad `rsp/t.js`（手機＋電腦各 10 項：未登入時間軸 6 家候選、登入後顯示優先、點連結跳到 Day 5 午餐並閃、優先排第一、☆ 按鈕、換優先送出的 PATCH 網址與內容、
+  家人推薦顯示料理價格與 ▶、點店名開小視窗並內嵌 YouTube 從 30 秒、Esc 關閉清 iframe、無錯誤）、`rsp/s.js`（截圖）、`check.js` 全過。
+
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
