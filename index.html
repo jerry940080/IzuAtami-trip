@@ -672,7 +672,7 @@ html.app .mk-a:focus-visible{outline:2px solid var(--color-accent);outline-offse
 .tl .rsl{display:block}.tl .rsl:empty{display:none} 
 .rsd{position:fixed;inset:0;z-index:110;background:rgba(28,22,16,.55);display:flex;align-items:center;justify-content:center;padding:20px}.rsd[hidden]{display:none}
 .rsd-box{position:relative;width:min(560px,100%);max-height:calc(100% - env(safe-area-inset-top));overflow:auto;background:var(--color-bg-elevated,#fffaf2);border-radius:22px;padding:18px 18px 16px}
-.rsd-ph{display:block;width:calc(100% + 36px);margin:-18px -18px 12px;max-height:240px;object-fit:cover;border-radius:22px 22px 0 0}
+.rsd-gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;width:calc(100% + 36px);margin:-18px -18px 4px;border-radius:22px 22px 0 0;scrollbar-width:none}.rsd-gal::-webkit-scrollbar{display:none}.rsd-gi{flex:0 0 100%;scroll-snap-align:start;position:relative;height:240px;background:#222}.rsd-gi img{width:100%;height:100%;object-fit:cover;display:block}.rsd-gi span{position:absolute;right:10px;top:10px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:9px}.rsd-gh{font-size:12px;color:#8a7d6b;text-align:right;margin:0 0 8px}.rsd-gal+h3,.rsd-gh+h3{margin-top:10px}
 .rsd-box h3{margin:0 40px 8px 0;font-size:19px}.rsd-x{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:var(--color-surface,#f1e6d4);font-size:22px;line-height:1;cursor:pointer}
 .rsd-ch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.rsd-ch span{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--color-surface,#f1e6d4)}
 .rsd .yt{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin:6px 0 10px}.rsd iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.rsd-note{margin:6px 0 10px;font-size:14px;line-height:1.6}
@@ -2958,8 +2958,8 @@ function rsFetchFam(){
     const t0=new Date('2027-02-10T12:00:00');
     const list=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);const day=g('day'),ll=g('ll');
       const d=day?Math.round((new Date(day+'T12:00:00')-t0)/864e5)+1:0,okll=Array.isArray(ll)&&ll.length===2?ll:null;
-      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:g('cuisine')||'',p:g('price')||'',v:g('video')||'',gr:g('grating'),tb:g('tabelog'),ph:/^data:image\/(webp|jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(g('photo')||'')?g('photo'):'',note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
-    const old=JSON.stringify((lsGet('izu-fsresto',{})||{}).list||[]);try{localStorage.setItem('izu-fsresto',JSON.stringify({ts:Date.now(),list}));}catch(e){lsSet('izu-fsresto',{ts:Date.now(),list:list.map(r=>({...r,ph:''}))});}/* 照片太多存不下就只存文字 */
+      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:g('cuisine')||'',p:g('price')||'',v:g('video')||'',gr:g('grating'),tb:g('tabelog'),phs:[].concat(g('photos')||[],g('photo')||[]).filter(u=>typeof u==='string'&&/^data:image\/(webp|jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(u)).slice(0,6),note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
+    const old=JSON.stringify((lsGet('izu-fsresto',{})||{}).list||[]);{const put=L=>{try{localStorage.setItem('izu-fsresto',JSON.stringify({ts:Date.now(),list:L}));return 1;}catch(e){return 0;}};put(list)||put(list.map(r=>({...r,phs:r.phs.slice(0,1)})))||put(list.map(r=>({...r,phs:[]})));}/* 照片太多存不下就只存封面，再不行只存文字 */
     if(JSON.stringify(list)!==old)rsRefresh();
   }).catch(()=>{});}
 setTimeout(rsFetchFam,1200);setInterval(rsFetchFam,10*60*1000);
@@ -2993,7 +2993,7 @@ function rsDetail(r){const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp
   const vid=yid?`<div class="yt"><div class="yt-ld" aria-hidden="true"><i></i><span>影片載入中…</span></div><iframe onload="this.parentNode.classList.add('ok')" src="https://www.youtube.com/embed/${yid}?rel=0${st?'&start='+st:''}" title="${esc(r.n)} 推薦影片" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
     :v?`<a class="rsd-vlink" href="${esc(v)}" target="_blank" rel="noopener noreferrer">▶ 看推薦影片（開新視窗）</a>`:'';
   el.innerHTML=`<div class="rsd-box" role="dialog" aria-modal="true" aria-label="${esc(r.n)}"><button class="rsd-x" data-rsdx aria-label="關閉">×</button>
-    ${r.ph?`<img class="rsd-ph" src="${r.ph}" alt="${esc(r.n)}">`:''}<h3>${pri?'<em class="rp p-pri">★ 優先</em> ':''}${esc(r.n)}</h3><div class="rsd-ch">${chips.map(c=>`<span>${c}</span>`).join('')}</div>
+    ${rsPhs(r).length?`<div class="rsd-gal">${rsPhs(r).map((u,i,A)=>`<div class="rsd-gi"><img src="${u}" alt="${esc(r.n)} ${i+1}">${A.length>1?`<span>${i+1} / ${A.length}</span>`:''}</div>`).join('')}</div>${rsPhs(r).length>1?'<div class="rsd-gh">左右滑看其他照片 ›</div>':''}`:''}<h3>${pri?'<em class="rp p-pri">★ 優先</em> ':''}${esc(r.n)}</h3><div class="rsd-ch">${chips.map(c=>`<span>${c}</span>`).join('')}</div>
     ${vid}${r.note?`<p class="rsd-note">${esc(r.note)}</p>`:''}
     <div class="rsd-act"><a href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer">📍 Google 地圖</a>${RSP.can&&r.d&&r.st!=='in'?`<button data-rspri="${r.d}|${r.m}|${r.id}" data-rsdx>${pri?'★ 取消優先':'☆ 設為優先'}</button>`:''}</div></div>`;
   el.hidden=false;document.body.style.overflow='hidden';el.querySelector('.rsd-x').focus();}
@@ -3026,7 +3026,8 @@ function rsSlots(dn){ // 當天的用餐時段：行程裡的「美食」站＋�
   return Object.values(o).sort((x,y)=>(tm(x.t)||DEF[x.m]).localeCompare(tm(y.t)||DEF[y.m]));}
 const rsRate=r=>[r.gr!=null&&isFinite(r.gr)?'⭐ Google '+r.gr:'',r.tb!=null&&isFinite(r.tb)?'Tabelog '+r.tb:''].filter(Boolean).join(' · ');
 function rsGmap(r){return r.g||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r.q||(r.card&&GQ[r.card])||r.n));}
-function rsThumb(r){const yt=/^https:\/\//.test(r.v||'')?ytId(r.v):'',src=r.card&&CARDS[r.card]?cardImg(r.card):r.ph?r.ph:yt?`https://i.ytimg.com/vi/${yt}/mqdefault.jpg`:'';return `<div class="rs-th">${src?`<img src="${src}" alt="" loading="lazy">`:`<span>${(r.n||'').replace(/^[鮨熱]\s*/,'').slice(0,2)}</span>`}</div>`;}
+const rsPhs=r=>r.phs||(r.ph?[r.ph]:[]);
+function rsThumb(r){const yt=/^https:\/\//.test(r.v||'')?ytId(r.v):'',src=r.card&&CARDS[r.card]?cardImg(r.card):rsPhs(r).length?rsPhs(r)[0]:yt?`https://i.ytimg.com/vi/${yt}/mqdefault.jpg`:'';return `<div class="rs-th">${src?`<img src="${src}" alt="" loading="lazy">`:`<span>${(r.n||'').replace(/^[鮨熱]\s*/,'').slice(0,2)}</span>`}</div>`;}
 function rsDayLab(dn){const d=DAYS[dn-1];return d?`${d.date}（${d.wd}）`:'日期未定';}
 const RS_COL={早餐:'#7a8a5e',點心:'#7a8a5e',午餐:'#d9822b',晚餐:'#3f4f8a'};
 const rsLL=r=>r.ll||(r.card&&P[r.card])||null;

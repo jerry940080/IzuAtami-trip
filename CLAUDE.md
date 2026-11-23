@@ -1660,6 +1660,8 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
 - **店家照片（同日追加）**：記帳工具推薦表單可附一張照片（restos 的 `photo`，data URL、長邊 640px、< 150 KB）。`rsFetchFam` 讀成 `ph`（只收 `data:image/(webp|jpeg|png);base64,` 開頭，其他丟掉）；
   縮圖順序＝景點卡照片 → 推薦照片 → YouTube 封面；小視窗最上面放照片（`.rsd-ph`）。`izu-fsresto` 存不下時改存不含照片的版本。驗證 scratchpad `rsp/t2.js`（24 項）、`rsp/tph.js`。
 - **貼上照片**：記帳工具表單可直接貼剪貼簿裡的圖片（按鈕用 `navigator.clipboard.read()`）。嵌入的 iframe 原本只有 `allow="clipboard-write"`，改成 `allow="clipboard-read; clipboard-write"`（四個 iframe），否則 Chrome 在 iframe 裡會擋讀取剪貼簿。
+- **多張照片**：記帳工具的推薦改存 `photos` 陣列（最多 6 張，第一張是封面；舊的單張 `photo` 仍讀得到）。`rsFetchFam` 讀成 `phs`（只收 `data:image/(webp|jpeg|png);base64,`），`rsPhs(r)` 也相容舊快取的 `ph`；
+  縮圖用第一張；小視窗最上面改成左右滑的相簿 `.rsd-gal`（右上「n / N」）。`izu-fsresto` 存不下時先改存只有封面、再不行只存文字。驗證 scratchpad `rsp/t3.js`（24 項，含壞網址被丟掉）。
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
 - 2026-10-05 14:28 那次（a0891c8）build 30 秒就成功，**deploy 卻一直排隊**：22 分鐘後被取消，使用者按 Re-run 後又排了 50 分鐘以上，
