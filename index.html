@@ -2957,7 +2957,7 @@ function rsFetchFam(){
     const t0=new Date('2027-02-10T12:00:00');
     const list=(rows||[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{},g=k=>val(f[k]);const day=g('day'),ll=g('ll');
       const d=day?Math.round((new Date(day+'T12:00:00')-t0)/864e5)+1:0,okll=Array.isArray(ll)&&ll.length===2?ll:null;
-      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:g('cuisine')||'',p:g('price')||'',v:g('video')||'',note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
+      return {id:'f'+x.document.name.split('/').pop(),n:g('name')||'',d:d>=1&&d<=DAYS.length?d:0,m:RS_MEALS.includes(g('meal'))?g('meal'):'晚餐',reg:rsRegOf(okll),c:g('cuisine')||'',p:g('price')||'',v:g('video')||'',gr:g('grating'),tb:g('tabelog'),note:g('note')||'',by:g('byName')||'',g:g('url')||'',ll:okll,st:'c',fam:1};}).filter(r=>r.n);
     const old=JSON.stringify((lsGet('izu-fsresto',{})||{}).list||[]);lsSet('izu-fsresto',{ts:Date.now(),list});
     if(JSON.stringify(list)!==old)rsRefresh();
   }).catch(()=>{});}
@@ -2988,7 +2988,7 @@ function rsDetail(r){const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp
     el.addEventListener('click',e=>{if(e.target===el||e.target.closest('[data-rsdx]'))rsDetClose();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)rsDetClose();});}
   const v=/^https:\/\/[^\s"<>]+$/.test(r.v||'')?r.v:'',yid=v?ytId(v):'',st=yid?ytStart(v):0,pri=rsIsPri(r);
-  const chips=[r.d?`Day ${r.d}・${r.m}`:'日期未定',r.c?esc(r.c):'',r.p?'💴 '+esc(r.p):'',r.fam&&r.by?esc(r.by)+' 推薦':'',r.st==='in'?'已排入':''].filter(Boolean);
+  const chips=[r.d?`Day ${r.d}・${r.m}`:'日期未定',r.c?esc(r.c):'',r.p?'💴 '+esc(r.p):'',rsRate(r),r.fam&&r.by?esc(r.by)+' 推薦':'',r.st==='in'?'已排入':''].filter(Boolean);
   const vid=yid?`<div class="yt"><div class="yt-ld" aria-hidden="true"><i></i><span>影片載入中…</span></div><iframe onload="this.parentNode.classList.add('ok')" src="https://www.youtube.com/embed/${yid}?rel=0${st?'&start='+st:''}" title="${esc(r.n)} 推薦影片" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
     :v?`<a class="rsd-vlink" href="${esc(v)}" target="_blank" rel="noopener noreferrer">▶ 看推薦影片（開新視窗）</a>`:'';
   el.innerHTML=`<div class="rsd-box" role="dialog" aria-modal="true" aria-label="${esc(r.n)}"><button class="rsd-x" data-rsdx aria-label="關閉">×</button>
@@ -3023,15 +3023,16 @@ function rsSlots(dn){ // 當天的用餐時段：行程裡的「美食」站＋�
   ents.forEach(r=>{const s=r.card&&S.find(x=>x.card===r.card&&tm(x.t));if(!o[r.m])o[r.m]={m:r.m,t:s?s.t:'',n:''};else if(!o[r.m].t&&s)o[r.m].t=s.t;});
   const DEF={早餐:'08:00',午餐:'12:00',點心:'15:00',晚餐:'19:00'};
   return Object.values(o).sort((x,y)=>(tm(x.t)||DEF[x.m]).localeCompare(tm(y.t)||DEF[y.m]));}
+const rsRate=r=>[r.gr!=null&&isFinite(r.gr)?'⭐ Google '+r.gr:'',r.tb!=null&&isFinite(r.tb)?'Tabelog '+r.tb:''].filter(Boolean).join(' · ');
 function rsGmap(r){return r.g||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r.q||(r.card&&GQ[r.card])||r.n));}
-function rsThumb(r){const src=r.card&&CARDS[r.card]?cardImg(r.card):'';return `<div class="rs-th">${src?`<img src="${src}" alt="" loading="lazy">`:`<span>${(r.n||'').replace(/^[鮨熱]\s*/,'').slice(0,2)}</span>`}</div>`;}
+function rsThumb(r){const yt=/^https:\/\//.test(r.v||'')?ytId(r.v):'',src=r.card&&CARDS[r.card]?cardImg(r.card):yt?`https://i.ytimg.com/vi/${yt}/mqdefault.jpg`:'';return `<div class="rs-th">${src?`<img src="${src}" alt="" loading="lazy">`:`<span>${(r.n||'').replace(/^[鮨熱]\s*/,'').slice(0,2)}</span>`}</div>`;}
 function rsDayLab(dn){const d=DAYS[dn-1];return d?`${d.date}（${d.wd}）`:'日期未定';}
 const RS_COL={早餐:'#7a8a5e',點心:'#7a8a5e',午餐:'#d9822b',晚餐:'#3f4f8a'};
 const rsLL=r=>r.ll||(r.card&&P[r.card])||null;
 function rsRow(r,withDay,num){
   const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const pri=rsIsPri(r),pill=(pri?'<em class="rp p-pri">★ 優先</em>':'')+(r.fam?'<em class="rp p-fam">家人推薦</em>':(r.st==='in'?'<em class="rp p-ok">已排入</em>':''));
-  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',esc(r.c),r.p?'💴 '+esc(r.p):'',r.fam?(r.by?esc(r.by)+' 推薦':''):r.note,r.fam?esc(r.note):'',num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
+  const sub=[withDay?(r.d?`Day ${r.d} ${r.m}`:`未定 ${r.m||''}`):'',esc(r.c),r.p?'💴 '+esc(r.p):'',rsRate(r),r.fam?(r.by?esc(r.by)+' 推薦':''):r.note,r.fam?esc(r.note):'',num?'':'地圖上沒有位置'].filter(Boolean).join(' · ');
   const act=r.card&&CARDS[r.card]?` data-full="${r.card}"`:` data-rsx="${r.fam?'f':'o'}:${r.id}"`;
   return `<div class="rs-it"${num?` data-rsn="${num}"`:''}><div class="rs-main"${act}><div class="rs-thw">${rsThumb(r)}${num?`<i class="rs-n" style="background:${RS_COL[r.m]||'#2a221b'}">${num}</i>`:''}</div><div class="rs-tx"><b>${r.fam?esc(r.n):r.n}${pill}</b><small>${sub}</small></div></div>
     ${RSP.can&&r.d&&r.st!=='in'?`<button class="rs-pri${pri?' on':''}" data-rspri="${r.d}|${r.m}|${r.id}" aria-pressed="${pri}" title="${pri?'取消優先':'設為優先考慮'}">${pri?'★':'☆'}</button>`:''}${/^https:\/\/[^\s"<>]+$/.test(r.v||'')?`<button class="rs-vd" data-rsx="${r.fam?'f':'o'}:${r.id}" aria-label="看推薦影片">▶</button>`:''}<a class="rs-gm" href="${rsGmap(r)}" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟">${ico('pin',17)}</a></div>`;}

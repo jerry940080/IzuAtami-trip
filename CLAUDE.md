@@ -1654,6 +1654,8 @@ trip-tools 的預算項目改成每一項自己填「幾個人分」（`ppl`）�
   手機版 `html.app body>*:not(#mapp)…{display:none}` 那條規則要放行 `.rsd`、`#rsToast`，否則小視窗被藏起來（測試抓到的）。
 - 驗證：scratchpad `rsp/t.js`（手機＋電腦各 10 項：未登入時間軸 6 家候選、登入後顯示優先、點連結跳到 Day 5 午餐並閃、優先排第一、☆ 按鈕、換優先送出的 PATCH 網址與內容、
   家人推薦顯示料理價格與 ▶、點店名開小視窗並內嵌 YouTube 從 30 秒、Esc 關閉清 iframe、無錯誤）、`rsp/s.js`（截圖）、`check.js` 全過。
+- **評分與縮圖（同日追加）**：家人推薦多讀 `grating`／`tabelog`（`rsFetchFam` 的 `gr`／`tb`），`rsRate(r)` 在名單與小視窗顯示「⭐ Google 4.3 · Tabelog 3.52」；價格由推薦者自己填（記帳工具存成 `¥2,000–4,000` 這種字串，網站照原樣顯示）。
+  `rsThumb`：沒有景點卡照片時，用推薦影片的 YouTube 封面（`i.ytimg.com/vi/<id>/mqdefault.jpg`）。Google 地圖照片要 Places API＋綁帳單，沒做。
 
 ### GitHub Pages 發布卡住（2026-10-05 踩雷）
 - 網站由分支 `claude/read-izuatami-trip-37v8zi` 直接發布（GitHub 內建的 `pages build and deployment`，每次 push 觸發一次）。
